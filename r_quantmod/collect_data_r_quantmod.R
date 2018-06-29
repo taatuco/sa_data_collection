@@ -26,23 +26,21 @@ collect_data <- function() {
   # create a driver
   m = dbDriver("MySQL")
   myHost <- "127.0.0.1"
-  myUsername <- db_usr
   myDbname <- "smartalpha"
   myPort <- 3306
-  myPassword <- db_pwd
-  con <- dbConnect(m, user= myUsername, host= myHost, password= myPassword, dbname= myDbname, port= myPort)
-  
+  con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
+
   sql <- "SELECT * FROM symbol_list"
   res <- dbSendQuery(con, sql)
-  
-  tryCatch({  
-    symbol_list <- fetch(res, n = -1)  
+
+  tryCatch({
+    symbol_list <- fetch(res, n = -1)
     i <- 1
     while (i < nrow(symbol_list)) {
       ### Define data to collect
       symbol <- symbol_list[i,5]
       dataframe <- as.data.frame(getSymbols(symbol, src = qm_src, from = dfrom, env = NULL))
-      
+
       ### Set columns name
       colnames(dataframe)[1] <- "open"
       colnames(dataframe)[2] <- "high"
@@ -50,7 +48,7 @@ collect_data <- function() {
       colnames(dataframe)[4] <- "close"
       colnames(dataframe)[5] <- "volume"
       colnames(dataframe)[6] <- "adjusted"
-      
+
       ### Export content to CSV ###
       fn <- paste(symbol,".csv", sep = "")
       f <- paste(xf,fn, sep = "")
@@ -58,7 +56,7 @@ collect_data <- function() {
       i = i+1
     }
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
-  
+
 }
 
 
