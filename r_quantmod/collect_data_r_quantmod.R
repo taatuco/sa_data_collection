@@ -34,28 +34,31 @@ collect_data <- function() {
   
   sql <- "SELECT * FROM symbol_list"
   res <- dbSendQuery(con, sql)
-  symbol_list <- fetch(res, n = -1)  
   
-  i <- 1
-  while (i < nrow(symbol_list)) {
-    ### Define data to collect
-    symbol <- symbol_list[i,5]
-    dataframe <- as.data.frame(getSymbols(symbol, src = qm_src, from = dfrom, env = NULL))
-    
-    ### Set columns name
-    colnames(dataframe)[1] <- "open"
-    colnames(dataframe)[2] <- "high"
-    colnames(dataframe)[3] <- "low"
-    colnames(dataframe)[4] <- "close"
-    colnames(dataframe)[5] <- "volume"
-    colnames(dataframe)[6] <- "adjusted"
-    
-    ### Export content to CSV ###
-    fn <- paste(symbol,".csv", sep = "")
-    f <- paste(xf,fn, sep = "")
-    write.csv(dataframe, file = f)
-    i = i+1
-  }
+  tryCatch({  
+    symbol_list <- fetch(res, n = -1)  
+    i <- 1
+    while (i < nrow(symbol_list)) {
+      ### Define data to collect
+      symbol <- symbol_list[i,5]
+      dataframe <- as.data.frame(getSymbols(symbol, src = qm_src, from = dfrom, env = NULL))
+      
+      ### Set columns name
+      colnames(dataframe)[1] <- "open"
+      colnames(dataframe)[2] <- "high"
+      colnames(dataframe)[3] <- "low"
+      colnames(dataframe)[4] <- "close"
+      colnames(dataframe)[5] <- "volume"
+      colnames(dataframe)[6] <- "adjusted"
+      
+      ### Export content to CSV ###
+      fn <- paste(symbol,".csv", sep = "")
+      f <- paste(xf,fn, sep = "")
+      write.csv(dataframe, file = f)
+      i = i+1
+    }
+  }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+  
 }
 
 
