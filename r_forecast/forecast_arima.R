@@ -40,30 +40,32 @@ forecast_data <- function() {
   sql <- "SELECT * FROM symbol_list"
   res <- dbSendQuery(con, sql)
   
-  #tryCatch({
+  tryCatch({
     symbol_list <- fetch(res, n = -1)
     i <- 1
     while (i < nrow(symbol_list)) {
       ### Define data to collect
       symbol <- symbol_list[i,5]
       csvFile <- paste(csvf,symbol,".csv",sep = "")
-      mydata<- as.data.frame(read.csv(file = csvFile,header = TRUE, sep = ","))
-
-      attach(mydata)
-      T <- mydata
-      price <- ts(T$close)      
-      ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
-      fit <- auto.arima(ts_price, stepwise = F, approximation = F)
-      fc  <- forecast(fit, h = forecastNumbOfdays, level = c(75, 85, 95))
-      dataframe <- as.data.frame(fc)
-      
-      ### Export forecast to CSV ###
-      fn <- paste(symbol,".csv", sep = "")
-      f <- paste(xf,fn, sep = "")
-      write.csv(dataframe, file = f)
-      i = i+1
+      if(file.exists(csvFile)){
+        mydata<- as.data.frame(read.csv(file = csvFile,header = TRUE, sep = ","))
+  
+        attach(mydata)
+        T <- mydata
+        price <- ts(T$close)      
+        ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
+        fit <- auto.arima(ts_price, stepwise = F, approximation = F)
+        fc  <- forecast(fit, h = forecastNumbOfdays, level = c(75, 85, 95))
+        dataframe <- as.data.frame(fc)
+        
+        ### Export forecast to CSV ###
+        fn <- paste(symbol,".csv", sep = "")
+        f <- paste(xf,fn, sep = "")
+        write.csv(dataframe, file = f)
+     }
+        i = i+1
     }
- # }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+  }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
   
 }
 
