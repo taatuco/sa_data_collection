@@ -25,7 +25,6 @@ inst_ini_package <- function(){
 
 
 collect_data <- function() {
-
   ### Define path and other variables
   xf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_quantmod\\src\\"
   qm_src <- "yahoo"
