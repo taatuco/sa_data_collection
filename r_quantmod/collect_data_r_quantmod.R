@@ -1,3 +1,15 @@
+################################################################################
+# Desc: Collect historical data using quantmod library (source yahoo finance)
+#
+# Connect to MySQL database to retrieve the list of symbols to fetch for data.
+# Locate data and export content to csv files.
+#
+# inst_ini_package() = Check if all the necessary packages are installed.
+# collect_data() = Retrieve symbols from database and output results in csv.
+#
+# Auth: dh@taatu.co (Taatu Ltd.)
+#
+################################################################################
 
 ### Install necessary packages
 inst_ini_package <- function(){
@@ -7,7 +19,7 @@ inst_ini_package <- function(){
   library("quantmod")
   library("lubridate")
   library("DBI")
-  library("RMySQL")  
+  library("RMySQL")
 }
 
 
