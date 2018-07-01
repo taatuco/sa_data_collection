@@ -4,6 +4,8 @@
 :: This batch file execute R script and Python script that is dedicated to
 :: data collection and data manipulation on the SQL database.
 ::
+:: Dependencies: Required Python 3.X, R x64 3.X
+::
 :: Auth: dh@taatu.co (Taatu Ltd.)
 :: Date: July 1, 2018
 :: Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
