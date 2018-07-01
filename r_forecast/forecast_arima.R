@@ -8,7 +8,7 @@
 # forecast_data() = Run the forecast of various csv files and ouput results in csv.
 #
 # Auth: dh@taatu.co (Taatu Ltd.)
-#
+# Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
 ################################################################################
 
 ### Install necessary packages

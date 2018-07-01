@@ -5,7 +5,8 @@
 :: data collection and data manipulation on the SQL database.
 ::
 :: Auth: dh@taatu.co (Taatu Ltd.)
-::
+:: Date: July 1, 2018
+:: Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
 ::###############################################################################
 
 :: Rscript that collect price_historical_data using quantmod library
@@ -16,5 +17,5 @@ DEL /F /Q "C:\xampp\htdocs\_sa\sa_data_collection\r_quantmod\src\*"
 DEL /F /Q "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\src\*"
 "C:\Program Files\R\R-3.5.0\bin\x64\Rscript.exe" "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\forecast_arima.R"
 
-:: Install SQLAlchemy for Python to allow interaction with MySQL 
+:: Install SQLAlchemy for Python to allow interaction with MySQL
 "C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install SQLAlchemy
