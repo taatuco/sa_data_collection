@@ -33,18 +33,30 @@ connection = pymysql.connect(host=db_srv,
 # Get symbol_list to iterate for records to collect
 try:
     with connection.cursor() as cursor:
-        # Read a single record
+        # Read symbol_list
         sql = "SELECT * FROM symbol_list"
         cursor.execute(sql)
         result = cursor.fetchall()
         for row in result:
+            symbol_quantmod = row["r_quantmod"]
+            symbol_index = row["symbol"]
             # Read csv file
-            with open(csvdir+row["symbol"]+'csv') as csvfile:
+            with open(csvdir+symbol_quantmod+'.csv') as csvfile:
                 readCSV = csv.reader(csvfile, delimiter=',')
                 for row in readCSV:
-                    print(row)
-                    print(row[0])
-                    print(row[0],row[1],row[2],)
-            # For each symbol, retrieve the csv content
+                    # For each symbol, retrieve the csv content
+                    price_date = row[0]
+                    price_open = row[1]
+                    price_high = row[2]
+                    price_low = row[3]
+                    price_close = row[4]
+                    volume = row[5]
+                    # check for each row if not already exists.
+                    # if exists, then insert new record, else ignore.
+                    cursor.execute("SELECT *, COUNT(*) FROM price_instruments_data WHERE symbol=''"+symbol_index+"' AND date="+price_date)
+                    # gets the number of rows affected by the command executed
+                    price_instruments_data_count = cursor.rowcount
+                    if price_instruments_data_count == 0:
+                        # insert record in case not existing.
 finally:
     connection.close()
