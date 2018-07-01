@@ -17,6 +17,8 @@ db_name = 'smartalpha'
 db_srv = 'localhost'
 
 # Use PyMySQL to access MySQL database
+import pymysql.cursors
+
 connection = pymysql.connect(host=db_srv,
                              user=db_usr,
                              password=db_pwd,
