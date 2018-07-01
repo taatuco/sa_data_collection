@@ -16,6 +16,10 @@ db_pwd = '9XHWVxTH9ZJnshvN'
 db_name = 'smartalpha'
 db_srv = 'localhost'
 
+# Use csv
+import csv
+csvdir = "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_quantmod\\src\\"
+
 # Use PyMySQL to access MySQL database
 import pymysql.cursors
 
@@ -33,10 +37,14 @@ try:
         sql = "SELECT * FROM symbol_list"
         cursor.execute(sql)
         result = cursor.fetchall()
-        print(result)
+        for row in result:
+            # Read csv file
+            with open(csvdir+row["symbol"]+'csv') as csvfile:
+                readCSV = csv.reader(csvfile, delimiter=',')
+                for row in readCSV:
+                    print(row)
+                    print(row[0])
+                    print(row[0],row[1],row[2],)
+            # For each symbol, retrieve the csv content
 finally:
     connection.close()
-
-# Read csv file
-
-# For each symbol, retrieve the csv content
