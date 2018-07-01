@@ -1,4 +1,3 @@
-"""
 ###############################################################################
 # Desc: Read csv and update the database accordingly: table: price_historical_data
 #
@@ -8,4 +7,7 @@
 # Auth: dh@taatu.co (Taatu Ltd.)
 # Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
 ###############################################################################
-"""
+
+#
+from sqlalchemy import create_engine
+engine = create_engine('mysql://scott:tiger@localhost/foo')
