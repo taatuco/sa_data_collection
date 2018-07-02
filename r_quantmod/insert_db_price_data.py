@@ -7,6 +7,7 @@
 # Dependencies: PyMySQL is required to access MySQL database.
 #
 # Auth: dh@taatu.co (Taatu Ltd.)
+# Date: July 2, 2018
 # Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
 ###############################################################################
 
@@ -62,17 +63,16 @@ try:
                         volume = row[5]
                         # check for each row if not already exists.
                         # if exists, then insert new record, else ignore.
-                        if price_open != "open":
+                        if price_open != "open" and price_open != "NA":
                             with connection.cursor() as query_count_cursor:
-                                query_count_sql = "SELECT * FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND 'date'='"+price_date+"'"
+                                query_count_sql = "SELECT * FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND date='"+price_date+"'"
                                 query_count_cursor.execute(query_count_sql)
                                 exists_rec = query_count_cursor.fetchone()
                         
                             if not exists_rec:
                                 # insert record in case not existing.
                                 with connection.cursor() as query_insert_cursor:
-                                    insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+symbol_index+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
-                                    #print(insert_price_sql)
+                                    insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume, price_type) VALUES ('"+symbol_index+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+",'p');"
                                     query_insert_cursor.execute(insert_price_sql)
                                     connection.commit()
 
