@@ -1,5 +1,5 @@
 ###############################################################################
-# Desc: Read csv and update the database accordingly: table: price_historical_data
+# Desc: Read csv and update the database accordingly: table: price_instruments_data
 #
 # Read csv file and insert records that are not existing in the database table
 # price_instruments_data. (Avoid duplicate records).
