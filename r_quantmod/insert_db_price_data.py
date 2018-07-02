@@ -41,7 +41,6 @@ try:
         for row in result:
             symbol_quantmod = row["r_quantmod"]
             symbol_index = row["symbol"]
-<<<<<<< HEAD
             file_str = csvdir+symbol_quantmod+'.csv'
             filepath = Path(file_str)
             if filepath.exists():
@@ -77,25 +76,5 @@ try:
                                     query_insert_cursor.execute(insert_price_sql)
                                     connection.commit()
 
-=======
-            # Read csv file
-            with open(csvdir+symbol_quantmod+'.csv') as csvfile:
-                readCSV = csv.reader(csvfile, delimiter=',')
-                for row in readCSV:
-                    # For each symbol, retrieve the csv content
-                    price_date = row[0]
-                    price_open = row[1]
-                    price_high = row[2]
-                    price_low = row[3]
-                    price_close = row[4]
-                    volume = row[5]
-                    # check for each row if not already exists.
-                    # if exists, then insert new record, else ignore.
-                    cursor.execute("SELECT *, COUNT(*) FROM price_instruments_data WHERE symbol=''"+symbol_index+"' AND date="+price_date)
-                    # gets the number of rows affected by the command executed
-                    price_instruments_data_count = cursor.rowcount
-                    if price_instruments_data_count == 0:
-                        # insert record in case not existing.
->>>>>>> 4abd82d549d7fd850a38157a263e381c95c0a082
 finally:
     connection.close()
