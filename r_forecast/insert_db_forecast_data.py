@@ -53,6 +53,10 @@ try:
             file_str = csvdir+symbol_quantmod+'.csv'
             filepath = Path(file_str)
             if filepath.exists():
+                # Collect the last date from price_instruments_data of the selected symbol
+                with connection.cursor() as cursor_last_date:
+                    sql_last_date = "SELECT symbol, date FROM price_instruments_data WHERE symbol='"+symbol_index+"' ORDER by date DESC"
+                    cursor_last_date
                 # Read csv file
                 with open(file_str) as csvfile:
                     readCSV = csv.reader(csvfile, delimiter=',')
