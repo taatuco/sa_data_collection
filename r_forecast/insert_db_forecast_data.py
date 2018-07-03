@@ -4,7 +4,7 @@
 # Read csv file and insert records that are not existing in the database table
 # price_instruments_data. Existing records are updated according to column price_type.
 # This script will import the forecast model results into the price_instruments_data
-# table. 
+# table.
 #
 # Dependencies: PyMySQL is required to access MySQL database.
 # datetime library, timedelta library.
@@ -76,9 +76,11 @@ try:
                         price_high_95 = row[7]
                         if price_forecast != "Point Forecast":
                             # Check if price_type "f#" already exists. If not create new record, else update.
+                            with connection.cursor() as cursor_input_forecast:
+                                sql_input_forecast = "SELECT * FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='f"+str(i)+"'"
                             print(i)
                             print(price_forecast)
                             i += 1
-                        
+
 finally:
     connection.close()
