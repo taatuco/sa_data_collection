@@ -29,6 +29,7 @@ from pathlib import Path
 
 # Date time util library
 from dateutil import parser
+from datetime import datetime, timedelta
 
 # Use PyMySQL to access MySQL database
 import pymysql.cursors
@@ -55,9 +56,14 @@ try:
             if filepath.exists():
                 # Collect the last date from price_instruments_data of the selected symbol
                 with connection.cursor() as cursor_last_date:
-                    sql_last_date = "SELECT symbol, date FROM price_instruments_data WHERE symbol='"+symbol_index+"' ORDER by date DESC"
-                    cursor_last_date
+                    sql_last_date = "SELECT symbol, date FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='p' ORDER by date DESC"
+                    cursor_last_date.execute(sql_last_date)
+                    result_last_date = cursor_last_date.fetchone()
+                    # Collect the last date of the price historical data
+                    last_date_is = result_last_date["date"]
+                    forecast_date_start = last_date_is + timedelta(days=1)
                 # Read csv file
+                i = 1
                 with open(file_str) as csvfile:
                     readCSV = csv.reader(csvfile, delimiter=',')
                     for row in readCSV:
@@ -71,6 +77,10 @@ try:
                         price_high_85 = row[5]
                         price_low_95 = row[6]
                         price_high_95 = row[7]
+                        if price_forecast != "Point Forecast":
+                            print(i)
+                            print(price_forecast)
+                            i += 1
                         
 
 finally:

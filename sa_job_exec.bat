@@ -22,3 +22,6 @@ DEL /F /Q "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\src\*"
 :: Install PyMySQL for Python to allow interaction with MySQL
 "C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install mysql-python
 "C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install PyMySQL
+
+:: Install DateUtil for date and time format management
+"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install python-dateutil
