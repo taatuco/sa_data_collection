@@ -7,9 +7,7 @@
 # table. 
 #
 # Dependencies: PyMySQL is required to access MySQL database.
-# Use the dateutils library.
-# dt = parser.parse("Aug 28 1999 12:00AM")
-# pip install python-dateutil
+# datetime library, timedelta library.
 #
 # Auth: dh@taatu.co (Taatu Ltd.)
 # Date: July 2, 2018
@@ -27,8 +25,7 @@ import csv
 csvdir = "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_forecast\\src\\"
 from pathlib import Path
 
-# Date time util library
-from dateutil import parser
+# Date time library
 from datetime import datetime, timedelta
 
 # Use PyMySQL to access MySQL database
@@ -78,10 +75,10 @@ try:
                         price_low_95 = row[6]
                         price_high_95 = row[7]
                         if price_forecast != "Point Forecast":
+                            # Check if price_type "f#" already exists. If not create new record, else update.
                             print(i)
                             print(price_forecast)
                             i += 1
                         
-
 finally:
     connection.close()
