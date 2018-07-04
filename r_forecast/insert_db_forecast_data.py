@@ -106,7 +106,6 @@ try:
                                 exists_rec = cursor_input_forecast.fetchone()
 
                             forecast_date_str = str(forecast_date_start).replace("-","")
-
                             if not exists_rec:
                                 with connection.cursor() as cursor_insert_forecast:
                                     # insert record in case it is not existing
