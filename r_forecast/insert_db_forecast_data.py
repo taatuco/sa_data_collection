@@ -105,16 +105,28 @@ try:
                                 cursor_input_forecast.execute(sql_input_forecast)
                                 exists_rec = cursor_input_forecast.fetchone()
 
+                            forecast_date_str = str(forecast_date_start).replace("-","")
+
                             if not exists_rec:
                                 with connection.cursor() as cursor_insert_forecast:
                                     # insert record in case it is not existing
-                                    forecast_date_str = str(forecast_date_start).replace("-","")
                                     sql_insert_forecast = "INSERT INTO price_instruments_data (symbol, date, price_forecast, price_low_75, price_high_75, price_low_85, price_high_85, price_low_95, price_high_95, price_type) VALUES ('"+symbol_index+"',"+forecast_date_str+","+price_forecast+","+price_low_75+","+price_high_75+","+price_low_85+","+price_high_85+","+price_low_95+","+price_high_95+",'f"+str(i)+"');"
                                     cursor_insert_forecast.execute(sql_insert_forecast)
                                     connection.commit()
                             else:
                                 # update the record line
-                                pass
+                                with connection.cursor() as cursor_update_forecast:
+                                    sql_update_forecast = "UPDATE price_instruments_data SET date = " + forecast_date_str +
+                                                            ", price_forecast = " + price_forecast +
+                                                            ", price_low_75 = " + price_low_75 +
+                                                            ", price_high_75 = " + price_high_75 +
+                                                            ", price_low_85 = " + price_low_85 +
+                                                            ", price_high_85 = " + price_high_85 +
+                                                            ", price_low_95 = " + price_low_95 +
+                                                            ", price_high_95 = " + price_high_95 +
+                                                            " WHERE symbol ='"+symbol_index+"' AND price_type='f"+str(i)+"'"
+                                    cursor_update_forecast.execute(sql_update_forecast)
+                                    connection.commit()
 
                             i += 1
                             forecast_date_start = forecast_date_start + timedelta(days=1)
