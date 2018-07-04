@@ -25,3 +25,8 @@ DEL /F /Q "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\src\*"
 
 :: Install DateUtil for date and time format management
 "C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install python-dateutil
+
+:: Import and update historical data
+"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" "C:\xampp\htdocs\_sa\sa_data_collection\r_quantmod\insert_db_price_data.py"
+:: Import forecast price point
+"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\insert_db_forecast_data.py"
