@@ -5,17 +5,25 @@
 # price_instruments_data. (Avoid duplicate records).
 #
 # Dependencies: PyMySQL is required to access MySQL database.
+# sys, os libraries.
 #
 # Auth: dh@taatu.co (Taatu Ltd.)
 # Date: July 2, 2018
 # Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
 ###############################################################################
 
+#import db access object
+import sys
+import os
+sys.path.append(os.path.abspath("../../sa_pwd"))
+from sa_access import *
+access_obj = sa_db_access()
+
 #define database username and password and other variable regarding access to db
-db_usr = 'sa_db_user'
-db_pwd = '9XHWVxTH9ZJnshvN'
-db_name = 'smartalpha'
-db_srv = 'localhost'
+db_usr = access_obj.username()
+db_pwd = access_obj.password()
+db_name = access_obj.db_name()
+db_srv = access_obj.db_server()
 
 # Use csv and file system
 import csv
