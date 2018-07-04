@@ -34,7 +34,7 @@
 #import db access object
 import sys
 import os
-sys.path.append(os.path.abspath("../../sa_pwd"))
+sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
 
