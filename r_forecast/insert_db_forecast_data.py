@@ -8,6 +8,7 @@
 #
 # Dependencies: PyMySQL is required to access MySQL database.
 # datetime library, timedelta library.
+# sys, os libraries.
 #
 # Auth: dh@taatu.co (Taatu Ltd.)
 # Date: July 2, 2018
@@ -72,7 +73,7 @@ try:
                     readCSV = csv.reader(csvfile, delimiter=',')
                     for row in readCSV:
                         # Retrieve csv content
-                        #date retrieve the last date and increment.
+                        # date retrieve the last date and increment.
                         price_date = row[0]
                         price_forecast = row[1]
                         price_low_75 = row[2]
@@ -85,9 +86,22 @@ try:
                             # Check if price_type "f#" already exists. If not create new record, else update.
                             with connection.cursor() as cursor_input_forecast:
                                 sql_input_forecast = "SELECT * FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='f"+str(i)+"'"
-                            print(i)
-                            print(price_forecast)
+                                cursor_input_forecast.execute(sql_input_forecast)
+                                exists_rec = cursor_input_forecast.fetchone()
+
+                            if not exists_rec:
+                                with connection.cursor() as cursor_insert_forecast:
+                                    # insert record in case it is not existing
+                                    forecast_date_str = str(forecast_date_start).replace("-","")
+                                    sql_insert_forecast = "INSERT INTO price_instruments_data (symbol, date, price_forecast, price_low_75, price_high_75, price_low_85, price_high_85, price_low_95, price_high_95, price_type) VALUES ('"+symbol_index+"',"+forecast_date_str+","+price_forecast+","+price_low_75+","+price_high_75+","+price_low_85+","+price_high_85+","+price_low_95+","+price_high_95+",'f"+str(i)+"');"
+                                    cursor_insert_forecast.execute(sql_insert_forecast)
+                                    connection.commit()
+                            else:
+                                # update the record line
+                                pass
+                            
                             i += 1
+                            forecast_date_start = forecast_date_start + timedelta(days=1)
 
 finally:
     connection.close()
