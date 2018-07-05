@@ -59,7 +59,6 @@ try:
                                 sql_ma200_update = "UPDATE price_instruments_data "+\
                                                    "SET ma200="+ma200 +\
                                                    " WHERE symbol='"+symbol_index+"' AND date="+ date_index
-                                print(sql_ma200_update)
                                 cursor_ma200_update.execute(sql_ma200_update)
                                 connection.commit()
 
