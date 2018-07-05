@@ -2,7 +2,7 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
- 
+
 #import db access object
 import sys
 import os
@@ -44,25 +44,24 @@ try:
                 result_price_data = cursor_price_data.fetchall()
                 for row in result_price_data:
                     date_index = str(row["date"]).replace("-","")
-                if date_index != "":
-                    # For each date get the average price for 200 period
-                    with connection.cursor() as cursor_price_avg:
-                        sql_price_avg = "SELECT AVG(price_close) AS avg200 "+\
-                                        "FROM (SELECT symbol, date, ma200, price_close "+\
-                                        "FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND "+\
-                                        "date<"+date_index+" LIMIT 200) avg_table"
-                        cursor_price_avg.execute(sql_price_avg)
-                        result_price_avg = cursor_price_avg.fetchall()
-                        for row in result_price_avg:
-                            ma200 = row["avg200"]
-                        # Update ma200 column
-                        with connection.cursor() as cursor_ma200_update:
-                            sql_ma200_update = "UPDATE FROM price_instruments_data "+\
-                                               "SET ma200 ="+ma200 +\
-                                               " WHERE symbol='"+symbol_index+"' AND date="+ date_index
-                            print(sql_ma200_update)
-                            cursor_ma200_update.execute(sql_ma200_update)
-                            connection.commit()            
+                # For each date get the average price for 200 period
+                with connection.cursor() as cursor_price_avg:
+                    sql_price_avg = "SELECT AVG(price_close) AS avg200 "+\
+                                    "FROM (SELECT symbol, date, ma200, price_close "+\
+                                    "FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND "+\
+                                    "date<"+date_index+" LIMIT 200) avg_table"
+                    cursor_price_avg.execute(sql_price_avg)
+                    result_price_avg = cursor_price_avg.fetchall()
+                    for row in result_price_avg:
+                        ma200 = str(row["avg200"])
+                    # Update ma200 column
+                    with connection.cursor() as cursor_ma200_update:
+                        sql_ma200_update = "UPDATE FROM price_instruments_data "+\
+                                           "SET ma200 ="+ma200 +\
+                                           " WHERE symbol='"+symbol_index+"' AND date="+ date_index
+                        print(sql_ma200_update)
+                        cursor_ma200_update.execute(sql_ma200_update)
+                        connection.commit()
 
 finally:
     connection.close()
