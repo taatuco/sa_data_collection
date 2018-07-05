@@ -46,6 +46,7 @@ inst_ini_package <- function(){
 forecast_data <- function() {
 
   ### Define path and other variables
+  source("C:\\xampp\\htdocs\\_sa\\sa_pwd\\sa_access.R")
   xf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_forecast\\src\\"
   csvf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_quantmod\\src\\"
   qm_src <- "yahoo"
@@ -56,12 +57,12 @@ forecast_data <- function() {
   forecastNumbOfdays <- 7
 
   ### Connect to MySQL database to retrieve list of symbols
-  db_usr <- "sa_db_user"
-  db_pwd <- "9XHWVxTH9ZJnshvN"
+  db_usr <- get_sa_usr()
+  db_pwd <- get_sa_pwd()
   # create a driver
   m = dbDriver("MySQL")
-  myHost <- "127.0.0.1"
-  myDbname <- "smartalpha"
+  myHost <- get_sa_db_srv()
+  myDbname <- get_sa_db_name()
   myPort <- 3306
   con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
 
