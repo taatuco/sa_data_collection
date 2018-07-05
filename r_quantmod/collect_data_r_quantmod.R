@@ -29,17 +29,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Install necessary packages
-inst_ini_package <- function(){
-  list.of.packages <- c("lubridate","quantmod", "tidyquant", "DBI", "RMySQL")
-  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-  if(length(new.packages)) install.packages(new.packages)
-  library("quantmod")
-  library("lubridate")
-  library("DBI")
-  library("RMySQL")
-}
-
-
+source("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_packages\\r_packages.R")
 
 collect_data <- function() {
   ### Define path and other variables
