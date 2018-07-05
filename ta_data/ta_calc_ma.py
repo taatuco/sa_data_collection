@@ -56,8 +56,8 @@ try:
                             ma200 = str(row["avg200"])
                         # Update ma200 column
                         with connection.cursor() as cursor_ma200_update:
-                            sql_ma200_update = "UPDATE FROM price_instruments_data "+\
-                                               "SET ma200 ="+ma200 +\
+                            sql_ma200_update = "UPDATE price_instruments_data "+\
+                                               "SET ma200="+ma200 +\
                                                " WHERE symbol='"+symbol_index+"' AND date="+ date_index
                             print(sql_ma200_update)
                             cursor_ma200_update.execute(sql_ma200_update)
