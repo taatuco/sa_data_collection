@@ -55,12 +55,12 @@ try:
                         for row in result_price_avg:
                             ma200 = str(row["avg200"])
                             # Update ma200 column
-                            with connection.cursor() as cursor_ma200_update:
-                                sql_ma200_update = "UPDATE price_instruments_data "+\
-                                                   "SET ma200="+ma200 +\
-                                                   " WHERE symbol='"+symbol_index+"' AND date="+ date_index
-                                cursor_ma200_update.execute(sql_ma200_update)
-                                connection.commit()
+                        with connection.cursor() as cursor_ma200_update:
+                            sql_ma200_update = "UPDATE price_instruments_data "+\
+                                               "SET ma200="+ma200 +\
+                                               " WHERE symbol='"+symbol_index+"' AND date="+ date_index
+                            cursor_ma200_update.execute(sql_ma200_update)
+                            connection.commit()
 
 finally:
     connection.close()
