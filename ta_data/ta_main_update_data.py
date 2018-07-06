@@ -36,6 +36,10 @@ sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
 
+#import all TA functions
+sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\ta_data\\"))
+from ta_calc_ma import *
+
 #define database username and password and other variable regarding access to db
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -73,7 +77,9 @@ try:
                                   "fib_61_8=0, fib_76_4=0, fib_100=0 "+\
                                   " WHERE symbol='"+symbol_index+"'"
                 cursor_clr_ta_data.execute(sql_clr_ta_data)
-                connection.commit()                                                                   
-
+                connection.commit()
 finally:
     connection.close()
+
+# calc ma200 and update records
+calc_ma()

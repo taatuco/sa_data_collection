@@ -30,3 +30,6 @@ DEL /F /Q "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\src\*"
 "C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" "C:\xampp\htdocs\_sa\sa_data_collection\r_quantmod\insert_db_price_data.py"
 :: Import forecast price point
 "C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\insert_db_forecast_data.py"
+
+:: Compute TA data
+"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" "C:\xampp\htdocs\_sa\sa_data_collection\ta_data\ta_main_update_data.py"
