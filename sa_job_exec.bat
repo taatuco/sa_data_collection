@@ -20,11 +20,11 @@ DEL /F /Q "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\src\*"
 "C:\Program Files\R\R-3.5.0\bin\x64\Rscript.exe" "C:\xampp\htdocs\_sa\sa_data_collection\r_forecast\forecast_arima.R"
 
 :: Install PyMySQL for Python to allow interaction with MySQL
-"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install mysql-python
-"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install PyMySQL
+"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\Scripts\pip.exe" install mysql-python
+"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\Scripts\pip.exe" install PyMySQL
 
 :: Install DateUtil for date and time format management
-"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" install python-dateutil
+"C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\Scripts\pip.exe" install python-dateutil
 
 :: Import and update historical data
 "C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe" "C:\xampp\htdocs\_sa\sa_data_collection\r_quantmod\insert_db_price_data.py"

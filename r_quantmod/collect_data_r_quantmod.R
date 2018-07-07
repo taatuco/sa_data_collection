@@ -36,7 +36,7 @@ collect_data <- function() {
   source("C:\\xampp\\htdocs\\_sa\\sa_pwd\\sa_access.R")
   xf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_quantmod\\src\\"
   qm_src <- "yahoo"
-  yx <- year(now()-1)
+  yx <- year(now())-1
   dfrom <- paste(yx,"-01-01",sep = "")
 
   ### Connect to MySQL database to retrieve list of symbols
