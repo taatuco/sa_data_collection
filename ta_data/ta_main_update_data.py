@@ -5,9 +5,6 @@
 # price_instruments_data. Various scripts are called to calculate and transform data
 # to import in the database.
 #
-# Dependencies: PyMySQL is required to access MySQL database.
-# sys, os libraries.
-#
 # Auth: dh@taatu.co (Taatu Ltd.)
 # Date: July 5, 2018
 ###############################################################################
@@ -76,9 +73,20 @@ try:
                 result_date_index = cursor_date_index.fetchall()
                 for row in result_date_index:
                     date_index = str(row["date"]).replace("-","")
+                    
                     # for each symbol and each date
                     ma = calc_ma(symbol_index,date_index,200)
                     is_ta_calc = "1"
+
+                    # update record
+                    with connection.cursor() as cursor_update:
+                        sql_update = "UPDATE price_instruments_data SET "+\
+                        "ma200="+ma+ ", "+\
+                        "is_ta_calc="+is_ta_calc+" "+\
+                        "WHERE symbol='"+symbol_index+"' AND date="+date_index
+                        cursor_update.execute(sql_update)
+                        connection.commit()
+                        cursor_update.close()
 
 finally:
     connection.close()
