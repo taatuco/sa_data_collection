@@ -60,7 +60,7 @@ connection = pymysql.connect(host=db_srv,
 try:
     with connection.cursor() as cursor:
         # Read symbol_list
-        sql = "SELECT * FROM symbol_list"
+        sql = "SELECT symbol, r_quantmod FROM symbol_list"
         cursor.execute(sql)
         result = cursor.fetchall()
         for row in result:
@@ -89,7 +89,7 @@ try:
                         # if exists, then insert new record, else ignore.
                         if price_open != "open" and price_open != "NA":
                             with connection.cursor() as query_count_cursor:
-                                query_count_sql = "SELECT * FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND date='"+price_date+"'"
+                                query_count_sql = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND date='"+price_date+"'"
                                 query_count_cursor.execute(query_count_sql)
                                 exists_rec = query_count_cursor.fetchone()
 
@@ -99,8 +99,8 @@ try:
                                         insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume, price_type) VALUES ('"+symbol_index+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+",'p');"
                                         query_insert_cursor.execute(insert_price_sql)
                                         connection.commit()
-                                        connection.close()
+                                        query_insert_cursor.close()
 
-                                connection.close()
+                                query_count_cursor.close()
 finally:
     connection.close()

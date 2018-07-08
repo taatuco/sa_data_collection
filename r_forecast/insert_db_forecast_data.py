@@ -66,7 +66,7 @@ connection = pymysql.connect(host=db_srv,
 try:
     with connection.cursor() as cursor:
         # Read symbol_list
-        sql = "SELECT * FROM symbol_list"
+        sql = "SELECT symbol, r_quantmod FROM symbol_list"
         cursor.execute(sql)
         result = cursor.fetchall()
         for row in result:
@@ -77,12 +77,13 @@ try:
             if filepath.exists():
                 # Collect the last date from price_instruments_data of the selected symbol
                 with connection.cursor() as cursor_last_date:
-                    sql_last_date = "SELECT symbol, date FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='p' ORDER by date DESC"
+                    sql_last_date = "SELECT date FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='p' ORDER by date DESC"
                     cursor_last_date.execute(sql_last_date)
                     result_last_date = cursor_last_date.fetchone()
                     # Collect the last date of the price historical data
                     last_date_is = result_last_date["date"]
                     forecast_date_start = last_date_is + timedelta(days=1)
+                    cursor_last_date.close()
                 # Read csv file
                 i = 1
                 with open(file_str) as csvfile:
@@ -101,9 +102,10 @@ try:
                         if price_forecast != "Point Forecast":
                             # Check if price_type "f#" already exists. If not create new record, else update.
                             with connection.cursor() as cursor_input_forecast:
-                                sql_input_forecast = "SELECT * FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='f"+str(i)+"'"
+                                sql_input_forecast = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='f"+str(i)+"'"
                                 cursor_input_forecast.execute(sql_input_forecast)
                                 exists_rec = cursor_input_forecast.fetchone()
+                                cursor_input_forecast.close()
 
                             forecast_date_str = str(forecast_date_start).replace("-","")
                             if not exists_rec:
@@ -115,6 +117,7 @@ try:
                                                             ","+price_low_85+","+price_high_85+","+price_low_95+","+price_high_95+",'f"+str(i)+"');"
                                     cursor_insert_forecast.execute(sql_insert_forecast)
                                     connection.commit()
+                                    cursor_insert_forecast.close()
                             else:
                                 # update the record line
                                 with connection.cursor() as cursor_update_forecast:
@@ -129,6 +132,7 @@ try:
                                                             " WHERE symbol ='"+symbol_index+"' AND price_type='f"+str(i)+"'"
                                     cursor_update_forecast.execute(sql_update_forecast)
                                     connection.commit()
+                                    cursor_update_forecast.close()
 
                             i += 1
                             forecast_date_start = forecast_date_start + timedelta(days=1)

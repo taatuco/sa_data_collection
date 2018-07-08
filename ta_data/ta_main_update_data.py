@@ -58,16 +58,27 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-# Get symbol_list to iterate for records to collect and process
 try:
     with connection.cursor() as cursor:
-        # Read symbol_list
-        sql = "SELECT * FROM symbol_list"
+        sql = "SELECT symbol, r_quantmod FROM symbol_list"
         cursor.execute(sql)
         result = cursor.fetchall()
         for row in result:
             symbol_quantmod = row["r_quantmod"]
             symbol_index = row["symbol"]
+            # for each symbol
             set_zero_fib_trend(symbol_index)
+
+            with connection.cursor() as cursor_date_index:
+                sql_date_index = "SELECT date FROM price_instruments_data "+\
+                "WHERE symbol='"+symbol_index+" and is_ta_calc=0' ORDER BY date DESC"
+                cursor_date_index.execute(sql_date_index)
+                result_date_index = cursor_date_index.fetchall()
+                for row in result_date_index:
+                    date_index = str(row["date"]).replace("-","")
+                    # for each symbol and each date
+                    ma = calc_ma(symbol_index,date_index,200)
+                    is_ta_calc = "1"
+
 finally:
     connection.close()
