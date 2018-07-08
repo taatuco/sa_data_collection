@@ -38,6 +38,7 @@ access_obj = sa_db_access()
 
 #import all TA functions
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\ta_data\\"))
+from ta_zeroing_fib_trend import *
 from ta_calc_ma import *
 
 #define database username and password and other variable regarding access to db
@@ -57,7 +58,7 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-# Get symbol_list to iterate for records to collect
+# Get symbol_list to iterate for records to collect and process
 try:
     with connection.cursor() as cursor:
         # Read symbol_list
@@ -67,19 +68,6 @@ try:
         for row in result:
             symbol_quantmod = row["r_quantmod"]
             symbol_index = row["symbol"]
-            ### get price_instruments_data for the corresponding symbol_index
-            # clear previous data to accommodate new one
-            with connection.cursor() as cursor_clr_ta_data:
-                sql_clr_ta_data = "UPDATE price_instruments_data SET "+\
-                                  "mt_trend_high=0, mt_trend_low=0, "+\
-                                  "st_trend_high=0, st_trend_low=0, "+\
-                                  "fib_0=0, fib_23_6=0, fib_38_2=0, "+\
-                                  "fib_61_8=0, fib_76_4=0, fib_100=0 "+\
-                                  " WHERE symbol='"+symbol_index+"'"
-                cursor_clr_ta_data.execute(sql_clr_ta_data)
-                connection.commit()
+            set_zero_fib_trend(symbol_index)
 finally:
     connection.close()
-
-# calc ma200 and update records
-calc_ma()

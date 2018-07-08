@@ -100,7 +100,7 @@ try:
                                         query_insert_cursor.execute(insert_price_sql)
                                         connection.commit()
                                         connection.close()
-                                        
+
                                 connection.close()
 finally:
     connection.close()
