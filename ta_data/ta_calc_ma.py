@@ -53,9 +53,12 @@ def calc_ma():
                     result_list_price = cursor_list_price.fetchall()
                     for row in result_list_price:
                         date_index = str(row["date"]).replace("-","")
+                        # compute the average value using loop might be faster
+                        ### export data symbol, date, ma200 in csv...
+                        ########################################
+                        '''
                         drop_tmp_v_view()
                         # Create temporary SQL view to get ma200 value
-
                         with connection.cursor() as cursor_create_view:
                             sql_create_view = "CREATE VIEW tmp_v_ma200 AS "+\
                                   "(SELECT symbol, avg(price_close) as 'ma200' "+\
@@ -83,6 +86,6 @@ def calc_ma():
 
                         # Remove view
                         drop_tmp_v_view()
-
+                        '''
     finally:
         connection.close()
