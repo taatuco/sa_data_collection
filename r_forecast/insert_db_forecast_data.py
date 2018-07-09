@@ -6,10 +6,6 @@
 # This script will import the forecast model results into the price_instruments_data
 # table.
 #
-# Dependencies: PyMySQL is required to access MySQL database.
-# datetime library, timedelta library.
-# sys, os libraries.
-#
 # Auth: dh@taatu.co (Taatu Ltd.)
 # Date: July 2, 2018
 ###############################################################################

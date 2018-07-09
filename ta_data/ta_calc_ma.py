@@ -3,13 +3,13 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+import sys
+import os
+sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
+from sa_access import *
+access_obj = sa_db_access()
+    
 def calc_ma(symbol_index, date_index, ma_period):
-    #import db access object
-    import sys
-    import os
-    sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
-    from sa_access import *
-    access_obj = sa_db_access()
 
     #define database username and password and other variable regarding access to db
     db_usr = access_obj.username()
