@@ -10,7 +10,6 @@ from sa_access import *
 access_obj = sa_db_access()
 
 '''
-(FIRST_AVG, GAIN, LOSS) = AVERAGE( (GAIN) ), AVERAGE( (LOSS) ) (if count> rsi_period)
 (AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(rsi_period-1)+ (GAIN) ) / rsi_period
 (AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(rsi_period-1)+ (LOSS) ) / rsi_period
 (RS) = (AVG_GAIN) / (AVG_LOSS)
@@ -26,6 +25,8 @@ class day_data:
     c_prev_avg_loss = 0
     c_curr_avg_gain = 0
     c_curr_avg_loss = 0
+    c_prev_is_ta_calc = 0
+    c_curr_is_ta_calc = 0
 
     #define database username and password and other variable regarding access to db
     db_usr = access_obj.username()
@@ -59,10 +60,10 @@ class day_data:
         #(FIRST_AVG, GAIN, LOSS) = AVERAGE( (GAIN) ), AVERAGE( (LOSS) ) (if count> rsi_period)
         # In case previous is 0 then get average of last rsi_period
         tt_gain = 0
-        if day_data.c_prev_avg_gain == 0:
+        if day_data.c_prev_avg_gain == 0 and day_data.c_prev_is_ta_calc == 1:
             with day_data.connection.cursor() as cr_get_avg:
                 sql_get_avg = "SELECT avg_gain, gain_1d FROM price_instruments_data "+\
-                              "WHERE symbol='"+self.symbol+"' AND date<"+str(self.date)+" "+\
+                              "WHERE symbol='"+self.symbol+"' AND date<"+str(self.date)+" AND is_ta_calc=1 "+\
                               "LIMIT "+str(self.rsi_period)
                 cr_get_avg.execute(sql_get_avg)
                 result_avg = cr_get_avg.fetchall()
@@ -70,7 +71,11 @@ class day_data:
                     for row in result_avg:
                         tt_gain = tt_gain + row["gain_1d"]
                     day_data.c_curr_avg_gain = tt_gain / self.rsi_period
-                    
+        else:
+            if day_data.c_prev_is_ta_calc == 1:
+                #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(rsi_period-1)+ (GAIN) ) / rsi_period                
+                pass
+                        
         return day_data.c_curr_avg_gain
 
     def get_loss(self):
@@ -85,7 +90,7 @@ class day_data:
     
     def set_data(self):
         with day_data.connection.cursor() as cr_get_prev_d:
-            sql_get_prev_d = "SELECT price_close, avg_gain, avg_loss FROM price_instruments_data "+\
+            sql_get_prev_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
                                  "WHERE symbol='"+self.symbol+"' AND date<"+str(self.date)+" "+\
                                  "ORDER BY date DESC LIMIT 1"
             cr_get_prev_d.execute(sql_get_prev_d)
@@ -95,9 +100,10 @@ class day_data:
                     day_data.c_prev_close_price = row["price_close"]
                     day_data.c_prev_avg_gain = row["avg_gain"]
                     day_data.c_prev_avg_loss = row["avg_loss"]
+                    day_data.c_prev_is_ta_calc = row["is_ta_calc"]
                            
                 with day_data.connection.cursor() as cr_get_curr_d:
-                    sql_get_curr_d = "SELECT price_close, avg_gain, avg_loss FROM price_instruments_data "+\
+                    sql_get_curr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
                                          "WHERE symbol='"+self.symbol+"' AND date="+str(self.date)+" "+\
                                          "ORDER BY date DESC LIMIT 1"
                     cr_get_curr_d.execute(sql_get_curr_d)
@@ -107,6 +113,7 @@ class day_data:
                             day_data.c_curr_price_close = row["price_close"]
                             day_data.c_curr_avg_gain = row["avg_gain"]
                             day_data.c_curr_avg_loss = row["avg_loss"]
+                            day_data.c_curr_is_ta_calc = row["is_ta_calc"]
                             
                     cr_get_curr_d.close()
             cr_get_prev_d.close()
