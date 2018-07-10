@@ -37,6 +37,7 @@ access_obj = sa_db_access()
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\ta_data\\"))
 from ta_zeroing_fib_trend import *
 from ta_calc_ma import *
+from ta_calc_rsi import *
 
 #define database username and password and other variable regarding access to db
 db_usr = access_obj.username()
@@ -68,24 +69,45 @@ try:
 
             with connection.cursor() as cursor_date_index:
                 sql_date_index = "SELECT date FROM price_instruments_data "+\
-                "WHERE symbol='"+symbol_index+" and is_ta_calc=0' ORDER BY date DESC"
+                "WHERE symbol='"+symbol_index+"' and is_ta_calc=0 ORDER BY date ASC"
                 cursor_date_index.execute(sql_date_index)
                 result_date_index = cursor_date_index.fetchall()
                 for row in result_date_index:
                     date_index = str(row["date"]).replace("-","")
-                    
                     # for each symbol and each date
-                    ma = calc_ma(symbol_index,date_index,200)
+                    rsi = rsi_data(symbol_index,date_index,14)
+                    change_1d = rsi.get_change()
+                    gain_1d = rsi.get_gain()
+                    loss_1d = rsi.get_loss()
+                    avg_gain = rsi.get_avg_gain()
+                    avg_loss = rsi.get_avg_loss()
+                    rs14 = rsi.get_rs()
+                    rsi14 = rsi.get_rsi()
+                    rsi_overbought = rsi.get_rsi_overbought()
+                    rsi_oversold = rsi.get_rsi_oversold()
+                    ma200 = calc_ma(symbol_index,date_index,200)                    
                     is_ta_calc = "1"
-
+                    
                     # update record
-                    with connection.cursor() as cursor_update:
-                        sql_update = "UPDATE price_instruments_data SET "+\
-                        "ma200="+ma+ ", "+\
-                        "is_ta_calc="+is_ta_calc+" "+\
-                        "WHERE symbol='"+symbol_index+"' AND date="+date_index
-                        cursor_update.execute(sql_update)
-                        connection.commit()
+                    try:
+                        with connection.cursor() as cursor_update:
+                            sql_update = "UPDATE price_instruments_data SET "+\
+                            "change_1d="+str(change_1d)+", "+\
+                            "gain_1d="+str(gain_1d)+", "+\
+                            "loss_1d="+str(loss_1d)+", "+\
+                            "avg_gain="+str(avg_gain)+", "+\
+                            "avg_loss="+str(avg_loss)+", "+\
+                            "rs14="+str(rs14)+", "+\
+                            "rsi14="+str(rsi14)+", "+\
+                            "rsi_overbought="+str(rsi_overbought)+", "+\
+                            "rsi_oversold="+str(rsi_oversold)+", "+\
+                            "ma200="+str(ma200)+ ", "+\
+                            "is_ta_calc="+str(is_ta_calc)+" "+\
+                            "WHERE symbol='"+symbol_index+"' AND date="+date_index
+                            cursor_update.execute(sql_update)
+                            connection.commit()
+                            cursor_update.close()
+                    except:
                         cursor_update.close()
 
 finally:

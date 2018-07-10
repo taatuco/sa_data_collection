@@ -28,6 +28,7 @@ def calc_ma(symbol_index, date_index, ma_period):
                                  cursorclass=pymysql.cursors.DictCursor)
     try:
         ma_period = str(ma_period)
+        ma = 0
         with connection.cursor() as cursor:
             sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
             "WHERE symbol='"+symbol_index+"' AND date<"+date_index+" "+\
@@ -37,10 +38,7 @@ def calc_ma(symbol_index, date_index, ma_period):
             if result:
                 for row in result:
                     ma = row["ma"]
-            else:
-                ma = 0
-
-            return(str(ma))
+            return(ma)
 
     finally:
         connection.close()

@@ -88,7 +88,8 @@ try:
                             with connection.cursor() as query_count_cursor:
                                 query_count_sql = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND date='"+price_date+"'"
                                 query_count_cursor.execute(query_count_sql)
-                                exists_rec = query_count_cursor.fetchone()
+                                exists_rec = query_count_cursor.fetchall()
+                                print(query_count_sql)
 
                                 if not exists_rec:
                                     # insert record in case not existing.
@@ -96,6 +97,7 @@ try:
                                         insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume, price_type) VALUES ('"+symbol_index+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+",'p');"
                                         query_insert_cursor.execute(insert_price_sql)
                                         connection.commit()
+                                        print(insert_price_sql)
                                         query_insert_cursor.close()
 
                                 query_count_cursor.close()
