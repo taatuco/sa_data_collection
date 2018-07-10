@@ -112,6 +112,7 @@ class rsi_data:
                     for row in result_avg_g:
                         tt_gain = tt_gain + row["gain_1d"]
                     rsi_data.c_curr_avg_gain = tt_gain / self.rsi_period
+                cr_get_avg_g.close()
         else:
             #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(rsi_period-1)+ (GAIN) ) / rsi_period
             rsi_data.c_curr_avg_gain = ( ( rsi_data.c_prev_avg_gain * (self.rsi_period-1) )+ rsi_data.c_curr_gain )/self.rsi_period                       
@@ -131,6 +132,7 @@ class rsi_data:
                     for row in result_avg_l:
                         tt_loss = tt_loss + row["loss_1d"]
                     rsi_data.c_curr_avg_loss = tt_loss / self.rsi_period
+                cr_get_avg_l.close()
         else:
             #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(rsi_period-1)+ (LOSS) ) / rsi_period
             rsi_data.c_curr_avg_loss = ( ( rsi_data.c_prev_avg_loss * (self.rsi_period-1) )+ rsi_data.c_curr_loss )/self.rsi_period                       

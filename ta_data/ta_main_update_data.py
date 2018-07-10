@@ -89,26 +89,36 @@ try:
                     is_ta_calc = "1"
                     
                     # update record
-                    try:
-                        with connection.cursor() as cursor_update:
-                            sql_update = "UPDATE price_instruments_data SET "+\
-                            "change_1d="+str(change_1d)+", "+\
-                            "gain_1d="+str(gain_1d)+", "+\
-                            "loss_1d="+str(loss_1d)+", "+\
-                            "avg_gain="+str(avg_gain)+", "+\
-                            "avg_loss="+str(avg_loss)+", "+\
-                            "rs14="+str(rs14)+", "+\
-                            "rsi14="+str(rsi14)+", "+\
-                            "rsi_overbought="+str(rsi_overbought)+", "+\
-                            "rsi_oversold="+str(rsi_oversold)+", "+\
-                            "ma200="+str(ma200)+ ", "+\
-                            "is_ta_calc="+str(is_ta_calc)+" "+\
-                            "WHERE symbol='"+symbol_index+"' AND date="+date_index
-                            cursor_update.execute(sql_update)
-                            connection.commit()
-                            cursor_update.close()
+                    cursor_select = connection.cursor(pymysql.cursors.SSCursor)
+                    sql_select = "SELECT id from price_instruments_data "+\
+                                 "WHERE symbol='"+symbol_index+"' AND date="+date_index+" AND is_ta_calc=0"
+                    cursor_select.execute(sql_select)
+                    result_select = cursor_select.fetchall()
+                    for row in result_select:
+                        id = row[0]
+                    cursor_select.close()
+                    
+                    try:                        
+                        cursor_update = connection.cursor(pymysql.cursors.SSCursor)
+                        sql_update = "UPDATE price_instruments_data SET "+\
+                        "change_1d="+str(change_1d)+", "+\
+                        "gain_1d="+str(gain_1d)+", "+\
+                        "loss_1d="+str(loss_1d)+", "+\
+                        "avg_gain="+str(avg_gain)+", "+\
+                        "avg_loss="+str(avg_loss)+", "+\
+                        "rs14="+str(rs14)+", "+\
+                        "rsi14="+str(rsi14)+", "+\
+                        "rsi_overbought="+str(rsi_overbought)+", "+\
+                        "rsi_oversold="+str(rsi_oversold)+", "+\
+                        "ma200="+str(ma200)+ ", "+\
+                        "is_ta_calc="+str(is_ta_calc)+" "+\
+                        "WHERE id="+str(id)
+                        cursor_update.execute(sql_update)
+                        connection.commit()
+                        cursor_update.close()
                     except:
                         cursor_update.close()
 
+            cursor_date_index.close()
 finally:
     connection.close()
