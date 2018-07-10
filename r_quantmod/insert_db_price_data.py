@@ -4,9 +4,6 @@
 # Read csv file and insert records that are not existing in the database table
 # price_instruments_data. (Avoid duplicate records).
 #
-# Dependencies: PyMySQL is required to access MySQL database.
-# sys, os libraries.
-#
 # Auth: dh@taatu.co (Taatu Ltd.)
 # Date: July 2, 2018
 ###############################################################################
