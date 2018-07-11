@@ -68,12 +68,13 @@ try:
             set_zero_fib_trend(symbol_index)
 
             with connection.cursor() as cursor_date_index:
-                sql_date_index = "SELECT date FROM price_instruments_data "+\
+                sql_date_index = "SELECT id, date FROM price_instruments_data "+\
                 "WHERE symbol='"+symbol_index+"' and is_ta_calc=0 ORDER BY date ASC"
                 cursor_date_index.execute(sql_date_index)
                 result_date_index = cursor_date_index.fetchall()
                 for row in result_date_index:
                     date_index = str(row["date"]).replace("-","")
+                    id = row["id"]
                     # for each symbol and each date
                     rsi = rsi_data(symbol_index,date_index,14)
                     change_1d = rsi.get_change()
@@ -89,15 +90,6 @@ try:
                     is_ta_calc = "1"
                     
                     # update record
-                    cursor_select = connection.cursor(pymysql.cursors.SSCursor)
-                    sql_select = "SELECT id from price_instruments_data "+\
-                                 "WHERE symbol='"+symbol_index+"' AND date="+date_index+" AND is_ta_calc=0"
-                    cursor_select.execute(sql_select)
-                    result_select = cursor_select.fetchall()
-                    for row in result_select:
-                        id = row[0]
-                    cursor_select.close()
-                    
                     try:                        
                         cursor_update = connection.cursor(pymysql.cursors.SSCursor)
                         sql_update = "UPDATE price_instruments_data SET "+\
@@ -113,10 +105,17 @@ try:
                         "ma200="+str(ma200)+ ", "+\
                         "is_ta_calc="+str(is_ta_calc)+" "+\
                         "WHERE id="+str(id)
-                        cursor_update.execute(sql_update)
+                        print(sql_update)
+                        cursor_update.execute(sql_update)                    
                         connection.commit()
                         cursor_update.close()
                     except:
+                        sql_update = "UPDATE price_instruments_data SET "+\
+                        "is_ta_calc=1 "+\
+                        "WHERE id="+str(id)
+                        print(sql_update)
+                        cursor_update.execute(sql_update)                    
+                        connection.commit()                        
                         cursor_update.close()
 
             cursor_date_index.close()
