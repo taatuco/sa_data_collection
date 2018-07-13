@@ -27,6 +27,14 @@
 # FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
+'''
+(Daiviet) Will Remove this code as not useful as we have decided
+to not update and import to database and read directly from csv which
+is faster as we realised.
+'''
+
+
 #import db access object
 import sys
 import os

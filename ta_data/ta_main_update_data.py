@@ -105,7 +105,7 @@ try:
                         "ma200="+str(ma200)+ ", "+\
                         "is_ta_calc="+str(is_ta_calc)+" "+\
                         "WHERE id="+str(id)
-                        print(sql_update)
+                        #print(sql_update)
                         cursor_update.execute(sql_update)                    
                         connection.commit()
                         cursor_update.close()
@@ -113,7 +113,7 @@ try:
                         sql_update = "UPDATE price_instruments_data SET "+\
                         "is_ta_calc=1 "+\
                         "WHERE id="+str(id)
-                        print(sql_update)
+                        #print(sql_update)
                         cursor_update.execute(sql_update)                    
                         connection.commit()                        
                         cursor_update.close()

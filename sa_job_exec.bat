@@ -34,8 +34,6 @@ DEL /F /Q "%SA_DATA_DIR%\r_forecast\src\*"
 
 :: Import and update historical data
 %_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data.py"
-:: Import forecast price point
-%_PY_EXE% "%SA_DATA_DIR%\r_forecast\insert_db_forecast_data.py"
 
 :: Compute TA data
 %_PY_EXE% "%SA_DATA_DIR%\ta_data\ta_main_update_data.py"

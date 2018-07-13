@@ -94,7 +94,7 @@ try:
                                 if not exists_rec:
                                     # insert record in case not existing.
                                     with connection.cursor() as query_insert_cursor:
-                                        insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume, price_type) VALUES ('"+symbol_index+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+",'p');"
+                                        insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+symbol_index+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
                                         query_insert_cursor.execute(insert_price_sql)
                                         connection.commit()
                                         query_insert_cursor.close()
