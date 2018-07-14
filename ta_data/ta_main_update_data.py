@@ -40,16 +40,12 @@ from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_l_h import *
 
-#define database username and password and other variable regarding access to db
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
 db_name = access_obj.db_name()
 db_srv = access_obj.db_server()
 
-
-# Use PyMySQL to access MySQL database
 import pymysql.cursors
-
 connection = pymysql.connect(host=db_srv,
                              user=db_usr,
                              password=db_pwd,
@@ -58,27 +54,27 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 try:
-    with connection.cursor() as cursor:
+    with connection.cursor() as cr:
         sql = "SELECT symbol, r_quantmod FROM symbol_list ORDER BY symbol DESC"
-        cursor.execute(sql)
-        result = cursor.fetchall()
+        cr.execute(sql)
+        result = cr.fetchall()
         for row in result:
             symbol_quantmod = row["r_quantmod"]
-            symbol_index = row["symbol"]
+            symbol_id = row["symbol"]
             # for each symbol
-            set_zero_fib_trend(symbol_index)
+            set_zero_fib_trend(symbol_id)
 
-            with connection.cursor() as cursor_date_index:
-                sql_date_index = "SELECT id, date FROM price_instruments_data "+\
-                "WHERE symbol='"+symbol_index+"' and is_ta_calc=0 ORDER BY date ASC"
-                cursor_date_index.execute(sql_date_index)
-                result_date_index = cursor_date_index.fetchall()
-                for row in result_date_index:
-                    date_index = str(row["date"]).replace("-","")
+            with connection.cursor() as cr_date_id:
+                sql_date_id = "SELECT id, date FROM price_instruments_data "+\
+                "WHERE symbol='"+symbol_id+"' and is_ta_calc=0 ORDER BY date ASC"
+                cr_date_id.execute(sql_date_id)
+                result_date_id = cr_date_id.fetchall()
+                for row in result_date_id:
+                    date_id = str(row["date"]).replace("-","")
                     id = row["id"]
                     # for each symbol and each date
-                    rsi = rsi_data(symbol_index,date_index,14)
-                    lh = low_high_data(symbol_index, date_index, 20)
+                    rsi = rsi_data(symbol_id,date_id,14)
+                    lh = low_high_data(symbol_id, date_id, 20)
                     change_1d = rsi.get_change()
                     gain_1d = rsi.get_gain()
                     loss_1d = rsi.get_loss()
@@ -88,13 +84,13 @@ try:
                     rsi14 = rsi.get_rsi()
                     rsi_overbought = rsi.get_rsi_overbought()
                     rsi_oversold = rsi.get_rsi_oversold()
-                    ma200 = calc_ma(symbol_index,date_index,200)
+                    ma200 = calc_ma(symbol_id,date_id,200)
                     lowest_20d = lh.get_low()
-                    highest_20d = lh.get_high()                
+                    highest_20d = lh.get_high()
                     is_ta_calc = "1"
                     # update record
-                    try:                        
-                        cursor_update = connection.cursor(pymysql.cursors.SSCursor)
+                    try:
+                        cr_update = connection.cursor(pymysql.cursors.SSCursor)
                         sql_update = "UPDATE price_instruments_data SET "+\
                         "change_1d="+str(change_1d)+", "+\
                         "gain_1d="+str(gain_1d)+", "+\
@@ -111,18 +107,17 @@ try:
                         "is_ta_calc="+str(is_ta_calc)+" "+\
                         "WHERE id="+str(id)
                         print(sql_update)
-                        cursor_update.execute(sql_update)                    
+                        cr_update.execute(sql_update)
                         connection.commit()
-                        cursor_update.close()
+                        cr_update.close()
                     except:
                         sql_update = "UPDATE price_instruments_data SET "+\
                         "is_ta_calc=1 "+\
                         "WHERE id="+str(id)
                         print(sql_update)
-                        cursor_update.execute(sql_update)                    
-                        connection.commit()                        
-                        cursor_update.close()
-
-            cursor_date_index.close()
+                        cr_update.execute(sql_update)
+                        connection.commit()
+                        cr_update.close()
+            cr_date_id.close()
 finally:
     connection.close()

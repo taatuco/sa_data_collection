@@ -10,35 +10,11 @@ sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
 
-import pymysql.cursors   
-#define database username and password and other variable regarding access to db
+import pymysql.cursors
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
 db_name = access_obj.db_name()
 db_srv = access_obj.db_server()
-    
-
-def count_row(symbol, date, period):
-    try:
-        r_c = 0
-
-        connection = pymysql.connect(host=db_srv,
-                                     user=db_usr,
-                                     password=db_pwd,
-                                     db=db_name,
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)   
-        with connection.cursor() as cr_c:
-            sql_c = "SELECT id FROM price_instruments_data "+\
-                    "WHERE symbol='"+symbol+"' AND date<"+str(date)+" "+\
-                    "LIMIT "+str(period)
-            cr_c.execute(sql_c)
-            r = cr_c.fetchall()
-            r_c = cr_c.rowcount
-            print(str(r_c) )
-        return r_c
-    finally:
-        connection.close()
 
 def get_lh(what,symbol, date, period):
     try:
@@ -67,11 +43,11 @@ def get_lh(what,symbol, date, period):
             rv = lowest_price
         else:
             rv = highest_price
-            
+
         return rv
     finally:
         connection.close()
-    
+
 
 # Notes:
 # Retrieve Lowest or Highest point according to specified period
@@ -82,7 +58,7 @@ class low_high_data:
     s = ""
     p = 0
     d = datetime.datetime(2000, 1, 1, 1, 1)
-    
+
     def __init__(self, symbol, date, period):
         try:
             connection = pymysql.connect(host=db_srv,
@@ -90,7 +66,7 @@ class low_high_data:
                                          password=db_pwd,
                                          db=db_name,
                                          charset='utf8mb4',
-                                         cursorclass=pymysql.cursors.DictCursor)   
+                                         cursorclass=pymysql.cursors.DictCursor)
             with connection.cursor() as cr_c:
                 sql_c = "SELECT id FROM price_instruments_data "+\
                         "WHERE symbol='"+symbol+"' AND date<"+str(date)+" "+\
@@ -109,11 +85,9 @@ class low_high_data:
         if self.r_c == self.p:
             rv = get_lh("l", self.s, self.d, self.p)
         return rv
-        
+
     def get_high(self):
         rv = 0
         if self.r_c == self.p:
             rv = get_lh("h", self.s, self.d, self.p)
         return rv
-
-

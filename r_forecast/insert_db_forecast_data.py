@@ -68,26 +68,26 @@ connection = pymysql.connect(host=db_srv,
 
 # Get symbol_list to iterate for records to collect
 try:
-    with connection.cursor() as cursor:
+    with connection.cursor() as cr:
         # Read symbol_list
         sql = "SELECT symbol, r_quantmod FROM symbol_list"
-        cursor.execute(sql)
-        result = cursor.fetchall()
+        cr.execute(sql)
+        result = cr.fetchall()
         for row in result:
             symbol_quantmod = row["r_quantmod"]
-            symbol_index = row["symbol"]
+            symbol_id = row["symbol"]
             file_str = csvdir+symbol_quantmod+'.csv'
             filepath = Path(file_str)
             if filepath.exists():
                 # Collect the last date from price_instruments_data of the selected symbol
-                with connection.cursor() as cursor_last_date:
-                    sql_last_date = "SELECT date FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='p' ORDER by date DESC"
-                    cursor_last_date.execute(sql_last_date)
-                    result_last_date = cursor_last_date.fetchone()
+                with connection.cursor() as cr_last_date:
+                    sql_last_date = "SELECT date FROM price_instruments_data WHERE symbol='"+symbol_id+"' and price_type='p' ORDER by date DESC"
+                    cr_last_date.execute(sql_last_date)
+                    result_last_date = cr_last_date.fetchone()
                     # Collect the last date of the price historical data
                     last_date_is = result_last_date["date"]
                     forecast_date_start = last_date_is + timedelta(days=1)
-                    cursor_last_date.close()
+                    cr_last_date.close()
                 # Read csv file
                 i = 1
                 with open(file_str) as csvfile:
@@ -105,26 +105,26 @@ try:
                         price_high_95 = row[7]
                         if price_forecast != "Point Forecast":
                             # Check if price_type "f#" already exists. If not create new record, else update.
-                            with connection.cursor() as cursor_input_forecast:
-                                sql_input_forecast = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_index+"' and price_type='f"+str(i)+"'"
-                                cursor_input_forecast.execute(sql_input_forecast)
-                                exists_rec = cursor_input_forecast.fetchone()
-                                cursor_input_forecast.close()
+                            with connection.cursor() as cr_input_forecast:
+                                sql_input_forecast = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_id+"' and price_type='f"+str(i)+"'"
+                                cr_input_forecast.execute(sql_input_forecast)
+                                exists_rec = cr_input_forecast.fetchone()
+                                cr_input_forecast.close()
 
                             forecast_date_str = str(forecast_date_start).replace("-","")
                             if not exists_rec:
-                                with connection.cursor() as cursor_insert_forecast:
+                                with connection.cursor() as cr_insert_forecast:
                                     # insert record in case it is not existing
                                     sql_insert_forecast = "INSERT INTO price_instruments_data (symbol, date, price_forecast, "+\
                                                             "price_low_75, price_high_75, price_low_85, price_high_85, price_low_95, price_high_95, price_type)"+\
-                                                            " VALUES ('"+symbol_index+"',"+forecast_date_str+","+price_forecast+","+price_low_75+","+price_high_75+\
+                                                            " VALUES ('"+symbol_id+"',"+forecast_date_str+","+price_forecast+","+price_low_75+","+price_high_75+\
                                                             ","+price_low_85+","+price_high_85+","+price_low_95+","+price_high_95+",'f"+str(i)+"');"
-                                    cursor_insert_forecast.execute(sql_insert_forecast)
+                                    cr_insert_forecast.execute(sql_insert_forecast)
                                     connection.commit()
-                                    cursor_insert_forecast.close()
+                                    cr_insert_forecast.close()
                             else:
                                 # update the record line
-                                with connection.cursor() as cursor_update_forecast:
+                                with connection.cursor() as cr_update_forecast:
                                     sql_update_forecast = "UPDATE price_instruments_data SET date = " + forecast_date_str +\
                                                             ", price_forecast = " + price_forecast +\
                                                             ", price_low_75 = " + price_low_75 +\
@@ -133,10 +133,10 @@ try:
                                                             ", price_high_85 = " + price_high_85 +\
                                                             ", price_low_95 = " + price_low_95 +\
                                                             ", price_high_95 = " + price_high_95 +\
-                                                            " WHERE symbol ='"+symbol_index+"' AND price_type='f"+str(i)+"'"
-                                    cursor_update_forecast.execute(sql_update_forecast)
+                                                            " WHERE symbol ='"+symbol_id+"' AND price_type='f"+str(i)+"'"
+                                    cr_update_forecast.execute(sql_update_forecast)
                                     connection.commit()
-                                    cursor_update_forecast.close()
+                                    cr_update_forecast.close()
 
                             i += 1
                             forecast_date_start = forecast_date_start + timedelta(days=1)

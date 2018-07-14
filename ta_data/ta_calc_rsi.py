@@ -9,7 +9,6 @@ sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
 
-#define database username and password and other variable regarding access to db
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
 db_name = access_obj.db_name()
@@ -45,9 +44,7 @@ class rsi_data:
     c_rs = 0
     c_rsi = 0
 
-    # Use PyMySQL to access MySQL database
     import pymysql.cursors
-
     connection = pymysql.connect(host=db_srv,
                                  user=db_usr,
                                  password=db_pwd,
@@ -55,7 +52,7 @@ class rsi_data:
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
 
- 
+
     def __init__(self, symbol_id, date_id, rsi_period):
         self.symbol = symbol_id
         self.date = date_id
@@ -73,7 +70,7 @@ class rsi_data:
                     rsi_data.c_prev_avg_gain = row["avg_gain"]
                     rsi_data.c_prev_avg_loss = row["avg_loss"]
                     rsi_data.c_prev_is_ta_calc = row["is_ta_calc"]
-                           
+
                 with rsi_data.connection.cursor() as cr_get_curr_d:
                     sql_get_curr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
                                          "WHERE symbol='"+self.symbol+"' AND date="+str(self.date)+" "+\
@@ -86,10 +83,10 @@ class rsi_data:
                             rsi_data.c_curr_avg_gain = row["avg_gain"]
                             rsi_data.c_curr_avg_loss = row["avg_loss"]
                             rsi_data.c_curr_is_ta_calc = row["is_ta_calc"]
-                            
+
                     cr_get_curr_d.close()
-            cr_get_prev_d.close()        
-    
+            cr_get_prev_d.close()
+
     def get_gain(self):
         gain_1d = 0
         if rsi_data.c_change_1d >= 0:
@@ -115,9 +112,9 @@ class rsi_data:
                 cr_get_avg_g.close()
         else:
             #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(rsi_period-1)+ (GAIN) ) / rsi_period
-            rsi_data.c_curr_avg_gain = ( ( rsi_data.c_prev_avg_gain * (self.rsi_period-1) )+ rsi_data.c_curr_gain )/self.rsi_period                       
+            rsi_data.c_curr_avg_gain = ( ( rsi_data.c_prev_avg_gain * (self.rsi_period-1) )+ rsi_data.c_curr_gain )/self.rsi_period
         return rsi_data.c_curr_avg_gain
-    
+
     def get_avg_loss(self):
         #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(rsi_period-1)+ (LOSS) ) / rsi_period
         tt_loss = 0
@@ -135,11 +132,11 @@ class rsi_data:
                 cr_get_avg_l.close()
         else:
             #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(rsi_period-1)+ (LOSS) ) / rsi_period
-            rsi_data.c_curr_avg_loss = ( ( rsi_data.c_prev_avg_loss * (self.rsi_period-1) )+ rsi_data.c_curr_loss )/self.rsi_period                       
+            rsi_data.c_curr_avg_loss = ( ( rsi_data.c_prev_avg_loss * (self.rsi_period-1) )+ rsi_data.c_curr_loss )/self.rsi_period
         return rsi_data.c_curr_avg_loss
-    
+
     def get_loss(self):
-        loss_1d = 0    
+        loss_1d = 0
         if rsi_data.c_change_1d < 0:
             loss_1d = (rsi_data.c_change_1d)*(-1)
         rsi_data.c_curr_loss = loss_1d
@@ -169,4 +166,3 @@ class rsi_data:
 
     def get_rsi_oversold(self):
         return 30
-            

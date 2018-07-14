@@ -25,27 +25,22 @@
 # FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import db access object
 import sys
 import os
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
 
-#define database username and password and other variable regarding access to db
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
 db_name = access_obj.db_name()
 db_srv = access_obj.db_server()
 
-# Use csv and file system
 import csv
 csvdir = "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_quantmod\\src\\"
 from pathlib import Path
 
-# Use PyMySQL to access MySQL database
 import pymysql.cursors
-
 connection = pymysql.connect(host=db_srv,
                              user=db_usr,
                              password=db_pwd,
@@ -55,14 +50,14 @@ connection = pymysql.connect(host=db_srv,
 
 # Get symbol_list to iterate for records to collect
 try:
-    with connection.cursor() as cursor:
+    with connection.cursor() as cr:
         # Read symbol_list
         sql = "SELECT symbol, r_quantmod FROM symbol_list"
-        cursor.execute(sql)
-        result = cursor.fetchall()
+        cr.execute(sql)
+        result = cr.fetchall()
         for row in result:
             symbol_quantmod = row["r_quantmod"]
-            symbol_index = row["symbol"]
+            symbol_id = row["symbol"]
             file_str = csvdir+symbol_quantmod+'.csv'
             filepath = Path(file_str)
             if filepath.exists():
@@ -85,20 +80,19 @@ try:
                         # check for each row if not already exists.
                         # if exists, then insert new record, else ignore.
                         if price_open != "open" and price_open != "NA":
-                            with connection.cursor() as query_count_cursor:
-                                query_count_sql = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_index+"' AND date='"+price_date+"'"
-                                query_count_cursor.execute(query_count_sql)
-                                exists_rec = query_count_cursor.fetchall()
+                            with connection.cursor() as cr_query_count:
+                                query_count_sql = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_id+"' AND date='"+price_date+"'"
+                                cr_query_count.execute(query_count_sql)
+                                exists_rec = cr_query_count.fetchall()
                                 print(query_count_sql)
 
                                 if not exists_rec:
                                     # insert record in case not existing.
-                                    with connection.cursor() as query_insert_cursor:
-                                        insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+symbol_index+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
-                                        query_insert_cursor.execute(insert_price_sql)
+                                    with connection.cursor() as cr_query_insert:
+                                        insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+symbol_id+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
+                                        cr_query_insert.execute(insert_price_sql)
                                         connection.commit()
-                                        query_insert_cursor.close()
-
-                                query_count_cursor.close()
+                                        cr_query_insert.close()
+                                cr_query_count.close()
 finally:
     connection.close()

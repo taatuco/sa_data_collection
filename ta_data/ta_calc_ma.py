@@ -9,17 +9,14 @@ sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
 
-#define database username and password and other variable regarding access to db
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
 db_name = access_obj.db_name()
 db_srv = access_obj.db_server()
-    
-def calc_ma(symbol_index, date_index, ma_period):
 
-    # Use PyMySQL to access MySQL database
+def calc_ma(symbol_id, date_id, ma_period):
+
     import pymysql.cursors
-
     connection = pymysql.connect(host=db_srv,
                                  user=db_usr,
                                  password=db_pwd,
@@ -29,12 +26,12 @@ def calc_ma(symbol_index, date_index, ma_period):
     try:
         ma_period = str(ma_period)
         ma = 0
-        with connection.cursor() as cursor:
+        with connection.cursor() as cr:
             sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
-            "WHERE symbol='"+symbol_index+"' AND date<"+date_index+" "+\
+            "WHERE symbol='"+symbol_id+"' AND date<"+date_id+" "+\
             "ORDER BY date DESC LIMIT "+ma_period
-            cursor.execute(sql)
-            result = cursor.fetchall()
+            cr.execute(sql)
+            result = cr.fetchall()
             if result:
                 for row in result:
                     ma = row["ma"]
