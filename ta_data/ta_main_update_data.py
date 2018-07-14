@@ -38,6 +38,7 @@ sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\ta_
 from ta_zeroing_fib_trend import *
 from ta_calc_ma import *
 from ta_calc_rsi import *
+from ta_calc_l_h import *
 
 #define database username and password and other variable regarding access to db
 db_usr = access_obj.username()
@@ -58,7 +59,7 @@ connection = pymysql.connect(host=db_srv,
 
 try:
     with connection.cursor() as cursor:
-        sql = "SELECT symbol, r_quantmod FROM symbol_list"
+        sql = "SELECT symbol, r_quantmod FROM symbol_list ORDER BY symbol DESC"
         cursor.execute(sql)
         result = cursor.fetchall()
         for row in result:
@@ -77,6 +78,7 @@ try:
                     id = row["id"]
                     # for each symbol and each date
                     rsi = rsi_data(symbol_index,date_index,14)
+                    lh = low_high_data(symbol_index, date_index, 20)
                     change_1d = rsi.get_change()
                     gain_1d = rsi.get_gain()
                     loss_1d = rsi.get_loss()
@@ -86,9 +88,10 @@ try:
                     rsi14 = rsi.get_rsi()
                     rsi_overbought = rsi.get_rsi_overbought()
                     rsi_oversold = rsi.get_rsi_oversold()
-                    ma200 = calc_ma(symbol_index,date_index,200)                    
+                    ma200 = calc_ma(symbol_index,date_index,200)
+                    lowest_20d = lh.get_low()
+                    highest_20d = lh.get_high()                
                     is_ta_calc = "1"
-                    
                     # update record
                     try:                        
                         cursor_update = connection.cursor(pymysql.cursors.SSCursor)
@@ -103,9 +106,11 @@ try:
                         "rsi_overbought="+str(rsi_overbought)+", "+\
                         "rsi_oversold="+str(rsi_oversold)+", "+\
                         "ma200="+str(ma200)+ ", "+\
+                        "lowest_20d="+str(lowest_20d)+", "+\
+                        "highest_20d="+str(highest_20d)+", "+\
                         "is_ta_calc="+str(is_ta_calc)+" "+\
                         "WHERE id="+str(id)
-                        #print(sql_update)
+                        print(sql_update)
                         cursor_update.execute(sql_update)                    
                         connection.commit()
                         cursor_update.close()
@@ -113,7 +118,7 @@ try:
                         sql_update = "UPDATE price_instruments_data SET "+\
                         "is_ta_calc=1 "+\
                         "WHERE id="+str(id)
-                        #print(sql_update)
+                        print(sql_update)
                         cursor_update.execute(sql_update)                    
                         connection.commit()                        
                         cursor_update.close()

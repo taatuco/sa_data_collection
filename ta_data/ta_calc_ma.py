@@ -8,14 +8,14 @@ import os
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
+
+#define database username and password and other variable regarding access to db
+db_usr = access_obj.username()
+db_pwd = access_obj.password()
+db_name = access_obj.db_name()
+db_srv = access_obj.db_server()
     
 def calc_ma(symbol_index, date_index, ma_period):
-
-    #define database username and password and other variable regarding access to db
-    db_usr = access_obj.username()
-    db_pwd = access_obj.password()
-    db_name = access_obj.db_name()
-    db_srv = access_obj.db_server()
 
     # Use PyMySQL to access MySQL database
     import pymysql.cursors
