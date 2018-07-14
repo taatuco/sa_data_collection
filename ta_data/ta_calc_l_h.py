@@ -16,7 +16,7 @@ db_pwd = access_obj.password()
 db_name = access_obj.db_name()
 db_srv = access_obj.db_server()
 
-def get_lh(what,symbol, date, period):
+def get_lh(what,symbol, date, period, count_row):
     try:
         lowest_price = 0
         highest_price = 0
@@ -29,7 +29,7 @@ def get_lh(what,symbol, date, period):
                                      charset='utf8mb4',
                                      cursorclass=pymysql.cursors.DictCursor)
 
-        if count_row(symbol, date, period) == period:
+        if count_row == period:
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT MIN(price_close) as lowest, MAX(price_close) as highest FROM price_instruments_data "+\
                     "WHERE symbol='"+symbol+"' AND date<"+str(date)+" "+\
@@ -83,11 +83,11 @@ class low_high_data:
     def get_low(self):
         rv = 0
         if self.r_c == self.p:
-            rv = get_lh("l", self.s, self.d, self.p)
+            rv = get_lh("l", self.s, self.d, self.p, self.r_c)
         return rv
 
     def get_high(self):
         rv = 0
         if self.r_c == self.p:
-            rv = get_lh("h", self.s, self.d, self.p)
+            rv = get_lh("h", self.s, self.d, self.p, self.r_c)
         return rv

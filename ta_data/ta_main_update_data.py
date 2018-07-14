@@ -57,19 +57,19 @@ try:
     with connection.cursor() as cr:
         sql = "SELECT symbol, r_quantmod FROM symbol_list ORDER BY symbol DESC"
         cr.execute(sql)
-        result = cr.fetchall()
-        for row in result:
+        rs = cr.fetchall()
+        for row in rs:
             symbol_quantmod = row["r_quantmod"]
             symbol_id = row["symbol"]
             # for each symbol
             set_zero_fib_trend(symbol_id)
 
-            with connection.cursor() as cr_date_id:
-                sql_date_id = "SELECT id, date FROM price_instruments_data "+\
+            with connection.cursor() as cr_d_id:
+                sql_d_id = "SELECT id, date FROM price_instruments_data "+\
                 "WHERE symbol='"+symbol_id+"' and is_ta_calc=0 ORDER BY date ASC"
-                cr_date_id.execute(sql_date_id)
-                result_date_id = cr_date_id.fetchall()
-                for row in result_date_id:
+                cr_d_id.execute(sql_d_id)
+                rs_date_id = cr_d_id.fetchall()
+                for row in rs_date_id:
                     date_id = str(row["date"]).replace("-","")
                     id = row["id"]
                     # for each symbol and each date
@@ -90,8 +90,8 @@ try:
                     is_ta_calc = "1"
                     # update record
                     try:
-                        cr_update = connection.cursor(pymysql.cursors.SSCursor)
-                        sql_update = "UPDATE price_instruments_data SET "+\
+                        cr_upd = connection.cursor(pymysql.cursors.SSCursor)
+                        sql_upd = "UPDATE price_instruments_data SET "+\
                         "change_1d="+str(change_1d)+", "+\
                         "gain_1d="+str(gain_1d)+", "+\
                         "loss_1d="+str(loss_1d)+", "+\
@@ -106,18 +106,16 @@ try:
                         "highest_20d="+str(highest_20d)+", "+\
                         "is_ta_calc="+str(is_ta_calc)+" "+\
                         "WHERE id="+str(id)
-                        print(sql_update)
-                        cr_update.execute(sql_update)
+                        cr_upd.execute(sql_upd)
                         connection.commit()
-                        cr_update.close()
+                        cr_upd.close()
                     except:
-                        sql_update = "UPDATE price_instruments_data SET "+\
+                        sql_upd = "UPDATE price_instruments_data SET "+\
                         "is_ta_calc=1 "+\
                         "WHERE id="+str(id)
-                        print(sql_update)
-                        cr_update.execute(sql_update)
+                        cr_upd.execute(sql_upd)
                         connection.commit()
-                        cr_update.close()
-            cr_date_id.close()
+                        cr_upd.close()
+            cr_d_id.close()
 finally:
     connection.close()

@@ -54,8 +54,8 @@ try:
         # Read symbol_list
         sql = "SELECT symbol, r_quantmod FROM symbol_list"
         cr.execute(sql)
-        result = cr.fetchall()
-        for row in result:
+        rs = cr.fetchall()
+        for row in rs:
             symbol_quantmod = row["r_quantmod"]
             symbol_id = row["symbol"]
             file_str = csvdir+symbol_quantmod+'.csv'
@@ -80,19 +80,19 @@ try:
                         # check for each row if not already exists.
                         # if exists, then insert new record, else ignore.
                         if price_open != "open" and price_open != "NA":
-                            with connection.cursor() as cr_query_count:
-                                query_count_sql = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_id+"' AND date='"+price_date+"'"
-                                cr_query_count.execute(query_count_sql)
-                                exists_rec = cr_query_count.fetchall()
-                                print(query_count_sql)
+                            with connection.cursor() as cr_q_cnt:
+                                sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_id+"' AND date='"+price_date+"'"
+                                cr_q_cnt.execute(sql_q_cnt)
+                                exists_rec = cr_q_cnt.fetchall()
+                                print(sql_q_cnt)
 
                                 if not exists_rec:
                                     # insert record in case not existing.
-                                    with connection.cursor() as cr_query_insert:
-                                        insert_price_sql = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+symbol_id+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
-                                        cr_query_insert.execute(insert_price_sql)
+                                    with connection.cursor() as cr_q_ins:
+                                        sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+symbol_id+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
+                                        cr_q_ins.execute(sql_q_ins)
                                         connection.commit()
-                                        cr_query_insert.close()
-                                cr_query_count.close()
+                                        cr_q_ins.close()
+                                cr_q_cnt.close()
 finally:
     connection.close()

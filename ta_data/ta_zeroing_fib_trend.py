@@ -27,14 +27,14 @@ def set_zero_fib_trend(symbol_id):
     try:
         ### get price_instruments_data for the corresponding symbol_id
         # clear previous data to accommodate new one
-        with connection.cursor() as cr_clr_ta_data:
-            sql_clr_ta_data = "UPDATE price_instruments_data SET "+\
+        with connection.cursor() as cr:
+            sql = "UPDATE price_instruments_data SET "+\
                               "mt_trend_high=0, mt_trend_low=0, "+\
                               "st_trend_high=0, st_trend_low=0, "+\
                               "fib_0=0, fib_23_6=0, fib_38_2=0, "+\
                               "fib_61_8=0, fib_76_4=0, fib_100=0 "+\
                               " WHERE symbol='"+symbol_id+"'"
-            cr_clr_ta_data.execute(sql_clr_ta_data)
+            cr.execute(sql)
             connection.commit()
     finally:
         connection.close()

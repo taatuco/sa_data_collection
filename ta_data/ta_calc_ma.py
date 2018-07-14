@@ -31,9 +31,9 @@ def calc_ma(symbol_id, date_id, ma_period):
             "WHERE symbol='"+symbol_id+"' AND date<"+date_id+" "+\
             "ORDER BY date DESC LIMIT "+ma_period
             cr.execute(sql)
-            result = cr.fetchall()
-            if result:
-                for row in result:
+            rs = cr.fetchall()
+            if rs:
+                for row in rs:
                     ma = row["ma"]
             return(ma)
 
