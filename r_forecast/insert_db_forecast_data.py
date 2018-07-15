@@ -31,7 +31,7 @@
 '''
 (Daiviet) Will Remove this code as not useful as we have decided
 to not update and import to database and read directly from csv which
-is faster as we realised.
+is faster as we realise it.
 '''
 
 

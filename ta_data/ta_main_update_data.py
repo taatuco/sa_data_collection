@@ -116,6 +116,8 @@ try:
                         cr_upd.execute(sql_upd)
                         connection.commit()
                         cr_upd.close()
+                # Compute forecasted data
+
             cr_d_id.close()
 finally:
     connection.close()
