@@ -23,43 +23,61 @@ class trend_pts:
     sd = datetime.datetime(2000, 1, 1, 1, 1)
     ed = datetime.datetime(2000, 1, 1, 1, 1)
     md = datetime.datetime(2000, 1, 1, 1, 1)
+    x1 = datetime.datetime(2000, 1, 1, 1, 1) - timedelta(days=p)
+    s = ""
+    d = datetime.datetime(2000, 1, 1, 1, 1)
+    p = 0
 
-    def __init__(self, p):
-        #get end date from query
-        pass
+    def __init__(self, s, d, p):
+        self.s = s;
+        self.d = d;
+        self.p = p;
+        self.p2 = p/2;
+
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        with connection.cursor() as cr:
+            sql = "SELECT symbol, date FROM price_instruments_data WHERE symbol='"+ self.s +"' ORDER BY date DESC LIMIT 1"
+            cr.execute(sql)
+            rs = cr.fetchall()
+            for row in rs:
+                self.d = row["date"]
+            self.ed = self.d
 
     def get_sd(self):
-        #get start date: ed - p
+        self.sd = self.ed - timedelta(days=self.p)
         return self.sd
 
-    def get ed(self):
+    def get_ed(self):
         return self.ed
 
     def get_md(self):
-        #get md = ed - (p/2)
-        #md = ed - timedelta(days=p)
+        self.md = self.ed - timedelta(days=self.p2)
         return self.md
+
+    def get_x1(self):
+        self.x1 = d - timedelta(days=1)
+        return self.x1
 
 
 class tln_data:
 
-    s = ""
-    d = datetime.datetime(2000, 1, 1, 1, 1)
-    p = 0
-    x_1 = 0
+    sd = datetime.datetime(2000, 1, 1, 1, 1)
+    ed = datetime.datetime(2000, 1, 1, 1, 1)
+    md = datetime.datetime(2000, 1, 1, 1, 1)
+    x1 = datetime.datetime(2000, 1, 1, 1, 1)
 
-    connection = pymysql.connect(host=db_srv,
-                                 user=db_usr,
-                                 password=db_pwd,
-                                 db=db_name,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
-
-    def __init__(self, symbol_id, date_id, period, x_1):
-        self.s = symbol_id
-        self.d = date_id
-        self.p = period
-        self.x_1 = x_1
+    def __init__(self, symbol_id, date_id, period):
+        #period = 180 or 360
+        pts = trend_pts(symbol_id, date_id, period)
+        self.sd = pts.get_sd()
+        self.ed = pts.get_ed()
+        self.md = pts.get_md()
+        self.x1 = pts.get_x1()
 
     def get_t_l(self):
         #if (sd > ed ): x = x_1 + ( (ed - sd) / p )
