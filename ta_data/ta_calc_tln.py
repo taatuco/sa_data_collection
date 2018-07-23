@@ -70,16 +70,30 @@ class tln_data:
     ed = datetime.datetime(2000, 1, 1, 1, 1)
     md = datetime.datetime(2000, 1, 1, 1, 1)
     x1 = datetime.datetime(2000, 1, 1, 1, 1)
+    get_this = ""
 
-    def __init__(self, symbol_id, date_id, period):
+    def __init__(self, symbol_id, date_id, period, get_what):
         #period = 180 or 360
         pts = trend_pts(symbol_id, date_id, period)
         self.sd = pts.get_sd()
         self.ed = pts.get_ed()
         self.md = pts.get_md()
         self.x1 = pts.get_x1()
+        #l for low, h for high
+        self.get_this = get_what
 
     def get_t_l(self):
-        #if (sd > ed ): x = x_1 + ( (ed - sd) / p )
-        # else        : x = X_1 + ( (sd - ed) / p )
-        pass
+        sd = self.sd
+        ed = self.ed
+        md = self.md
+        x1 = self.x1
+        p = self.p
+        x = 0
+
+        #get the value
+
+        if sdv > edv:
+            x = x1v + ( (edv - sdv)/p )
+            else
+            x = x1v + ( (sdv - edv)/p )
+        return x
