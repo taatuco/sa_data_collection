@@ -59,11 +59,10 @@ class trend_pts:
 
     def get_val_frm_d(self,d,get_what):
         #get from date
-        rv = 0
+        v = 0
         with connection.cursor() as cr:
             dr = ""
             sl = ""
-
             if d == self.sd:
                 dr = "' AND date>"+self.sd+" AND date<"+self.md
             if d == self.ed:
@@ -77,9 +76,9 @@ class trend_pts:
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs:
-                rv = row["p"]
+                v = row["p"]
 
-        return rv
+        return v
 
 
 
@@ -95,13 +94,11 @@ class tln_data:
     p = 0
 
     def __init__(self, symbol_id, period, get_what):
-        #period = 180 or 360...
         pts = trend_pts(symbol_id, period)
         self.sd = pts.get_sd()
         self.ed = pts.get_ed()
         self.md = pts.get_md()
         self.p = period
-        #get_what="l" for low, get_what="h" for high
         self.get_this = get_what
         self.sdv = pts.get_val_frm_d(self.sd, self.get_this)
         self.edv = pts.get_val_frm_d(self.ed, self.get_this)
@@ -109,16 +106,14 @@ class tln_data:
 
     def get_pts(self,d,x1v):
         x = 0
-        #get the value
         if d != self.sd and d != self.ed:                          
             if self.sdv > self.edv:
                 x = x1v + ( (self.edv - self.sdv)/self.p )
             else:
                 x = x1v + ( (self.sdv - self.edv)/self.p )
+        elif d == self.sd:
+            x = self.sdv
         else:
-            if d == self.sd:
-                x = self.sdv
-            if d == self.ed:
-                x = self.edv
+            x = self.edv
                 
         return x
