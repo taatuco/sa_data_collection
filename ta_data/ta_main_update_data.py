@@ -39,7 +39,7 @@ from ta_zeroing_fib_trend import *
 from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_l_h import *
-from ta_calc_tln import *
+#from ta_calc_tln import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -76,10 +76,6 @@ try:
                     # for each symbol and each date
                     rsi = rsi_data(symbol_id,date_id,14)
                     lh = low_high_data(symbol_id, date_id, 20)
-                    tl_180_l = tln_data(symbol_id, date_id, 180,"l")
-                    tl_360_l = tln_data(symbol_id, date_id, 360,"l")
-                    tl_180_h = tln_data(symbol_id, date_id, 180,"h")
-                    tl_360_h = tln_data(symbol_id, date_id, 360,"h")
                     change_1d = rsi.get_change()
                     gain_1d = rsi.get_gain()
                     loss_1d = rsi.get_loss()
@@ -92,7 +88,6 @@ try:
                     ma200 = calc_ma(symbol_id,date_id,200)
                     lowest_20d = lh.get_low()
                     highest_20d = lh.get_high()
-
 
                     is_ta_calc = "1"
                     # update record
@@ -123,9 +118,9 @@ try:
                         cr_upd.execute(sql_upd)
                         connection.commit()
                         cr_upd.close()
-                # Compute trend lines 
-                # Compute forecasted data
 
+            # Calc trend line
+            
             cr_d_id.close()
 finally:
     connection.close()

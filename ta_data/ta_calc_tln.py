@@ -30,14 +30,12 @@ class trend_pts:
     sd = datetime.datetime(2000, 1, 1, 1, 1)
     ed = datetime.datetime(2000, 1, 1, 1, 1)
     md = datetime.datetime(2000, 1, 1, 1, 1)
-    x1 = datetime.datetime(2000, 1, 1, 1, 1) - timedelta(days=p)
     s = ""
-    d = datetime.datetime(2000, 1, 1, 1, 1)
     p = 0
+    p2 = 0
 
-    def __init__(self, s, d, p):
+    def __init__(self, s, p):
         self.s = s;
-        self.d = d;
         self.p = p;
         self.p2 = p/2;
 
@@ -46,33 +44,42 @@ class trend_pts:
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs:
-                self.d = row["date"]
-            self.ed = self.d
+                self.ed = row["date"]
+        self.sd = self.ed - timedelta(days=self.p)                
+        self.md = self.ed - timedelta(days=self.p2)
 
     def get_sd(self):
-        self.sd = self.ed - timedelta(days=self.p)
         return self.sd
 
     def get_ed(self):
         return self.ed
 
     def get_md(self):
-        self.md = self.ed - timedelta(days=self.p2)
         return self.md
-
-    def get_x1(self):
-        self.x1 = d - timedelta(days=1)
-        return self.x1
 
     def get_val_frm_d(self,d,get_what):
         #get from date
         rv = 0
         with connection.cursor() as cr:
-            sql = "SELECT date FROM price_instruments_data WHERE symbol='"+self.s+"' AND date="+d+" LIMIT 1"
+            dr = ""
+            sl = ""
+
+            if d == self.sd:
+                dr = "' AND date>"+self.sd+" AND date<"+self.md
+            if d == self.ed:
+                dr = "' AND date>"+self.md+" AND date<"+self.ed
+            if get_what == "l":
+                sl = "SELECT MIN(price_close) AS p "
+            if get_what == "h":
+                sl = "SELECT MAX(price_close) AS p "
+
+            sql = sl + "WHERE symbol='"+self.s + dr
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs:
-                rv =
+                rv = row["p"]
+
+        return rv
 
 
 
@@ -81,36 +88,37 @@ class tln_data:
     sd = datetime.datetime(2000, 1, 1, 1, 1)
     ed = datetime.datetime(2000, 1, 1, 1, 1)
     md = datetime.datetime(2000, 1, 1, 1, 1)
-    x1 = datetime.datetime(2000, 1, 1, 1, 1)
     get_this = ""
+    sdv = 0
+    edv = 0
+    mdv = 0
+    p = 0
 
-    def __init__(self, symbol_id, date_id, period, get_what):
-        #period = 180 or 360
-        pts = trend_pts(symbol_id, date_id, period)
+    def __init__(self, symbol_id, period, get_what):
+        #period = 180 or 360...
+        pts = trend_pts(symbol_id, period)
         self.sd = pts.get_sd()
         self.ed = pts.get_ed()
         self.md = pts.get_md()
-        self.x1 = pts.get_x1()
-        #l for low, h for high
+        self.p = period
+        #get_what="l" for low, get_what="h" for high
         self.get_this = get_what
+        self.sdv = pts.get_val_frm_d(self.sd, self.get_this)
+        self.edv = pts.get_val_frm_d(self.ed, self.get_this)
+        self.mdv = pts.get_val_frm_d(self.md, self.get_this)
 
-    def get_t_l(self):
-        sd = self.sd
-        ed = self.ed
-        md = self.md
-        x1 = self.x1
-        p = self.p
-        get_this = self.get_this
+    def get_pts(self,d,x1v):
         x = 0
-
         #get the value
-        sdv = get_val_frm_d(sd, get_this)
-        edv = get_val_frm_d(ed, get_this)
-        mdv = get_val_frm_d(md, get_this)
-        x1v = get_val_frm_d(x1, get_this)
-
-        if sdv > edv:
-            x = x1v + ( (edv - sdv)/p )
-            else
-            x = x1v + ( (sdv - edv)/p )
+        if d != self.sd and d != self.ed:                          
+            if self.sdv > self.edv:
+                x = x1v + ( (self.edv - self.sdv)/self.p )
+            else:
+                x = x1v + ( (self.sdv - self.edv)/self.p )
+        else:
+            if d == self.sd:
+                x = self.sdv
+            if d == self.ed:
+                x = self.edv
+                
         return x
