@@ -39,7 +39,7 @@ from ta_zeroing_fib_trend import *
 from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_l_h import *
-#from ta_calc_tln import *
+from ta_calc_tln import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -120,6 +120,7 @@ try:
                         cr_upd.close()
 
             # Calc trend line
+            get_trend_line_data(symbol_id)
             
             cr_d_id.close()
 finally:
