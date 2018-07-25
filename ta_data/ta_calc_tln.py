@@ -105,20 +105,21 @@ class tln_data:
 
     def get_pts(self,d,x1v):
         x = 0
-
-        if x1v == 0:
-            x1v = self.sdv
-        
-        if d >= self.sd and d != self.ed:
-            if self.sdv > self.edv:
-                x = x1v + ( (self.edv - self.sdv)/self.p )
+        try:
+            if x1v == 0:
+                x1v = self.sdv
+            
+            if d >= self.sd and d != self.ed:
+                if self.sdv > self.edv:
+                    x = x1v + ( (self.edv - self.sdv)/self.p )
+                else:
+                    x = x1v + ( (self.sdv - self.edv)/self.p )
+            elif d == self.ed:
+                x = self.edv
             else:
-                x = x1v + ( (self.sdv - self.edv)/self.p )
-        elif d == self.ed:
-            x = self.edv
-        else:
-            x = 0
-                
+                x = 0
+        except Exception as e: print(e)
+        
         return x
 
 def get_trend_line_data(s):
