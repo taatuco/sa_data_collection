@@ -134,7 +134,7 @@ def get_trend_line_data(s):
     t360_l_x1v = 0
     t360_h_x1v = 0    
     sd = dpts.get_sd()
-    f = "src\\"+ s +"_tl.csv"
+    f = "src\\"+ s.replace(":","_") +"_tl.csv"
        
     with connection.cursor() as cr:
         sql = "SELECT date, price_close "+\
