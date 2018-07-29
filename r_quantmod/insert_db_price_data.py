@@ -44,7 +44,7 @@ try:
         rs = cr.fetchall()
         for row in rs:
             symbol_quantmod = row["r_quantmod"]
-            symbol_id = row["symbol"]
+            s = row["symbol"]
             file_str = csvdir+symbol_quantmod+'.csv'
             filepath = Path(file_str)
             if filepath.exists():
@@ -68,7 +68,7 @@ try:
                         # if exists, then insert new record, else ignore.
                         if price_open != "open" and price_open != "NA":
                             with connection.cursor() as cr_q_cnt:
-                                sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+symbol_id+"' AND date='"+price_date+"'"
+                                sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+s+"' AND date='"+price_date+"'"
                                 cr_q_cnt.execute(sql_q_cnt)
                                 exists_rec = cr_q_cnt.fetchall()
                                 print(sql_q_cnt)
@@ -76,7 +76,7 @@ try:
                                 if not exists_rec:
                                     # insert record in case not existing.
                                     with connection.cursor() as cr_q_ins:
-                                        sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+symbol_id+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
+                                        sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+s+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
                                         cr_q_ins.execute(sql_q_ins)
                                         connection.commit()
                                         cr_q_ins.close()

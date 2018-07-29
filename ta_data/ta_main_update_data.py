@@ -48,21 +48,21 @@ try:
         rs = cr.fetchall()
         for row in rs:
             symbol_quantmod = row["r_quantmod"]
-            symbol_id = row["symbol"]
+            s = row["symbol"]
             # for each symbol
-            set_zero_fib_trend(symbol_id)
+            set_zero_fib_trend(s)
 
             with connection.cursor() as cr_d_id:
                 sql_d_id = "SELECT id, date FROM price_instruments_data "+\
-                "WHERE symbol='"+symbol_id+"' and is_ta_calc=0 ORDER BY date ASC"
+                "WHERE symbol='"+s+"' and is_ta_calc=0 ORDER BY date ASC"
                 cr_d_id.execute(sql_d_id)
-                rs_date_id = cr_d_id.fetchall()
-                for row in rs_date_id:
-                    date_id = str(row["date"]).replace("-","")
+                rs_d = cr_d_id.fetchall()
+                for row in rs_d:
+                    d = str(row["date"]).replace("-","")
                     id = row["id"]
                     # for each symbol and each date
-                    rsi = rsi_data(symbol_id,date_id,14)
-                    lh = low_high_data(symbol_id, date_id, 20)
+                    rsi = rsi_data(s,d,14)
+                    lh = low_high_data(s, d, 20)
                     change_1d = rsi.get_change()
                     gain_1d = rsi.get_gain()
                     loss_1d = rsi.get_loss()
@@ -72,7 +72,7 @@ try:
                     rsi14 = rsi.get_rsi()
                     rsi_overbought = rsi.get_rsi_overbought()
                     rsi_oversold = rsi.get_rsi_oversold()
-                    ma200 = calc_ma(symbol_id,date_id,200)
+                    ma200 = calc_ma(s,d,200)
                     lowest_20d = lh.get_low()
                     highest_20d = lh.get_high()
 
@@ -107,8 +107,8 @@ try:
                         cr_upd.close()
 
             # Calc trend line
-            get_trend_line_data(symbol_id)
-            
+            get_trend_line_data(s)
+
             cr_d_id.close()
 finally:
     connection.close()

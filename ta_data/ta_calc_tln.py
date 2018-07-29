@@ -94,9 +94,9 @@ class tln_data:
     p = 0
     s = ""
 
-    def __init__(self, symbol_id, period, get_what):
-        pts = trend_pts(symbol_id, period)
-        self.s = symbol_id
+    def __init__(self, symbol, period, get_what):
+        pts = trend_pts(symbol, period)
+        self.s = symbol
         self.sd = pts.get_sd()
         self.ed = pts.get_ed()
         self.md = pts.get_md()
