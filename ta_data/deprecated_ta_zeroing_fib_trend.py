@@ -9,6 +9,7 @@ to not update and import to database and read directly from csv which
 is faster as we realise it.
 '''
 
+
 import sys
 import os
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
