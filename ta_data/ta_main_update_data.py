@@ -104,9 +104,8 @@ try:
                 cr_upd.execute(sql_upd)
                 connection.commit()
                 cr_upd.close()
-            del rsi
-            gc.collect()
-            time.sleep()
+        gc.collect()
+        time.sleep()
         cr_d_id.close()
         # Calc trend line
         get_trend_line_data(s)
