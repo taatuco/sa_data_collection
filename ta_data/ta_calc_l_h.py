@@ -39,6 +39,7 @@ def get_lh(what,symbol, date, period, count_row):
             for row in r:
                 lowest_price = row[0]
                 highest_price = row[1]
+            cr.close()
         if what=="l":
             rv = lowest_price
         else:
@@ -77,6 +78,7 @@ class low_high_data:
                 self.s = symbol
                 self.d = date
                 self.p = period
+                cr_c.close()
         finally:
             connection.close()
 

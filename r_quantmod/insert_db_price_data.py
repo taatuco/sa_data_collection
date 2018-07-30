@@ -81,5 +81,7 @@ try:
                                         connection.commit()
                                         cr_q_ins.close()
                                 cr_q_cnt.close()
+        cr.close()
+
 finally:
     connection.close()

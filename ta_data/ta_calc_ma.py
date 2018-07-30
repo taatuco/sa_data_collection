@@ -35,6 +35,7 @@ def calc_ma(symbol_id, date_id, ma_period):
             if rs:
                 for row in rs:
                     ma = row["ma"]
+            cr.close()
             return(ma)
 
     finally:

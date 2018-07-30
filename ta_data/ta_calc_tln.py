@@ -47,6 +47,7 @@ class trend_pts:
             rs = cr.fetchall()
             for row in rs:
                 self.ed = row["date"]
+            cr.close()
         self.sd = self.ed - timedelta(days=self.p)
         self.md = self.ed - timedelta(days=self.p2)
 
@@ -79,6 +80,7 @@ class trend_pts:
             rs = cr.fetchall()
             for row in rs:
                 v = row["p"]
+            cr.close()
         return v
 
 
@@ -162,4 +164,6 @@ def get_trend_line_data(s):
                 t360_h = tl_360_h.get_pts(d,t360_h_x1v)
                 t360_l_x1v = t360_l
                 t360_h_x1v = t360_h
+                print(str(d) + " "+ str(s) + " " + str(t180_l) +" " + str(t180_h) + " " + str(t360_l) + " " + str(t360_h) )
                 writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
+        cr.close()
