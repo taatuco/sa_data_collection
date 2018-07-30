@@ -151,7 +151,7 @@ def get_trend_line_data(s):
     cr.execute(sql)
     rs = cr.fetchall()
 
-    with open(f, 'w') as csvfile:
+    with open(f, 'w', newline='') as csvfile:
         fieldnames = ["date", "180_low","180_high","360_low","360_high"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
