@@ -41,70 +41,72 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 try:
-    with connection.cursor() as cr:
-        sql = "SELECT symbol, r_quantmod FROM symbol_list ORDER BY symbol"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs:
-            symbol_quantmod = row["r_quantmod"]
-            s = row["symbol"]
+    #with connection.cursor() as cr:
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT symbol, r_quantmod FROM symbol_list ORDER BY symbol"
+    cr.execute(sql)
+    rs = cr.fetchall()
+    for row in rs:
+        symbol_quantmod = row[1]
+        s = row[0]
 
-            with connection.cursor() as cr_d_id:
-                sql_d_id = "SELECT id, date FROM price_instruments_data "+\
-                "WHERE symbol='"+s+"' and is_ta_calc=0 ORDER BY date ASC"
-                cr_d_id.execute(sql_d_id)
-                rs_d = cr_d_id.fetchall()
-                for row in rs_d:
-                    d = str(row["date"]).replace("-","")
-                    id = row["id"]
-                    rsi = rsi_data(s,d,14)
-                    lh = low_high_data(s, d, 20)
-                    change_1d = rsi.get_change()
-                    gain_1d = rsi.get_gain()
-                    loss_1d = rsi.get_loss()
-                    avg_gain = rsi.get_avg_gain()
-                    avg_loss = rsi.get_avg_loss()
-                    rs14 = rsi.get_rs()
-                    rsi14 = rsi.get_rsi()
-                    rsi_overbought = rsi.get_rsi_overbought()
-                    rsi_oversold = rsi.get_rsi_oversold()
-                    ma200 = calc_ma(s,d,200)
-                    lowest_20d = lh.get_low()
-                    highest_20d = lh.get_high()
+        #with connection.cursor() as cr_d_id:
+        cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
+        sql_d_id = "SELECT id, date FROM price_instruments_data "+\
+        "WHERE symbol='"+s+"' and is_ta_calc=0 ORDER BY date ASC"
+        cr_d_id.execute(sql_d_id)
+        rs_d = cr_d_id.fetchall()
+        for row in rs_d:
+            d = str(row[1]).replace("-","")
+            id = row[0]
+            rsi = rsi_data(s,d,14)
+            lh = low_high_data(s, d, 20)
+            change_1d = rsi.get_change()
+            gain_1d = rsi.get_gain()
+            loss_1d = rsi.get_loss()
+            avg_gain = rsi.get_avg_gain()
+            avg_loss = rsi.get_avg_loss()
+            rs14 = rsi.get_rs()
+            rsi14 = rsi.get_rsi()
+            rsi_overbought = rsi.get_rsi_overbought()
+            rsi_oversold = rsi.get_rsi_oversold()
+            ma200 = calc_ma(s,d,200)
+            lowest_20d = lh.get_low()
+            highest_20d = lh.get_high()
 
-                    is_ta_calc = "1"
-                    try:
-                        cr_upd = connection.cursor(pymysql.cursors.SSCursor)
-                        sql_upd = "UPDATE price_instruments_data SET "+\
-                        "change_1d="+str(change_1d)+", "+\
-                        "gain_1d="+str(gain_1d)+", "+\
-                        "loss_1d="+str(loss_1d)+", "+\
-                        "avg_gain="+str(avg_gain)+", "+\
-                        "avg_loss="+str(avg_loss)+", "+\
-                        "rs14="+str(rs14)+", "+\
-                        "rsi14="+str(rsi14)+", "+\
-                        "rsi_overbought="+str(rsi_overbought)+", "+\
-                        "rsi_oversold="+str(rsi_oversold)+", "+\
-                        "ma200="+str(ma200)+ ", "+\
-                        "lowest_20d="+str(lowest_20d)+", "+\
-                        "highest_20d="+str(highest_20d)+", "+\
-                        "is_ta_calc="+str(is_ta_calc)+" "+\
-                        "WHERE id="+str(id)
-                        cr_upd.execute(sql_upd)
-                        connection.commit()
-                        cr_upd.close()
-                    except:
-                        sql_upd = "UPDATE price_instruments_data SET "+\
-                        "is_ta_calc=1 "+\
-                        "WHERE id="+str(id)
-                        cr_upd.execute(sql_upd)
-                        connection.commit()
-                        cr_upd.close()
-            cr_d_id.close()
-            # Calc trend line
-            get_trend_line_data(s)
+            is_ta_calc = "1"
+            try:
+                cr_upd = connection.cursor(pymysql.cursors.SSCursor)
+                sql_upd = "UPDATE price_instruments_data SET "+\
+                "change_1d="+str(change_1d)+", "+\
+                "gain_1d="+str(gain_1d)+", "+\
+                "loss_1d="+str(loss_1d)+", "+\
+                "avg_gain="+str(avg_gain)+", "+\
+                "avg_loss="+str(avg_loss)+", "+\
+                "rs14="+str(rs14)+", "+\
+                "rsi14="+str(rsi14)+", "+\
+                "rsi_overbought="+str(rsi_overbought)+", "+\
+                "rsi_oversold="+str(rsi_oversold)+", "+\
+                "ma200="+str(ma200)+ ", "+\
+                "lowest_20d="+str(lowest_20d)+", "+\
+                "highest_20d="+str(highest_20d)+", "+\
+                "is_ta_calc="+str(is_ta_calc)+" "+\
+                "WHERE id="+str(id)
+                cr_upd.execute(sql_upd)
+                connection.commit()
+                cr_upd.close()
+            except:
+                sql_upd = "UPDATE price_instruments_data SET "+\
+                "is_ta_calc=1 "+\
+                "WHERE id="+str(id)
+                cr_upd.execute(sql_upd)
+                connection.commit()
+                cr_upd.close()
+        cr_d_id.close()
+        # Calc trend line
+        get_trend_line_data(s)
 
-        cr.close()
+    cr.close()
 
 finally:
     connection.close()
