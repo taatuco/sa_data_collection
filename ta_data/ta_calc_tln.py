@@ -35,25 +35,22 @@ class trend_pts:
     p2 = 0
 
     def __init__(self, s, p):
-        try:
-            self.s = s;
-            self.p = p;
-            self.p2 = p/2;
+        self.s = s;
+        self.p = p;
+        self.p2 = p/2;
 
-            #with connection.cursor() as cr:
-            cr = connection.cursor(pymysql.cursors.SSCursor)
-            sql = "SELECT date FROM price_instruments_data "+\
-                    "WHERE symbol='"+ self.s +\
-                    "' ORDER BY date DESC LIMIT 1"
-            cr.execute(sql)
-            rs = cr.fetchall()
-            for row in rs:
-                self.ed = row[0]
-            cr.close()
-            self.sd = self.ed - timedelta(days=self.p)
-            self.md = self.ed - timedelta(days=self.p2)
-        finally:
-            connection.close()
+        #with connection.cursor() as cr:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT date FROM price_instruments_data "+\
+                "WHERE symbol='"+ self.s +\
+                "' ORDER BY date DESC LIMIT 1"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            self.ed = row[0]
+        cr.close()
+        self.sd = self.ed - timedelta(days=self.p)
+        self.md = self.ed - timedelta(days=self.p2)
 
     def get_sd(self):
         return self.sd
@@ -65,31 +62,28 @@ class trend_pts:
         return self.md
 
     def get_val_frm_d(self,d,get_what):
-        try:
-            #get from date
-            v = 0
-            #with connection.cursor() as cr:
-            cr = connection.cursor(pymysql.cursors.SSCursor)
-            dr = ""
-            sl = ""
-            if d == self.sd:
-                dr = "' AND date>'"+str(self.sd)+"' AND date<'"+str(self.md)+"'"
-            if d == self.ed:
-                dr = "' AND date>'"+str(self.md)+"' AND date<'"+str(self.ed)+"'"
-            if get_what == "l":
-                sl = "SELECT MIN(price_close) AS p "
-            if get_what == "h":
-                sl = "SELECT MAX(price_close) AS p "
+        #get from date
+        v = 0
+        #with connection.cursor() as cr:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        dr = ""
+        sl = ""
+        if d == self.sd:
+            dr = "' AND date>'"+str(self.sd)+"' AND date<'"+str(self.md)+"'"
+        if d == self.ed:
+            dr = "' AND date>'"+str(self.md)+"' AND date<'"+str(self.ed)+"'"
+        if get_what == "l":
+            sl = "SELECT MIN(price_close) AS p "
+        if get_what == "h":
+            sl = "SELECT MAX(price_close) AS p "
 
-            sql = sl + "FROM price_instruments_data WHERE symbol='"+self.s + dr
-            cr.execute(sql)
-            rs = cr.fetchall()
-            for row in rs:
-                v = row[0]
-            cr.close()
-            return v
-        finally:
-            connection.close()
+        sql = sl + "FROM price_instruments_data WHERE symbol='"+self.s + dr
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            v = row[0]
+        cr.close()
+        return v
 
 class tln_data:
 
