@@ -174,4 +174,3 @@ def get_trend_line_data(s):
         del tl_360_l
         del tl_360_h
         del dpts
-        connection.close()
