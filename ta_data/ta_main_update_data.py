@@ -103,6 +103,7 @@ try:
                 connection.commit()
                 cr_upd.close()
         cr_d_id.close()
+        del rsi
         # Calc trend line
         get_trend_line_data(s)
 
