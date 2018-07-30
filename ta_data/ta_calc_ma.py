@@ -26,17 +26,18 @@ def calc_ma(symbol_id, date_id, ma_period):
     try:
         ma_period = str(ma_period)
         ma = 0
-        with connection.cursor() as cr:
-            sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
-            "WHERE symbol='"+symbol_id+"' AND date<"+date_id+" "+\
-            "ORDER BY date DESC LIMIT "+ma_period
-            cr.execute(sql)
-            rs = cr.fetchall()
-            if rs:
-                for row in rs:
-                    ma = row["ma"]
-            cr.close()
-            return(ma)
+        #with connection.cursor() as cr:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
+        "WHERE symbol='"+symbol_id+"' AND date<"+date_id+" "+\
+        "ORDER BY date DESC LIMIT "+ma_period
+        cr.execute(sql)
+        rs = cr.fetchall()
+        if rs:
+            for row in rs:
+                ma = row[0]
+        cr.close()
+        return(ma)
 
     finally:
         connection.close()

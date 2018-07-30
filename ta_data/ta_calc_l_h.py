@@ -68,17 +68,18 @@ class low_high_data:
                                          db=db_name,
                                          charset='utf8mb4',
                                          cursorclass=pymysql.cursors.DictCursor)
-            with connection.cursor() as cr_c:
-                sql_c = "SELECT id FROM price_instruments_data "+\
-                        "WHERE symbol='"+symbol+"' AND date<"+str(date)+" "+\
-                        "LIMIT "+str(period)
-                cr_c.execute(sql_c)
-                r = cr_c.fetchall()
-                self.r_c = cr_c.rowcount
-                self.s = symbol
-                self.d = date
-                self.p = period
-                cr_c.close()
+            #with connection.cursor() as cr_c:
+            cr_c = connection.cursor(pymysql.cursors.SSCursor)
+            sql_c = "SELECT id FROM price_instruments_data "+\
+                    "WHERE symbol='"+symbol+"' AND date<"+str(date)+" "+\
+                    "LIMIT "+str(period)
+            cr_c.execute(sql_c)
+            r = cr_c.fetchall()
+            self.r_c = cr_c.rowcount
+            self.s = symbol
+            self.d = date
+            self.p = period
+            cr_c.close()
         finally:
             connection.close()
 

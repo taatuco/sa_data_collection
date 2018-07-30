@@ -58,34 +58,36 @@ class rsi_data:
         self.d = date
         self.p = period
 
-        with rsi_data.connection.cursor() as cr_get_pr_d:
-            sql_get_pr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
-                                 "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" "+\
+        #with rsi_data.connection.cursor() as cr_get_pr_d:
+        cr_get_pr_d = connection.cursor(pymysql.cursors.SSCursor)
+        sql_get_pr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
+                             "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" "+\
+                             "ORDER BY date DESC LIMIT 1"
+        cr_get_pr_d.execute(sql_get_pr_d)
+        rs_prev = cr_get_pr_d.fetchall()
+        if rs_prev:
+            for row in rs_prev:
+                rsi_data.c_prev_price_close = row[0]
+                rsi_data.c_prev_avg_gain = row[1]
+                rsi_data.c_prev_avg_loss = row[2]
+                rsi_data.c_prev_is_ta_calc = row[3]
+
+            #with rsi_data.connection.cursor() as cr_get_curr_d:
+            cr_get_curr_d = connection.cursor(pymysql.cursors.SSCursor)
+            sql_get_curr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
+                                 "WHERE symbol='"+self.s+"' AND date="+str(self.d)+" "+\
                                  "ORDER BY date DESC LIMIT 1"
-            cr_get_pr_d.execute(sql_get_pr_d)
-            rs_prev = cr_get_pr_d.fetchall()
-            if rs_prev:
-                for row in rs_prev:
-                    rsi_data.c_prev_price_close = row["price_close"]
-                    rsi_data.c_prev_avg_gain = row["avg_gain"]
-                    rsi_data.c_prev_avg_loss = row["avg_loss"]
-                    rsi_data.c_prev_is_ta_calc = row["is_ta_calc"]
+            cr_get_curr_d.execute(sql_get_curr_d)
+            rs_curr = cr_get_curr_d.fetchall()
+            if rs_curr:
+                for row in rs_curr:
+                    rsi_data.c_curr_price_close = row[0]
+                    rsi_data.c_curr_avg_gain = row[1]
+                    rsi_data.c_curr_avg_loss = row[2]
+                    rsi_data.c_curr_is_ta_calc = row[3]
 
-                with rsi_data.connection.cursor() as cr_get_curr_d:
-                    sql_get_curr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
-                                         "WHERE symbol='"+self.s+"' AND date="+str(self.d)+" "+\
-                                         "ORDER BY date DESC LIMIT 1"
-                    cr_get_curr_d.execute(sql_get_curr_d)
-                    rs_curr = cr_get_curr_d.fetchall()
-                    if rs_curr:
-                        for row in rs_curr:
-                            rsi_data.c_curr_price_close = row["price_close"]
-                            rsi_data.c_curr_avg_gain = row["avg_gain"]
-                            rsi_data.c_curr_avg_loss = row["avg_loss"]
-                            rsi_data.c_curr_is_ta_calc = row["is_ta_calc"]
-
-                    cr_get_curr_d.close()
-            cr_get_pr_d.close()
+            cr_get_curr_d.close()
+        cr_get_pr_d.close()
 
     def get_gain(self):
         gain_1d = 0
@@ -99,17 +101,18 @@ class rsi_data:
         # In case previous is 0 then get average of last period
         tt_gain = 0
         if rsi_data.c_prev_avg_gain == 0:
-            with rsi_data.connection.cursor() as cr_get_avg_g:
-                sql_get_avg_g = "SELECT avg_gain, gain_1d FROM price_instruments_data "+\
-                              "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
-                              "LIMIT "+str(self.p)
-                cr_get_avg_g.execute(sql_get_avg_g)
-                rs_avg_g = cr_get_avg_g.fetchall()
-                if cr_get_avg_g.rowcount == self.p:
-                    for row in rs_avg_g:
-                        tt_gain = tt_gain + row["gain_1d"]
-                    rsi_data.c_curr_avg_gain = tt_gain / self.p
-                cr_get_avg_g.close()
+            #with rsi_data.connection.cursor() as cr_get_avg_g:
+            cr_get_avg_g = connection.cursor(pymysql.cursors.SSCursor)
+            sql_get_avg_g = "SELECT gain_1d FROM price_instruments_data "+\
+                          "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
+                          "LIMIT "+str(self.p)
+            cr_get_avg_g.execute(sql_get_avg_g)
+            rs_avg_g = cr_get_avg_g.fetchall()
+            if cr_get_avg_g.rowcount == self.p:
+                for row in rs_avg_g:
+                    tt_gain = tt_gain + row[0]
+                rsi_data.c_curr_avg_gain = tt_gain / self.p
+            cr_get_avg_g.close()
         else:
             #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(period-1)+ (GAIN) ) / period
             rsi_data.c_curr_avg_gain = ( ( rsi_data.c_prev_avg_gain * (self.p-1) )+ rsi_data.c_curr_gain )/self.p
@@ -119,17 +122,18 @@ class rsi_data:
         #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
         tt_loss = 0
         if rsi_data.c_prev_avg_loss == 0:
-            with rsi_data.connection.cursor() as cr_get_avg_l:
-                sql_get_avg_l = "SELECT avg_loss, loss_1d FROM price_instruments_data "+\
-                              "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
-                              "LIMIT "+str(self.p)
-                cr_get_avg_l.execute(sql_get_avg_l)
-                rs_avg_l = cr_get_avg_l.fetchall()
-                if cr_get_avg_l.rowcount == self.p:
-                    for row in rs_avg_l:
-                        tt_loss = tt_loss + row["loss_1d"]
-                    rsi_data.c_curr_avg_loss = tt_loss / self.p
-                cr_get_avg_l.close()
+            #with rsi_data.connection.cursor() as cr_get_avg_l:
+            cr_get_avg_l = connection.cursor(pymysql.cursors.SSCursor)
+            sql_get_avg_l = "SELECT loss_1d FROM price_instruments_data "+\
+                          "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
+                          "LIMIT "+str(self.p)
+            cr_get_avg_l.execute(sql_get_avg_l)
+            rs_avg_l = cr_get_avg_l.fetchall()
+            if cr_get_avg_l.rowcount == self.p:
+                for row in rs_avg_l:
+                    tt_loss = tt_loss + row[0]
+                rsi_data.c_curr_avg_loss = tt_loss / self.p
+            cr_get_avg_l.close()
         else:
             #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
             rsi_data.c_curr_avg_loss = ( ( rsi_data.c_prev_avg_loss * (self.p-1) )+ rsi_data.c_curr_loss )/self.p

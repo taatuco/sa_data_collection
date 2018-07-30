@@ -37,51 +37,54 @@ connection = pymysql.connect(host=db_srv,
 
 # Get symbol_list to iterate for records to collect
 try:
-    with connection.cursor() as cr:
-        # Read symbol_list
-        sql = "SELECT symbol, r_quantmod FROM symbol_list"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs:
-            symbol_quantmod = row["r_quantmod"]
-            s = row["symbol"]
-            file_str = csvdir+symbol_quantmod+'.csv'
-            filepath = Path(file_str)
-            if filepath.exists():
-                # Read csv file
-                with open(file_str) as csvfile:
-                    readCSV = csv.reader(csvfile, delimiter=',')
-                    for row in readCSV:
-                        # For each symbol, retrieve the csv content
-                        price_date = row[0]
+    #with connection.cursor() as cr:
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    # Read symbol_list
+    sql = "SELECT symbol, r_quantmod FROM symbol_list"
+    cr.execute(sql)
+    rs = cr.fetchall()
+    for row in rs:
+        symbol_quantmod = row[1]
+        s = row[0]
+        file_str = csvdir+symbol_quantmod+'.csv'
+        filepath = Path(file_str)
+        if filepath.exists():
+            # Read csv file
+            with open(file_str) as csvfile:
+                readCSV = csv.reader(csvfile, delimiter=',')
+                for row in readCSV:
+                    # For each symbol, retrieve the csv content
+                    price_date = row[0]
 
-                        price_date = price_date.replace('.', '-')
-                        price_date = price_date.replace('X', '')
-                        price_date = price_date.replace('-','')
-                        price_date = '%.8s' % price_date
-                        price_open = row[1]
-                        price_high = row[2]
-                        price_low = row[3]
-                        price_close = row[4]
-                        volume = row[5]
-                        # check for each row if not already exists.
-                        # if exists, then insert new record, else ignore.
-                        if price_open != "open" and price_open != "NA":
-                            with connection.cursor() as cr_q_cnt:
-                                sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+s+"' AND date='"+price_date+"'"
-                                cr_q_cnt.execute(sql_q_cnt)
-                                exists_rec = cr_q_cnt.fetchall()
-                                print(sql_q_cnt)
+                    price_date = price_date.replace('.', '-')
+                    price_date = price_date.replace('X', '')
+                    price_date = price_date.replace('-','')
+                    price_date = '%.8s' % price_date
+                    price_open = row[1]
+                    price_high = row[2]
+                    price_low = row[3]
+                    price_close = row[4]
+                    volume = row[5]
+                    # check for each row if not already exists.
+                    # if exists, then insert new record, else ignore.
+                    if price_open != "open" and price_open != "NA":
+                        #with connection.cursor() as cr_q_cnt:
+                        cr_q_cnt = connection.cursor(pymysql.cursors.SSCursor)
+                        sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+s+"' AND date='"+price_date+"'"
+                        cr_q_cnt.execute(sql_q_cnt)
+                        exists_rec = cr_q_cnt.fetchall()
+                        #print(sql_q_cnt)
 
-                                if not exists_rec:
-                                    # insert record in case not existing.
-                                    with connection.cursor() as cr_q_ins:
-                                        sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+s+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
-                                        cr_q_ins.execute(sql_q_ins)
-                                        connection.commit()
-                                        cr_q_ins.close()
-                                cr_q_cnt.close()
-        cr.close()
+                        if not exists_rec:
+                            # insert record in case not existing.
+                            #with connection.cursor() as cr_q_ins:
+                            cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
+                            sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+s+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
+                            cr_q_ins.execute(sql_q_ins)
+                            connection.commit()
+                            cr_q_ins.close()
+                        cr_q_cnt.close()
+    cr.close()
 
 finally:
     connection.close()
