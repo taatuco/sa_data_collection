@@ -105,7 +105,7 @@ try:
                 connection.commit()
                 cr_upd.close()
         gc.collect()
-        time.sleep()
+        time.sleep(0.2)
         cr_d_id.close()
         # Calc trend line
         get_trend_line_data(s)

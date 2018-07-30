@@ -14,6 +14,7 @@
 
 import sys
 import os
+import time
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
@@ -54,8 +55,8 @@ try:
                 readCSV = csv.reader(csvfile, delimiter=',')
                 for row in readCSV:
                     # For each symbol, retrieve the csv content
+                    time.sleep(0.2)
                     price_date = row[0]
-
                     price_date = price_date.replace('.', '-')
                     price_date = price_date.replace('X', '')
                     price_date = price_date.replace('-','')

@@ -6,6 +6,7 @@
 import datetime
 import sys
 import os
+import time
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
@@ -39,6 +40,7 @@ def get_lh(what,symbol, date, period, count_row):
             for row in r:
                 lowest_price = row[0]
                 highest_price = row[1]
+                time.sleep(0.2)
             cr.close()
         if what=="l":
             rv = lowest_price
