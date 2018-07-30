@@ -100,10 +100,9 @@ try:
                         cr_upd.execute(sql_upd)
                         connection.commit()
                         cr_upd.close()
-
+            cr_d_id.close()
             # Calc trend line
             get_trend_line_data(s)
-            cr_d_id.close()
 
         cr.close()
 

@@ -122,7 +122,7 @@ class tln_data:
                 x = self.edv
             else:
                 x = 0
-        except Exception as e: print(self.s +": "+ str(d) +" = " + e)
+        except Exception as e: print(self.s +": "+ str(d) +" = " + str(e) )
 
         return x
 
@@ -166,4 +166,9 @@ def get_trend_line_data(s):
                 t360_h_x1v = t360_h
                 print(str(d) + " "+ str(s) + " " + str(t180_l) +" " + str(t180_h) + " " + str(t360_l) + " " + str(t360_h) )
                 writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
-        cr.close()
+            cr.close()
+    del tl_180_l
+    del tl_180_h
+    del tl_360_l
+    del tl_360_h
+    del dpts
