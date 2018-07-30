@@ -16,6 +16,8 @@
 #import db access object
 import sys
 import os
+import gc
+import time
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
@@ -102,8 +104,10 @@ try:
                 cr_upd.execute(sql_upd)
                 connection.commit()
                 cr_upd.close()
+            del rsi
+            gc.collect()
+            time.sleep()
         cr_d_id.close()
-        del rsi
         # Calc trend line
         get_trend_line_data(s)
 

@@ -8,6 +8,8 @@ from datetime import timedelta
 import csv
 import sys
 import os
+import gc
+import time
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
@@ -167,6 +169,7 @@ def get_trend_line_data(s):
                 t360_h_x1v = t360_h
                 #print(str(d) + " "+ str(s) + " " + str(t180_l) +" " + str(t180_h) + " " + str(t360_l) + " " + str(t360_h) )
                 writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
+                time.sleep(0.2)
         cr.close()
     finally:
         del tl_180_l
@@ -174,3 +177,4 @@ def get_trend_line_data(s):
         del tl_360_l
         del tl_360_h
         del dpts
+        gc.collect()
