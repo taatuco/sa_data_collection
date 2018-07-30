@@ -119,13 +119,11 @@ class tln_data:
             if x1v == 0:
                 x1v = self.sdv
 
-            if d >= self.sd and d != self.ed:
+            if d >= self.sd:
                 if self.sdv > self.edv:
                     x = x1v + ( (self.edv - self.sdv)/self.p )
                 else:
                     x = x1v + ( (self.sdv - self.edv)/self.p )
-            elif d == self.ed:
-                x = self.edv
             else:
                 x = 0
         except:
