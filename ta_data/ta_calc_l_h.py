@@ -70,7 +70,6 @@ class low_high_data:
                                          db=db_name,
                                          charset='utf8mb4',
                                          cursorclass=pymysql.cursors.DictCursor)
-            #with connection.cursor() as cr_c:
             cr_c = connection.cursor(pymysql.cursors.SSCursor)
             sql_c = "SELECT id FROM price_instruments_data "+\
                     "WHERE symbol='"+symbol+"' AND date<"+str(date)+" "+\

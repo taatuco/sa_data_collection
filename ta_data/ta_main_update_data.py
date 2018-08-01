@@ -13,7 +13,6 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-#import db access object
 import sys
 import os
 import gc
@@ -22,7 +21,6 @@ sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
 from sa_access import *
 access_obj = sa_db_access()
 
-#import all TA functions
 sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\ta_data\\"))
 from ta_calc_ma import *
 from ta_calc_rsi import *
@@ -43,7 +41,6 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 try:
-    #with connection.cursor() as cr:
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol, r_quantmod FROM symbol_list ORDER BY symbol"
     cr.execute(sql)
@@ -52,7 +49,6 @@ try:
         symbol_quantmod = row[1]
         s = row[0]
 
-        #with connection.cursor() as cr_d_id:
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
         sql_d_id = "SELECT id, date FROM price_instruments_data "+\
         "WHERE symbol='"+s+"' and is_ta_calc=0 ORDER BY date ASC"

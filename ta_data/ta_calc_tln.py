@@ -41,7 +41,6 @@ class trend_pts:
         self.p = p;
         self.p2 = p/2;
 
-        #with connection.cursor() as cr:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date FROM price_instruments_data "+\
                 "WHERE symbol='"+ self.s +\
@@ -64,9 +63,7 @@ class trend_pts:
         return self.md
 
     def get_val_frm_d(self,d,get_what):
-        #get from date
         v = 0
-        #with connection.cursor() as cr:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         dr = ""
         sl = ""
@@ -124,7 +121,6 @@ class tln_data:
                 x = 0
         except:
             pass
-        #Exception as e: print(self.s +": "+ str(d) +" = " + str(e) )
 
         return x
 
@@ -142,7 +138,6 @@ def get_trend_line_data(s):
     sd = dpts.get_sd()
     f = "src\\"+ s.replace(":","_") +"_tl.csv"
     try:
-        #with connection.cursor() as cr:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date, price_close "+\
                 "FROM price_instruments_data "+\
@@ -167,7 +162,6 @@ def get_trend_line_data(s):
                 t360_h = tl_360_h.get_pts(d,t360_h_x1v)
                 t360_l_x1v = t360_l
                 t360_h_x1v = t360_h
-                #print(str(d) + " "+ str(s) + " " + str(t180_l) +" " + str(t180_h) + " " + str(t360_l) + " " + str(t360_h) )
                 writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
                 time.sleep(0.2)
         cr.close()

@@ -26,7 +26,6 @@ def calc_ma(symbol_id, date_id, ma_period):
     try:
         ma_period = str(ma_period)
         ma = 0
-        #with connection.cursor() as cr:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
         "WHERE symbol='"+symbol_id+"' AND date<"+date_id+" "+\

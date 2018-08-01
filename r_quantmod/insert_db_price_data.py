@@ -36,9 +36,7 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-# Get symbol_list to iterate for records to collect
 try:
-    #with connection.cursor() as cr:
     cr = connection.cursor(pymysql.cursors.SSCursor)
     # Read symbol_list
     sql = "SELECT symbol, r_quantmod FROM symbol_list"
@@ -54,7 +52,6 @@ try:
             with open(file_str) as csvfile:
                 readCSV = csv.reader(csvfile, delimiter=',')
                 for row in readCSV:
-                    # For each symbol, retrieve the csv content
                     time.sleep(0.2)
                     price_date = row[0]
                     price_date = price_date.replace('.', '-')
@@ -69,16 +66,13 @@ try:
                     # check for each row if not already exists.
                     # if exists, then insert new record, else ignore.
                     if price_open != "open" and price_open != "NA":
-                        #with connection.cursor() as cr_q_cnt:
                         cr_q_cnt = connection.cursor(pymysql.cursors.SSCursor)
                         sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+s+"' AND date='"+price_date+"'"
                         cr_q_cnt.execute(sql_q_cnt)
                         exists_rec = cr_q_cnt.fetchall()
-                        #print(sql_q_cnt)
 
                         if not exists_rec:
                             # insert record in case not existing.
-                            #with connection.cursor() as cr_q_ins:
                             cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                             sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+s+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
                             cr_q_ins.execute(sql_q_ins)
