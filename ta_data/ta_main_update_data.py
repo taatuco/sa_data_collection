@@ -17,7 +17,13 @@ import sys
 import os
 import gc
 import time
-sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
+
+pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(pdir) )
+from settings import *
+sett = sa_path()
+
+sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
@@ -103,7 +109,7 @@ try:
         gc.collect()
         time.sleep(0.2)
         cr_d_id.close()
-        # Calc trend line
+        # Calc other data as per symbol
         get_trend_line_data(s)
 
     cr.close()
