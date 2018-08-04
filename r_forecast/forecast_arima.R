@@ -15,7 +15,28 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-setwd("~/")
+library(base)
+library(rstudioapi)
+
+get_dir <- function() {
+  args <- commandArgs(trailingOnly = FALSE)
+  file <- "--file="
+  rstudio <- "RStudio"
+
+  match <- grep(rstudio, args)
+  if (length(match) > 0) {
+    return(dirname(rstudioapi::getSourceEditorContext()$path))
+  } else {
+    match <- grep(file, args)
+    if (length(match) > 0) {
+      return(dirname(normalizePath(sub(file, "", args[match]))))
+    } else {
+      return(dirname(normalizePath(sys.frames()[[1]]$ofile)))
+    }
+  }
+}
+
+setwd(get_dir() )
 setwd("../../")
 rd <- getwd()
 
