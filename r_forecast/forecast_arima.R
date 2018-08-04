@@ -15,15 +15,22 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+setwd("~/")
+setwd("../../")
+rd <- getwd()
+
 ### Install necessary packages
-source("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_packages\\r_packages.R")
+#source("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_packages\\r_packages.R")
+source(paste(rd,"/sa_data_collection/r_packages/r_packages.R", sep = "") )
 
 forecast_data <- function() {
 
   ### Define path and other variables
-  source("C:\\xampp\\htdocs\\_sa\\sa_pwd\\sa_access.R")
-  xf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_forecast\\src\\"
-  csvf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_quantmod\\src\\"
+  #source("C:\\xampp\\htdocs\\_sa\\sa_pwd\\sa_access.R")
+  source(paste(rd,"/sa_pwd/sa_access.R", sep = "") )
+
+  xf <- paste(rd, "/sa_data_collection/r_forecast/src/", sep = "" )
+  csvf <- paste(rd, "/sa_data_collection/r_quantmod/src/", sep = "")
   qm_src <- "yahoo"
   startYear <- year(now()-1)
   startMonth <- 01
