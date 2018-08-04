@@ -41,13 +41,11 @@ setwd("../../")
 rd <- getwd()
 
 ### Install necessary packages
-#source("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_packages\\r_packages.R")
 source(paste(rd,"/sa_data_collection/r_packages/r_packages.R", sep = "") )
 
 forecast_data <- function() {
 
   ### Define path and other variables
-  #source("C:\\xampp\\htdocs\\_sa\\sa_pwd\\sa_access.R")
   source(paste(rd,"/sa_pwd/sa_access.R", sep = "") )
 
   xf <- paste(rd, "/sa_data_collection/r_forecast/src/", sep = "" )
