@@ -10,5 +10,11 @@ class sa_path:
     def get_path_pwd(self):
         return "C:\\xampp\\htdocs\\_sa\\sa_pwd"
 
+    def get_path_data(self):
+        return self.rdir + "\\ta_data"
+
     def get_path_ta_data_src(self):
         return self.rdir + "\\ta_data\\src"
+
+    def get_path_JSON_rep(self):
+        return "c:\\xampp\\htdocs\\_sa\\_sa_app\\json"

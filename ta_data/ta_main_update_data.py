@@ -27,11 +27,12 @@ sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
-sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\ta_data\\"))
+sys.path.append(os.path.abspath( sett.get_path_data() ))
 from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_l_h import *
 from ta_calc_tln import *
+from ta_calc_fib import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -64,6 +65,7 @@ try:
             d = str(row[1]).replace("-","")
             id = row[0]
             rsi = rsi_data(s,d,14)
+            fib = fib_data(s,180)
             lh = low_high_data(s, d, 20)
             change_1d = rsi.get_change()
             gain_1d = rsi.get_gain()
@@ -111,6 +113,7 @@ try:
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s)
+        get_fib()
 
     cr.close()
 
