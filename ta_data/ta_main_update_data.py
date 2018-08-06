@@ -113,7 +113,7 @@ try:
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s)
-        get_fib()
+        fib.get_fib()
 
     cr.close()
 
