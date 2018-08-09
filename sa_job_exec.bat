@@ -8,7 +8,7 @@
 :: Date: July 1, 2018
 :: Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
 ::###############################################################################
-SET SA_DATA_DIR="C:\xampp\htdocs\_sa\sa_data_collection"
+SET SA_DATA_DIR=C:\xampp\htdocs\_sa\sa_data_collection
 SET LOGFILE="%SA_DATA_DIR%\sa_col_log.log"
 SET _R_SCRIPT_EXE="C:\Program Files\R\R-3.5.0\bin\x64\Rscript.exe"
 SET _PIP_EXE="C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\Scripts\pip.exe"

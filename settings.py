@@ -18,3 +18,6 @@ class sa_path:
 
     def get_path_JSON_rep(self):
         return "c:\\xampp\\htdocs\\_sa\\_sa_app\\json"
+
+    def get_path_r_quantmod_src(self):
+        return self.rdir + "\\r_quantmod\\src\\"
