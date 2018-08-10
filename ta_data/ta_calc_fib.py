@@ -18,6 +18,7 @@ sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
+import pymysql.cursors
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
 db_name = access_obj.db_name()
@@ -46,7 +47,7 @@ class fib_data:
     def __init__(self, symbol, period):
         try:
             self.s = symbol
-            td = datetime.datetime.today().strftime("%Y-%m-%d")
+            td = datetime.datetime.today()
             self.sd = td - ( timedelta(days=period) )
             str_date = self.sd.strftime("%Y%m%d")
             sql_select = "SELECT price_close FROM price_instruments_data "
@@ -83,7 +84,7 @@ class fib_data:
             for row in rs:
                 self.minp = row[0]
         finally:
-            cr.close()
+            connection.close()
 
     def get_fib(self):
 
