@@ -142,7 +142,7 @@ def get_trend_line_data(s):
     t360_l_x1v = 0
     t360_h_x1v = 0
     sd = dpts.get_sd()
-    f = sett.get_path_ta_data_src+"\\"+ s.replace(":","_") +"_tl.csv"
+    f = sett.get_path_ta_data_src()+"\\"+ s.replace(":","_") +"_tl.csv"
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date, price_close "+\
