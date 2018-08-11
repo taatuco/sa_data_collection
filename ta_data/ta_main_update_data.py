@@ -55,6 +55,8 @@ try:
     for row in rs:
         symbol_quantmod = row[1]
         s = row[0]
+        fib = fib_data(s,180)
+        print(s + ": "+ sql)
 
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
         sql_d_id = "SELECT id, date FROM price_instruments_data "+\
@@ -65,7 +67,6 @@ try:
             d = str(row[1]).replace("-","")
             id = row[0]
             rsi = rsi_data(s,d,14)
-            fib = fib_data(s,180)
             lh = low_high_data(s, d, 20)
             change_1d = rsi.get_change()
             gain_1d = rsi.get_gain()
@@ -80,7 +81,7 @@ try:
             lowest_20d = lh.get_low()
             highest_20d = lh.get_high()
             is_ta_calc = "1"
-            print(sql_d_id)
+            print(d +": "+ sql_d_id)
 
             try:
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)

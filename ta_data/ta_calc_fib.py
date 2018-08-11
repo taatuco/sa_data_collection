@@ -84,7 +84,7 @@ class fib_data:
             for row in rs:
                 self.minp = row[0]
         finally:
-            connection.close()
+            cr.close()
 
     def get_fib(self):
 
@@ -102,9 +102,9 @@ class fib_data:
             self.fib618 = self.fib000 - (self.fib100 - self.fib000) * 0.618
             self.fib764 = self.fib000 - (self.fib100 - self.fib000) * 0.764
             self.fib100 = self.maxp
-        f = sett.get_path_ta_data_src +"\\"+ self.s.replace(":","_") +"_fib.csv"
+        f = sett.get_path_ta_data_src() +"\\"+ self.s.replace(":","_") +"_fib.csv"
         with open(f, 'w', newline='') as csvfile:
             fieldnames = ["from_date", "fib_0", "fib_236", "fib_382", "fib_618", "fib_764", "fib_100"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
-            writer.writerow({"date": str(self.sd), "fib_0": self.fib000, "fib_236": self.fib236, "fib_382": self.fib382, "fib_618": self.fib618, "fib_764": self.fib764, "fib_100": self.fib100 })
+            writer.writerow({"from_date": str(self.sd), "fib_0": self.fib000, "fib_236": self.fib236, "fib_382": self.fib382, "fib_618": self.fib618, "fib_764": self.fib764, "fib_100": self.fib100 })
