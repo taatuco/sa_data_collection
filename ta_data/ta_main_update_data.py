@@ -79,8 +79,9 @@ try:
             ma200 = calc_ma(s,d,200)
             lowest_20d = lh.get_low()
             highest_20d = lh.get_high()
-
             is_ta_calc = "1"
+            print(sql_d_id)
+
             try:
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)
                 sql_upd = "UPDATE price_instruments_data SET "+\
