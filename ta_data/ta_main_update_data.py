@@ -56,7 +56,7 @@ try:
         symbol_quantmod = row[1]
         s = row[0]
         fib = fib_data(s,180)
-        print(s + ": "+ sql)
+        print(s + ": "+ os.path.basename(__file__) )
 
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
         sql_d_id = "SELECT id, date FROM price_instruments_data "+\
