@@ -87,24 +87,25 @@ class fib_data:
             cr.close()
 
     def get_fib(self):
-
-        if self.dpv < self.dlv:
-            self.fib000 = self.maxp
-            self.fib236 = self.fib000 + (self.fib100 - self.fib000) * 0.236
-            self.fib382 = self.fib000 + (self.fib100 - self.fib000) * 0.382
-            self.fib618 = self.fib000 + (self.fib100 - self.fib000) * 0.618
-            self.fib764 = self.fib000 + (self.fib100 - self.fib000) * 0.764
-            self.fib100 = self.minp
-        else:
-            self.fib000 = self.minp
-            self.fib236 = self.fib000 - (self.fib100 - self.fib000) * 0.236
-            self.fib382 = self.fib000 - (self.fib100 - self.fib000) * 0.382
-            self.fib618 = self.fib000 - (self.fib100 - self.fib000) * 0.618
-            self.fib764 = self.fib000 - (self.fib100 - self.fib000) * 0.764
-            self.fib100 = self.maxp
-        f = sett.get_path_ta_data_src() +"\\"+ self.s.replace(":","_") +"_fib.csv"
-        with open(f, 'w', newline='') as csvfile:
-            fieldnames = ["from_date", "fib_0", "fib_236", "fib_382", "fib_618", "fib_764", "fib_100"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerow({"from_date": str(self.sd), "fib_0": self.fib000, "fib_236": self.fib236, "fib_382": self.fib382, "fib_618": self.fib618, "fib_764": self.fib764, "fib_100": self.fib100 })
+        try:
+            if self.dpv < self.dlv:
+                self.fib000 = self.maxp
+                self.fib236 = self.fib000 + (self.fib100 - self.fib000) * 0.236
+                self.fib382 = self.fib000 + (self.fib100 - self.fib000) * 0.382
+                self.fib618 = self.fib000 + (self.fib100 - self.fib000) * 0.618
+                self.fib764 = self.fib000 + (self.fib100 - self.fib000) * 0.764
+                self.fib100 = self.minp
+            else:
+                self.fib000 = self.minp
+                self.fib236 = self.fib000 - (self.fib100 - self.fib000) * 0.236
+                self.fib382 = self.fib000 - (self.fib100 - self.fib000) * 0.382
+                self.fib618 = self.fib000 - (self.fib100 - self.fib000) * 0.618
+                self.fib764 = self.fib000 - (self.fib100 - self.fib000) * 0.764
+                self.fib100 = self.maxp
+            f = sett.get_path_ta_data_src() +"\\"+ self.s.replace(":","_") +"_fib.csv"
+            with open(f, 'w', newline='') as csvfile:
+                fieldnames = ["from_date", "fib_0", "fib_236", "fib_382", "fib_618", "fib_764", "fib_100"]
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerow({"from_date": str(self.sd), "fib_0": self.fib000, "fib_236": self.fib236, "fib_382": self.fib382, "fib_618": self.fib618, "fib_764": self.fib764, "fib_100": self.fib100 })
+        except Exception as e: print(e)

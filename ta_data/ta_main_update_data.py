@@ -81,7 +81,6 @@ try:
             lowest_20d = lh.get_low()
             highest_20d = lh.get_high()
             is_ta_calc = "1"
-            print(d +": "+ sql_d_id)
 
             try:
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)

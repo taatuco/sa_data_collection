@@ -8,6 +8,7 @@ from datetime import timedelta
 import csv
 import sys
 import os
+import os.path
 import gc
 import time
 
@@ -132,6 +133,8 @@ class tln_data:
 
 def get_trend_line_data(s):
 
+    dw = datetime.datetime.today().weekday()
+
     tl_180_l = tln_data(s,180,"l")
     tl_180_h = tln_data(s,180,"h")
     tl_360_l = tln_data(s,360,"l")
@@ -143,38 +146,39 @@ def get_trend_line_data(s):
     t360_h_x1v = 0
     sd = dpts.get_sd()
     f = sett.get_path_ta_data_src()+"\\"+ s.replace(":","_") +"_tl.csv"
-    try:
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT date, price_close "+\
-                "FROM price_instruments_data "+\
-                "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
-                " ORDER BY date"
-        cr.execute(sql)
-        rs = cr.fetchall()
+    if not os.path.isfile(f) or dw == 6:
+        try:
+            cr = connection.cursor(pymysql.cursors.SSCursor)
+            sql = "SELECT date, price_close "+\
+                    "FROM price_instruments_data "+\
+                    "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
+                    " ORDER BY date"
+            cr.execute(sql)
+            rs = cr.fetchall()
 
-        with open(f, 'w', newline='') as csvfile:
-            fieldnames = ["date", "180_low","180_high","360_low","360_high"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
+            with open(f, 'w', newline='') as csvfile:
+                fieldnames = ["date", "180_low","180_high","360_low","360_high"]
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
 
-            for row in rs:
-                d = row[0]
-                t180_l = tl_180_l.get_pts(d,t180_l_x1v)
-                t180_h = tl_180_h.get_pts(d,t180_h_x1v)
-                t180_l_x1v = t180_l
-                t180_h_x1v = t180_h
+                for row in rs:
+                    d = row[0]
+                    t180_l = tl_180_l.get_pts(d,t180_l_x1v)
+                    t180_h = tl_180_h.get_pts(d,t180_h_x1v)
+                    t180_l_x1v = t180_l
+                    t180_h_x1v = t180_h
 
-                t360_l = tl_360_l.get_pts(d,t360_l_x1v)
-                t360_h = tl_360_h.get_pts(d,t360_h_x1v)
-                t360_l_x1v = t360_l
-                t360_h_x1v = t360_h
-                writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
-                time.sleep(0.2)
-        cr.close()
-    finally:
-        del tl_180_l
-        del tl_180_h
-        del tl_360_l
-        del tl_360_h
-        del dpts
-        gc.collect()
+                    t360_l = tl_360_l.get_pts(d,t360_l_x1v)
+                    t360_h = tl_360_h.get_pts(d,t360_h_x1v)
+                    t360_l_x1v = t360_l
+                    t360_h_x1v = t360_h
+                    writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
+                    time.sleep(0.2)
+            cr.close()
+        finally:
+            del tl_180_l
+            del tl_180_h
+            del tl_360_l
+            del tl_360_h
+            del dpts
+            gc.collect()
