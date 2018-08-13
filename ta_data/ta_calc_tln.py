@@ -172,6 +172,7 @@ def get_trend_line_data(s):
                     t360_h = tl_360_h.get_pts(d,t360_h_x1v)
                     t360_l_x1v = t360_l
                     t360_h_x1v = t360_h
+                    print(s +": "+str(d) +" - "+ os.path.basename(__file__) )
                     writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
                     time.sleep(0.2)
             cr.close()
