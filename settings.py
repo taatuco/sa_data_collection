@@ -16,11 +16,5 @@ class sa_path:
     def get_path_ta_data_src(self):
         return self.rdir + "\\ta_data\\src"
 
-    def get_path_json_out_dir(self):
-        return "c:\\xampp\\htdocs\\_sa\\_sa_app\\json"
-
-    def get_path_json(self):
-        return self.rdir + "\\json"
-
     def get_path_r_quantmod_src(self):
         return self.rdir + "\\r_quantmod\\src\\"

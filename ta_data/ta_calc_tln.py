@@ -54,6 +54,8 @@ class trend_pts:
                 "' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
+        ttr = cr.rowcount
+        
         for row in rs:
             self.ed = row[0]
         cr.close()
