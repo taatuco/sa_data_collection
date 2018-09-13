@@ -1,13 +1,3 @@
-###############################################################################
-# Desc: Transform and compute data for technical analysis
-#
-# This script prepare and collect technical analysis data to insert in the table
-# price_instruments_data. Various scripts are called to calculate and transform data
-# to import in the database.
-#
-# Auth: dh@taatu.co (Taatu Ltd.)
-# Date: July 5, 2018
-###############################################################################
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -17,15 +7,22 @@ import sys
 import os
 import gc
 import time
-sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_pwd"))
+
+pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(pdir) )
+from settings import *
+sett = sa_path()
+
+sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
-sys.path.append(os.path.abspath("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\ta_data\\"))
+sys.path.append(os.path.abspath( sett.get_path_data() ))
 from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_l_h import *
 from ta_calc_tln import *
+from ta_calc_fib import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -48,6 +45,8 @@ try:
     for row in rs:
         symbol_quantmod = row[1]
         s = row[0]
+        fib = fib_data(s,180)
+        print(s + ": "+ os.path.basename(__file__) )
 
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
         sql_d_id = "SELECT id, date FROM price_instruments_data "+\
@@ -71,8 +70,8 @@ try:
             ma200 = calc_ma(s,d,200)
             lowest_20d = lh.get_low()
             highest_20d = lh.get_high()
-
             is_ta_calc = "1"
+
             try:
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)
                 sql_upd = "UPDATE price_instruments_data SET "+\
@@ -103,8 +102,9 @@ try:
         gc.collect()
         time.sleep(0.2)
         cr_d_id.close()
-        # Calc trend line
+        # Calc other data as per symbol
         get_trend_line_data(s)
+        fib.get_fib()
 
     cr.close()
 

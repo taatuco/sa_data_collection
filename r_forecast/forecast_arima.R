@@ -1,29 +1,43 @@
-################################################################################
-# Desc: ARIMA with an autofit forcast
-#
-# Collect the historical data from csv files and output forecast point
-# using ARIMA autofit.
-#
-# inst_ini_package() = Check if all the necessary packages are installed.
-# forecast_data() = Run the forecast of various csv files and ouput results in csv.
-#
-# Auth: dh@taatu.co (Taatu Ltd.)
-# Date: July 1, 2018
-################################################################################
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+library(base)
+library(rstudioapi)
+
+get_dir <- function() {
+  args <- commandArgs(trailingOnly = FALSE)
+  file <- "--file="
+  rstudio <- "RStudio"
+
+  match <- grep(rstudio, args)
+  if (length(match) > 0) {
+    return(dirname(rstudioapi::getSourceEditorContext()$path))
+  } else {
+    match <- grep(file, args)
+    if (length(match) > 0) {
+      return(dirname(normalizePath(sub(file, "", args[match]))))
+    } else {
+      return(dirname(normalizePath(sys.frames()[[1]]$ofile)))
+    }
+  }
+}
+
+setwd(get_dir() )
+setwd("../../")
+rd <- getwd()
+
 ### Install necessary packages
-source("C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_packages\\r_packages.R")
+source(paste(rd,"/sa_data_collection/r_packages/r_packages.R", sep = "") )
 
 forecast_data <- function() {
 
   ### Define path and other variables
-  source("C:\\xampp\\htdocs\\_sa\\sa_pwd\\sa_access.R")
-  xf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_forecast\\src\\"
-  csvf <- "C:\\xampp\\htdocs\\_sa\\sa_data_collection\\r_quantmod\\src\\"
+  source(paste(rd,"/sa_pwd/sa_access.R", sep = "") )
+
+  xf <- paste(rd, "/sa_data_collection/r_forecast/src/", sep = "" )
+  csvf <- paste(rd, "/sa_data_collection/r_quantmod/src/", sep = "")
   qm_src <- "yahoo"
   startYear <- year(now()-1)
   startMonth <- 01
