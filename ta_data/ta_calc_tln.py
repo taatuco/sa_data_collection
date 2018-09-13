@@ -155,12 +155,20 @@ def get_trend_line_data(s):
                     " ORDER BY date"
             cr.execute(sql)
             rs = cr.fetchall()
+<<<<<<< HEAD
+=======
+            ttr = cr.rowcount
+>>>>>>> SQL_Q_Perf
 
             with open(f, 'w', newline='') as csvfile:
                 fieldnames = ["date", "180_low","180_high","360_low","360_high"]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
+<<<<<<< HEAD
 
+=======
+                i = 0
+>>>>>>> SQL_Q_Perf
                 for row in rs:
                     d = row[0]
                     t180_l = tl_180_l.get_pts(d,t180_l_x1v)

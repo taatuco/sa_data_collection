@@ -1,13 +1,3 @@
-###############################################################################
-# Desc: Transform and compute data for technical analysis
-#
-# This script prepare and collect technical analysis data to insert in the table
-# price_instruments_data. Various scripts are called to calculate and transform data
-# to import in the database.
-#
-# Auth: dh@taatu.co (Taatu Ltd.)
-# Date: July 5, 2018
-###############################################################################
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the

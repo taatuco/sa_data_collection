@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ::###############################################################################
 :: Desc: Batch to execute R and python script jobs related to data collection.
 ::
@@ -8,11 +9,17 @@
 :: Date: July 1, 2018
 :: Copyright 2018 Taatu Ltd. 27 Old Gloucester Street, London, WC1N 3AX, UK (http://taatu.co)
 ::###############################################################################
+=======
+:: Batch: data collection
+
+SET R_VER=R-3.5.0
+SET PY_VER=Python36-32
+>>>>>>> SQL_Q_Perf
 SET SA_DATA_DIR=C:\xampp\htdocs\_sa\sa_data_collection
 SET LOGFILE="%SA_DATA_DIR%\sa_col_log.log"
-SET _R_SCRIPT_EXE="C:\Program Files\R\R-3.5.0\bin\x64\Rscript.exe"
-SET _PIP_EXE="C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\Scripts\pip.exe"
-SET _PY_EXE="C:\Users\Administrator\AppData\Local\Programs\Python\Python36-32\python.exe"
+SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
+SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
+SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
 call :Logit >> %LOGFILE%
 exit /b 0
 

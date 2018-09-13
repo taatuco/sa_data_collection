@@ -1,15 +1,3 @@
-################################################################################
-# Desc: Collect historical data using quantmod library (source yahoo finance)
-#
-# Connect to MySQL database to retrieve the list of symbols to fetch for data.
-# Locate data and export content to csv files.
-#
-# inst_ini_package() = Check if all the necessary packages are installed.
-# collect_data() = Retrieve symbols from database and output results in csv.
-#
-# Auth: dh@taatu.co (Taatu Ltd.)
-# Date: July 1, 2018
-################################################################################
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the

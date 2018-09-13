@@ -1,15 +1,3 @@
-################################################################################
-# Desc: ARIMA with an autofit forcast
-#
-# Collect the historical data from csv files and output forecast point
-# using ARIMA autofit.
-#
-# inst_ini_package() = Check if all the necessary packages are installed.
-# forecast_data() = Run the forecast of various csv files and ouput results in csv.
-#
-# Auth: dh@taatu.co (Taatu Ltd.)
-# Date: July 1, 2018
-################################################################################
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the

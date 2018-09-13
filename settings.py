@@ -16,8 +16,17 @@ class sa_path:
     def get_path_ta_data_src(self):
         return self.rdir + "\\ta_data\\src"
 
+<<<<<<< HEAD
     def get_path_JSON_rep(self):
         return "c:\\xampp\\htdocs\\_sa\\_sa_app\\json"
 
+=======
+    def get_path_json_out_dir(self):
+        return "c:\\xampp\\htdocs\\_sa\\_sa_app\\json"
+
+    def get_path_json(self):
+        return self.rdir + "\\json"
+
+>>>>>>> SQL_Q_Perf
     def get_path_r_quantmod_src(self):
         return self.rdir + "\\r_quantmod\\src\\"

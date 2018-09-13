@@ -1,12 +1,3 @@
-###############################################################################
-# Desc: Read csv and update the database accordingly: table: price_instruments_data
-#
-# Read csv file and insert records that are not existing in the database table
-# price_instruments_data. (Avoid duplicate records).
-#
-# Auth: dh@taatu.co (Taatu Ltd.)
-# Date: July 2, 2018
-###############################################################################
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -72,7 +63,11 @@ try:
                         sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+s+"' AND date='"+price_date+"'"
                         cr_q_cnt.execute(sql_q_cnt)
                         exists_rec = cr_q_cnt.fetchall()
+<<<<<<< HEAD
                         print(sql_q_cnt)                        
+=======
+                        print(sql_q_cnt)
+>>>>>>> SQL_Q_Perf
 
                         if not exists_rec:
                             cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
