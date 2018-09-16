@@ -55,7 +55,7 @@ class trend_pts:
         cr.execute(sql)
         rs = cr.fetchall()
         ttr = cr.rowcount
-        
+
         for row in rs:
             self.ed = row[0]
         cr.close()
@@ -115,23 +115,19 @@ class tln_data:
         self.sdv = pts.get_val_frm_d(self.sd, self.get_this)
         self.edv = pts.get_val_frm_d(self.ed, self.get_this)
 
-    def get_pts(self,d,x1v):
-        x = 0
+    def get_slope(self):
+        slp = 0
         try:
-            if x1v == 0:
-                x1v = self.sdv
-
-            if d >= self.sd:
-                if self.sdv > self.edv:
-                    x = x1v + ( (self.edv - self.sdv)/self.p )
-                else:
-                    x = x1v + ( (self.sdv - self.edv)/self.p )
-            else:
-                x = 0
+            slp =  (self.edv - self.sdv)/self.p
         except:
             pass
+        return slp
 
-        return x
+    def get_sd(self):
+        return self.sd
+
+    def get_ed(self):
+        return self.ed
 
 def get_trend_line_data(s):
 
@@ -141,12 +137,11 @@ def get_trend_line_data(s):
     tl_180_h = tln_data(s,180,"h")
     tl_360_l = tln_data(s,360,"l")
     tl_360_h = tln_data(s,360,"h")
-    dpts = trend_pts(s,360)
     t180_l_x1v = 0
     t180_h_x1v = 0
     t360_l_x1v = 0
     t360_h_x1v = 0
-    sd = dpts.get_sd()
+    sd = tl_360_l.get_sd()
     f = sett.get_path_ta_data_src()+"\\"+ s.replace(":","_") +"_tl.csv"
     if not os.path.isfile(f) or dw == 6:
         try:
@@ -160,29 +155,20 @@ def get_trend_line_data(s):
             ttr = cr.rowcount
 
             with open(f, 'w', newline='') as csvfile:
-                fieldnames = ["date", "180_low","180_high","360_low","360_high"]
+                fieldnames = ["180_sd", "180_slope","360_sd","360_slope"]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
-                i = 0
-                for row in rs:
-                    d = row[0]
-                    t180_l = tl_180_l.get_pts(d,t180_l_x1v)
-                    t180_h = tl_180_h.get_pts(d,t180_h_x1v)
-                    t180_l_x1v = t180_l
-                    t180_h_x1v = t180_h
-
-                    t360_l = tl_360_l.get_pts(d,t360_l_x1v)
-                    t360_h = tl_360_h.get_pts(d,t360_h_x1v)
-                    t360_l_x1v = t360_l
-                    t360_h_x1v = t360_h
-                    print(s +": "+str(d) +" - "+ os.path.basename(__file__) )
-                    writer.writerow({"date": str(d), "180_low": t180_l, "180_high": t180_h, "360_low": t360_l, "360_high": t360_h})
-                    time.sleep(0.2)
+                t180_sd = tl_180_l.get_sd()
+                t180_slp = tl_180_l.get_slope()
+                t360_sd = tl_360_l.get_sd()
+                t360_slp = tl_360_l.get_slope()
+                print(s +": "+ os.path.basename(__file__) )
+                writer.writerow({"180_sd": str(t180_sd), "180_slope": t180_slp, "360_sd": str(t360_sd), "360_slope": t360_slp})
             cr.close()
+
         finally:
-            del tl_180_l
-            del tl_180_h
-            del tl_360_l
-            del tl_360_h
-            del dpts
+            del t180_sd
+            del t180_slp
+            del t360_sd
+            del t360_slp
             gc.collect()

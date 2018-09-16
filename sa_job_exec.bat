@@ -11,9 +11,15 @@ call :Logit >> %LOGFILE%
 exit /b 0
 
 :Logit
+:: Upgrade to latest pip
+%_PY_EXE% -m pip install --upgrade pip
+
 :: Rscript that collect price_historical_data using quantmod library
 DEL /F /Q "%SA_DATA_DIR%\r_quantmod\src\*"
 %_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_quantmod\collect_data_r_quantmod.R"
+
+:: Import and update historical data
+%_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data.py"
 
 :: Rscript that compute forecast points using ARIMA model using forecast library
 DEL /F /Q "%SA_DATA_DIR%\r_forecast\src\*"
@@ -25,9 +31,6 @@ DEL /F /Q "%SA_DATA_DIR%\r_forecast\src\*"
 
 :: Install DateUtil for date and time format management
 %_PIP_EXE% install python-dateutil
-
-:: Import and update historical data
-%_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data.py"
 
 :: Compute TA data
 %_PY_EXE% "%SA_DATA_DIR%\ta_data\ta_main_update_data.py"

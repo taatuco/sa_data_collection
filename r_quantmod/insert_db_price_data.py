@@ -53,11 +53,7 @@ try:
                     price_date = price_date.replace('X', '')
                     price_date = price_date.replace('-','')
                     price_date = '%.8s' % price_date
-                    price_open = row[1]
-                    price_high = row[2]
-                    price_low = row[3]
                     price_close = row[4]
-                    volume = row[5]
                     if price_open != "open" and price_open != "NA":
                         cr_q_cnt = connection.cursor(pymysql.cursors.SSCursor)
                         sql_q_cnt = "SELECT id FROM price_instruments_data WHERE symbol='"+s+"' AND date='"+price_date+"'"
@@ -67,7 +63,7 @@ try:
 
                         if not exists_rec:
                             cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
-                            sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close, price_open, price_low, price_high, volume) VALUES ('"+s+"',"+price_date+","+price_close+","+price_open+","+price_low+","+price_high+","+volume+");"
+                            sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close) VALUES ('"+s+"',"+price_date+","+price_close+");"
                             cr_q_ins.execute(sql_q_ins)
                             connection.commit()
                             cr_q_ins.close()

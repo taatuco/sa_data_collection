@@ -31,13 +31,34 @@ rd <- getwd()
 ### Install necessary packages
 source(paste(rd, "/sa_data_collection/r_packages/r_packages.R", sep = "") )
 
+get_date_prev_month <- function(yyyy,mm,dd) {
+  yx <- yyyy
+  mx <- mm
+  dx <- dd
+
+  if (mx == 1) {
+    mx <- 12
+    yx <- yx -1
+  } else {
+    mx <- mx -1
+    if (mx < 10) {
+      mx <- paste("0",mx, sep = "")
+    }
+  }
+
+  date_yyyymmdd <- paste(yx,mx,dx, sep = "-")
+  return(date_yyyymmdd)
+
+}
+
 collect_data <- function() {
   ### Define path and other variables
   source(paste(rd, "/sa_pwd/sa_access.R", sep = "")  )
   xf <- paste(rd, "/sa_data_collection/r_quantmod/src/", sep = "")
   qm_src <- "yahoo"
   yx <- year(now())
-  dfrom <- paste(yx,"-01-01",sep = "")
+  mx <- month(now())
+  dfrom <- get_date_prev_month(yx,mx,"01")
 
   ### Connect to MySQL database to retrieve list of symbols
   db_usr <- get_sa_usr()
@@ -58,20 +79,21 @@ collect_data <- function() {
     while (i < nrow(symbol_list)) {
       ### Define data to collect
       symbol <- symbol_list[i,5]
-      dataframe <- as.data.frame(getSymbols(symbol, src = qm_src, from = dfrom, env = NULL))
+      tryCatch({
+        dataframe <- as.data.frame(getSymbols(symbol, src = qm_src, from = dfrom, env = NULL))
+        ### Set columns name
+        colnames(dataframe)[1] <- "open"
+        colnames(dataframe)[2] <- "high"
+        colnames(dataframe)[3] <- "low"
+        colnames(dataframe)[4] <- "close"
+        colnames(dataframe)[5] <- "volume"
+        colnames(dataframe)[6] <- "adjusted"
 
-      ### Set columns name
-      colnames(dataframe)[1] <- "open"
-      colnames(dataframe)[2] <- "high"
-      colnames(dataframe)[3] <- "low"
-      colnames(dataframe)[4] <- "close"
-      colnames(dataframe)[5] <- "volume"
-      colnames(dataframe)[6] <- "adjusted"
-
-      ### Export content to CSV ###
-      fn <- paste(symbol,".csv", sep = "")
-      f <- paste(xf,fn, sep = "")
-      write.csv(dataframe, file = f)
+        ### Export content to CSV ###
+        fn <- paste(symbol,".csv", sep = "")
+        f <- paste(xf,fn, sep = "")
+        write.csv(dataframe, file = f)
+      }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
       i = i+1
     }
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
