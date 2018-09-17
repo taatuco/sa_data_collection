@@ -22,7 +22,7 @@ db_name = access_obj.db_name()
 db_srv = access_obj.db_server()
 
 import csv
-csvdir = sett.get_path_r_quantmod_src()
+csvdir = sett.get_path_r_oanda_src()
 from pathlib import Path
 
 import pymysql.cursors
@@ -35,13 +35,13 @@ connection = pymysql.connect(host=db_srv,
 
 try:
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol, r_quantmod FROM symbol_list"
+    sql = "SELECT symbol FROM symbol_list WHERE oanda<>'' "
     cr.execute(sql)
     rs = cr.fetchall()
     for row in rs:
-        symbol_quantmod = row[1]
+        symbol = row[0]
         s = row[0]
-        file_str = csvdir+symbol_quantmod+'.csv'
+        file_str = csvdir+symbol+'.csv'
         filepath = Path(file_str)
         if filepath.exists():
             with open(file_str) as csvfile:
@@ -53,9 +53,9 @@ try:
                     price_date = price_date.replace('X', '')
                     price_date = price_date.replace('-','')
                     price_date = '%.8s' % price_date
-                    price_close = row[4]
+                    price_close = row[1]
                     print(s +": "+ os.path.basename(__file__) )
-                    if price_close != "open" and price_close != "NA":
+                    if price_close != "NA":
                         try:
                             cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                             sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close) VALUES ('"+s+"',"+price_date+","+price_close+");"

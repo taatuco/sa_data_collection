@@ -7,6 +7,7 @@ import sys
 import os
 import gc
 import time
+from datetime import timedelta
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -45,9 +46,12 @@ try:
         s = row[0]
         print(s + ": "+ os.path.basename(__file__) )
 
+        d = datetime.datetime.now() - timedelta(days=720)
+        d = d.strftime("%Y%m%d")
+
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
         sql_d_id = "SELECT id, date FROM price_instruments_data "+\
-        "WHERE symbol='"+s+"' and is_ta_calc=0 ORDER BY date ASC"
+        "WHERE (symbol='"+s+"' and date>"+d+" and is_ta_calc=0) ORDER BY date ASC"
         cr_d_id.execute(sql_d_id)
         rs_d = cr_d_id.fetchall()
         for row in rs_d:

@@ -18,3 +18,6 @@ class sa_path:
 
     def get_path_r_quantmod_src(self):
         return self.rdir + "\\r_quantmod\\src\\"
+
+    def get_path_r_oanda_src(self):
+        return self.rdir + "\\r_oanda\\src\\"

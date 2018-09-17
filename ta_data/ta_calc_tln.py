@@ -72,6 +72,15 @@ class trend_pts:
         return self.md
 
     def get_val_frm_d(self,d,get_what):
+        '''
+        +LT bias: Positive/negative
+        +ST bias: Positive/negative
+        +RSI momentum: Weak, Neutral, Strong
+        _____________________________________________
+        +RSI average
+        +200d moving average
+        +50d moving average
+        '''
         v = 0
         cr = connection.cursor(pymysql.cursors.SSCursor)
         dr = ""
