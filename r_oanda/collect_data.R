@@ -70,7 +70,7 @@ collect_data <- function() {
   myPort <- 3306
   con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
 
-  sql <- "SELECT symbol, oanda FROM symbol_list WHERE oanda <>'' ORDER BY oanda"
+  sql <- "SELECT oanda, uid FROM symbol_list WHERE oanda <>'' ORDER BY oanda"
   res <- dbSendQuery(con, sql)
 
   tryCatch({
@@ -78,15 +78,15 @@ collect_data <- function() {
     i <- 1
     while (i < nrow(symbol_list)) {
       ### Define data to collect
-      symbol <- symbol_list[i,1]
-      oanda <- symbol_list[i,2]
+      oanda <- symbol_list[i,1]
+      uid <- symbol_list[i,2]
       tryCatch({
         dataframe <- as.data.frame(getSymbols(oanda, src = qm_src, from = dfrom, env = NULL))
         ### Set columns name
         colnames(dataframe)[1] <- "close"
 
         ### Export content to CSV ###
-        fn <- paste(symbol,".csv", sep = "")
+        fn <- paste(uid,".csv", sep = "")
         f <- paste(xf,fn, sep = "")
         write.csv(dataframe, file = f)
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})

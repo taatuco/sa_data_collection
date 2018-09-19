@@ -28,62 +28,66 @@ setwd(get_dir() )
 setwd("../../")
 rd <- getwd()
 
-### Install necessary packages
 source(paste(rd,"/sa_data_collection/r_packages/r_packages.R", sep = "") )
 
 forecast_data <- function() {
 
-  ### Define path and other variables
   source(paste(rd,"/sa_pwd/sa_access.R", sep = "") )
 
   xf <- paste(rd, "/sa_data_collection/r_forecast/src/", sep = "" )
   csvf <- paste(rd, "/sa_data_collection/r_quantmod/src/", sep = "")
-  qm_src <- "yahoo"
   startYear <- year(now()-1)
   startMonth <- 01
   startDay <- 01
   StartDate <- paste(startYear,startMonth,startDay,sep = "-")
   forecastNumbOfdays <- 7
 
-  ### Connect to MySQL database to retrieve list of symbols
   db_usr <- get_sa_usr()
   db_pwd <- get_sa_pwd()
-  # create a driver
-  m = dbDriver("MySQL")
+
+    m = dbDriver("MySQL")
   myHost <- get_sa_db_srv()
   myDbname <- get_sa_db_name()
   myPort <- 3306
   con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
 
-  sql <- "SELECT * FROM symbol_list"
+  sql <- "SELECT symbol, uid FROM symbol_list"
   res <- dbSendQuery(con, sql)
 
-  tryCatch({
-    symbol_list <- fetch(res, n = -1)
-    i <- 1
-    while (i < nrow(symbol_list)) {
-      ### Define data to collect
-      symbol <- symbol_list[i,5]
-      csvFile <- paste(csvf,symbol,".csv",sep = "")
-      if(file.exists(csvFile)){
-        mydata<- as.data.frame(read.csv(file = csvFile,header = TRUE, sep = ","))
+  symbol_list <- fetch(res, n = -1)
+  i <- 1
+  while (i < nrow(symbol_list)) {
+    symbol <- symbol_list[i,1]
+    uid <- symbol_list[i,2]
+    hd_sql <- paste("SELECT date, price_close FROM price_instruments_data WHERE symbol ='",symbol,"' AND date>=",StartDate," ORDER BY date ASC", sep = "")
+    hd_res <- dbSendQuery(con, hd_sql)
+    mydata <- fetch(hd_res, n = -1)
 
-        attach(mydata)
-        T <- mydata
-        price <- ts(T$close)
-        ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
-        fit <- auto.arima(ts_price, stepwise = F, approximation = F)
-        fc  <- forecast(fit, h = forecastNumbOfdays, level = c(75, 85, 95))
-        dataframe <- as.data.frame(fc)
+      attach(mydata)
+      T <- mydata
+      price <- ts(T$price_close)
+      ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
 
-        ### Export forecast to CSV ###
-        fn <- paste(symbol,".csv", sep = "")
-        f <- paste(xf,fn, sep = "")
-        write.csv(dataframe, file = f)
-     }
-        i = i+1
-    }
-  }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+      tryCatch({
+        fit <- arima(ts_price,order = c(9,0,10))
+        fc  <- forecast(fit, h = forecastNumbOfdays)
+      },
+        error=function(e){
+          tryCatch({
+            cat("ERROR :",conditionMessage(e), "\n")
+            fit <- arima(ts_price,order = c(9,1,10))
+            fc  <- forecast(fit, h = forecastNumbOfdays)
+          }, error=function(e){
+            print(symbol)
+            cat("ERROR :",conditionMessage(e), "\n")
+          })
+        })
+      dataframe <- as.data.frame(fc)
+      fn <- paste(uid,".csv", sep = "")
+      f <- paste(xf,fn, sep = "")
+      write.csv(dataframe, file = f)
+      i = i+1
+  }
 
 }
 

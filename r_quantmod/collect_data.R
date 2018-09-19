@@ -70,7 +70,7 @@ collect_data <- function() {
   myPort <- 3306
   con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
 
-  sql <- "SELECT * FROM symbol_list"
+  sql <- "SELECT yahoo_finance, uid FROM symbol_list"
   res <- dbSendQuery(con, sql)
 
   tryCatch({
@@ -78,7 +78,8 @@ collect_data <- function() {
     i <- 1
     while (i < nrow(symbol_list)) {
       ### Define data to collect
-      symbol <- symbol_list[i,5]
+      symbol <- symbol_list[i,1]
+      uid <- symbol_list[i,2]
       tryCatch({
         dataframe <- as.data.frame(getSymbols(symbol, src = qm_src, from = dfrom, env = NULL))
         ### Set columns name
@@ -90,7 +91,7 @@ collect_data <- function() {
         colnames(dataframe)[6] <- "adjusted"
 
         ### Export content to CSV ###
-        fn <- paste(symbol,".csv", sep = "")
+        fn <- paste(uid,".csv", sep = "")
         f <- paste(xf,fn, sep = "")
         write.csv(dataframe, file = f)
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})

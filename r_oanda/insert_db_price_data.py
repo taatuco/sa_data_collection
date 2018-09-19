@@ -35,13 +35,13 @@ connection = pymysql.connect(host=db_srv,
 
 try:
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol FROM symbol_list WHERE oanda<>'' "
+    sql = "SELECT symbol, uid FROM symbol_list WHERE oanda<>'' "
     cr.execute(sql)
     rs = cr.fetchall()
     for row in rs:
-        symbol = row[0]
         s = row[0]
-        file_str = csvdir+symbol+'.csv'
+        uid = row[1]
+        file_str = csvdir+uid+'.csv'
         filepath = Path(file_str)
         if filepath.exists():
             with open(file_str) as csvfile:
