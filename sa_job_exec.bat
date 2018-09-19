@@ -19,6 +19,7 @@ exit /b 0
 %_PIP_EXE% install PyMySQL
 %_PIP_EXE% install python-dateutil
 %_PIP_EXE% install %PY_BS%
+%PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 
 :: Collect price_historical_data from various sources
 DEL /F /Q "%SA_DATA_DIR%\r_quantmod\src\*"

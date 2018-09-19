@@ -41,7 +41,7 @@ try:
     for row in rs:
         uid = row[1]
         s = row[0]
-        file_str = csvdir+uid+'.csv'
+        file_str = csvdir+str(uid)+'.csv'
         filepath = Path(file_str)
         if filepath.exists():
             with open(file_str) as csvfile:
