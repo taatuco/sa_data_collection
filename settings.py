@@ -11,10 +11,10 @@ class sa_path:
         return "C:\\xampp\\htdocs\\_sa\\sa_pwd"
 
     def get_path_data(self):
-        return self.rdir + "\\ta_data"
+        return self.rdir + "\\data"
 
     def get_path_ta_data_src(self):
-        return self.rdir + "\\ta_data\\src"
+        return self.rdir + "\\data\\src"
 
     def get_path_r_quantmod_src(self):
         return self.rdir + "\\r_quantmod\\src\\"

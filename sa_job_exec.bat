@@ -35,4 +35,4 @@ DEL /F /Q "%SA_DATA_DIR%\r_forecast\src\*"
 %_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_forecast\forecast_arima.R"
 
 :: Compute TA data
-%_PY_EXE% "%SA_DATA_DIR%\ta_data\ta_main_update_data.py"
+%_PY_EXE% "%SA_DATA_DIR%\data\ta_main_update_data.py"
