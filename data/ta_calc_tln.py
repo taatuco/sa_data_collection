@@ -72,15 +72,6 @@ class trend_pts:
         return self.md
 
     def get_val_frm_d(self,d,get_what):
-        '''
-        +LT bias: Positive/negative
-        +ST bias: Positive/negative
-        +RSI momentum: Weak, Neutral, Strong
-        _____________________________________________
-        +RSI average
-        +200d moving average
-        +50d moving average
-        '''
         v = 0
         cr = connection.cursor(pymysql.cursors.SSCursor)
         dr = ""
@@ -138,6 +129,68 @@ class tln_data:
     def get_ed(self):
         return self.ed
 
+    def get_sdv(self):
+        return self.sdv
+
+    def get_edv(self):
+        return self.edv
+
+    def get_200ma_frm_d(self,d):
+        v = 0
+        s = self.s
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT ma200 FROM price_instruments_data WHERE (symbol ='"+s+"' AND date='"+str(d)+"') LIMIT 1"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            v = row[0]
+        cr.close()
+        return v
+
+    def get_50ma_frm_d(self,d):
+        v = 0
+        s = self.s
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT AVG(price_close) AS p FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT 50"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            v = row[0]
+        cr.close()
+        return v
+
+    def get_rsi_avg(self,d,p):
+        v = 0
+        s = self.s
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT AVG(rsi14) AS rsi FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT " + str(p)
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            v = row[0]
+        cr.close()
+        return v
+
+    def get_rsi_mom(self,v):
+        mm = ""
+        if (v < 31):
+            mm = "Oversold"
+        if (v >30 and v <50):
+            mm = "Weak"
+        if (v >49 and v <70):
+            mm = "Strong"
+        if (v >69):
+            mm = "Overbought"
+        return mm
+
+def get_bias(sdv,edv):
+    v = "Neutral"
+    if (sdv > edv):
+        v = "Negative"
+    else:
+        v = "Positive"
+    return v
+
 def get_trend_line_data(s,uid):
 
     dw = datetime.datetime.today().weekday()
@@ -164,20 +217,52 @@ def get_trend_line_data(s,uid):
             ttr = cr.rowcount
 
             with open(f, 'w', newline='') as csvfile:
-                fieldnames = ["180_sd", "180_slope","360_sd","360_slope"]
+                fieldnames = ["180_sd", "180_slope_low","180_slope_high",
+                "360_sd","360_slope_low","360_slope_high",
+                "180_sdv_low","180_sdv_high","360_sdv_low","360_sdv_high",
+                "st_lower_range","st_upper_range","lt_lower_range", "lt_upper_range",
+                "st_rsi_avg", "lt_rsi_avg", "st_rsi_mom", "lt_rsi_mom",
+                "ma200","ma50", "st_bias", "lt_bias"]
+
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
                 t180_sd = tl_180_l.get_sd()
-                t180_slp = tl_180_l.get_slope()
+                t180_ed = tl_180_l.get_ed()
+                t360_ed = tl_360_l.get_ed()
+                t180_slp_l = tl_180_l.get_slope()
+                t180_slp_h = tl_180_h.get_slope()
                 t360_sd = tl_360_l.get_sd()
-                t360_slp = tl_360_l.get_slope()
+                t360_slp_l = tl_360_l.get_slope()
+                t360_slp_h = tl_360_h.get_slope()
+                t180_sdv_l = tl_180_l.get_sdv()
+                t180_sdv_h = tl_180_h.get_sdv()
+                t360_sdv_l = tl_360_l.get_sdv()
+                t360_sdv_h = tl_360_h.get_sdv()
+                st_lower_range = tl_180_l.get_edv()
+                st_upper_range = tl_180_h.get_edv()
+                lt_lower_range = tl_360_l.get_edv()
+                lt_upper_range = tl_360_h.get_edv()
+
+                st_rsi_avg = tl_180_l.get_rsi_avg( t180_ed, 5)
+                lt_rsi_avg = tl_360_l.get_rsi_avg( t360_ed, 50)
+
+                st_rsi_mom = tl_180_l.get_rsi_mom(st_rsi_avg)
+                lt_rsi_mom = tl_360_l.get_rsi_mom(lt_rsi_avg)
+                ma_200_ed = tl_360_l.get_200ma_frm_d( t180_ed )
+                ma_50_ed = tl_360_l.get_50ma_frm_d( t180_ed )
+                ma_200_sd = tl_360_l.get_200ma_frm_d( t180_sd )
+                ma_50_sd = tl_360_l.get_50ma_frm_d( t180_sd )
+                st_bias = get_bias(ma_50_sd, ma_50_ed)
+                lt_bias = get_bias(ma_200_sd, ma_200_ed)
+
                 print(s +": "+ os.path.basename(__file__) )
-                writer.writerow({"180_sd": str(t180_sd), "180_slope": t180_slp, "360_sd": str(t360_sd), "360_slope": t360_slp})
+                writer.writerow({"180_sd": str(t180_sd), "180_slope_low": str(t180_slp_l), "180_slope_high": str(t180_slp_h),
+                "360_sd": str(t360_sd), "360_slope_low": str(t360_slp_l),"360_slope_high": str(t360_slp_h),
+                "180_sdv_low": str(t180_sdv_l), "180_sdv_high": str(t180_sdv_h), "360_sdv_low": str(t360_sdv_l), "360_sdv_high": str(t360_sdv_h),
+                "st_lower_range": str(st_lower_range), "st_upper_range": str(st_upper_range), "lt_lower_range": str(lt_lower_range), "lt_upper_range": str(lt_upper_range),
+                "st_rsi_avg":str(st_rsi_avg), "lt_rsi_avg": str(lt_rsi_avg), "st_rsi_mom": str(st_rsi_mom), "lt_rsi_mom": str(lt_rsi_mom),
+                "ma200": str(ma_200_ed), "ma50": str(ma_50_ed), "st_bias": str(st_bias), "lt_bias": str(lt_bias) })
             cr.close()
 
         finally:
-            del t180_sd
-            del t180_slp
-            del t360_sd
-            del t360_slp
             gc.collect()

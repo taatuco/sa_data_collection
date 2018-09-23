@@ -33,7 +33,6 @@ connection = pymysql.connect(host=db_srv,
 
 '''
 ticker
-lastPrice
 1Y
 6M
 3M
