@@ -22,6 +22,7 @@ sys.path.append(os.path.abspath( sett.get_path_data() ))
 from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_tln import *
+from ta_instr_sum import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -100,6 +101,7 @@ try:
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
+        get_instr_sum(s,uid)
 
     cr.close()
 

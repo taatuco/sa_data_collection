@@ -21,3 +21,6 @@ class sa_path:
 
     def get_path_r_oanda_src(self):
         return self.rdir + "\\r_oanda\\src\\"
+
+    def get_path_r_forecast_src(self):
+        return self.rdir + "\\r_forecast\\src\\"

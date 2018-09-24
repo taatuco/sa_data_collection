@@ -187,7 +187,7 @@ def get_bias(sdv,edv):
     v = "Neutral"
     if (sdv > edv):
         v = "Negative"
-    else:
+    if (sdv < edv):
         v = "Positive"
     return v
 
