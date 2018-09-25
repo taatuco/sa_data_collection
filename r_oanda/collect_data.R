@@ -76,7 +76,7 @@ collect_data <- function() {
   tryCatch({
     symbol_list <- fetch(res, n = -1)
     i <- 1
-    while (i < nrow(symbol_list)) {
+    while (i <= nrow(symbol_list)) {
       ### Define data to collect
       oanda <- symbol_list[i,1]
       uid <- symbol_list[i,2]

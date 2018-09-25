@@ -201,20 +201,32 @@ class instr_sum_data:
         return str(get_pct_from_date(str_date, self.sql_select, self.lp))
 
 def get_forecast_pct(lp,fp):
-    p = (fp - lp)/lp
+    try:
+        lpf = float(lp)
+        fpf = float(fp)
+        p = (fpf - lpf)/lpf
+        if (p < 0.0001):
+            p = 0
+    except:
+        p = ""
+    return p
 
 
-def get_instr_sum(s,uid):
+def get_instr_sum(s,uid,pip):
+
+    #Convert to pips for FX instruments
+    m = pip
+
     instr_data = instr_sum_data(s,uid)
     forc_data = forecast_data(uid)
     f = sett.get_path_ta_data_src()+"\\"+str(uid)+"s.csv"
     # ---
-    y1_pct = instr_data.get_pct_1Yp()
-    m6_pct = instr_data.get_pct_6Mp()
-    m3_pct = instr_data.get_pct_3Mp()
-    m1_pct = instr_data.get_pct_1Mp()
-    w1_pct = instr_data.get_pct_1Wp()
-    wf_pct = get_forecast_pct(instr_data.get_lp(), forecast_data.get_frc_pt() )
+    y1_pct = float(instr_data.get_pct_1Yp() )* m
+    m6_pct = float(instr_data.get_pct_6Mp() )* m
+    m3_pct = float(instr_data.get_pct_3Mp() )* m
+    m1_pct = float(instr_data.get_pct_1Mp() )* m
+    w1_pct = float(instr_data.get_pct_1Wp() )* m
+    wf_pct = get_forecast_pct(instr_data.get_lp(), forc_data.get_frc_pt() ) * m
     # --- (1)
     trade_entry_buy_1 = forc_data.get_entry_buy(1)
     trade_tp_buy_1 = forc_data.get_tp_buy(1)
@@ -233,7 +245,7 @@ def get_instr_sum(s,uid):
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
     try:
-        with open(f, mode="w") as csvfile:
+        with open(f, mode="w", newline = "") as csvfile:
             fieldnames = ["y1", "m6", "m3", "m1", "w1","wf",
             "trade_1_entry", "trade_1_tp", "trade_1_sl", "trade_1_type",
             "trade_2_entry", "trade_2_tp", "trade_2_sl", "trade_2_type",

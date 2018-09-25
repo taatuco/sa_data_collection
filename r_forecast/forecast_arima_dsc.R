@@ -55,38 +55,43 @@ forecast_data <- function() {
   res <- dbSendQuery(con, sql)
 
   symbol_list <- fetch(res, n = -1)
-  i <- 1
-  while (i < nrow(symbol_list)) {
-    symbol <- symbol_list[i,1]
-    uid <- symbol_list[i,2]
-    hd_sql <- paste("SELECT date, price_close FROM price_instruments_data WHERE symbol ='",symbol,"' AND date>=",StartDate," ORDER BY date ASC", sep = "")
-    hd_res <- dbSendQuery(con, hd_sql)
-    mydata <- fetch(hd_res, n = -1)
+  i <- nrow(symbol_list)
+  while (i >= (nrow(symbol_list)/2)+1 ) {
+    tryCatch({
+      symbol <- symbol_list[i,1]
+      uid <- symbol_list[i,2]
+      hd_sql <- paste("SELECT date, price_close FROM price_instruments_data WHERE symbol ='",symbol,"' AND date>=",StartDate," ORDER BY date ASC", sep = "")
+      hd_res <- dbSendQuery(con, hd_sql)
+      mydata <- fetch(hd_res, n = -1)
 
-      attach(mydata)
-      T <- mydata
-      price <- ts(T$price_close)
-      ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
+        attach(mydata)
+        T <- mydata
+        price <- ts(T$price_close)
+        ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
 
-      tryCatch({
-        fit <- arima(ts_price,order = c(9,0,10))
-        fc  <- forecast(fit, h = forecastNumbOfdays)
-      },
-        error=function(e){
-          tryCatch({
-            cat("ERROR :",conditionMessage(e), "\n")
-            fit <- arima(ts_price,order = c(9,1,10))
-            fc  <- forecast(fit, h = forecastNumbOfdays)
-          }, error=function(e){
-            print(symbol)
-            cat("ERROR :",conditionMessage(e), "\n")
+        tryCatch({
+          fit <- arima(ts_price,order = c(9,0,10))
+          fc  <- forecast(fit, h = forecastNumbOfdays)
+        },
+          error=function(e){
+            tryCatch({
+              cat("ERROR :",conditionMessage(e), "\n")
+              fit <- arima(ts_price,order = c(9,1,10))
+              fc  <- forecast(fit, h = forecastNumbOfdays)
+            }, error=function(e){
+              print(symbol)
+              cat("ERROR :",conditionMessage(e), "\n")
+            })
           })
-        })
-      dataframe <- as.data.frame(fc)
-      fn <- paste(uid,".csv", sep = "")
-      f <- paste(xf,fn, sep = "")
-      write.csv(dataframe, file = f)
-      i = i+1
+        dataframe <- as.data.frame(fc)
+        fn <- paste(uid,".csv", sep = "")
+        f <- paste(xf,fn, sep = "")
+        write.csv(dataframe, file = f)
+      }, error=function(e){
+        cat("ERROR :",conditionMessage(e), "\n")
+      })
+
+      i = i-1
   }
 
 }

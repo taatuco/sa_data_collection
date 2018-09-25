@@ -24,7 +24,8 @@ exit /b 0
 :: Collect price_historical_data from various sources
 DEL /F /Q "%SA_DATA_DIR%\r_quantmod\src\*"
 %_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_quantmod\collect_data.R"
-%_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data.py"
+START "" %_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data_asc.py"
+%_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data_dsc.py"
 
 DEL /F /Q "%SA_DATA_DIR%\r_oanda\src\*"
 %_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_oanda\collect_data.R"
@@ -32,7 +33,8 @@ DEL /F /Q "%SA_DATA_DIR%\r_oanda\src\*"
 
 :: Compute forecast points
 DEL /F /Q "%SA_DATA_DIR%\r_forecast\src\*"
-%_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_forecast\forecast_arima.R"
+START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_forecast\forecast_arima_asc.R"
+%_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_forecast\forecast_arima_dsc.R"
 
 :: Compute TA data
 %_PY_EXE% "%SA_DATA_DIR%\data\ta_main_update_data.py"

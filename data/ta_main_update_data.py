@@ -45,8 +45,16 @@ try:
     for row in rs:
         uid = row[1]
         s = row[0]
-        print(s + ": "+ os.path.basename(__file__) )
 
+        cr_pip = connection.cursor(pymysql.cursors.SSCursor)
+        sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
+        cr_pip.execute(sql_pip)
+        rs_pip = cr_pip.fetchall()
+        for row in rs_pip:
+            pip = row[0]
+
+
+        print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
         d = datetime.datetime.now() - timedelta(days=720)
         d = d.strftime("%Y%m%d")
 
@@ -101,7 +109,7 @@ try:
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
-        get_instr_sum(s,uid)
+        get_instr_sum(s,uid,pip)
 
     cr.close()
 

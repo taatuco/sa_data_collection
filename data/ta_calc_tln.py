@@ -172,23 +172,28 @@ class tln_data:
         return v
 
     def get_rsi_mom(self,v):
-        mm = ""
-        if (v < 31):
-            mm = "Oversold"
-        if (v >30 and v <50):
-            mm = "Weak"
-        if (v >49 and v <70):
-            mm = "Strong"
-        if (v >69):
-            mm = "Overbought"
+        try:
+            if (v < 31):
+                mm = "Oversold"
+            if (v >30 and v <50):
+                mm = "Weak"
+            if (v >49 and v <70):
+                mm = "Strong"
+            if (v >69):
+                mm = "Overbought"
+        except:
+            mm = ""
         return mm
 
 def get_bias(sdv,edv):
-    v = "Neutral"
-    if (sdv > edv):
-        v = "Negative"
-    if (sdv < edv):
-        v = "Positive"
+    try:
+        v = "Neutral"
+        if (sdv > edv):
+            v = "Negative"
+        if (sdv < edv):
+            v = "Positive"
+    except:
+        v = ""
     return v
 
 def get_trend_line_data(s,uid):

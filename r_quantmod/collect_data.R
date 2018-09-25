@@ -76,7 +76,7 @@ collect_data <- function() {
   tryCatch({
     symbol_list <- fetch(res, n = -1)
     i <- 1
-    while (i < nrow(symbol_list)) {
+    while (i <= nrow(symbol_list)) {
       ### Define data to collect
       symbol <- symbol_list[i,1]
       uid <- symbol_list[i,2]
@@ -93,6 +93,7 @@ collect_data <- function() {
         ### Export content to CSV ###
         fn <- paste(uid,".csv", sep = "")
         f <- paste(xf,fn, sep = "")
+        print(f)
         write.csv(dataframe, file = f)
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
       i = i+1
