@@ -22,19 +22,11 @@ exit /b 0
 %PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 
 :: Collect price_historical_data from various sources
-DEL /F /Q "%SA_DATA_DIR%\r_quantmod\src\*"
-%_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_quantmod\collect_data.R"
-START "" %_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data_asc.py"
-%_PY_EXE% "%SA_DATA_DIR%\r_quantmod\insert_db_price_data_dsc.py"
-
-DEL /F /Q "%SA_DATA_DIR%\r_oanda\src\*"
-%_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_oanda\collect_data.R"
-%_PY_EXE% "%SA_DATA_DIR%\r_oanda\insert_db_price_data.py"
+"%SA_DATA_DIR%\r_quantmod\get_quantmod_data.bat"
+"%SA_DATA_DIR%\r_oanda\get_oanda_data.R"
 
 :: Compute forecast points
-DEL /F /Q "%SA_DATA_DIR%\r_forecast\src\*"
-START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_forecast\forecast_arima_asc.R"
-%_R_SCRIPT_EXE% "%SA_DATA_DIR%\r_forecast\forecast_arima_dsc.R"
+"%SA_DATA_DIR%\r_forecast\get_forecast.bat"
 
 :: Compute TA data
 %_PY_EXE% "%SA_DATA_DIR%\data\ta_main_update_data.py"

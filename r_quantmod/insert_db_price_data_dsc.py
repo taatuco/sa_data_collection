@@ -39,7 +39,7 @@ try:
     cr_cnt.execute(sql_cnt)
     rs_cnt = cr_cnt.fetchall()
     for row in rs_cnt:
-        j = ( ((int(row[0]) )/2)+1)
+        j = ( ((int(row[0]) )/2)+10)
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol DESC"
