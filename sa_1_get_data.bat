@@ -9,10 +9,7 @@ SET LOGFILE="%SA_DATA_DIR%\sa_col_log.log"
 SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
 SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
 SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
-call :Logit >> %LOGFILE%
-exit /b 0
 
-:Logit
 :: Update and install various libraries
 %_PY_EXE% -m pip install --upgrade pip
 %_PIP_EXE% install mysql-python
@@ -22,11 +19,5 @@ exit /b 0
 %PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 
 :: Collect price_historical_data from various sources
-"%SA_DATA_DIR%\r_quantmod\get_quantmod_data.bat"
-"%SA_DATA_DIR%\r_oanda\get_oanda_data.R"
-
-:: Compute forecast points
-"%SA_DATA_DIR%\r_forecast\get_forecast.bat"
-
-:: Compute TA data
-%_PY_EXE% "%SA_DATA_DIR%\data\ta_main_update_data.py"
+START "" "%SA_DATA_DIR%\r_quantmod\get_quantmod_data.bat"
+START "" "%SA_DATA_DIR%\r_oanda\get_oanda_data.bat"
