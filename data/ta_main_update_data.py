@@ -23,6 +23,7 @@ from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_tln import *
 from ta_instr_sum import *
+from ta_calc_up_dn_stats import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -59,16 +60,13 @@ try:
         d = d.strftime("%Y%m%d")
 
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
-        sql_d_id = "SELECT id, date, price_close, diff FROM price_instruments_data "+\
+        sql_d_id = "SELECT id, date FROM price_instruments_data "+\
         "WHERE (symbol='"+s+"' and date>"+d+" and is_ta_calc=0) ORDER BY date ASC"
         cr_d_id.execute(sql_d_id)
         rs_d = cr_d_id.fetchall()
-        ppc = 0
-        dif = 0
         for row in rs_d:
             d = str(row[1]).replace("-","")
             id = row[0]
-            cp = row[2]
             rsi = rsi_data(s,d,14)
             change_1d = rsi.get_change()
             gain_1d = rsi.get_gain()
@@ -81,8 +79,6 @@ try:
             rsi_oversold = rsi.get_rsi_oversold()
             ma200 = calc_ma(s,d,200)
             is_ta_calc = "1"
-            if (ppc != 0):
-                dif = cp - ppc
 
             try:
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)
@@ -97,7 +93,6 @@ try:
                 "rsi_overbought="+str(rsi_overbought)+", "+\
                 "rsi_oversold="+str(rsi_oversold)+", "+\
                 "ma200="+str(ma200)+ ", "+\
-                "diff="+str(dif)+ ", "+\
                 "is_ta_calc="+str(is_ta_calc)+" "+\
                 "WHERE id="+str(id)
                 cr_upd.execute(sql_upd)
@@ -111,13 +106,13 @@ try:
                 cr_upd.execute(sql_upd)
                 connection.commit()
                 cr_upd.close()
-            ppc = row[2]
         gc.collect()
         time.sleep(0.2)
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
         get_instr_sum(s,uid,pip)
+        get_day_up_dwn_stat(s,uid)
 
     cr.close()
 
