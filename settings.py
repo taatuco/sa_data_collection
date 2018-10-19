@@ -13,14 +13,14 @@ class sa_path:
     def get_path_data(self):
         return self.rdir + "\\data"
 
-    def get_path_ta_data_src(self):
-        return self.rdir + "\\data\\src"
+    def get_path_feed(self):
+        return self.rdir + "\\feed"
+
+    def get_path_src(self):
+        return self.rdir+"\\src"
 
     def get_path_r_quantmod_src(self):
         return self.rdir + "\\r_quantmod\\src\\"
 
     def get_path_r_oanda_src(self):
         return self.rdir + "\\r_oanda\\src\\"
-
-    def get_path_r_forecast_src(self):
-        return self.rdir + "\\r_forecast\\src\\"

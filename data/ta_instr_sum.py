@@ -48,9 +48,9 @@ class forecast_data:
     frc_pt = 0
 
     def __init__(self, uid):
-        forc_src = sett.get_path_r_forecast_src()
+        forc_src = sett.get_path_src()
         ext = ".csv"
-        file_str = forc_src+str(uid)+'.csv'
+        file_str = forc_src+str(uid)+'f.csv'
         filepath = Path(file_str)
         if filepath.exists():
             with open(file_str) as csvfile:
@@ -211,6 +211,14 @@ def get_forecast_pct(lp,fp):
         p = ""
     return p
 
+def update_forecast_table(s,wf):
+    try:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "UPDATE symbol_list SET w_forecast_change='"+str(wf)+"' WHERE symbol='"+s+"'"
+        cr.execute(sql)
+        connection.commit()
+    except:
+        pass
 
 def get_instr_sum(s,uid,pip):
 
@@ -219,7 +227,7 @@ def get_instr_sum(s,uid,pip):
 
     instr_data = instr_sum_data(s,uid)
     forc_data = forecast_data(uid)
-    f = sett.get_path_ta_data_src()+"\\"+str(uid)+"s.csv"
+    f = sett.get_path_src()+"\\"+str(uid)+"s.csv"
     # ---
     y1_pct = float(instr_data.get_pct_1Yp() )* m
     m6_pct = float(instr_data.get_pct_6Mp() )* m
@@ -245,6 +253,7 @@ def get_instr_sum(s,uid,pip):
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
     try:
+        update_forecast_table(s,wf_pct)
         with open(f, mode="w", newline = "") as csvfile:
             fieldnames = ["y1", "m6", "m3", "m1", "w1","wf",
             "trade_1_entry", "trade_1_tp", "trade_1_sl", "trade_1_type",

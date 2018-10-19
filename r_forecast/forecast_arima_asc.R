@@ -34,7 +34,7 @@ forecast_data <- function() {
 
   source(paste(rd,"/sa_pwd/sa_access.R", sep = "") )
 
-  xf <- paste(rd, "/sa_data_collection/r_forecast/src/", sep = "" )
+  xf <- paste(rd, "/sa_data_collection/src/", sep = "" )
   csvf <- paste(rd, "/sa_data_collection/r_quantmod/src/", sep = "")
   startYear <- year(now()-1)
   startMonth <- 01
@@ -72,21 +72,28 @@ forecast_data <- function() {
         tryCatch({
           fit <- arima(ts_price,order = c(9,0,10))
           fc  <- forecast(fit, h = forecastNumbOfdays)
+          fn <- paste(uid,"f.csv", sep = "")
+          f <- paste(xf,fn, sep = "")
+          write.csv(fc, file = f)
         },
           error=function(e){
             tryCatch({
               cat("ERROR :",conditionMessage(e), "\n")
               fit <- arima(ts_price,order = c(9,1,10))
               fc  <- forecast(fit, h = forecastNumbOfdays)
+              fn <- paste(uid,"f.csv", sep = "")
+              f <- paste(xf,fn, sep = "")
+              write.csv(fc, file = f)
             }, error=function(e){
               print(symbol)
               cat("ERROR :",conditionMessage(e), "\n")
+              fit <- auto.arima(ts_price, stepwise = F, approximation = F)
+              fc  <- forecast(fit, h = forecastNumbOfdays)
+              fn <- paste(uid,"f.csv", sep = "")
+              f <- paste(xf,fn, sep = "")
+              write.csv(fc, file = f)
             })
           })
-        dataframe <- as.data.frame(fc)
-        fn <- paste(uid,".csv", sep = "")
-        f <- paste(xf,fn, sep = "")
-        write.csv(dataframe, file = f)
       }, error=function(e){
         cat("ERROR :",conditionMessage(e), "\n")
       })

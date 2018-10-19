@@ -21,6 +21,8 @@ SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
 
 REM ### 1 Get Data
 DEL /F /Q %GET_DATA%
+MKDIR "%SA_DATA_DIR%src"
+@ECHO DEL /F /Q "%SA_DATA_DIR%src\*" > %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --upgrade pip > %GET_DATA%
 @ECHO %_PIP_EXE% install mysql-python >> %GET_DATA%
 @ECHO %_PIP_EXE% install PyMySQL >> %GET_DATA%
@@ -51,13 +53,10 @@ REM ### Cryptocompare
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
-MKDIR "%SA_DATA_DIR%r_forecast\src"
-@ECHO DEL /F /Q "%SA_DATA_DIR%r_forecast\src\*" > %GET_FRC%
 @ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_asc.R" >> %GET_FRC%
 @ECHO %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_dsc.R" >> %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
-MKDIR "%SA_DATA_DIR%data\src"
 @ECHO DEL /F /Q "%SA_DATA_DIR%data\src\*" > %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%data\ta_main_update_data.py" >> %SET_DATA%

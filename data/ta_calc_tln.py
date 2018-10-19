@@ -209,7 +209,7 @@ def get_trend_line_data(s,uid):
     t360_l_x1v = 0
     t360_h_x1v = 0
     sd = tl_360_l.get_sd()
-    f = sett.get_path_ta_data_src()+"\\"+str(uid)+"t.csv"
+    f = sett.get_path_src()+"\\"+str(uid)+"t.csv"
     if not os.path.isfile(f) or dw == 6:
         try:
             cr = connection.cursor(pymysql.cursors.SSCursor)

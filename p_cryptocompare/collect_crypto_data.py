@@ -24,8 +24,6 @@ db_pwd = access_obj.password()
 db_name = access_obj.db_name()
 db_srv = access_obj.db_server()
 
-import csv
-csvdir = sett.get_path_r_quantmod_src()
 from pathlib import Path
 
 import pymysql.cursors

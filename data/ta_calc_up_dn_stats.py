@@ -63,7 +63,7 @@ def get_day_up_dwn_stat(s,uid):
     w1_dn = get_count_d(s,-1,7)
 
     dw = datetime.datetime.today().weekday()
-    f = sett.get_path_ta_data_src()+"\\"+str(uid)+"ud.csv"
+    f = sett.get_path_src()+"\\"+str(uid)+"ud.csv"
     if not os.path.isfile(f) or dw == 6:
         with open(f, 'w', newline='') as csvfile:
             fieldnames = ["symbol","7_up_days","7_down_days","30_up_days", "30_down_days"]
