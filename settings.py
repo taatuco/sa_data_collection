@@ -17,7 +17,7 @@ class sa_path:
         return self.rdir + "\\feed"
 
     def get_path_src(self):
-        return self.rdir+"\\src"
+        return self.rdir+"\\src\\"
 
     def get_path_r_quantmod_src(self):
         return self.rdir + "\\r_quantmod\\src\\"

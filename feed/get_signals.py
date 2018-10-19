@@ -35,5 +35,5 @@ connection = pymysql.connect(host=db_srv,
 
 
 feed_id = 1
-feed_type = "Signals"
+feed_type = "signals"
 add_feed_type(feed_id, feed_type)

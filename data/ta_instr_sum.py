@@ -234,7 +234,8 @@ def get_instr_sum(s,uid,pip):
     m3_pct = float(instr_data.get_pct_3Mp() )* m
     m1_pct = float(instr_data.get_pct_1Mp() )* m
     w1_pct = float(instr_data.get_pct_1Wp() )* m
-    wf_pct = get_forecast_pct(instr_data.get_lp(), forc_data.get_frc_pt() ) * m
+    wf = get_forecast_pct(instr_data.get_lp(), forc_data.get_frc_pt() )
+    wf_pct =  wf * m
     # --- (1)
     trade_entry_buy_1 = forc_data.get_entry_buy(1)
     trade_tp_buy_1 = forc_data.get_tp_buy(1)
@@ -253,7 +254,7 @@ def get_instr_sum(s,uid,pip):
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
     try:
-        update_forecast_table(s,wf_pct)
+        update_forecast_table(s,wf)
         with open(f, mode="w", newline = "") as csvfile:
             fieldnames = ["y1", "m6", "m3", "m1", "w1","wf",
             "trade_1_entry", "trade_1_tp", "trade_1_sl", "trade_1_type",
