@@ -205,16 +205,14 @@ def get_forecast_pct(lp,fp):
         lpf = float(lp)
         fpf = float(fp)
         p = (fpf - lpf)/lpf
-        if (p < 0.0001):
-            p = 0
     except:
-        p = ""
+        p = 0
     return p
 
 def update_forecast_table(s,wf):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "UPDATE symbol_list SET w_forecast_change='"+str(wf)+"' WHERE symbol='"+s+"'"
+        sql = "UPDATE instruments SET w_forecast_change='"+str(wf)+"' WHERE symbol='"+s+"'"
         cr.execute(sql)
         connection.commit()
     except:

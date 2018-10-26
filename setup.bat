@@ -2,9 +2,11 @@ REM Edit and Set version here ##################################################
 SET R_VER=R-3.5.0
 SET PY_VER=Python36-32
 SET PY_BS=beautifulsoup4
+SET EXPRESS_JS=express
 REM ############################################################################
 
 SET SA_DATA_DIR=%~dp0
+SET API_DIR=%SA_DATA_DIR%api
 SET GET_DATA="%SA_DATA_DIR%sa_1_get_data.bat"
 SET GET_FRC="%SA_DATA_DIR%sa_2_get_forecast.bat"
 SET SET_DATA="%SA_DATA_DIR%sa_3_set_data.bat"
@@ -17,12 +19,20 @@ SET GET_CC_DATA="%SA_DATA_DIR%p_cryptocompare\get_cryptocompare_data.bat"
 SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
 SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
 SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
+SET _NODE=node
+SET _NPM=npm
+
+REM ### Setup Node.js and express.js
+cd %API_DIR%
+%_NPM% install %EXPRESS_JS% --save
+
+REM ### To start Node.js server
 
 
 REM ### 1 Get Data
 DEL /F /Q %GET_DATA%
-MKDIR "%SA_DATA_DIR%src"
-@ECHO DEL /F /Q "%SA_DATA_DIR%src\*" > %GET_DATA%
+MKDIR "%API_DIR%"
+MKDIR "%API_DIR%\src"
 @ECHO %_PY_EXE% -m pip install --upgrade pip > %GET_DATA%
 @ECHO %_PIP_EXE% install mysql-python >> %GET_DATA%
 @ECHO %_PIP_EXE% install PyMySQL >> %GET_DATA%
@@ -58,5 +68,4 @@ DEL /F /Q %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
-@ECHO DEL /F /Q "%SA_DATA_DIR%data\src\*" > %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%data\ta_main_update_data.py" >> %SET_DATA%
