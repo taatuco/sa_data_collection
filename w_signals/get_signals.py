@@ -37,3 +37,17 @@ connection = pymysql.connect(host=db_srv,
 feed_id = 1
 feed_type = "signals"
 add_feed_type(feed_id, feed_type)
+
+#Date
+#Short_Title
+#Short_Description
+#Content
+#URL
+#Ranking
+#Symbol
+#Type (type = 1)
+#badge
+#badge-bs-class (red = badge badge-danger ; green = badge badge-success)
+#search (AssetClass & Market & symbol & fullname)
+
+#Instruments order by w_forecast_change

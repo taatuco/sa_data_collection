@@ -209,12 +209,17 @@ def get_forecast_pct(lp,fp):
         p = 0
     return p
 
-def update_forecast_table(s,wf):
+def update_forecast_table(s,wf,frc):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "UPDATE instruments SET w_forecast_change='"+str(wf)+"' WHERE symbol='"+s+"'"
         cr.execute(sql)
         connection.commit()
+
+        sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (target_price=0 AND symbol='"+s+"') "
+        cr.execute(sql)
+        connection.commit()
+
     except:
         pass
 
@@ -232,7 +237,9 @@ def get_instr_sum(s,uid,pip):
     m3_pct = float(instr_data.get_pct_3Mp() )* m
     m1_pct = float(instr_data.get_pct_1Mp() )* m
     w1_pct = float(instr_data.get_pct_1Wp() )* m
-    wf = get_forecast_pct(instr_data.get_lp(), forc_data.get_frc_pt() )
+    frc_pt = forc_data.get_frc_pt()
+    lp_pt = instr_data.get_lp()
+    wf = get_forecast_pct(lp_pt, frc_pt )
     wf_pct =  wf * m
     # --- (1)
     trade_entry_buy_1 = forc_data.get_entry_buy(1)
@@ -252,7 +259,7 @@ def get_instr_sum(s,uid,pip):
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
     try:
-        update_forecast_table(s,wf)
+        update_forecast_table(s,wf,frc_pt)
         with open(f, mode="w", newline = "") as csvfile:
             fieldnames = ["y1", "m6", "m3", "m1", "w1","wf",
             "trade_1_entry", "trade_1_tp", "trade_1_sl", "trade_1_type",

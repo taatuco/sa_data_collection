@@ -3,6 +3,13 @@ SET R_VER=R-3.5.0
 SET PY_VER=Python36-32
 SET PY_BS=beautifulsoup4
 SET EXPRESS_JS=express
+
+SET GET_DATA_TIME_ST=01:00
+SET GET_DATA_TIME_ET=04:00
+SET GET_FRC_TIME_ST=05:00
+SET GET_FRC_TIME_ET=08:00
+SET SET_DATA_TIME_ST=09:00
+SET SET_DATA_TIME_ET=12:00
 REM ############################################################################
 
 SET SA_DATA_DIR=%~dp0
@@ -24,7 +31,7 @@ SET _NPM=npm
 
 REM ### Setup Node.js and express.js
 cd %API_DIR%
-%_NPM% install %EXPRESS_JS% --save
+CALL %_NPM% install %EXPRESS_JS% --save
 
 REM ### To start Node.js server
 
@@ -69,3 +76,8 @@ DEL /F /Q %GET_FRC%
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%data\ta_main_update_data.py" >> %SET_DATA%
+
+REM ### Set Schedule tasks
+SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /ET %GET_DATA_TIME_ET% /K /F
+SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_FORECAST /TR %GET_FRC% /RI 0 /ST %GET_FRC_TIME_ST% /ET %GET_FRC_TIME_ET% /K /F
+SCHTASKS /Create /SC DAILY /TN SMARTALPHA_SET_DATA /TR %SET_DATA% /RI 0 /ST %SET_DATA_TIME_ST% /ET %SET_DATA_TIME_ET% /K /F
