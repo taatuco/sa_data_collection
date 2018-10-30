@@ -24,6 +24,7 @@ from ta_calc_rsi import *
 from ta_calc_tln import *
 from ta_instr_sum import *
 from ta_calc_up_dn_stats import *
+from get_signals import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -113,6 +114,7 @@ try:
         get_trend_line_data(s,uid)
         get_instr_sum(s,uid,pip)
         get_day_up_dwn_stat(s,uid)
+        get_signals(s)
 
     cr.close()
 

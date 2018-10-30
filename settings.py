@@ -6,9 +6,10 @@ import os
 
 class sa_path:
     rdir = os.path.dirname(os.path.realpath(__file__))
+    pdir = os.path.abspath(os.path.join(rdir, os.pardir))
 
     def get_path_pwd(self):
-        return "C:\\xampp\\htdocs\\_sa\\sa_pwd"
+        return self.pdir+ "\\sa_pwd"
 
     def get_path_data(self):
         return self.rdir + "\\data"
