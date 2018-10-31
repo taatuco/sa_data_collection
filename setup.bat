@@ -1,6 +1,6 @@
-REM Edit and Set version here ##################################################
-SET R_VER=R-3.5.0
-SET PY_VER=Python36-32
+REM Edt Configuration here #####################################################
+SET R_VER=R-3.5.1
+SET PY_VER=Python37-32
 SET PY_BS=beautifulsoup4
 SET EXPRESS_JS=express
 
@@ -34,6 +34,9 @@ cd %API_DIR%
 CALL %_NPM% install %EXPRESS_JS% --save
 
 REM ### To start Node.js server
+
+REM ### Setup default data
+%_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
 
 
 REM ### 1 Get Data
@@ -75,7 +78,7 @@ DEL /F /Q %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%data\ta_main_update_data.py" >> %SET_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%w_signals\ta_main_update_data.py" >> %SET_DATA%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /ET %GET_DATA_TIME_ET% /K /F
