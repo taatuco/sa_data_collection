@@ -25,6 +25,8 @@ from ta_calc_tln import *
 from ta_instr_sum import *
 from ta_calc_up_dn_stats import *
 from get_signals import *
+from set_recomm_text_lang import *
+from ta_gen_recomm import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -40,6 +42,8 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 try:
+    set_recomm_text_lang()
+
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol"
     cr.execute(sql)
@@ -115,6 +119,7 @@ try:
         get_instr_sum(s,uid,pip)
         get_day_up_dwn_stat(s,uid)
         get_signals(s)
+        gen_recomm(s,uid)
 
     cr.close()
 

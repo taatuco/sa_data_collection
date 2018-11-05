@@ -63,7 +63,7 @@ def get_signals(s):
         short_description = fullname + "<br>" + sector
         content = ""
         url = "signals/?s="+symbol
-        ranking = str(round(w_forecast_change,5))
+        ranking = str( abs(round(w_forecast_change,5)) )
         type = str(feed_id)
 
         if (w_forecast_change < 0):
