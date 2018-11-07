@@ -198,7 +198,6 @@ def get_bias(sdv,edv):
 
 def get_trend_line_data(s,uid):
 
-    dw = datetime.datetime.today().weekday()
 
     tl_180_l = tln_data(s,180,"l")
     tl_180_h = tln_data(s,180,"h")
@@ -210,64 +209,63 @@ def get_trend_line_data(s,uid):
     t360_h_x1v = 0
     sd = tl_360_l.get_sd()
     f = sett.get_path_src()+"\\"+str(uid)+"t.csv"
-    if not os.path.isfile(f) or dw == 6:
-        try:
-            cr = connection.cursor(pymysql.cursors.SSCursor)
-            sql = "SELECT date, price_close "+\
-                    "FROM price_instruments_data "+\
-                    "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
-                    " ORDER BY date"
-            cr.execute(sql)
-            rs = cr.fetchall()
-            ttr = cr.rowcount
+    try:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT date, price_close "+\
+                "FROM price_instruments_data "+\
+                "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
+                " ORDER BY date"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        ttr = cr.rowcount
 
-            with open(f, 'w', newline='') as csvfile:
-                fieldnames = ["180_sd", "180_slope_low","180_slope_high",
-                "360_sd","360_slope_low","360_slope_high",
-                "180_sdv_low","180_sdv_high","360_sdv_low","360_sdv_high",
-                "st_lower_range","st_upper_range","lt_lower_range", "lt_upper_range",
-                "st_rsi_avg", "lt_rsi_avg", "st_rsi_mom", "lt_rsi_mom",
-                "ma200","ma50", "st_bias", "lt_bias"]
+        with open(f, 'w', newline='') as csvfile:
+            fieldnames = ["180_sd", "180_slope_low","180_slope_high",
+            "360_sd","360_slope_low","360_slope_high",
+            "180_sdv_low","180_sdv_high","360_sdv_low","360_sdv_high",
+            "st_lower_range","st_upper_range","lt_lower_range", "lt_upper_range",
+            "st_rsi_avg", "lt_rsi_avg", "st_rsi_mom", "lt_rsi_mom",
+            "ma200","ma50", "st_bias", "lt_bias"]
 
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()
-                t180_sd = tl_180_l.get_sd()
-                t180_ed = tl_180_l.get_ed()
-                t360_ed = tl_360_l.get_ed()
-                t180_slp_l = tl_180_l.get_slope()
-                t180_slp_h = tl_180_h.get_slope()
-                t360_sd = tl_360_l.get_sd()
-                t360_slp_l = tl_360_l.get_slope()
-                t360_slp_h = tl_360_h.get_slope()
-                t180_sdv_l = tl_180_l.get_sdv()
-                t180_sdv_h = tl_180_h.get_sdv()
-                t360_sdv_l = tl_360_l.get_sdv()
-                t360_sdv_h = tl_360_h.get_sdv()
-                st_lower_range = tl_180_l.get_edv()
-                st_upper_range = tl_180_h.get_edv()
-                lt_lower_range = tl_360_l.get_edv()
-                lt_upper_range = tl_360_h.get_edv()
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            t180_sd = tl_180_l.get_sd()
+            t180_ed = tl_180_l.get_ed()
+            t360_ed = tl_360_l.get_ed()
+            t180_slp_l = tl_180_l.get_slope()
+            t180_slp_h = tl_180_h.get_slope()
+            t360_sd = tl_360_l.get_sd()
+            t360_slp_l = tl_360_l.get_slope()
+            t360_slp_h = tl_360_h.get_slope()
+            t180_sdv_l = tl_180_l.get_sdv()
+            t180_sdv_h = tl_180_h.get_sdv()
+            t360_sdv_l = tl_360_l.get_sdv()
+            t360_sdv_h = tl_360_h.get_sdv()
+            st_lower_range = tl_180_l.get_edv()
+            st_upper_range = tl_180_h.get_edv()
+            lt_lower_range = tl_360_l.get_edv()
+            lt_upper_range = tl_360_h.get_edv()
 
-                st_rsi_avg = tl_180_l.get_rsi_avg( t180_ed, 5)
-                lt_rsi_avg = tl_360_l.get_rsi_avg( t360_ed, 50)
+            st_rsi_avg = tl_180_l.get_rsi_avg( t180_ed, 5)
+            lt_rsi_avg = tl_360_l.get_rsi_avg( t360_ed, 50)
 
-                st_rsi_mom = tl_180_l.get_rsi_mom(st_rsi_avg)
-                lt_rsi_mom = tl_360_l.get_rsi_mom(lt_rsi_avg)
-                ma_200_ed = tl_360_l.get_200ma_frm_d( t180_ed )
-                ma_50_ed = tl_360_l.get_50ma_frm_d( t180_ed )
-                ma_200_sd = tl_360_l.get_200ma_frm_d( t180_sd )
-                ma_50_sd = tl_360_l.get_50ma_frm_d( t180_sd )
-                st_bias = get_bias(ma_50_sd, ma_50_ed)
-                lt_bias = get_bias(ma_200_sd, ma_200_ed)
+            st_rsi_mom = tl_180_l.get_rsi_mom(st_rsi_avg)
+            lt_rsi_mom = tl_360_l.get_rsi_mom(lt_rsi_avg)
+            ma_200_ed = tl_360_l.get_200ma_frm_d( t180_ed )
+            ma_50_ed = tl_360_l.get_50ma_frm_d( t180_ed )
+            ma_200_sd = tl_360_l.get_200ma_frm_d( t180_sd )
+            ma_50_sd = tl_360_l.get_50ma_frm_d( t180_sd )
+            st_bias = get_bias(ma_50_sd, ma_50_ed)
+            lt_bias = get_bias(ma_200_sd, ma_200_ed)
 
-                print(s +": "+ os.path.basename(__file__) )
-                writer.writerow({"180_sd": str(t180_sd), "180_slope_low": str(t180_slp_l), "180_slope_high": str(t180_slp_h),
-                "360_sd": str(t360_sd), "360_slope_low": str(t360_slp_l),"360_slope_high": str(t360_slp_h),
-                "180_sdv_low": str(t180_sdv_l), "180_sdv_high": str(t180_sdv_h), "360_sdv_low": str(t360_sdv_l), "360_sdv_high": str(t360_sdv_h),
-                "st_lower_range": str(st_lower_range), "st_upper_range": str(st_upper_range), "lt_lower_range": str(lt_lower_range), "lt_upper_range": str(lt_upper_range),
-                "st_rsi_avg":str(st_rsi_avg), "lt_rsi_avg": str(lt_rsi_avg), "st_rsi_mom": str(st_rsi_mom), "lt_rsi_mom": str(lt_rsi_mom),
-                "ma200": str(ma_200_ed), "ma50": str(ma_50_ed), "st_bias": str(st_bias), "lt_bias": str(lt_bias) })
-            cr.close()
+            print(s +": "+ os.path.basename(__file__) )
+            writer.writerow({"180_sd": str(t180_sd), "180_slope_low": str(t180_slp_l), "180_slope_high": str(t180_slp_h),
+            "360_sd": str(t360_sd), "360_slope_low": str(t360_slp_l),"360_slope_high": str(t360_slp_h),
+            "180_sdv_low": str(t180_sdv_l), "180_sdv_high": str(t180_sdv_h), "360_sdv_low": str(t360_sdv_l), "360_sdv_high": str(t360_sdv_h),
+            "st_lower_range": str(st_lower_range), "st_upper_range": str(st_upper_range), "lt_lower_range": str(lt_lower_range), "lt_upper_range": str(lt_upper_range),
+            "st_rsi_avg":str(st_rsi_avg), "lt_rsi_avg": str(lt_rsi_avg), "st_rsi_mom": str(st_rsi_mom), "lt_rsi_mom": str(lt_rsi_mom),
+            "ma200": str(ma_200_ed), "ma50": str(ma_50_ed), "st_bias": str(st_bias), "lt_bias": str(lt_bias) })
+        cr.close()
 
-        finally:
-            gc.collect()
+    finally:
+        gc.collect()

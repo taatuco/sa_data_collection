@@ -7,6 +7,7 @@ import sys
 import os
 import gc
 import time
+import datetime
 from datetime import timedelta
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +28,7 @@ from ta_calc_up_dn_stats import *
 from get_signals import *
 from set_recomm_text_lang import *
 from ta_gen_recomm import *
+from ta_gen_chart_data import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -120,6 +122,7 @@ try:
         get_day_up_dwn_stat(s,uid)
         get_signals(s)
         gen_recomm(s,uid)
+        gen_chart(s,uid)
 
     cr.close()
 

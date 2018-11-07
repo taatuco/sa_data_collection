@@ -6,9 +6,6 @@ import sys
 import os
 import csv
 import gc
-import time
-import datetime
-from datetime import timedelta
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -62,7 +59,6 @@ def get_day_up_dwn_stat(s,uid):
     w1_up = get_count_d(s,1,7)
     w1_dn = get_count_d(s,-1,7)
 
-    dw = datetime.datetime.today().weekday()
     f = sett.get_path_src()+"\\"+str(uid)+"ud.csv"
     with open(f, 'w', newline='') as csvfile:
         fieldnames = ["symbol","7_up_days","7_down_days","30_up_days", "30_down_days"]
