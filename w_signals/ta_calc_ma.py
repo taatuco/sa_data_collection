@@ -5,6 +5,9 @@
 
 import sys
 import os
+import datetime
+import time
+from datetime import timedelta
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -30,12 +33,13 @@ def calc_ma(symbol_id, date_id, ma_period):
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
     try:
+        from_date =  datetime.datetime.strptime(date_id, '%Y%m%d') - ( timedelta(days=ma_period) )
+        from_date = from_date.strftime("%Y%m%d")
         ma_period = str(ma_period)
         ma = 0
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
-        "WHERE symbol='"+symbol_id+"' AND date<"+date_id+" "+\
-        "ORDER BY date DESC LIMIT "+ma_period
+        "WHERE symbol='"+symbol_id+"' AND date<="+date_id+" AND date>="+ from_date
         cr.execute(sql)
         rs = cr.fetchall()
         if rs:

@@ -100,11 +100,11 @@ def gen_chart(s,uid):
         cr.execute(sql)
         rs = cr.fetchall()
 
-        lt_lower_trend_line = ''
-        lt_upper_trend_line = ''
+        lt_lower_trend_line = 'null'
+        lt_upper_trend_line = 'null'
         draw_lt = False
-        st_lower_trend_line = ''
-        st_upper_trend_line = ''
+        st_lower_trend_line = 'null'
+        st_upper_trend_line = 'null'
         draw_st = False
 
 
@@ -130,27 +130,57 @@ def gen_chart(s,uid):
                 draw_st = True
 
             if (draw_lt):
-                lt_lower_trend_line = str( float(lt_lower_trend_line) + float(lt_slope_low) )
-                lt_upper_trend_line = str( float(lt_upper_trend_line) + float(lt_slope_high) )
+                try:
+                    lt_lower_trend_line = str( float(lt_lower_trend_line) + float(lt_slope_low) )
+                    lt_upper_trend_line = str( float(lt_upper_trend_line) + float(lt_slope_high) )
+                except:
+                    lt_lower_trend_line = 'null'
+                    lt_upper_trend_line = 'null'
 
             if (draw_st):
-                st_lower_trend_line = str( float(st_lower_trend_line) + float(st_slope_low) )
-                st_upper_trend_line = str( float(st_upper_trend_line) + float(st_slope_high) )
+                try:
+                    st_lower_trend_line = str( float(st_lower_trend_line) + float(st_slope_low) )
+                    st_upper_trend_line = str( float(st_upper_trend_line) + float(st_slope_high) )
+                except:
+                    st_lower_trend_line = 'null'
+                    st_upper_trend_line = 'null'
 
-            print(s +"> "+str(date)+": "+ os.path.basename(__file__) )
-            writer.writerow({"title": str(title), "date":str(date), "price": str(price), "forecast": str(''),
+            print(s +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
+            writer.writerow({"title": str(title), "date":str(date), "price": str(price), "forecast": str('null'),
             "lt_upper_trend_line": str(lt_upper_trend_line), "lt_lower_trend_line": str(lt_lower_trend_line),
             "st_upper_trend_line": str(st_upper_trend_line), "st_lower_trend_line": str(st_lower_trend_line),
             "rsi": str(rsi), "rsi_oversold": str(rsi_oversold), "rsi_overbought": str(rsi_overbought),
             "ma200": str(ma200), "target_price": str(target_price)        })
 
 
+        f = data_src+str(uid)+'f.csv'
+        filepath = Path(f)
+        if filepath.exists():
+            with open(f) as csvfile:
+                readCSV = csv.reader(csvfile, delimiter=',')
+                i = 1
+                for row in readCSV:
+                    if (i == 2):
+                        date = date +  ( timedelta(days=1) )
+                        forecast = row[1]
+                        try:
+                            lt_lower_trend_line = str( float(lt_lower_trend_line) + float(lt_slope_low) )
+                            lt_upper_trend_line = str( float(lt_upper_trend_line) + float(lt_slope_high) )
+                        except:
+                            lt_lower_trend_line = 'null'
+                            lt_upper_trend_line = 'null'
 
-    '''
-        with open(f,'a', newline='') as csvfile:
-            fd.write({"title": str(title), "date": str(''), "price": str(''), "forecast": str(forecast),
-            "lt_upper_trend_line": str(lt_upper_trend_line), "lt_lower_trend_line": str(lt_lower_trend_line),
-            "st_upper_trend_line": str(st_upper_trend_line), "st_lower_trend_line": str(st_lower_trend_line),
-            "rsi": str(rsi), "rsi_oversold": str(rsi_oversold), "rsi_overbought": str(rsi_overbought),
-            "ma200": str(ma200), "target_price": str(target_price)        })
-    '''
+                        try:
+                            st_lower_trend_line = str( float(st_lower_trend_line) + float(st_slope_low) )
+                            st_upper_trend_line = str( float(st_upper_trend_line) + float(st_slope_high) )
+                        except:
+                            st_lower_trend_line = 'null'
+                            st_upper_trend_line = 'null'
+
+                    writer.writerow({"title": str(title), "date":str(date), "price": str('null'), "forecast": str('null'),
+                    "lt_upper_trend_line": str(lt_upper_trend_line), "lt_lower_trend_line": str(lt_lower_trend_line),
+                    "st_upper_trend_line": str(st_upper_trend_line), "st_lower_trend_line": str(st_lower_trend_line),
+                    "rsi": str('null'), "rsi_oversold": str(rsi_oversold), "rsi_overbought": str(rsi_overbought),
+                    "ma200": str(ma200), "target_price": str(target_price)        })
+
+                    i +=1
