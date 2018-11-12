@@ -60,9 +60,9 @@ def get_signals(s):
         sector = row[5]
 
         short_title = symbol
-        short_description = fullname + "<br>" + sector
-        content = ""
-        url = "signals/?s="+symbol
+        short_description = fullname
+        content = sector
+        url = "c/?t="+str(feed_id)+"&s="+symbol
         ranking = str( abs(round(w_forecast_change,5)) )
         type = str(feed_id)
 

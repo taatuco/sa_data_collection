@@ -3,6 +3,7 @@ SET R_VER=R-3.5.1
 SET PY_VER=Python37-32
 SET PY_BS=beautifulsoup4
 SET EXPRESS_JS=express
+SET MYSQL_NODE=mysql
 
 SET GET_DATA_TIME_ST=01:00
 SET GET_DATA_TIME_ET=04:00
@@ -32,11 +33,15 @@ SET _NPM=npm
 REM ### Setup Node.js and express.js
 cd %API_DIR%
 CALL %_NPM% install %EXPRESS_JS% --save
+CALL %NPM% install %MYSQL_NODE% --save
 
 REM ### To start Node.js server
 
 REM ### Setup default data
 %_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
+%_PY_EXE% "%SA_DATA_DIR%asset_class\set_asset_class.py"
+%_PY_EXE% "%SA_DATA_DIR%markets\set_market.py"
+%_PY_EXE% "%SA_DATA_DIR%sectors\set_sector.py"
 
 
 REM ### 1 Get Data
