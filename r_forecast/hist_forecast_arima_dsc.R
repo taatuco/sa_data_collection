@@ -61,7 +61,7 @@ forecast_data <- function() {
       while (j <= 360) {
 
         startYear <- year( (as.Date(now()) -360) +j  )
-        startMonth <- month ( (as.Date(now()) -360) +j   )
+        startMonth <- month( (as.Date(now()) -360) +j   )
         startDay <- day( (as.Date(now())  -360) +j  )
 
         if (nchar(startMonth) < 2 ){
@@ -79,7 +79,7 @@ forecast_data <- function() {
           attach(mydata)
           T <- mydata
           price <- ts(T$price_close)
-          ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
+          ts_price <- ts(price, start = c(strtoi(startYear), strtoi(startMonth)), frequency = nrow(T))
 
           tryCatch({
             fit <- arima(ts_price,order = c(9,0,10))
