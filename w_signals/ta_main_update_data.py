@@ -29,6 +29,7 @@ from get_signals import *
 from set_recomm_text_lang import *
 from ta_gen_recomm import *
 from ta_gen_chart_data import *
+from get_frc_pnl import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -123,6 +124,7 @@ try:
         get_signals(s)
         gen_recomm(s,uid)
         gen_chart(s,uid)
+        get_forecast_pnl(s,uid)
 
     cr.close()
 

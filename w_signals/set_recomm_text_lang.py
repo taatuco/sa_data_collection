@@ -62,8 +62,8 @@ def set_recomm_text_lang():
     "rsi_oversold, rsi_overbought, rsi_weak, rsi_strong, "+\
     "uptrend_recomm, downtrend_recomm) VALUES "+\
     "('"+lang_en+"', '"+price_under_200ma_en+"', '"+price_above_200ma_en+"', "+\
-     "'"+st_upper_range_above_price_range_en+"', '"+st_lower_range_below_price_range_en+"', '"+st_upper_range_below_price_downtrend_en+"', "+\
-     "'"+st_lower_range_above_price_uptrend_en+"', '"+rsi_oversold_en+"', '"+rsi_overbought_en+"', '"+rsi_weak_en+"', "+\
+     "'"+st_upper_range_above_price_range_en+"', '"+st_lower_range_below_price_range_en+"', '"+upper_range_below_price_downtrend_en+"', "+\
+     "'"+lower_range_above_price_uptrend_en+"', '"+rsi_oversold_en+"', '"+rsi_overbought_en+"', '"+rsi_weak_en+"', "+\
      "'"+rsi_strong_en+"', '"+uptrend_recomm_en+"', '"+downtrend_recomm_en+"')"
 
     try:
