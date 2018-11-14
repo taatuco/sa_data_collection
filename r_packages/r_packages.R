@@ -7,7 +7,8 @@
 inst_ini_package <- function(){
   list.of.packages <- c("lubridate","quantmod", "tidyquant", "DBI", "RMySQL","binhf","tseries","forecast")
   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-  if(length(new.packages)) install.packages(new.packages, repos="http://cran.us.r-project.org")
+  repository <- "http://cran.us.r-project.org"
+  if(length(new.packages)) install.packages(new.packages, repos=repository)
   library("quantmod")
   library("lubridate")
   library("DBI")
@@ -15,6 +16,6 @@ inst_ini_package <- function(){
   library("binhf")
   library("tseries")
   library("forecast")
-  install.packages("devtools")
+  install.packages("devtools", repos=repository)
   devtools::install_github("rstudio/rstudioapi")
 }
