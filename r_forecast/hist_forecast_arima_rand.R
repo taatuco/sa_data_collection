@@ -47,7 +47,7 @@ forecast_data <- function() {
   myPort <- 3306
   con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
 
-  sql <- "SELECT symbol, uid FROM symbol_list"
+  sql <- "SELECT symbol, uid FROM symbol_list ORDER BY RAND()"
   res <- dbSendQuery(con, sql)
 
   symbol_list <- fetch(res, n = -1)
