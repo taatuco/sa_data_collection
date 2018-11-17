@@ -21,6 +21,9 @@ class sa_path:
     def get_path_signals(self):
         return self.rdir + "\\w_signals"
 
+    def get_path_portfolios(self):
+        return self.rdir + "\\portfolios"
+
     def get_path_r_quantmod_src(self):
         return self.rdir + "\\r_quantmod\\src\\"
 

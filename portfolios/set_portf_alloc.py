@@ -31,17 +31,29 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
-sql = "INSERT INTO asset_class(asset_class_id, asset_class_name) VALUES "+\
-"('CR:','Crypto'), "+\
-"('EQ:','Equity'), "+\
-"('FX:','Forex'), "+\
-"('PF:','Portfolio')"+\
-"('CO:','Commodities')"+\
-"('BD:','Bonds')"+\
-"('MA:','Multi-asset')"
+
+def set_alloc(sfx,s):
+    symbol = sfx + s
+
+    if (symbol == sfx+"FXONE" ):
+        sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
+        "('" + sfx + "FXONE','EURUSD',10000),"+\
+        "('" + sfx + "FXONE','GBPUSD',10000),"+\
+        "('" + sfx + "FXONE','EURGBP',10000)"
+        try:
+            cr.execute(sql)
+            connection.commit()
+        except:
+            pass
 
 
-try:
-    cr.execute(sql)
-    connection.commit()
-except Exception as e: print(e)
+    if (symbol == sfx+"" ):
+        sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
+        "('" + sfx + "','',1),"+\
+        "('" + sfx + "','',1,"+\
+        "('" + sfx + "','',1)"
+        try:
+            cr.execute(sql)
+            connection.commit()
+        except:
+            pass

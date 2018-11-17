@@ -52,17 +52,24 @@ forecast_data <- function() {
 
   symbol_list <- fetch(res, n = -1)
   i <- 1
+  ndf <- 200
+  df <- 360
+
   while (i <= (nrow(symbol_list)/2)+1 ) {
     tryCatch({
       symbol <- symbol_list[i,1]
       uid <- symbol_list[i,2]
 
       j <- 0
-      while (j <= 360) {
+      while (j <= df) {
 
-        startYear <- year( (as.Date(now()) -360) +j  )
-        startMonth <- month( (as.Date(now()) -360) +j   )
-        startDay <- day( (as.Date(now())  -360) +j  )
+        startYear <- year( (as.Date(now()) -df) +j  )
+        startMonth <- month( (as.Date(now()) -df) +j   )
+        startDay <- day( (as.Date(now())  -df) +j  )
+
+        rangeYear <- year( (as.Date(now()) -df) +j -ndf  )
+        rangeMonth <- month( (as.Date(now()) -df) +j -ndf  )
+        rangeDay <- day( (as.Date(now())  -df) +j -ndf )
 
         if (nchar(startMonth) < 2 ){
           startMonth <- paste("0",startMonth, sep = "")
@@ -72,8 +79,9 @@ forecast_data <- function() {
         }
 
         StartDate <- paste(startYear,startMonth,startDay,sep = "")
+        RangeDate <- paste(rangeYear,rangeMonth,rangeDay,sep = "")
 
-        hd_sql <- paste("SELECT date, price_close, target_price FROM price_instruments_data WHERE symbol ='",symbol,"' AND date<=",StartDate," ORDER BY date ASC", sep = "")
+        hd_sql <- paste("SELECT date, price_close, target_price FROM price_instruments_data WHERE symbol ='",symbol,"' AND date<=",StartDate," AND date>=",RangeDate," ORDER BY date ASC", sep = "")
         hd_res <- dbSendQuery(con, hd_sql)
         mydata <- fetch(hd_res, n = -1)
 

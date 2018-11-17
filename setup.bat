@@ -42,6 +42,7 @@ REM ### Setup default data
 %_PY_EXE% "%SA_DATA_DIR%asset_class\set_asset_class.py"
 %_PY_EXE% "%SA_DATA_DIR%markets\set_market.py"
 %_PY_EXE% "%SA_DATA_DIR%sectors\set_sector.py"
+%_PY_EXE% "%SA_DATA_DIR%portfolios\set_portf.py"
 
 
 REM ### 1 Get Data
@@ -78,8 +79,6 @@ REM ### Cryptocompare
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
-@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_asc.R" >> %GET_FRC%
-@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_dsc.R" >> %GET_FRC%
 @ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\hist_forecast_arima_asc.R" >> %GET_FRC%
 @ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\hist_forecast_arima_dsc.R" >> %GET_FRC%
 
