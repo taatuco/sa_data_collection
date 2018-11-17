@@ -56,13 +56,14 @@ forecast_data <- function() {
     tryCatch({
       symbol <- symbol_list[i,1]
       uid <- symbol_list[i,2]
+      df <- 7
 
       j <- 0
-      while (j <= 360) {
+      while (j <= df) {
 
-        startYear <- year( (as.Date(now()) -360) +j  )
-        startMonth <- month( (as.Date(now()) -360) +j   )
-        startDay <- day( (as.Date(now())  -360) +j  )
+        startYear <- year( (as.Date(now()) -df) +j  )
+        startMonth <- month( (as.Date(now()) -df) +j   )
+        startDay <- day( (as.Date(now())  -df) +j  )
 
         if (nchar(startMonth) < 2 ){
           startMonth <- paste("0",startMonth, sep = "")
@@ -72,54 +73,59 @@ forecast_data <- function() {
         }
         StartDate <- paste(startYear,startMonth,startDay,sep = "")
 
-        hd_sql <- paste("SELECT date, price_close FROM price_instruments_data WHERE symbol ='",symbol,"' AND date>=",StartDate," ORDER BY date ASC", sep = "")
+        hd_sql <- paste("SELECT date, price_close, target_price FROM price_instruments_data WHERE symbol ='",symbol,"' AND date>=",StartDate," ORDER BY date ASC", sep = "")
         hd_res <- dbSendQuery(con, hd_sql)
         mydata <- fetch(hd_res, n = -1)
 
           attach(mydata)
           T <- mydata
           price <- ts(T$price_close)
-          ts_price <- ts(price, start = c(strtoi(startYear), strtoi(startMonth)), frequency = nrow(T))
+          target_price <- ts(T$target_price)
 
-          tryCatch({
-            fit <- arima(ts_price,order = c(9,0,10))
-            fc  <- forecast(fit, h = forecastNumbOfdays)
+          if (target_price == 0) {
 
-            fc <- data.frame(fc)
-            print(fc[7,1])
-            print(fc)
-            upd_sql <- paste("UPDATE price_instruments_data SET target_price = ",toString(fc[7,1])," WHERE symbol ='",symbol,"' AND date = ",StartDate, sep = "")
-            dbSendQuery(con, upd_sql)
-            print(upd_sql)
-          },
-            error=function(e){
-              tryCatch({
-                cat("ERROR :",conditionMessage(e), "\n")
-                fit <- arima(ts_price,order = c(9,1,10))
-                fc  <- forecast(fit, h = forecastNumbOfdays)
+            ts_price <- ts(price, start = c(strtoi(startYear), strtoi(startMonth)), frequency = nrow(T))
 
-                fc <- data.frame(fc)
-                print(fc[7,1])
-                print(fc)
-                upd_sql <- paste("UPDATE price_instruments_data SET target_price = ",toString(fc[7,1])," WHERE symbol ='",symbol,"' AND date = ",StartDate, sep = "")
-                dbSendQuery(con, upd_sql)
-                print(upd_sql)
+            tryCatch({
+              fit <- arima(ts_price,order = c(9,0,10))
+              fc  <- forecast(fit, h = forecastNumbOfdays)
 
-              }, error=function(e){
-                print(symbol)
-                cat("ERROR :",conditionMessage(e), "\n")
-                fit <- auto.arima(ts_price, stepwise = F, approximation = F)
-                fc  <- forecast(fit, h = forecastNumbOfdays)
+              fc <- data.frame(fc)
+              print(fc[7,1])
+              print(fc)
+              upd_sql <- paste("UPDATE price_instruments_data SET target_price = ",toString(fc[7,1])," WHERE symbol ='",symbol,"' AND date = ",StartDate, sep = "")
+              dbSendQuery(con, upd_sql)
+              print(upd_sql)
+            },
+              error=function(e){
+                tryCatch({
+                  cat("ERROR :",conditionMessage(e), "\n")
+                  fit <- arima(ts_price,order = c(9,1,10))
+                  fc  <- forecast(fit, h = forecastNumbOfdays)
 
-                fc <- data.frame(fc)
-                print(fc[7,1])
-                print(fc)
-                upd_sql <- paste("UPDATE price_instruments_data SET target_price = ",toString(fc[7,1])," WHERE symbol ='",symbol,"' AND date = ",StartDate, sep = "")
-                dbSendQuery(con, upd_sql)
-                print(upd_sql)
+                  fc <- data.frame(fc)
+                  print(fc[7,1])
+                  print(fc)
+                  upd_sql <- paste("UPDATE price_instruments_data SET target_price = ",toString(fc[7,1])," WHERE symbol ='",symbol,"' AND date = ",StartDate, sep = "")
+                  dbSendQuery(con, upd_sql)
+                  print(upd_sql)
 
+                }, error=function(e){
+                  print(symbol)
+                  cat("ERROR :",conditionMessage(e), "\n")
+                  fit <- auto.arima(ts_price, stepwise = F, approximation = F)
+                  fc  <- forecast(fit, h = forecastNumbOfdays)
+
+                  fc <- data.frame(fc)
+                  print(fc[7,1])
+                  print(fc)
+                  upd_sql <- paste("UPDATE price_instruments_data SET target_price = ",toString(fc[7,1])," WHERE symbol ='",symbol,"' AND date = ",StartDate, sep = "")
+                  dbSendQuery(con, upd_sql)
+                  print(upd_sql)
+
+                })
               })
-            })
+            }
             j = j+1
        }
     }, error=function(e){
