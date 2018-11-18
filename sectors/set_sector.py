@@ -31,6 +31,10 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
+
+sql = "DELETE FROM sectors"
+cr.execute(sql)
+
 sql = "INSERT INTO sectors(id, sector) VALUES "+\
 "('1','FX'), "+\
 "('2','Cryptocurrency'), "+\

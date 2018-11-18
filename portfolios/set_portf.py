@@ -37,88 +37,84 @@ connection = pymysql.connect(host=db_srv,
 
 portf_symbol_suffix = '#PRF:'
 cr = connection.cursor(pymysql.cursors.SSCursor)
-
-
-set_portf_fx()
-set_portf_crypto()
-set_portf_commo()
-set_portf_multi()
-set_portf_us()
-
-
+sql = "DELETE FROM instruments WHERE symbol LIKE '" + portf_symbol_suffix + "%' "
+cr.execute(sql)
+sql = "DELETE FROM symbol_list WHERE symbol LIKE '"+ portf_symbol_suffix +"%' "
+cr.execute(sql)
 
 def set_portf_fx():
+    ac = "fx"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "FXONE')"
     try:
         cr.execute(sql)
         connection.commit()
-    except:
-        pass
+    except Exception as e: print(e)
     sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
     "('" + portf_symbol_suffix + "FXONE','No-Fly Zone Airspace','FX:','GO>',5,10000)"
     try:
         cr.execute(sql)
         connection.commit()
-        set_alloc(portf_symbol_suffix, "FXONE")
-    except:
-        pass
+    except Exception as e: print(e)
+    print( set_alloc(portf_symbol_suffix, "FXONE") )
+    return ac
 
 def set_portf_crypto():
+    ac = "crypto"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "CRYPTONE')"
     try:
         cr.execute(sql)
         connection.commit()
-    except:
-        pass
+    except Exception as e: print(e)
     sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
     "('" + portf_symbol_suffix + "CRYPTONE','The Hot Potato','CR:','GO>',5,1)"
     try:
         cr.execute(sql)
         connection.commit()
-        set_alloc(portf_symbol_suffix, "CRYPTONE")
-    except:
-        pass
+    except Exception as e: print(e)
+    print( set_alloc(portf_symbol_suffix, "CRYPTONE") )
+    return ac
 
 def set_portf_commo():
+    ac = "commo"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "COMMONE')"
     try:
         cr.execute(sql)
         connection.commit()
-    except:
-        pass
+    except Exception as e: print(e)
     sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
     "('" + portf_symbol_suffix + "COMMONE','Gold Digger','CO:','GO>',2,1)"
     try:
         cr.execute(sql)
         connection.commit()
-        set_alloc(portf_symbol_suffix, "COMMONE")
-    except:
-        pass
+    except Exception as e: print(e)
+    print( set_alloc(portf_symbol_suffix, "COMMONE") )
+    return ac
 
 def set_portf_multi():
+    ac = "multi"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "MULTIONE'), "+\
     "('" + portf_symbol_suffix + "GOJONE')"
     try:
         cr.execute(sql)
         connection.commit()
-    except:
-        pass
+    except Exception as e: print(e)
     sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
     "('" + portf_symbol_suffix + "MULTIONE','Milkshake','MA:','GO>',5,1), "+\
     "('" + portf_symbol_suffix + "GOJONE','Safe Haven','MA','GO>',5,1)"
     try:
         cr.execute(sql)
         connection.commit()
-        set_alloc(portf_symbol_suffix, "MULTIONE")
-        set_alloc(portf_symbol_suffix, "GOJONE")
-    except:
-        pass
+    except Exception as e: print(e)
+    print( set_alloc(portf_symbol_suffix, "MULTIONE") )
+    print( set_alloc(portf_symbol_suffix, "GOJONE") )
+    return ac
 
 def set_portf_us():
+    ac = "us"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "INDXONE'), "+\
     "('" + portf_symbol_suffix + "INDUONEUS'), "+\
@@ -139,8 +135,7 @@ def set_portf_us():
     try:
         cr.execute(sql)
         connection.commit()
-    except:
-        pass
+    except Exception as e: print(e)
     sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
     "('" + portf_symbol_suffix + "INDXONE','The Escalator','EQ:','GO>',2,1), "+\
     "('" + portf_symbol_suffix + "INDUONEUS','Smoke Up','EQ:','US>',2,1), "+\
@@ -156,26 +151,34 @@ def set_portf_us():
     "('" + portf_symbol_suffix + "TELCONEUS','The Phone Booth','EQ:','US>',2,1), "+\
     "('" + portf_symbol_suffix + "REITONEUS','House of Cards','EQ:','US>',2,1), "+\
     "('" + portf_symbol_suffix + "FOODONEUS','Burritos','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "DEFONEUS','Guns and ROses','EQ:','US>',2,1), "+\
+    "('" + portf_symbol_suffix + "DEFONEUS','Guns and Roses','EQ:','US>',2,1), "+\
     "('" + portf_symbol_suffix + "TOBACONEUS','Party don-t stop','EQ:','US>',2,1)"
     try:
         cr.execute(sql)
         connection.commit()
-        set_alloc(portf_symbol_suffix, "INDXONE")
-        set_alloc(portf_symbol_suffix, "INDUONEUS")
-        set_alloc(portf_symbol_suffix, "TECHONEUS")
-        set_alloc(portf_symbol_suffix, "HCONEUS")
-        set_alloc(portf_symbol_suffix, "CDONEUS")
-        set_alloc(portf_symbol_suffix, "UTILONEUS")
-        set_alloc(portf_symbol_suffix, "FINONEUS")
-        set_alloc(portf_symbol_suffix, "MATONEUS")
-        set_alloc(portf_symbol_suffix, "TONEUS")
-        set_alloc(portf_symbol_suffix, "CSONEUS")
-        set_alloc(portf_symbol_suffix, "NRGONEUS")
-        set_alloc(portf_symbol_suffix, "TELCONEUS")
-        set_alloc(portf_symbol_suffix, "REITONEUS")
-        set_alloc(portf_symbol_suffix, "FOODONEUS")
-        set_alloc(portf_symbol_suffix, "DEFONEUS")
-        set_alloc(portf_symbol_suffix, "TOBACONEUS")
-    except:
-        pass
+    except Exception as e: print(e)
+    print( set_alloc(portf_symbol_suffix, "INDXONE") )
+    print( set_alloc(portf_symbol_suffix, "INDUONEUS") )
+    print( set_alloc(portf_symbol_suffix, "TECHONEUS") )
+    print( set_alloc(portf_symbol_suffix, "HCONEUS") )
+    print( set_alloc(portf_symbol_suffix, "CDONEUS") )
+    print( set_alloc(portf_symbol_suffix, "UTILONEUS") )
+    print( set_alloc(portf_symbol_suffix, "FINONEUS") )
+    print( set_alloc(portf_symbol_suffix, "MATONEUS") )
+    print( set_alloc(portf_symbol_suffix, "TONEUS") )
+    print( set_alloc(portf_symbol_suffix, "CSONEUS") )
+    print( set_alloc(portf_symbol_suffix, "NRGONEUS") )
+    print( set_alloc(portf_symbol_suffix, "TELCONEUS") )
+    print( set_alloc(portf_symbol_suffix, "REITONEUS") )
+    print( set_alloc(portf_symbol_suffix, "FOODONEUS") )
+    print( set_alloc(portf_symbol_suffix, "DEFONEUS") )
+    print( set_alloc(portf_symbol_suffix, "TOBACONEUS") )
+    return ac
+
+
+################################################################################
+print(set_portf_fx() +": "+ os.path.basename(__file__) )
+print(set_portf_crypto() +": "+ os.path.basename(__file__) )
+print(set_portf_commo() +": "+ os.path.basename(__file__) )
+print(set_portf_multi() +": "+ os.path.basename(__file__) )
+print(set_portf_us() +": "+ os.path.basename(__file__) )

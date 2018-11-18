@@ -33,7 +33,7 @@ SET _NPM=npm
 REM ### Setup Node.js and express.js
 cd %API_DIR%
 CALL %_NPM% install %EXPRESS_JS% --save
-CALL %NPM% install %MYSQL_NODE% --save
+CALL %_NPM% install %MYSQL_NODE% --save
 
 REM ### To start Node.js server
 
@@ -85,6 +85,8 @@ DEL /F /Q %GET_FRC%
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%w_signals\ta_main_update_data.py" >> %SET_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\get_portf_alloc.py" >> %SET_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\get_portf_hist_data.py" >> %SET_DATA%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /ET %GET_DATA_TIME_ET% /K /F

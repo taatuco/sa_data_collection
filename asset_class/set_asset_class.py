@@ -31,15 +31,19 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
+
+sql = "DELETE FROM asset_class"
+cr.execute(sql)
+
 sql = "INSERT INTO asset_class(asset_class_id, asset_class_name) VALUES "+\
 "('CR:','Crypto'), "+\
 "('EQ:','Equity'), "+\
 "('FX:','Forex'), "+\
-"('PF:','Portfolio')"+\
-"('CO:','Commodities')"+\
-"('BD:','Bonds')"+\
+"('PF:','Portfolio'), "+\
+"('CO:','Commodities'), "+\
+"('BD:','Bonds'), "+\
 "('MA:','Multi-asset')"
-
+print(sql +": "+ os.path.basename(__file__) )
 
 try:
     cr.execute(sql)

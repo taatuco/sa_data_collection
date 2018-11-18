@@ -36,5 +36,5 @@ def add_feed_type(id,ft):
         sql = "INSERT INTO feed_type(id, feed_type) VALUES ('"+str(id)+"','"+ft+"')"
         cr.execute(sql)
         connection.commit()
-    except:
-        pass
+        print(sql +": "+ os.path.basename(__file__) )
+    except Exception as e: print(e)

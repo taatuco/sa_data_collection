@@ -31,10 +31,15 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
+
+sql = "DELETE FROM languages"
+cr.execute(sql)
+
 sql = "INSERT INTO languages(id, language) VALUES "+\
 "('en','English'), "+\
 "('fr','Français'), "+\
 "('th','ไทย')"
+print(sql +": "+ os.path.basename(__file__) )
 
 try:
     cr.execute(sql)
