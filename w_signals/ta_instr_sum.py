@@ -209,21 +209,22 @@ def get_forecast_pct(lp,fp):
         p = 0
     return p
 
-def update_forecast_table(s,wf,frc):
+def update_forecast_table(s,wf,frc,d):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "UPDATE instruments SET w_forecast_change='"+str(wf)+"' WHERE symbol='"+s+"'"
         cr.execute(sql)
         connection.commit()
 
-        sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (target_price=0 AND symbol='"+s+"') "
+        sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (date>="+ d +" AND symbol='"+s+"' AND target_price =0) "
         cr.execute(sql)
         connection.commit()
+        print(sql)
 
     except:
         pass
 
-def get_instr_sum(s,uid,pip):
+def get_instr_sum(s,uid,pip,dn):
 
     #Convert to pips for FX instruments
     m = pip
@@ -259,7 +260,7 @@ def get_instr_sum(s,uid,pip):
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
     try:
-        update_forecast_table(s,wf,frc_pt)
+        update_forecast_table(s,wf,frc_pt,dn)
         with open(f, mode="w", newline = "") as csvfile:
             fieldnames = ["y1", "m6", "m3", "m1", "w1","wf",
             "trade_1_entry", "trade_1_tp", "trade_1_sl", "trade_1_type",

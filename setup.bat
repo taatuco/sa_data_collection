@@ -79,8 +79,9 @@ REM ### Cryptocompare
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
-@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\hist_forecast_arima_asc.R" >> %GET_FRC%
-@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\hist_forecast_arima_dsc.R" >> %GET_FRC%
+@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_asc.R" >> %GET_FRC%
+@ECHO ping 127.0.0.1 -n 10 > nul >> %GET_FRC%
+@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_dsc.R" >> %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%

@@ -73,7 +73,12 @@ def get_forecast_pnl(s,uid):
             else:
                 signal = "s"
 
+            id = 0
+            s_pnl = 0
+            s_price_close = 0
+
             sql = "SELECT id, price_close, pnl FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ sd_str
+            print(sql)
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs:
@@ -88,6 +93,7 @@ def get_forecast_pnl(s,uid):
                     pnl = p_price_close - s_price_close
 
                 sql = "UPDATE price_instruments_data SET pnl = " + str(pnl) + " WHERE id = " + str(id)
+                print(sql)
                 try:
                     cr.execute(sql)
                     connection.commit()

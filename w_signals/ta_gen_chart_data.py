@@ -64,23 +64,25 @@ def gen_chart(s,uid):
             i = 1
             for row in readCSV:
                 if (i == 2):
-                    wf = float(row[5])
-                    buy_entry = round(float(row[6]), decimal_places)
-                    st_sd = st.strftime("%Y-%m-%d")
-                    st_sd = row[0]
-                    st_slope_low = row[1]
-                    st_slope_high = row[2]
-                    lt_sd = lt.strftime("%Y-%m-%d")
-                    lt_slope_low = row[4]
-                    lt_slope_high = row[5]
-                    st_sdv_low = row[6]
-                    st_sdv_high = row[7]
-                    lt_sdv_low = row[8]
-                    lt_sdv_high = row[9]
-                    st_lower_range = row[10]
-                    st_upper_range = row[11]
-                    lt_lower_range = row[12]
-                    lt_upper_range = row[13]
+                    try:
+                        wf = float(row[5])
+                        buy_entry = round(float(row[6]), decimal_places)
+                        st_sd = st.strftime("%Y-%m-%d")
+                        st_sd = row[0]
+                        st_slope_low = row[1]
+                        st_slope_high = row[2]
+                        lt_sd = lt.strftime("%Y-%m-%d")
+                        lt_slope_low = row[4]
+                        lt_slope_high = row[5]
+                        st_sdv_low = row[6]
+                        st_sdv_high = row[7]
+                        lt_sdv_low = row[8]
+                        lt_sdv_high = row[9]
+                        st_lower_range = row[10]
+                        st_upper_range = row[11]
+                        lt_lower_range = row[12]
+                        lt_upper_range = row[13]
+                    except Exception as e: print(e)
 
                 i +=1
 

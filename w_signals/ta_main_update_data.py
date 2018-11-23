@@ -64,6 +64,8 @@ try:
 
 
         print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
+        dn = datetime.datetime.now() - timedelta(days=20)
+        dn = dn.strftime("%Y%m%d")
         d = datetime.datetime.now() - timedelta(days=720)
         d = d.strftime("%Y%m%d")
 
@@ -119,7 +121,7 @@ try:
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
-        get_instr_sum(s,uid,pip)
+        get_instr_sum(s,uid,pip,dn)
         get_day_up_dwn_stat(s,uid)
         get_signals(s)
         gen_recomm(s,uid)
