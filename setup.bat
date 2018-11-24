@@ -80,14 +80,13 @@ REM ### Cryptocompare
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
 @ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_asc.R" >> %GET_FRC%
-@ECHO ping 127.0.0.1 -n 10 > nul >> %GET_FRC%
+@ECHO ping 127.0.0.1 -n 60 > nul >> %GET_FRC%
 @ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_dsc.R" >> %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%w_signals\ta_main_update_data.py" >> %SET_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\get_portf_alloc.py" >> %SET_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\get_portf_hist_data.py" >> %SET_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\portf_main_get_data.py" >> %SET_DATA%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /ET %GET_DATA_TIME_ET% /K /F
