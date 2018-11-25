@@ -101,3 +101,5 @@ def get_portf_alloc():
                     writer.writerow({"portf_uid": str(portf_uid),"portf_fullname": str(portf_fullname),
                     "alloc_order_type": str(alloc_order_type),"portf_item_quantity": str(portf_item_quantity),
                     "alloc_symbol": str(alloc_symbol),"alloc_fullname": str(alloc_fullname), "alloc_dollar_amount": str(alloc_dollar_amount) })
+
+                    ### Compute expected return in dollar amount and in percentage ###
