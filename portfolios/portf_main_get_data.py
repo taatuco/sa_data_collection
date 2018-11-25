@@ -15,8 +15,6 @@ sys.path.append(os.path.abspath( sett.get_path_feed() ))
 from get_portf_alloc import *
 from get_portf_hist_data import *
 from set_portf_feed import *
-from set_portf import *
-
 from pathlib import Path
 
 get_portf_alloc()

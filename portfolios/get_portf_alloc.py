@@ -40,24 +40,18 @@ def get_portf_alloc():
 
     portf_symbol_suffix = '#PRF:'
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol, fullname FROM instruments WHERE symbol LIKE '"+ portf_symbol_suffix +"%' ORDER BY symbol"
+    sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid FROM instruments "+\
+    "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
+    "WHERE instruments.symbol LIKE '"+portf_symbol_suffix+"%' ORDER BY instruments.symbol"
     cr.execute(sql)
     rs = cr.fetchall()
 
     for row in rs:
         portf_symbol = row[0]
         portf_fullname = row[1]
+        portf_uid = row[2]
 
-        cr_u = connection.cursor(pymysql.cursors.SSCursor)
-        sql_u = "SELECT uid FROM symbol_list WHERE symbol ='"+portf_symbol+"'"
-        cr_u.execute(sql_u)
-        rs_u = cr_u.fetchall()
-        print(sql_u+": "+ os.path.basename(__file__) )
-
-        for row in rs_u:
-            uid = row[0]
-
-        f = sett.get_path_src()+"\\"+str(uid)+"pf.csv"
+        f = sett.get_path_src()+"\\"+str(portf_uid)+"pf.csv"
         with open(f, 'w', newline='') as csvfile:
             fieldnames = ["portf_uid","portf_fullname","alloc_order_type","portf_item_quantity","alloc_symbol","alloc_fullname","alloc_dollar_amount"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -104,6 +98,6 @@ def get_portf_alloc():
                     alloc_dollar_amount = round( portf_item_quantity * alloc_price, int(alloc_decimal_places) ) * alloc_pip
 
                     print(portf_symbol +": " + alloc_symbol )
-                    writer.writerow({"portf_uid": str(uid),"portf_fullname": str(portf_fullname),
+                    writer.writerow({"portf_uid": str(portf_uid),"portf_fullname": str(portf_fullname),
                     "alloc_order_type": str(alloc_order_type),"portf_item_quantity": str(portf_item_quantity),
                     "alloc_symbol": str(alloc_symbol),"alloc_fullname": str(alloc_fullname), "alloc_dollar_amount": str(alloc_dollar_amount) })
