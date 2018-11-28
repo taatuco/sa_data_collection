@@ -61,7 +61,7 @@ def get_portf_perf():
 
         f = sett.get_path_src()+"\\"+str(portf_uid)+"pp.csv"
         with open(f, 'w', newline='') as csvfile:
-            fieldnames = ["portf_fullname","date","portf_nav"]
+            fieldnames = ["portf_fullname","date","portf_nav", "portf_content"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
 
@@ -70,6 +70,7 @@ def get_portf_perf():
                 d = d + timedelta(days=1)
                 d_str = d.strftime("%Y%m%d")
                 portf_pnl = 0
+                portf_content = ''
 
                 #get portfolio allocations
                 #for each item get the pnl
@@ -87,10 +88,11 @@ def get_portf_perf():
                     pnl_c = row[0]
                     quantity_c = row[1]
                     portf_pnl = portf_pnl + (pnl_c * quantity_c)
+                    portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") " 
                 portf_nav = portf_nav + portf_pnl
 
                 writer.writerow({"portf_fullname": str(portf_fullname),
-                "date": str(d_str),"portf_nav": str(portf_nav) })
+                "date": str(d_str),"portf_nav": str(portf_nav), "portf_content": str(portf_content) })
 
 
                 i +=1
