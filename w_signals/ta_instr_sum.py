@@ -209,10 +209,27 @@ def get_forecast_pct(lp,fp):
         p = 0
     return p
 
-def update_forecast_table(s,wf,frc,d):
+def update_forecast_table(s,wf,frc,d,pip):
     try:
+
+        cr_d = connection.cursor(pymysql.cursors.SSCursor)
+        sql_d = "SELECT unit FROM instruments WHERE symbol = '"+s+"'"
+        cr_d.execute(sql_d)
+        rs_d = cr_d.fetchall()
+        for row in rs_d:
+            unit = row[0]
+
+        w_forecast_display_info = unit + " " + str(round(float(wf*100),2))
+
+        if unit == 'pips':
+            w_forecast_display_info = str(round(float(wf*pip),0)) +" "+ unit
+        if unit == '%':
+            w_forecast_display_info = str(round(float(wf*100),2)) + unit
+
+
+
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "UPDATE instruments SET w_forecast_change='"+str(wf)+"' WHERE symbol='"+s+"'"
+        sql = "UPDATE instruments SET w_forecast_change='"+str(wf)+"', w_forecast_display_info='"+ w_forecast_display_info +"' WHERE symbol='"+s+"'"
         cr.execute(sql)
         connection.commit()
 
@@ -260,7 +277,7 @@ def get_instr_sum(s,uid,pip,dn):
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
     try:
-        update_forecast_table(s,wf,frc_pt,dn)
+        update_forecast_table(s,wf,frc_pt,dn,pip)
         with open(f, mode="w", newline = "") as csvfile:
             fieldnames = ["y1", "m6", "m3", "m1", "w1","wf",
             "trade_1_entry", "trade_1_tp", "trade_1_sl", "trade_1_type",

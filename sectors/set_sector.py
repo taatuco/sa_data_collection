@@ -51,6 +51,7 @@ sql = "INSERT INTO sectors(id, sector) VALUES "+\
 "('13','Energy'), "+\
 "('14','Telecom and Services'), "+\
 "('15','Real Estates'), "+\
+"('19','Multi-asset'), "+\
 "('18','Commodities')"
 
 

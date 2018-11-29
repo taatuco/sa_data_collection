@@ -27,13 +27,12 @@ SET GET_CC_DATA="%SA_DATA_DIR%p_cryptocompare\get_cryptocompare_data.bat"
 SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
 SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
 SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
-SET _NODE=node
+SET _FLASK=Flask
 SET _NPM=npm
 
-REM ### Setup Node.js and express.js
+REM ### Install Flask
 cd %API_DIR%
-CALL %_NPM% install %EXPRESS_JS% --save
-CALL %_NPM% install %MYSQL_NODE% --save
+CALL %_PIP_EXE% install %_FLASK%
 
 REM ### To start Node.js server
 

@@ -7,4 +7,4 @@ SmartAlpha developed by Daiviet Huynh, Arnold Tegue Simo and Graham Kaiya, known
 Python 3.7.1+  
 R-3.5.1+  
 rstudioapi (https://cran.rstudio.com/web/packages/rstudioapi/)  
-Node.js 10.13.0+  
+Flask 1.0.2+

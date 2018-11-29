@@ -26,6 +26,9 @@ db_srv = access_obj.db_server()
 sys.path.append(os.path.abspath( sett.get_path_feed() ))
 from add_feed_type import *
 
+sys.path.append(os.path.abspath( sett.get_path_signals() ))
+from ta_instr_sum import *
+
 from pathlib import Path
 
 import pymysql.cursors
@@ -40,7 +43,7 @@ def get_portf_alloc():
 
     portf_symbol_suffix = '#PRF:'
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid, instruments.unit FROM instruments "+\
     "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol LIKE '"+portf_symbol_suffix+"%' ORDER BY instruments.symbol"
     cr.execute(sql)
@@ -50,6 +53,11 @@ def get_portf_alloc():
         portf_symbol = row[0]
         portf_fullname = row[1]
         portf_uid = row[2]
+        portf_unit = row[3]
+        portf_forc_return = 0
+        portf_perc_return = 0
+        portf_nav = 0
+        alloc_forc_pnl = 0
 
         f = sett.get_path_src()+"\\"+str(portf_uid)+"pf.csv"
         with open(f, 'w', newline='') as csvfile:
@@ -80,7 +88,10 @@ def get_portf_alloc():
                     alloc_price = row[0]
 
                 cr_t = connection.cursor(pymysql.cursors.SSCursor)
-                sql_t = "SELECT symbol, fullname, decimal_places, w_forecast_change, pip FROM instruments WHERE symbol ='"+portf_item_symbol+"' "
+                sql_t = "SELECT instruments.symbol, instruments.fullname, instruments.decimal_places, "+\
+                "instruments.w_forecast_change, instruments.pip, symbol_list.uid FROM instruments "+\
+                "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol WHERE instruments.symbol ='"+portf_item_symbol+"'"
+
                 cr_t.execute(sql_t)
                 rs_t = cr_t.fetchall()
                 print(sql_t+": "+ os.path.basename(__file__) )
@@ -91,6 +102,7 @@ def get_portf_alloc():
                     alloc_decimal_places = row[2]
                     alloc_w_forecast_change = row[3]
                     alloc_pip = row[4]
+                    alloc_uid = row[5]
                     if alloc_w_forecast_change >= 0:
                         alloc_order_type = 'buy'
                     else:
@@ -102,4 +114,15 @@ def get_portf_alloc():
                     "alloc_order_type": str(alloc_order_type),"portf_item_quantity": str(portf_item_quantity),
                     "alloc_symbol": str(alloc_symbol),"alloc_fullname": str(alloc_fullname), "alloc_dollar_amount": str(alloc_dollar_amount) })
 
-                    ### Compute expected return in dollar amount and in percentage ###
+                    alloc_forc_data = forecast_data(alloc_uid)
+                    alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity  )
+                    portf_forc_return = portf_forc_return + alloc_forc_pnl
+                    portf_nav = portf_nav + alloc_dollar_amount
+
+        ### Updatedb
+        portf_perc_return = (100/(portf_nav/portf_forc_return))/100
+        w_forecast_display_info = portf_unit + " " + str( round(portf_forc_return,2) )
+        cr_f = connection.cursor(pymysql.cursors.SSCursor)
+        sql_f = "UPDATE instruments SET w_forecast_change=" + str(portf_perc_return) + ", w_forecast_display_info='" + w_forecast_display_info + "' " +\
+        "WHERE symbol='"+portf_symbol+"' "
+        cr_f.execute(sql_f)

@@ -25,7 +25,7 @@ from ta_calc_rsi import *
 from ta_calc_tln import *
 from ta_instr_sum import *
 from ta_calc_up_dn_stats import *
-from get_signals import *
+from set_signals_feed import *
 from set_recomm_text_lang import *
 from ta_gen_recomm import *
 from ta_gen_chart_data import *
@@ -123,7 +123,7 @@ try:
         get_trend_line_data(s,uid)
         get_instr_sum(s,uid,pip,dn)
         get_day_up_dwn_stat(s,uid)
-        get_signals(s)
+        set_signals_feed(s)
         gen_recomm(s,uid)
         gen_chart(s,uid)
         get_forecast_pnl(s,uid)

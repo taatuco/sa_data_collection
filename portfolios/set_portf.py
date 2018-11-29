@@ -50,8 +50,8 @@ def set_portf_fx():
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
-    "('" + portf_symbol_suffix + "FXONE','No-Fly Zone Airspace','FX:','GO>',5,10000)"
+    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit) VALUES "+\
+    "('" + portf_symbol_suffix + "FXONE','No-Fly Zone Airspace','FX:','GO>',5,10000,1,'USD')"
     try:
         cr.execute(sql)
         connection.commit()
@@ -67,8 +67,8 @@ def set_portf_crypto():
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
-    "('" + portf_symbol_suffix + "CRYPTONE','The Hot Potato','CR:','GO>',5,1)"
+    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit) VALUES "+\
+    "('" + portf_symbol_suffix + "CRYPTONE','The Hot Potato','CR:','GO>',5,1,2,'USD')"
     try:
         cr.execute(sql)
         connection.commit()
@@ -84,8 +84,8 @@ def set_portf_commo():
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
-    "('" + portf_symbol_suffix + "COMMONE','Gold Digger','CO:','GO>',2,1)"
+    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit) VALUES "+\
+    "('" + portf_symbol_suffix + "COMMONE','Gold Digger','CO:','GO>',2,1,18,'USD')"
     try:
         cr.execute(sql)
         connection.commit()
@@ -102,9 +102,9 @@ def set_portf_multi():
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
-    "('" + portf_symbol_suffix + "MULTIONE','Milkshake','MA:','GO>',5,1), "+\
-    "('" + portf_symbol_suffix + "GOJONE','Safe Haven','MA','GO>',5,1)"
+    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit) VALUES "+\
+    "('" + portf_symbol_suffix + "MULTIONE','Milkshake','MA:','GO>',5,1,19,'USD'), "+\
+    "('" + portf_symbol_suffix + "GOJONE','Safe Haven','MA','GO>',5,1,19,'USD')"
     try:
         cr.execute(sql)
         connection.commit()
@@ -136,23 +136,23 @@ def set_portf_us():
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip) VALUES "+\
-    "('" + portf_symbol_suffix + "INDXONE','The Escalator','EQ:','GO>',2,1), "+\
-    "('" + portf_symbol_suffix + "INDUONEUS','Smoke Up','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "TECHONEUS','Time Travel','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "HCONEUS','Dr Kahroo','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "CDONEUS','Rich Kids','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "UTILONEUS','Uncle James','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "FINONEUS','Piggy Bank','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "MATONEUS','Iron String','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "TONEUS','Snail','BD:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "CSONEUS','Bread and Milk','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "NRGONEUS','The Fast and the Furious','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "TELCONEUS','The Phone Booth','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "REITONEUS','House of Cards','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "FOODONEUS','Burritos','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "DEFONEUS','Guns and Roses','EQ:','US>',2,1), "+\
-    "('" + portf_symbol_suffix + "TOBACONEUS','Party don-t stop','EQ:','US>',2,1)"
+    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit) VALUES "+\
+    "('" + portf_symbol_suffix + "INDXONE','The Escalator','EQ:','GO>',2,1,17,'USD'), "+\
+    "('" + portf_symbol_suffix + "INDUONEUS','Smoke Up','EQ:','US>',2,1,4,'USD'), "+\
+    "('" + portf_symbol_suffix + "TECHONEUS','Time Travel','EQ:','US>',2,1,5,'USD'), "+\
+    "('" + portf_symbol_suffix + "HCONEUS','Dr Kahroo','EQ:','US>',2,1,6,'USD'), "+\
+    "('" + portf_symbol_suffix + "CDONEUS','Rich Kids','EQ:','US>',2,1,7,'USD'), "+\
+    "('" + portf_symbol_suffix + "UTILONEUS','Uncle James','EQ:','US>',2,1,8,'USD'), "+\
+    "('" + portf_symbol_suffix + "FINONEUS','Piggy Bank','EQ:','US>',2,1,9,'USD'), "+\
+    "('" + portf_symbol_suffix + "MATONEUS','Iron String','EQ:','US>',2,1,10,'USD'), "+\
+    "('" + portf_symbol_suffix + "TONEUS','Snail','BD:','US>',2,1,11,'USD'), "+\
+    "('" + portf_symbol_suffix + "CSONEUS','Bread and Milk','EQ:','US>',2,1,12,'USD'), "+\
+    "('" + portf_symbol_suffix + "NRGONEUS','The Fast and the Furious','EQ:','US>',2,1,13,'USD'), "+\
+    "('" + portf_symbol_suffix + "TELCONEUS','The Phone Booth','EQ:','US>',2,1,14,'USD'), "+\
+    "('" + portf_symbol_suffix + "REITONEUS','House of Cards','EQ:','US>',2,1,15,'USD'), "+\
+    "('" + portf_symbol_suffix + "FOODONEUS','Burritos','EQ:','US>',2,1,12,'USD'), "+\
+    "('" + portf_symbol_suffix + "DEFONEUS','Guns and Roses','EQ:','US>',2,1,4,'USD'), "+\
+    "('" + portf_symbol_suffix + "TOBACONEUS','Party don-t stop','EQ:','US>',2,1,12,'USD')"
     try:
         cr.execute(sql)
         connection.commit()

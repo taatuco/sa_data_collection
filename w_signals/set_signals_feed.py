@@ -35,10 +35,10 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def set_portf_feed(s):
+def set_signals_feed(s):
 
-    feed_id = 9
-    feed_type = "portfolios"
+    feed_id = 1
+    feed_type = "signals"
     add_feed_type(feed_id, feed_type)
 
     #Date [Today date]
@@ -46,8 +46,9 @@ def set_portf_feed(s):
     d = d.strftime("%Y%m%d")
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector "+\
-    "FROM instruments INNER JOIN sectors ON instruments.sector = sectors.id WHERE symbol = '"+ s +"'"
+    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid FROM instruments "+\
+    "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
+    "WHERE instruments.symbol = '"+ s +"'"
 
     cr.execute(sql)
     rs = cr.fetchall()
@@ -58,13 +59,17 @@ def set_portf_feed(s):
         market = row[3]
         w_forecast_change = row[4]
         sector = row[5]
+        w_forecast_display_info = row[6]
+        uid = row[7]
 
         short_title = symbol
         short_description = fullname
         content = sector
-        url = "c/?t="+str(feed_id)+"&s="+symbol
+        url = "c/?s="+ str(uid)
         ranking = str( abs(round(w_forecast_change,5)) )
         type = str(feed_id)
+
+        badge = w_forecast_display_info
 
         search = asset_class + market + symbol + " " + fullname
 
