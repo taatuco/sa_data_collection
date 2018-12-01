@@ -86,15 +86,10 @@ def gen_chart(s,uid):
 
                 i +=1
 
-    f = sett.get_path_src()+"\\"+str(uid)+"tc.csv"
-    with open(f, 'w', newline='') as csvfile:
-        fieldnames = ["title","date","price","forecast",
-        "lt_upper_trend_line", "lt_lower_trend_line",
-        "st_upper_trend_line", "st_lower_trend_line",
-        "rsi","rsi_oversold","rsi_overbought",
-        "ma200","target_price"]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
+        cr_t = connection.cursor(pymysql.cursors.SSCursor)
+        sql_t = "DELETE FROM chart_data WHERE uid=" + str(uid)
+        cr_t.execute(sql_t)
+        connection.commit()
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date, price_close, ma200, rsi14, rsi_overbought, rsi_oversold, target_price "+\
@@ -102,11 +97,11 @@ def gen_chart(s,uid):
         cr.execute(sql)
         rs = cr.fetchall()
 
-        lt_lower_trend_line = 'null'
-        lt_upper_trend_line = 'null'
+        lt_lower_trend_line = '0'
+        lt_upper_trend_line = '0'
         draw_lt = False
-        st_lower_trend_line = 'null'
-        st_upper_trend_line = 'null'
+        st_lower_trend_line = '0'
+        st_upper_trend_line = '0'
         draw_st = False
 
 
@@ -136,24 +131,28 @@ def gen_chart(s,uid):
                     lt_lower_trend_line = str( float(lt_lower_trend_line) + float(lt_slope_low) )
                     lt_upper_trend_line = str( float(lt_upper_trend_line) + float(lt_slope_high) )
                 except:
-                    lt_lower_trend_line = 'null'
-                    lt_upper_trend_line = 'null'
+                    lt_lower_trend_line = '0'
+                    lt_upper_trend_line = '0'
 
             if (draw_st):
                 try:
                     st_lower_trend_line = str( float(st_lower_trend_line) + float(st_slope_low) )
                     st_upper_trend_line = str( float(st_upper_trend_line) + float(st_slope_high) )
                 except:
-                    st_lower_trend_line = 'null'
-                    st_upper_trend_line = 'null'
+                    st_lower_trend_line = '0'
+                    st_upper_trend_line = '0'
 
-            print(s +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
-            writer.writerow({"title": str(title), "date":str(date), "price": str(price), "forecast": str('null'),
-            "lt_upper_trend_line": str(lt_upper_trend_line), "lt_lower_trend_line": str(lt_lower_trend_line),
-            "st_upper_trend_line": str(st_upper_trend_line), "st_lower_trend_line": str(st_lower_trend_line),
-            "rsi": str(rsi), "rsi_oversold": str(rsi_oversold), "rsi_overbought": str(rsi_overbought),
-            "ma200": str(ma200), "target_price": str(target_price)        })
-
+            sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
+            "lt_upper_trend_line, lt_lower_trend_line, "+\
+            "st_upper_trend_line, st_lower_trend_line, "+\
+            "rsi, rsi_oversold, rsi_overbought, ma200, target_price) "+\
+            "VALUES ("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+",'0',"+\
+            str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
+            str(st_upper_trend_line)+","+st_lower_trend_line+","+\
+            str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+")"
+            print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
+            cr_t.execute(sql_t)
+            connection.commit()
 
         f = data_src+str(uid)+'f.csv'
         filepath = Path(f)
@@ -161,28 +160,35 @@ def gen_chart(s,uid):
             with open(f) as csvfile:
                 readCSV = csv.reader(csvfile, delimiter=',')
                 i = 1
+                forecast = '0'
                 for row in readCSV:
-                    if (i == 2):
+                    if (i >= 2):
                         date = date +  ( timedelta(days=1) )
                         forecast = row[1]
                         try:
                             lt_lower_trend_line = str( float(lt_lower_trend_line) + float(lt_slope_low) )
                             lt_upper_trend_line = str( float(lt_upper_trend_line) + float(lt_slope_high) )
                         except:
-                            lt_lower_trend_line = 'null'
-                            lt_upper_trend_line = 'null'
+                            lt_lower_trend_line = '0'
+                            lt_upper_trend_line = '0'
 
                         try:
                             st_lower_trend_line = str( float(st_lower_trend_line) + float(st_slope_low) )
                             st_upper_trend_line = str( float(st_upper_trend_line) + float(st_slope_high) )
                         except:
-                            st_lower_trend_line = 'null'
-                            st_upper_trend_line = 'null'
+                            st_lower_trend_line = '0'
+                            st_upper_trend_line = '0'
 
-                    writer.writerow({"title": str(title), "date":str(date), "price": str('null'), "forecast": str('null'),
-                    "lt_upper_trend_line": str(lt_upper_trend_line), "lt_lower_trend_line": str(lt_lower_trend_line),
-                    "st_upper_trend_line": str(st_upper_trend_line), "st_lower_trend_line": str(st_lower_trend_line),
-                    "rsi": str('null'), "rsi_oversold": str(rsi_oversold), "rsi_overbought": str(rsi_overbought),
-                    "ma200": str(ma200), "target_price": str(target_price)        })
+                        sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
+                        "lt_upper_trend_line, lt_lower_trend_line, "+\
+                        "st_upper_trend_line, st_lower_trend_line, "+\
+                        "rsi, rsi_oversold, rsi_overbought, ma200, target_price) "+\
+                        "VALUES ("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+","+str(forecast)+","+\
+                        str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
+                        str(st_upper_trend_line)+","+st_lower_trend_line+","+\
+                        str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+")"
+                        print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
+                        cr_t.execute(sql_t)
+                        connection.commit()
 
                     i +=1

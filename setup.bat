@@ -14,7 +14,6 @@ SET SET_DATA_TIME_ET=12:00
 REM ############################################################################
 
 SET SA_DATA_DIR=%~dp0
-SET API_DIR=%SA_DATA_DIR%api
 SET GET_DATA="%SA_DATA_DIR%sa_1_get_data.bat"
 SET GET_FRC="%SA_DATA_DIR%sa_2_get_forecast.bat"
 SET SET_DATA="%SA_DATA_DIR%sa_3_set_data.bat"
@@ -27,12 +26,6 @@ SET GET_CC_DATA="%SA_DATA_DIR%p_cryptocompare\get_cryptocompare_data.bat"
 SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
 SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
 SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
-SET _FLASK=Flask
-SET _NPM=npm
-
-REM ### Install Flask
-cd %API_DIR%
-CALL %_PIP_EXE% install %_FLASK%
 
 REM ### To start Node.js server
 
@@ -46,8 +39,7 @@ REM ### Setup default data
 
 REM ### 1 Get Data
 DEL /F /Q %GET_DATA%
-MKDIR "%API_DIR%"
-MKDIR "%API_DIR%\src"
+MKDIR "%SA_DATA_DIR%src"
 @ECHO %_PY_EXE% -m pip install --upgrade pip > %GET_DATA%
 @ECHO %_PIP_EXE% install mysql-python >> %GET_DATA%
 @ECHO %_PIP_EXE% install PyMySQL >> %GET_DATA%

@@ -12,7 +12,7 @@ class sa_path:
         return self.pdir+ "\\sa_pwd"
 
     def get_path_src(self):
-        return self.rdir+"\\api\\src\\"
+        return self.rdir+"\\src\\"
 
     def get_path_feed(self):
         return self.rdir + "\\feed"

@@ -241,6 +241,27 @@ def update_forecast_table(s,wf,frc,d,pip):
     except:
         pass
 
+def update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,wf_pct,
+trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
+trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
+trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
+trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
+    try:
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
+        "trade_1_entry="+str(trade_entry_buy_1)+",trade_1_tp="+str(trade_tp_buy_1)+",trade_1_sl="+str(trade_sl_buy_1)+",trade_1_type='buy',"+\
+        "trade_2_entry="+str(trade_entry_buy_2)+",trade_2_tp="+str(trade_tp_buy_2)+",trade_2_sl="+str(trade_sl_buy_2)+",trade_2_type='buy',"+\
+        "trade_3_entry="+str(trade_entry_sell_1)+",trade_3_tp="+str(trade_tp_sell_1)+",trade_3_sl="+str(trade_sl_sell_1)+",trade_3_type='sell',"+\
+        "trade_4_entry="+str(trade_entry_sell_2)+",trade_4_tp="+str(trade_tp_sell_2)+",trade_4_sl="+str(trade_sl_sell_2)+",trade_4_type='sell' "+\
+        "WHERE symbol='"+s+"' "
+        print(sql_i)
+        cr_i.execute(sql_i)
+        connection.commit()
+
+    except:
+        pass
+
+
 def get_instr_sum(s,uid,pip,dn):
 
     #Convert to pips for FX instruments
@@ -278,19 +299,11 @@ def get_instr_sum(s,uid,pip,dn):
     # ---
     try:
         update_forecast_table(s,wf,frc_pt,dn,pip)
-        with open(f, mode="w", newline = "") as csvfile:
-            fieldnames = ["y1", "m6", "m3", "m1", "w1","wf",
-            "trade_1_entry", "trade_1_tp", "trade_1_sl", "trade_1_type",
-            "trade_2_entry", "trade_2_tp", "trade_2_sl", "trade_2_type",
-            "trade_3_entry", "trade_3_tp", "trade_3_sl", "trade_3_type",
-            "trade_4_entry", "trade_4_tp", "trade_4_sl", "trade_4_type"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,wf_pct,
+        trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
+        trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
+        trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
+        trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2)
 
-            writer.writeheader()
-            writer.writerow({"y1": str(y1_pct), "m6": str(m6_pct), "m3": str(m3_pct), "m1": str(m1_pct), "w1": str(w1_pct), "wf": str(wf_pct),
-            "trade_1_entry": str(trade_entry_buy_1), "trade_1_tp": str(trade_tp_buy_1), "trade_1_sl": str(trade_sl_buy_1), "trade_1_type": "buy",
-            "trade_2_entry": str(trade_entry_buy_2), "trade_2_tp": str(trade_tp_buy_2), "trade_2_sl": str(trade_sl_buy_2), "trade_2_type": "buy",
-            "trade_3_entry": str(trade_entry_sell_1), "trade_3_tp": str(trade_tp_sell_1), "trade_3_sl": str(trade_sl_sell_1), "trade_3_type": "sell",
-            "trade_4_entry": str(trade_entry_sell_2), "trade_4_tp": str(trade_tp_sell_2), "trade_4_sl": str(trade_sl_sell_2), "trade_4_type": "sell"})
     except:
         pass
