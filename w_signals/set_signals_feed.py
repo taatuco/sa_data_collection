@@ -48,7 +48,7 @@ def set_signals_feed(s):
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
-    "WHERE instruments.symbol = '"+ s +"'"
+    "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%'"
 
     cr.execute(sql)
     rs = cr.fetchall()
@@ -65,11 +65,16 @@ def set_signals_feed(s):
         short_title = symbol
         short_description = fullname
         content = sector
-        url = "c/?s="+ str(uid)
+        url = "s/?uid="+ str(uid)
         ranking = str( abs(round(w_forecast_change,5)) )
         type = str(feed_id)
 
-        badge = w_forecast_display_info
+        if float(w_forecast_change) < 0:
+            badge = "down " + w_forecast_display_info
+        elif float(w_forecast_change) > 0:
+            badge = "up " + w_forecast_display_info
+        else:
+            badge = w_forecast_display_info
 
         search = asset_class + market + symbol + " " + fullname
 
@@ -86,9 +91,9 @@ def set_signals_feed(s):
         try:
             cr_i.execute(sql_i)
             connection.commit()
+            sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<'"+d+"')"
+            cr_i.execute(sql_i)
+            connection.commit()
+
         except:
             pass
-
-        sql_i = "DELETE FROM feed WHERE (type=" + type + " AND date<'"+d+"')"
-        cr_i.execute(sql_i)
-        connection.commit()

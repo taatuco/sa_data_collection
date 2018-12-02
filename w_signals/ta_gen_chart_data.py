@@ -109,12 +109,12 @@ def gen_chart(s,uid):
 
             title = '1Y - '+ s
             date = row[0]
-            price = row[1]
-            ma200 = row[2]
-            rsi = row[3]
-            rsi_overbought = row[4]
-            rsi_oversold = row[5]
-            target_price = row[6]
+            price = float( round(row[1], decimal_places) )
+            ma200 = float( round(row[2], decimal_places) )
+            rsi = float( round(row[3], 2) )
+            rsi_overbought = float( round(row[4], 2) )
+            rsi_oversold = float( round(row[5], 2) )
+            target_price = float( round(row[6], decimal_places) )
 
             if (datetime.datetime.combine(date, datetime.datetime.min.time())  >= datetime.datetime.strptime(lt_sd, '%Y-%m-%d') and not draw_lt) :
                 lt_lower_trend_line = lt_sdv_low
@@ -128,16 +128,16 @@ def gen_chart(s,uid):
 
             if (draw_lt):
                 try:
-                    lt_lower_trend_line = str( float(lt_lower_trend_line) + float(lt_slope_low) )
-                    lt_upper_trend_line = str( float(lt_upper_trend_line) + float(lt_slope_high) )
+                    lt_lower_trend_line = str( round( float(lt_lower_trend_line) + float(lt_slope_low), decimal_places) )
+                    lt_upper_trend_line = str( round( float(lt_upper_trend_line) + float(lt_slope_high), decimal_places) )
                 except:
                     lt_lower_trend_line = '0'
                     lt_upper_trend_line = '0'
 
             if (draw_st):
                 try:
-                    st_lower_trend_line = str( float(st_lower_trend_line) + float(st_slope_low) )
-                    st_upper_trend_line = str( float(st_upper_trend_line) + float(st_slope_high) )
+                    st_lower_trend_line = str( round( float(st_lower_trend_line) + float(st_slope_low), decimal_places) )
+                    st_upper_trend_line = str( round( float(st_upper_trend_line) + float(st_slope_high), decimal_places) )
                 except:
                     st_lower_trend_line = '0'
                     st_upper_trend_line = '0'
@@ -166,15 +166,15 @@ def gen_chart(s,uid):
                         date = date +  ( timedelta(days=1) )
                         forecast = row[1]
                         try:
-                            lt_lower_trend_line = str( float(lt_lower_trend_line) + float(lt_slope_low) )
-                            lt_upper_trend_line = str( float(lt_upper_trend_line) + float(lt_slope_high) )
+                            lt_lower_trend_line = str( round( float(lt_lower_trend_line) + float(lt_slope_low), decimal_places) )
+                            lt_upper_trend_line = str( round( float(lt_upper_trend_line) + float(lt_slope_high), decimal_places) )
                         except:
                             lt_lower_trend_line = '0'
                             lt_upper_trend_line = '0'
 
                         try:
-                            st_lower_trend_line = str( float(st_lower_trend_line) + float(st_slope_low) )
-                            st_upper_trend_line = str( float(st_upper_trend_line) + float(st_slope_high) )
+                            st_lower_trend_line = str( round( float(st_lower_trend_line) + float(st_slope_low), decimal_places) )
+                            st_upper_trend_line = str( round( float(st_upper_trend_line) + float(st_slope_high), decimal_places) )
                         except:
                             st_lower_trend_line = '0'
                             st_upper_trend_line = '0'

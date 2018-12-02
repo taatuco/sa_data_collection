@@ -48,7 +48,7 @@ try:
     set_recomm_text_lang()
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol"
+    sql = "SELECT symbol, uid FROM symbol_list WHERE symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
     cr.execute(sql)
     rs = cr.fetchall()
     for row in rs:
@@ -61,7 +61,6 @@ try:
         rs_pip = cr_pip.fetchall()
         for row in rs_pip:
             pip = row[0]
-
 
         print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
         dn = datetime.datetime.now() - timedelta(days=10)

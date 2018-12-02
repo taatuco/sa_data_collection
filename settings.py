@@ -17,7 +17,6 @@ class sa_path:
     def get_path_feed(self):
         return self.rdir + "\\feed"
 
-
     def get_path_signals(self):
         return self.rdir + "\\w_signals"
 
@@ -29,3 +28,6 @@ class sa_path:
 
     def get_path_r_oanda_src(self):
         return self.rdir + "\\r_oanda\\src\\"
+
+def get_portf_suffix():
+    return "PRF:"

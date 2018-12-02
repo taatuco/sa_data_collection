@@ -41,7 +41,7 @@ connection = pymysql.connect(host=db_srv,
 
 def get_portf_alloc():
 
-    portf_symbol_suffix = '#PRF:'
+    portf_symbol_suffix = get_portf_suffix()
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid, instruments.unit FROM instruments "+\
     "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\

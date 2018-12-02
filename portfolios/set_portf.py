@@ -35,7 +35,7 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-portf_symbol_suffix = '#PRF:'
+portf_symbol_suffix = get_portf_suffix()
 cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "DELETE FROM instruments WHERE symbol LIKE '" + portf_symbol_suffix + "%' "
 cr.execute(sql)

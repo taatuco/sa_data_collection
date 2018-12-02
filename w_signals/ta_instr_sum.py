@@ -247,6 +247,33 @@ trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
 trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
 trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
     try:
+
+        cr_d = connection.cursor(pymysql.cursors.SSCursor)
+        sql_d = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"' "
+        cr_d.execute()
+        rs_d = cr_d.fetchall()
+        for row in rs_d:
+            decimal_places = row[0]
+
+        y1_pct = round(float(y1_pct), 3)
+        m6_pct = round(float(m6_pct), 3)
+        m3_pct = round(float(m3_pct), 3)
+        m1_pct = round(float(m1_pct), 3)
+        w1_pct = round(float(w1_pct), 3)
+        wf_pct = round(float(wf_pct), 3)
+        trade_entry_buy_1 = round(float(trade_entry_buy_1), decimal_places)
+        trade_tp_buy_1 = round(float(trade_tp_buy_1), decimal_places)
+        trade_sl_buy_1 = round(float(trade_sl_buy_1), decimal_places)
+        trade_entry_buy_2 = round(float(trade_entry_buy_2), decimal_places)
+        trade_tp_buy_2 = round(float(trade_tp_buy_2), decimal_places)
+        trade_sl_buy_2 = round(float(trade_sl_buy_2), decimal_places)
+        trade_entry_sell_1 = round(float(trade_entry_sell_1), decimal_places)
+        trade_tp_sell_1 = round(float(trade_tp_sell_1), decimal_places)
+        trade_sl_sell_1 = round(float(trade_sl_sell_1), decimal_places)
+        trade_entry_sell_2 = round(float(trade_entry_sell_2), decimal_places)
+        trade_tp_sell_2 = round(float(trade_tp_sell_2), decimal_places)
+        trade_sl_sell_2 = round(float(trade_sl_sell_2), decimal_places)
+
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
         "trade_1_entry="+str(trade_entry_buy_1)+",trade_1_tp="+str(trade_tp_buy_1)+",trade_1_sl="+str(trade_sl_buy_1)+",trade_1_type='buy',"+\

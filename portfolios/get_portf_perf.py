@@ -39,7 +39,7 @@ connection = pymysql.connect(host=db_srv,
 
 
 def get_portf_perf():
-    portf_symbol_suffix = '#PRF:'
+    portf_symbol_suffix = get_portf_suffix()
     df = datetime.datetime.now() - timedelta(days=360)
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
@@ -88,7 +88,7 @@ def get_portf_perf():
                     pnl_c = row[0]
                     quantity_c = row[1]
                     portf_pnl = portf_pnl + (pnl_c * quantity_c)
-                    portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") " 
+                    portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
                 portf_nav = portf_nav + portf_pnl
 
                 writer.writerow({"portf_fullname": str(portf_fullname),
