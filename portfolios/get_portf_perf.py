@@ -59,40 +59,47 @@ def get_portf_perf():
         d = df
         portf_nav = 0
 
-        f = sett.get_path_src()+"\\"+str(portf_uid)+"pp.csv"
-        with open(f, 'w', newline='') as csvfile:
-            fieldnames = ["portf_fullname","date","portf_nav", "portf_content"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "DELETE FROM chart_data WHERE uid = "+ str(portf_uid)
+        print(sql_i)
+        cr_i.execute(sql_i)
+        connection.commit()
 
-            while (i <= j):
+        while (i <= j):
 
-                d = d + timedelta(days=1)
-                d_str = d.strftime("%Y%m%d")
-                portf_pnl = 0
-                portf_content = ''
+            d = d + timedelta(days=1)
+            d_str = d.strftime("%Y%m%d")
+            portf_pnl = 0
+            portf_content = ''
 
-                #get portfolio allocations
-                #for each item get the pnl
-                cr_c = connection.cursor(pymysql.cursors.SSCursor)
-                sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity " +\
-                "FROM portfolios INNER JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
-                "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
+            #get portfolio allocations
+            #for each item get the pnl
+            cr_c = connection.cursor(pymysql.cursors.SSCursor)
+            sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity " +\
+            "FROM portfolios INNER JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
+            "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
 
-                print(sql_c)
+            print(sql_c)
 
-                cr_c.execute(sql_c)
-                rs_c = cr_c.fetchall()
+            cr_c.execute(sql_c)
+            rs_c = cr_c.fetchall()
 
-                for row in rs_c:
-                    pnl_c = row[0]
-                    quantity_c = row[1]
-                    portf_pnl = portf_pnl + (pnl_c * quantity_c)
-                    portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
-                portf_nav = portf_nav + portf_pnl
+            for row in rs_c:
+                pnl_c = row[0]
+                quantity_c = row[1]
+                portf_pnl = portf_pnl + (pnl_c * quantity_c)
+                portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
+            portf_nav = portf_nav + portf_pnl
 
-                writer.writerow({"portf_fullname": str(portf_fullname),
-                "date": str(d_str),"portf_nav": str(portf_nav), "portf_content": str(portf_content) })
+            try:
 
+                sql_i = "INSERT INTO chart_data(uid, symbol, date, price_close) "+\
+                "VALUES (" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
+                print(sql_i)
+                cr_i.execute(sql_i)
+                connection.commit()
 
-                i +=1
+            except:
+                pass
+
+            i +=1
