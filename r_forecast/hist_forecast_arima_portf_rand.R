@@ -55,7 +55,7 @@ forecast_data <- function() {
   ndf <- 200
   df <- 360
 
-  while (i <= (nrow(symbol_list)/2)+1 ) {
+  while (i <= (nrow(symbol_list) ) {
     tryCatch({
       symbol <- symbol_list[i,1]
       uid <- symbol_list[i,2]
@@ -90,7 +90,7 @@ forecast_data <- function() {
         price <- ts(T$price_close)
         target_price <- ts(T$target_price)
 
-          ts_price <- ts(price, start = c(strtoi(startYear), strtoi(startMonth) ), frequency = nrow(T))
+          ts_price <- ts(price)
 
           tryCatch({
             fit <- arima(ts_price,order = c(9,0,10))

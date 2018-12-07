@@ -67,7 +67,7 @@ forecast_data <- function() {
         attach(mydata)
         T <- mydata
         price <- ts(T$price_close)
-        ts_price <- ts(price, start = c(startYear, startMonth), frequency = nrow(T))
+        ts_price <- ts(price)
 
         tryCatch({
           fit <- arima(ts_price,order = c(9,0,10))
