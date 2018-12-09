@@ -40,9 +40,9 @@ def set_alloc(sfx,s):
 
     if (symbol == sfx+"FXONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
-        "('" + sfx + "FXONE','EURUSD',10000),"+\
-        "('" + sfx + "FXONE','GBPUSD',10000),"+\
-        "('" + sfx + "FXONE','EURGBP',10000)"
+        "('" + sfx + "FXONE','EURUSD',1),"+\
+        "('" + sfx + "FXONE','GBPUSD',1),"+\
+        "('" + sfx + "FXONE','EURGBP',1)"
         try:
             cr.execute(sql)
             connection.commit()
@@ -102,7 +102,7 @@ def set_alloc(sfx,s):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "CDONEUS','NASDAQ:FOXA',1),"+\
         "('" + sfx + "CDONEUS','NASDAQ:MAR',1),"+\
-        "('" + sfx + "CDONEUS','NASAQ:SBUX',1)"
+        "('" + sfx + "CDONEUS','NASDAQ:SBUX',1)"
         try:
             cr.execute(sql)
             connection.commit()

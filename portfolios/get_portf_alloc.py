@@ -6,6 +6,7 @@
 import sys
 import os
 import datetime
+from datetime import timedelta
 import time
 import csv
 
@@ -59,65 +60,71 @@ def get_portf_alloc():
         portf_nav = 0
         alloc_forc_pnl = 0
 
-        f = sett.get_path_src()+"\\"+str(portf_uid)+"pf.csv"
-        with open(f, 'w', newline='') as csvfile:
-            fieldnames = ["portf_uid","portf_fullname","alloc_order_type","portf_item_quantity","alloc_symbol","alloc_fullname","alloc_dollar_amount"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
+
+        cr_pf = connection.cursor(pymysql.cursors.SSCursor)
+        sql_pf = "SELECT symbol, quantity FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
+        cr_pf.execute(sql_pf)
+        rs_pf = cr_pf.fetchall()
+
+        for row in rs_pf:
+            print(sql_pf+": "+ os.path.basename(__file__) )
+            portf_item_symbol = row[0]
+            portf_item_quantity = row[1]
 
 
-            cr_pf = connection.cursor(pymysql.cursors.SSCursor)
-            sql_pf = "SELECT symbol, quantity FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
-            cr_pf.execute(sql_pf)
-            rs_pf = cr_pf.fetchall()
-
-            for row in rs_pf:
-                print(sql_pf+": "+ os.path.basename(__file__) )
-                portf_item_symbol = row[0]
-                portf_item_quantity = row[1]
+            cr_p = connection.cursor(pymysql.cursors.SSCursor)
+            sql_p = "SELECT price_close, date FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"
+            cr_p.execute(sql_p)
+            rs_p = cr_p.fetchall()
+            print(sql_p+": "+ os.path.basename(__file__) )
 
 
-                cr_p = connection.cursor(pymysql.cursors.SSCursor)
-                sql_p = "SELECT price_close FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"
-                cr_p.execute(sql_p)
-                rs_p = cr_p.fetchall()
-                print(sql_p+": "+ os.path.basename(__file__) )
+            for row in rs_p:
+                alloc_price = row[0]
+                alloc_date = row[1]
+                alloc_expiration = alloc_date + timedelta(days=7)
+                alloc_expiration = alloc_expiration.strftime("%Y%m%d")
 
+            cr_t = connection.cursor(pymysql.cursors.SSCursor)
+            sql_t = "SELECT instruments.symbol, instruments.fullname, instruments.decimal_places, "+\
+            "instruments.w_forecast_change, instruments.pip, symbol_list.uid FROM instruments "+\
+            "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol WHERE instruments.symbol ='"+portf_item_symbol+"'"
 
-                for row in rs_p:
-                    alloc_price = row[0]
+            cr_t.execute(sql_t)
+            rs_t = cr_t.fetchall()
+            print(sql_t+": "+ os.path.basename(__file__) )
 
-                cr_t = connection.cursor(pymysql.cursors.SSCursor)
-                sql_t = "SELECT instruments.symbol, instruments.fullname, instruments.decimal_places, "+\
-                "instruments.w_forecast_change, instruments.pip, symbol_list.uid FROM instruments "+\
-                "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol WHERE instruments.symbol ='"+portf_item_symbol+"'"
+            for row in rs_t:
+                alloc_symbol = row[0]
+                alloc_fullname = row[1]
+                alloc_decimal_places = row[2]
+                alloc_w_forecast_change = row[3]
+                alloc_pip = row[4]
+                alloc_uid = row[5]
+                if alloc_w_forecast_change >= 0:
+                    alloc_entry_level_sign = '<'
+                    alloc_order_type = 'buy'
+                else:
+                    alloc_entry_level_sign = '>'
+                    alloc_order_type = 'sell'
+                alloc_dollar_amount = round( portf_item_quantity * alloc_price, int(alloc_decimal_places) ) * alloc_pip
 
-                cr_t.execute(sql_t)
-                rs_t = cr_t.fetchall()
-                print(sql_t+": "+ os.path.basename(__file__) )
+                entry_level = alloc_entry_level_sign + ' ' + str( round( float(alloc_price), alloc_decimal_places) )
 
-                for row in rs_t:
-                    alloc_symbol = row[0]
-                    alloc_fullname = row[1]
-                    alloc_decimal_places = row[2]
-                    alloc_w_forecast_change = row[3]
-                    alloc_pip = row[4]
-                    alloc_uid = row[5]
-                    if alloc_w_forecast_change >= 0:
-                        alloc_order_type = 'buy'
-                    else:
-                        alloc_order_type = 'sell'
-                    alloc_dollar_amount = round( portf_item_quantity * alloc_price, int(alloc_decimal_places) ) * alloc_pip
+                print(portf_symbol +": " + alloc_symbol )
 
-                    print(portf_symbol +": " + alloc_symbol )
-                    writer.writerow({"portf_uid": str(portf_uid),"portf_fullname": str(portf_fullname),
-                    "alloc_order_type": str(alloc_order_type),"portf_item_quantity": str(portf_item_quantity),
-                    "alloc_symbol": str(alloc_symbol),"alloc_fullname": str(alloc_fullname), "alloc_dollar_amount": str(alloc_dollar_amount) })
+                cr_x = connection.cursor(pymysql.cursors.SSCursor)
+                sql_x = 'UPDATE portfolios SET alloc_fullname="'+ alloc_fullname +'", order_type="' + alloc_order_type + '", '+\
+                'dollar_amount='+ str(alloc_dollar_amount) +', entry_level="'+ entry_level +'", expiration='+ alloc_expiration +' '+\
+                'WHERE symbol ="'+ alloc_symbol+'" AND portf_symbol ="' + portf_symbol + '" '
+                print(sql_x)
+                cr_x.execute(sql_x)
+                connection.commit()
 
-                    alloc_forc_data = forecast_data(alloc_uid)
-                    alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity  )
-                    portf_forc_return = portf_forc_return + alloc_forc_pnl
-                    portf_nav = portf_nav + alloc_dollar_amount
+                alloc_forc_data = forecast_data(alloc_uid)
+                alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity  )
+                portf_forc_return = portf_forc_return + alloc_forc_pnl
+                portf_nav = portf_nav + alloc_dollar_amount
 
         ### Updatedb
         portf_perc_return = (100/(portf_nav/portf_forc_return))/100
