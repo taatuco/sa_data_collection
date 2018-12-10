@@ -104,7 +104,7 @@ def set_portf_multi():
     except Exception as e: print(e)
     sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit) VALUES "+\
     "('" + portf_symbol_suffix + "MULTIONE','Milkshake','MA:','GO>',5,1,19,'USD'), "+\
-    "('" + portf_symbol_suffix + "GOJONE','Safe Haven','MA','GO>',5,1,19,'USD')"
+    "('" + portf_symbol_suffix + "GOJONE','Safe Haven','MA:','GO>',5,1,19,'USD')"
     try:
         cr.execute(sql)
         connection.commit()
