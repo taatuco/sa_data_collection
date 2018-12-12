@@ -238,6 +238,13 @@ def update_forecast_table(s,wf,frc,d,pip):
         connection.commit()
         print(sql)
 
+        sql = "SELECT price_close, date FROM price_instruments_data WHERE symbol='"+ s +"' ORDER BY date DESC LIMIT 1 "
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            last_price = row[0]
+            last_date = row[1]
+
     except:
         pass
 
@@ -261,6 +268,19 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         m1_pct = round(float(m1_pct), 3)
         w1_pct = round(float(w1_pct), 3)
         wf_pct = round(float(wf_pct), 3)
+
+        if wf_pct >=0:
+            signal_type = "buy"
+            signal_dir = '<'
+        else:
+            signal_type = "sell"
+            signal_dir = '<'
+
+        signal_entry = signal_dir + str( round( float(last_price), decimal_places ) )
+        d = last_date + timedelta(days=7)
+        signal_expiration = d.strftime("%Y%m%d")
+
+
         trade_entry_buy_1 = round(float(trade_entry_buy_1), decimal_places)
         trade_tp_buy_1 = round(float(trade_tp_buy_1), decimal_places)
         trade_sl_buy_1 = round(float(trade_sl_buy_1), decimal_places)
@@ -276,6 +296,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
+        "signal_type='"+ signal_type +"',signal_entry='"+ signal_entry +"',signal_expiration="+ str(signal_expiration) + ","+\
         "trade_1_entry="+str(trade_entry_buy_1)+",trade_1_tp="+str(trade_tp_buy_1)+",trade_1_sl="+str(trade_sl_buy_1)+",trade_1_type='buy',"+\
         "trade_2_entry="+str(trade_entry_buy_2)+",trade_2_tp="+str(trade_tp_buy_2)+",trade_2_sl="+str(trade_sl_buy_2)+",trade_2_type='buy',"+\
         "trade_3_entry="+str(trade_entry_sell_1)+",trade_3_tp="+str(trade_tp_sell_1)+",trade_3_sl="+str(trade_sl_sell_1)+",trade_3_type='sell',"+\
