@@ -140,7 +140,7 @@ def set_portf_us():
     "('" + portf_symbol_suffix + "INDXONE','The Escalator','EQ:','GO>',2,1,17,'USD'), "+\
     "('" + portf_symbol_suffix + "INDUONEUS','Smoke Up','EQ:','US>',2,1,4,'USD'), "+\
     "('" + portf_symbol_suffix + "TECHONEUS','Time Travel','EQ:','US>',2,1,5,'USD'), "+\
-    "('" + portf_symbol_suffix + "HCONEUS','Dr Kahroo','EQ:','US>',2,1,6,'USD'), "+\
+    "('" + portf_symbol_suffix + "HCONEUS','Dr Kam','EQ:','US>',2,1,6,'USD'), "+\
     "('" + portf_symbol_suffix + "CDONEUS','Rich Kids','EQ:','US>',2,1,7,'USD'), "+\
     "('" + portf_symbol_suffix + "UTILONEUS','Uncle James','EQ:','US>',2,1,8,'USD'), "+\
     "('" + portf_symbol_suffix + "FINONEUS','Piggy Bank','EQ:','US>',2,1,9,'USD'), "+\
