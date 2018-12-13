@@ -54,6 +54,7 @@ MKDIR "%SA_DATA_DIR%r_quantmod\src"
 @ECHO %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_quantmod\collect_data.R" >> %GET_QM_DATA%
 @ECHO START "" %_PY_EXE% "%SA_DATA_DIR%r_quantmod\insert_db_price_data_asc.py" >> %GET_QM_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%r_quantmod\insert_db_price_data_dsc.py" >> %GET_QM_DATA%
+@ECHO exit
 
 REM ### Oanda
 DEL /F /Q %GET_OA_DATA%
@@ -61,9 +62,11 @@ MKDIR "%SA_DATA_DIR%r_oanda\src"
 @ECHO DEL /F /Q "%SA_DATA_DIR%r_oanda\src\*" > %GET_OA_DATA%
 @ECHO %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_oanda\collect_data.R" >> %GET_OA_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%r_oanda\insert_db_price_data.py" >> %GET_OA_DATA%
+@ECHO exit
 
 REM ### Cryptocompare
 @ECHO %_PY_EXE% "%SA_DATA_DIR%p_cryptocompare\collect_crypto_data.py" > %GET_CC_DATA%
+@ECHO exit
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
@@ -75,6 +78,7 @@ REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%w_signals\ta_main_update_data.py" >> %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\portf_main_get_data.py" >> %SET_DATA%
+@ECHO exit
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
