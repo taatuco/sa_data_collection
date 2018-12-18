@@ -84,6 +84,7 @@ def get_portf_alloc():
                 alloc_date = row[1]
                 alloc_expiration = alloc_date + timedelta(days=7)
                 alloc_expiration = alloc_expiration.strftime("%Y%m%d")
+            cr_p.close()
 
             cr_t = connection.cursor(pymysql.cursors.SSCursor)
             sql_t = "SELECT instruments.symbol, instruments.fullname, instruments.decimal_places, "+\
@@ -120,12 +121,14 @@ def get_portf_alloc():
                 print(sql_x)
                 cr_x.execute(sql_x)
                 connection.commit()
+                cr_x.close()
 
                 alloc_forc_data = forecast_data(alloc_uid)
                 alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity  )
                 portf_forc_return = portf_forc_return + alloc_forc_pnl
                 portf_nav = portf_nav + alloc_dollar_amount
-
+            cr_t.close()
+        cr_pf.close()
         ### Updatedb
         portf_perc_return = (100/(portf_nav/portf_forc_return))/100
         w_forecast_display_info = portf_unit + " " + str( round(portf_forc_return,2) )
@@ -133,3 +136,6 @@ def get_portf_alloc():
         sql_f = "UPDATE instruments SET w_forecast_change=" + str(portf_perc_return) + ", w_forecast_display_info='" + w_forecast_display_info + "' " +\
         "WHERE symbol='"+portf_symbol+"' "
         cr_f.execute(sql_f)
+        connection.commit()
+        cr_f.close()
+    cr.close()

@@ -48,4 +48,5 @@ print(sql +": "+ os.path.basename(__file__) )
 try:
     cr.execute(sql)
     connection.commit()
+    cr.close()
 except Exception as e: print(e)

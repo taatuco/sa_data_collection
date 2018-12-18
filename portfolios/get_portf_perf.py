@@ -64,6 +64,7 @@ def get_portf_perf():
         print(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
+        cr_i.close()
 
         while (i <= j):
 
@@ -89,7 +90,8 @@ def get_portf_perf():
                 quantity_c = row[1]
                 portf_pnl = portf_pnl + (pnl_c * quantity_c)
                 portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
-            portf_nav = portf_nav + portf_pnl
+            cr_c.close()
+            portf_nav = round( portf_nav + portf_pnl, 2)
 
             try:
 
@@ -98,8 +100,10 @@ def get_portf_perf():
                 print(sql_i)
                 cr_i.execute(sql_i)
                 connection.commit()
+                cr_i.close()
 
             except:
                 pass
 
             i +=1
+    cr.close()

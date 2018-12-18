@@ -34,9 +34,13 @@ cr = connection.cursor(pymysql.cursors.SSCursor)
 
 sql = "DELETE FROM portfolios"
 cr.execute(sql)
+connection.commit()
+cr.close()
 
 def set_alloc(sfx,s):
     symbol = sfx + s
+
+    cr = connection.cursor(pymysql.cursors.SSCursor)
 
     if (symbol == sfx+"FXONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
@@ -243,5 +247,6 @@ def set_alloc(sfx,s):
             connection.commit()
         except Exception as e: print(e)
 
+    cr.close()
     ##############
     return symbol

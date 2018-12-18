@@ -2,8 +2,6 @@ REM Edt Configuration here #####################################################
 SET R_VER=R-3.5.1
 SET PY_VER=Python37-32
 SET PY_BS=beautifulsoup4
-SET EXPRESS_JS=express
-SET MYSQL_NODE=mysql
 
 SET GET_DATA_TIME_ST=01:00
 SET GET_FRC_TIME_ST=05:00
@@ -24,7 +22,6 @@ SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
 SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
 SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
 
-REM ### To start Node.js server
 
 REM ### Setup default data
 %_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"

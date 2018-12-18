@@ -69,6 +69,8 @@ for row in rs:
         try:
             cr_i.execute(sql_i)
             connection.commit()
+            cr_i.close()
         except:
             pass
         i +=1
+cr.close()

@@ -39,10 +39,14 @@ portf_symbol_suffix = get_portf_suffix()
 cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "DELETE FROM instruments WHERE symbol LIKE '" + portf_symbol_suffix + "%' "
 cr.execute(sql)
+connection.commit()
 sql = "DELETE FROM symbol_list WHERE symbol LIKE '"+ portf_symbol_suffix +"%' "
 cr.execute(sql)
+connection.commit()
+cr.close()
 
 def set_portf_fx():
+    cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "fx"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "FXONE')"
@@ -57,9 +61,11 @@ def set_portf_fx():
         connection.commit()
     except Exception as e: print(e)
     print( set_alloc(portf_symbol_suffix, "FXONE") )
+    cr.close()
     return ac
 
 def set_portf_crypto():
+    cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "crypto"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "CRYPTONE')"
@@ -74,9 +80,11 @@ def set_portf_crypto():
         connection.commit()
     except Exception as e: print(e)
     print( set_alloc(portf_symbol_suffix, "CRYPTONE") )
+    cr.close()
     return ac
 
 def set_portf_commo():
+    cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "commo"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "COMMONE')"
@@ -91,9 +99,11 @@ def set_portf_commo():
         connection.commit()
     except Exception as e: print(e)
     print( set_alloc(portf_symbol_suffix, "COMMONE") )
+    cr.close()
     return ac
 
 def set_portf_multi():
+    cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "multi"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "MULTIONE'), "+\
@@ -111,9 +121,11 @@ def set_portf_multi():
     except Exception as e: print(e)
     print( set_alloc(portf_symbol_suffix, "MULTIONE") )
     print( set_alloc(portf_symbol_suffix, "GOJONE") )
+    cr.close()
     return ac
 
 def set_portf_us():
+    cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "us"
     sql = "INSERT INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "INDXONE'), "+\
@@ -173,6 +185,7 @@ def set_portf_us():
     print( set_alloc(portf_symbol_suffix, "FOODONEUS") )
     print( set_alloc(portf_symbol_suffix, "DEFONEUS") )
     print( set_alloc(portf_symbol_suffix, "TOBACONEUS") )
+    cr.close()
     return ac
 
 

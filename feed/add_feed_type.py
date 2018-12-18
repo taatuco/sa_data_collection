@@ -37,4 +37,5 @@ def add_feed_type(id,ft):
         cr.execute(sql)
         connection.commit()
         print(sql +": "+ os.path.basename(__file__) )
+        cr.close()
     except Exception as e: print(e)
