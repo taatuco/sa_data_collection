@@ -64,7 +64,6 @@ def get_portf_perf():
         print(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
-        cr_i.close()
 
         while (i <= j):
 
