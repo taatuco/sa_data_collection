@@ -42,6 +42,7 @@ def set_alloc(sfx,s):
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
 
+################################################################################
     if (symbol == sfx+"FXONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "FXONE','EURUSD',1000),"+\
@@ -51,7 +52,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"CRYPTONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "CRYPTONE','BITCOIN',1),"+\
@@ -61,7 +64,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"INDXONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "INDXONE','SPX',1),"+\
@@ -71,7 +76,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"INDUONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "INDUONEUS','NYSE:FDX',1),"+\
@@ -81,7 +88,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"TECHONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "TECHONEUS','NASDAQ:FB',1),"+\
@@ -91,7 +100,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"HCONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "HCONEUS','NASDAQ:AMGN',1),"+\
@@ -101,7 +112,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"CDONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "CDONEUS','NASDAQ:FOXA',1),"+\
@@ -111,7 +124,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"UTILONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "UTILONEUS','NYSE:D',1),"+\
@@ -121,7 +136,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"FINONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "FINONEUS','NYSE:BAC',1),"+\
@@ -131,7 +148,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"MATONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "MATONEUS','NYSE:NUE',1),"+\
@@ -141,7 +160,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"TONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "TONEUS','NASDAQ:TLT',1),"+\
@@ -150,7 +171,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"CSONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "CSONEUS','NYSE:PG',1),"+\
@@ -160,7 +183,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"NRGONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "NRGONEUS','NYSE:NBL',1),"+\
@@ -170,7 +195,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"TELCONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "TELCONEUS','NYSE:VZ',1),"+\
@@ -180,7 +207,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"REITONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "REITONEUS','NYSEARCA:XLRE',1)"
@@ -188,7 +217,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"COMMONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "COMMONE','GLD',1),"+\
@@ -197,7 +228,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"FOODONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "FOODONEUS','NYSE:DRI',1),"+\
@@ -207,7 +240,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"MULTIONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "MULTIONE','NYSE:PG',1),"+\
@@ -217,7 +252,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"GOJONE" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "GOJONE','GLD',1),"+\
@@ -227,7 +264,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"DEFONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "DEFONEUS','NYSE:LMT',1),"+\
@@ -237,7 +276,9 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
+################################################################################
     if (symbol == sfx+"TOBACONEUS" ):
         sql = "INSERT INTO portfolios(portf_symbol, symbol, quantity) VALUES "+\
         "('" + sfx + "TOBACONEUS','NYSE:MO',1),"+\
@@ -246,6 +287,7 @@ def set_alloc(sfx,s):
             cr.execute(sql)
             connection.commit()
         except Exception as e: print(e)
+################################################################################
 
     cr.close()
     ##############
