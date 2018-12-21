@@ -74,31 +74,31 @@ def get_portf_perf():
 
             #get portfolio allocations
             #for each item get the pnl
-            cr_c = connection.cursor(pymysql.cursors.SSCursor)
-            sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity " +\
-            "FROM portfolios INNER JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
-            "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
+            if d < datetime.datetime.now():
+                cr_c = connection.cursor(pymysql.cursors.SSCursor)
+                sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity " +\
+                "FROM portfolios INNER JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
+                "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
+                print(sql_c)
 
-            print(sql_c)
+                cr_c.execute(sql_c)
+                rs_c = cr_c.fetchall()
 
-            cr_c.execute(sql_c)
-            rs_c = cr_c.fetchall()
+                for row in rs_c:
+                    pnl_c = row[0]
+                    quantity_c = row[1]
+                    portf_pnl = portf_pnl + (pnl_c * quantity_c)
+                    portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
+                cr_c.close()
+                portf_nav = round( portf_nav + portf_pnl, 2)
 
-            for row in rs_c:
-                pnl_c = row[0]
-                quantity_c = row[1]
-                portf_pnl = portf_pnl + (pnl_c * quantity_c)
-                portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
-            cr_c.close()
-            portf_nav = round( portf_nav + portf_pnl, 2)
+                try:
 
-            try:
-
-                sql_i = "INSERT INTO chart_data(uid, symbol, date, price_close) "+\
-                "VALUES (" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
-                print(sql_i)
-                cr_i.execute(sql_i)
-                connection.commit()
+                    sql_i = "INSERT INTO chart_data(uid, symbol, date, price_close) "+\
+                    "VALUES (" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
+                    print(sql_i)
+                    cr_i.execute(sql_i)
+                    connection.commit()
 
             except Exception as e: print(e)
 
