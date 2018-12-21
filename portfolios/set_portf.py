@@ -46,7 +46,12 @@ connection.commit()
 sql = "DELETE FROM chart_data WHERE symbol LIKE '"+ portf_symbol_suffix +"%' "
 cr.execute(sql)
 connection.commit()
+sql = "DELETE FROM feed WHERE symbol LIKE '%"+ portf_symbol_suffix +"%' "
+cr.execute(sql)
+connection.commit()
+
 cr.close()
+
 
 
 '''
