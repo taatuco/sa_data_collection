@@ -100,7 +100,7 @@ def get_portf_perf():
                     cr_i.execute(sql_i)
                     connection.commit()
 
-            except Exception as e: print(e)
+                except Exception as e: print(e)
 
             i +=1
         cr_i.close()
