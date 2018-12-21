@@ -219,10 +219,7 @@ def update_forecast_table(s,wf,frc,d,pip):
         for row in rs_d:
             unit = row[0]
 
-        if wf >= 0:
-            w_sign = '+'
-        else:
-            w_sign = ''
+        w_sign = '+'
         w_forecast_display_info = w_sign + str(round(float(wf*100),2)) + " " + unit
 
         if unit == 'pips':
