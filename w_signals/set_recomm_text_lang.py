@@ -66,7 +66,7 @@ def set_recomm_text_lang():
     "('"+lang_en+"', '"+price_under_200ma_en+"', '"+price_above_200ma_en+"', "+\
      "'"+st_upper_range_above_price_range_en+"', '"+st_lower_range_below_price_range_en+"', '"+upper_range_below_price_downtrend_en+"', "+\
      "'"+lower_range_above_price_uptrend_en+"', '"+rsi_oversold_en+"', '"+rsi_overbought_en+"', '"+rsi_weak_en+"', "+\
-     "'"+rsi_strong_en+"', '"+uptrend_recomm_en+"', '"+downtrend_recomm_en+"', '"+portf_desc_en+"', '"+portf_recomm_buy_en+ "', '"+portf_recomm_sell_en+"')"
+     "'"+rsi_strong_en+"', '"+uptrend_recomm_en+"', '"+downtrend_recomm_en+"', '"+portf_descr_en+"', '"+portf_recomm_buy_en+ "', '"+portf_recomm_sell_en+"')"
 
     try:
         cr.execute(sql)
