@@ -131,7 +131,7 @@ def get_portf_alloc():
         cr_pf.close()
         ### Updatedb
         portf_perc_return = (100/(portf_nav/portf_forc_return))/100
-        w_forecast_display_info = portf_unit + " " + str( round(portf_forc_return,2) )
+        w_forecast_display_info = "+" + portf_unit + " " + str( round(portf_forc_return,2) )
         cr_f = connection.cursor(pymysql.cursors.SSCursor)
         sql_f = "UPDATE instruments SET w_forecast_change=" + str(portf_perc_return) + ", w_forecast_display_info='" + w_forecast_display_info + "' " +\
         "WHERE symbol='"+portf_symbol+"' "
