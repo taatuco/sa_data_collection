@@ -31,3 +31,6 @@ class sa_path:
 
 def get_portf_suffix():
     return "PRF:"
+
+def get_product_name():
+    return "SmartAlpha"
