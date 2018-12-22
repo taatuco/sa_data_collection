@@ -14,6 +14,9 @@ class sa_path:
     def get_path_src(self):
         return self.rdir+"\\src\\"
 
+    def get_path_labels(self):
+        return self.rdir + "\\labels"
+
     def get_path_feed(self):
         return self.rdir + "\\feed"
 

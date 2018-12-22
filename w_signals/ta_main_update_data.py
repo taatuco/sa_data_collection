@@ -26,7 +26,6 @@ from ta_calc_tln import *
 from ta_instr_sum import *
 from ta_calc_up_dn_stats import *
 from set_signals_feed import *
-from set_recomm_text_lang import *
 from ta_gen_recomm import *
 from ta_gen_chart_data import *
 from get_frc_pnl import *
@@ -45,8 +44,6 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 try:
-    set_recomm_text_lang()
-
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol, uid FROM symbol_list WHERE symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
     cr.execute(sql)
