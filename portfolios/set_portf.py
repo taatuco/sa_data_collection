@@ -197,7 +197,7 @@ def set_portf_us():
     "('" + portf_symbol_suffix + "CDONEUS','Rich Kids','EQ:','US>',2,1,7,'USD','With an exposure in three major US equities in the consumer discretionary sector, the defined porfolio projects an absolute positive return in the next couple days.',1000), "+\
     "('" + portf_symbol_suffix + "UTILONEUS','Uncle James','EQ:','US>',2,1,8,'USD','This portfolio trades on US utilities sector, having a combination of 3 financial instruments carefully selected.',1000), "+\
     "('" + portf_symbol_suffix + "FINONEUS','Piggy Bank','EQ:','US>',2,1,9,'USD','Selected from a range of dynamic metrics, the selected assests are the most desirable in the finance and banking industry.',1000), "+\
-    "('" + portf_symbol_suffix + "MATONEUS','Iron String','EQ:','US>',2,1,10,'USD','This portfolio includes assets in the US materials sector.'), "+\
+    "('" + portf_symbol_suffix + "MATONEUS','Iron String','EQ:','US>',2,1,10,'USD','This portfolio includes assets in the US materials sector.',1000), "+\
     "('" + portf_symbol_suffix + "TONEUS','Snail','BD:','US>',2,1,11,'USD','With an exposure in the US Treasury bonds and Gold ETF, the defined porfolio projects an absolute positive return in the next couple days.',1000), "+\
     "('" + portf_symbol_suffix + "CSONEUS','Bread and Milk','EQ:','US>',2,1,12,'USD','A simple yet highly vetted long/short portfolio of three financial instruments in the consumer staples sector.',1000), "+\
     "('" + portf_symbol_suffix + "NRGONEUS','The Fast and the Furious','EQ:','US>',2,1,13,'USD','Selected from a range of dynamic metrics, the selected three assests are the most desirable in the energy sector to provide positive gains from a long/short strategy in the next couple of days.',1000), "+\
