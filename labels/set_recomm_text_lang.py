@@ -52,7 +52,7 @@ rsi_weak_en ="According to the Relative Strength Index, on a 50-day average basi
 rsi_strong_en ="According to the Relative Strength Index, on a 50-day average basis, {symbol} relative strength in price action remains strong at an average {rsi_50_day_avg}. Accordingly, a further positive momentum could be anticipated."
 uptrend_recomm_en ="{symbol} in the near term is technically positive. An opportunistic buy with an entry below {buy_entry} with a primary target at {buy_target_price} is recommended. On the other hand, above {sell_entry} a sell opportunity could be considered with a stop loss set at {sell_stop_loss} and target price at {sell_target_price}."
 downtrend_recomm_en ="{symbol} in the near term is technically negative. An opportunistic sell with an entry above {sell_entry} with a primary target at {sell_target_price} is recommended. On the other hand, below {buy_entry} a buy opportunity could be considered with a stop loss set at {buy_stop_loss} and target price at {buy_target_price}."
-portf_descr_en = "As per the "+ get_product_name() +" proprietary algorithm, projected profit of up to {display_forecast} for every {account_minimum} {unit} invested is achievable within the next 7 days with the following allocation: {portf_recomm} The specified portfolio has achieved an aggregated profit of {portf_last_price} {portf_unit} in the last 12 months with {account_minimum} {unit}."
+portf_descr_en = "As per the "+ get_product_name() +" proprietary algorithm, projected profit of up to {display_forecast} for every {account_minimum} {unit} invested is achievable within the next 7 days with the following allocation: {portf_recomm} The specified portfolio has achieved an aggregated profit of {portf_last_price} {unit} in the last 12 months with {account_minimum} {unit}."
 portf_recomm_buy_en = "buy {portf_alloc_instr} below {portf_alloc_entry_price}"
 portf_recomm_sell_en = "sell {portf_alloc_instr} above {portf_alloc_entry_price}"
 
@@ -66,6 +66,7 @@ sql = "INSERT INTO recommendations(lang, price_under_200ma, price_above_200ma, "
  "'"+st_upper_range_above_price_range_en+"', '"+st_lower_range_below_price_range_en+"', '"+upper_range_below_price_downtrend_en+"', "+\
  "'"+lower_range_above_price_uptrend_en+"', '"+rsi_oversold_en+"', '"+rsi_overbought_en+"', '"+rsi_weak_en+"', "+\
  "'"+rsi_strong_en+"', '"+uptrend_recomm_en+"', '"+downtrend_recomm_en+"', '"+portf_descr_en+"', '"+portf_recomm_buy_en+ "', '"+portf_recomm_sell_en+"')"
+ print(sql)
 
 try:
     cr.execute(sql)
