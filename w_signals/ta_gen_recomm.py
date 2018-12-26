@@ -177,14 +177,11 @@ def gen_recomm(s,uid):
 
             r = pt1 + " " + pt2 + " " + pt3 + " " + pt4 + " " + pt5
 
-            f = sett.get_path_src()+"\\"+str(uid)+lang+"r.csv"
-            with open(f, 'w', newline='') as csvfile:
-                fieldnames = ["recomm"]
 
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()
-                writer.writerow({"recomm": str(r)})
-
+            cr_u = connection.cursor(pymysql.cursors.SSCursor)
+            sql_u = "UPDATE instruments SET recommendation='"+ str(r) +"' WHERE symbol='" + str(s) + "'"
+            cr_u.execute(sql_u)
+            connection.commit()
 
         print(str(uid) +": "+ os.path.basename(__file__) )
 
