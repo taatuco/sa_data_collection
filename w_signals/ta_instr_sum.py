@@ -63,14 +63,14 @@ class forecast_data:
                         self.tp_1_b = row[5] #upper 95 first row row[5]
                         self.ent_1_s = row[3] #upper 80 first row row[3]
                         self.sl_1_s = row[5] #upper 95 first row row[5]
-                        self.tp_1_s = row[3] #lower 95 first row row[3]
+                        self.tp_1_s = row[4] #lower 95 first row row[4]
                     if (i == 8):
                         self.ent_2_b = row[2] #lower 80 last row row[2]
                         self.sl_2_b = row[4] #lower 95 last row row [4]
                         self.tp_2_b = row[5] #upper 95 last row row[5]
                         self.ent_2_s = row[3] #upper 80 last row row[3]
                         self.sl_2_s = row[5] #upper 95 last row row[5]
-                        self.tp_2_s = row[3] #lower 95 last row row[3]
+                        self.tp_2_s = row[4] #lower 95 last row row[4]
                         self.frc_pt = row[1] #forecast point 1W
                     i +=1
         print(str(uid) +": "+ os.path.basename(__file__) )

@@ -48,7 +48,7 @@ def set_signals_feed(s):
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
-    "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%'"
+    "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%' AND symbol_list.disabled=0 "
 
     cr.execute(sql)
     rs = cr.fetchall()
