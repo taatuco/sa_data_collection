@@ -6,6 +6,7 @@ import sys
 import os
 import datetime
 import time
+from datetime import timedelta
 from pathlib import Path
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,11 +45,13 @@ def disable_non_valid_ticker(s):
         rs = cr.fetchall()
         price_close = 0
         for row in rs:
-            price_close = int(row[0])
+            price_close = row[0]
 
+        '''
         if price_close == 0:
             sql = "UPDATE symbol_list SET disabled=1 WHERE symbol='"+ s +"' "
             cr.execute(sql)
             connection.commit()
+        '''
 
     except Exception as e: print(e)
