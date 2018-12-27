@@ -29,7 +29,6 @@ from set_signals_feed import *
 from ta_gen_recomm import *
 from ta_gen_chart_data import *
 from get_frc_pnl import *
-from disable_ticker import *
 
 db_usr = access_obj.username()
 db_pwd = access_obj.password()
@@ -124,7 +123,6 @@ try:
         gen_recomm(s,uid)
         gen_chart(s,uid)
         get_forecast_pnl(s,uid)
-        disable_non_valid_ticker(s)
 
     cr.close()
 

@@ -256,7 +256,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
 
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_d = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"' "
-        cr_d.execute()
+        cr_d.execute(sql_d)
         rs_d = cr_d.fetchall()
         for row in rs_d:
             decimal_places = row[0]
