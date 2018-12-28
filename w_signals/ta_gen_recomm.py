@@ -67,12 +67,14 @@ def gen_recomm(s,uid):
         decimal_places = 0
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"'"
+        sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol='"+s+"'"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
             decimal_places = int(row[0])
+            instr_fullname = row[1]
 
+        ########################################################################
         data_src = sett.get_path_src()
         ext = ".csv"
         f = data_src+str(uid)+'s.csv'
@@ -91,6 +93,8 @@ def gen_recomm(s,uid):
                         sell_tp = round(float(row[15]), decimal_places)
                         sell_sl = round(float(row[16]), decimal_places)
                     i +=1
+        ########################################################################
+        
 
         f = data_src+str(uid)+'t.csv'
         filepath = Path(f)
@@ -158,7 +162,7 @@ def gen_recomm(s,uid):
             else:
                 pt5 = uptrend_recomm
 
-            pt1 = pt1.replace("{symbol}",s)
+            pt1 = pt1.replace("{symbol}",instr_fullname)
             pt2 = pt2.replace("{st_upper_range}",str(st_upper_range) )
             pt2 = pt2.replace("{st_lower_range}",str(st_lower_range) )
             pt3 = pt3.replace("{symbol}",s)
