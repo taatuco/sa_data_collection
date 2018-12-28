@@ -77,7 +77,7 @@ def gen_recomm(s,uid):
 
         sql = "SELECT trade_1_entry, trade_1_tp, trade_1_sl, trade_1_type, "+\
         "trade_3_entry, trade_3_tp, trade_3_sl, trade_3_type "+\
-        "FROM instruments WHERE symbol =" + s
+        "FROM instruments WHERE symbol ='" + s + "'"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -170,12 +170,12 @@ def gen_recomm(s,uid):
             pt1 = pt1.replace("{symbol}",instr_fullname)
             pt2 = pt2.replace("{st_upper_range}",str(st_upper_range) )
             pt2 = pt2.replace("{st_lower_range}",str(st_lower_range) )
-            pt3 = pt3.replace("{symbol}",s)
+            pt3 = pt3.replace("{symbol}",instr_fullname)
             pt3 = pt3.replace("{st_upper_range}",str(st_upper_range) )
             pt3 = pt3.replace("{st_lower_range}",str(st_lower_range) )
-            pt4 = pt4.replace("{symbol}",s)
+            pt4 = pt4.replace("{symbol}",instr_fullname)
             pt4 = pt4.replace("{rsi_50_day_avg}",str(round(float(lt_rsi_avg),2) ) )
-            pt5 = pt5.replace("{symbol}",s)
+            pt5 = pt5.replace("{symbol}",instr_fullname)
             pt5 = pt5.replace("{buy_entry}", str(buy_entry) )
             pt5 = pt5.replace("{buy_target_price}",  str(buy_tp)  )
             pt5 = pt5.replace("{buy_stop_loss}", str(buy_sl) )
