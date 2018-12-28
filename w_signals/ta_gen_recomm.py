@@ -74,27 +74,32 @@ def gen_recomm(s,uid):
             decimal_places = int(row[0])
             instr_fullname = row[1]
 
-        ########################################################################
-        data_src = sett.get_path_src()
-        ext = ".csv"
-        f = data_src+str(uid)+'s.csv'
-        filepath = Path(f)
-        if filepath.exists():
-            with open(f) as csvfile:
-                readCSV = csv.reader(csvfile, delimiter=',')
-                i = 1
-                for row in readCSV:
-                    if (i == 2):
-                        wf = float(row[5])
-                        buy_entry = round(float(row[6]), decimal_places)
-                        buy_tp = round(float(row[7]), decimal_places)
-                        buy_sl = round(float(row[8]), decimal_places)
-                        sell_entry = round(float(row[14]), decimal_places)
-                        sell_tp = round(float(row[15]), decimal_places)
-                        sell_sl = round(float(row[16]), decimal_places)
-                    i +=1
-        ########################################################################
-        
+
+        sql = "SELECT trade_1_entry, trade_1_tp, trade_1_sl, trade_1_type, "+\
+        "trade_3_entry, trade_3_tp, trade_3_sl, trade_3_type "+\
+        "FROM instruments WHERE symbol =" + s
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            trade_1_entry = row[0]
+            trade_1_tp = row[1]
+            trade_1_sl = row[2]
+            trade_1_type = row[3]
+            trade_3_entry = row[4]
+            trade_3_tp = row[5]
+            trade_3_sl = row[6]
+            trade_3_type = row[7]
+
+            if trade_1_type == 'buy':
+                buy_entry = round( trade_1_entry, decimal_places)
+                buy_tp = round( trade_1_tp, decimal_places)
+                buy_sl = round( trade_1_sl, decimal_places)
+
+            if trade_3_type == 'sell':
+                sell_entry = round( trade_3_entry, decimal_places)
+                sell_tp = round( trade_3_tp, decimal_places)
+                sell_sl = round( trade_3_sl, decimal_places)
+
 
         f = data_src+str(uid)+'t.csv'
         filepath = Path(f)
