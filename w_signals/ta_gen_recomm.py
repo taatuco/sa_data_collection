@@ -100,7 +100,7 @@ def gen_recomm(s,uid):
                 sell_tp = round( trade_3_tp, decimal_places)
                 sell_sl = round( trade_3_sl, decimal_places)
 
-
+        data_src = sett.get_path_src()
         f = data_src+str(uid)+'t.csv'
         filepath = Path(f)
         if filepath.exists():
@@ -109,11 +109,11 @@ def gen_recomm(s,uid):
                 i = 1
                 for row in readCSV:
                     if (i == 2):
-                        ma200 = float(row[18])
-                        st_upper_range = float(row[11])
-                        st_lower_range = float(row[10])
-                        lt_rsi_avg = row[14]
-                        lt_rsi_mom = row[17]
+                        ma200 = round( float(row[18]), decimal_places)
+                        st_upper_range = round( float(row[11]), decimal_places)
+                        st_lower_range = round( float(row[10]), decimal_places)
+                        lt_rsi_avg = round( float(row[14]), decimal_places)
+                        lt_rsi_mom = round( float(row[17]), decimal_places)
                     i +=1
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
