@@ -46,9 +46,9 @@ def set_signals_feed(s):
     d = d.strftime("%Y%m%d")
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, instruments.disabled FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
-    "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%' AND symbol_list.disabled=0 "
+    "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%' "
 
     cr.execute(sql)
     rs = cr.fetchall()
@@ -61,6 +61,7 @@ def set_signals_feed(s):
         sector = row[5]
         w_forecast_display_info = row[6]
         uid = row[7]
+        disabled = row[8]
 
         short_title = symbol
         short_description = fullname
@@ -89,8 +90,10 @@ def set_signals_feed(s):
         "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"')"
         try:
-            cr_i.execute(sql_i)
-            connection.commit()
+            if not disabled:
+                cr_i.execute(sql_i)
+                connection.commit()
+
             sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<'"+d+"')"
             cr_i.execute(sql_i)
             connection.commit()
