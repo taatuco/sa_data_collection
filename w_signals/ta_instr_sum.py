@@ -236,8 +236,7 @@ def update_forecast_table(s,wf,frc,d,pip):
         cr.execute(sql)
         connection.commit()
         print(sql)
-    except:
-        pass
+    except Exception as e: print(e)
 
 def update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,wf_pct,
 trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
@@ -254,7 +253,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
             decimal_places = row[0]
 
         sql_d = "SELECT price_close, date FROM price_instruments_data WHERE symbol='"+ s +"' ORDER BY date DESC LIMIT 1 "
-        cr_d.execute(sql)
+        cr_d.execute(sql_d)
         rs_d = cr_d.fetchall()
         for row in rs_d:
             last_price = row[0]
