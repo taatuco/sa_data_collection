@@ -279,18 +279,27 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         signal_expiration = d.strftime("%Y%m%d")
 
 
-        trade_entry_buy_1 = round(float(trade_entry_buy_1), decimal_places)
-        trade_tp_buy_1 = round(float(trade_tp_buy_1), decimal_places)
-        trade_sl_buy_1 = round(float(trade_sl_buy_1), decimal_places)
-        trade_entry_buy_2 = round(float(trade_entry_buy_2), decimal_places)
-        trade_tp_buy_2 = round(float(trade_tp_buy_2), decimal_places)
-        trade_sl_buy_2 = round(float(trade_sl_buy_2), decimal_places)
-        trade_entry_sell_1 = round(float(trade_entry_sell_1), decimal_places)
-        trade_tp_sell_1 = round(float(trade_tp_sell_1), decimal_places)
-        trade_sl_sell_1 = round(float(trade_sl_sell_1), decimal_places)
-        trade_entry_sell_2 = round(float(trade_entry_sell_2), decimal_places)
-        trade_tp_sell_2 = round(float(trade_tp_sell_2), decimal_places)
-        trade_sl_sell_2 = round(float(trade_sl_sell_2), decimal_places)
+        trade_entry_buy_1 = round(float(trade_entry_buy_1), decimal_places); trade_tp_buy_1 = round(float(trade_tp_buy_1), decimal_places); trade_sl_buy_1 = round(float(trade_sl_buy_1), decimal_places)
+        trade_entry_buy_2 = round(float(trade_entry_buy_2), decimal_places); trade_tp_buy_2 = round(float(trade_tp_buy_2), decimal_places); trade_sl_buy_2 = round(float(trade_sl_buy_2), decimal_places)
+        trade_entry_sell_1 = round(float(trade_entry_sell_1), decimal_places); trade_tp_sell_1 = round(float(trade_tp_sell_1), decimal_places); trade_sl_sell_1 = round(float(trade_sl_sell_1), decimal_places)
+        trade_entry_sell_2 = round(float(trade_entry_sell_2), decimal_places); trade_tp_sell_2 = round(float(trade_tp_sell_2), decimal_places); trade_sl_sell_2 = round(float(trade_sl_sell_2), decimal_places)
+
+        if trade_tp_buy_1 < 0:
+            trade_tp_buy_1 = 0
+        if trade_sl_buy_1 < 0:
+            trade_sl_buy_1 = 0
+        if trade_tp_buy_2 < 0:
+            trade_tp_buy_2 = 0
+        if trade_sl_buy_2 < 0:
+            trade_sl_buy_2 = 0
+        if trade_tp_sell_1 < 0:
+            trade_tp_sell_1 = 0
+        if trade_sl_sell_1 < 0:
+            trade_sl_sell_1 = 0
+        if trade_tp_sell_2 < 0:
+            trade_tp_sell_2 = 0
+        if trade_sl_sell_2 < 0:
+            trade_sl_sell_2 = 0
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
