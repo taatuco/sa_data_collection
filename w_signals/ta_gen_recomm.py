@@ -76,7 +76,7 @@ def gen_recomm(s,uid):
 
 
         sql = "SELECT trade_1_entry, trade_1_tp, trade_1_sl, trade_1_type, "+\
-        "trade_3_entry, trade_3_tp, trade_3_sl, trade_3_type "+\
+        "trade_3_entry, trade_3_tp, trade_3_sl, trade_3_type, wf "+\
         "FROM instruments WHERE symbol ='" + s + "'"
         cr.execute(sql)
         rs = cr.fetchall()
@@ -89,6 +89,7 @@ def gen_recomm(s,uid):
             trade_3_tp = row[5]
             trade_3_sl = row[6]
             trade_3_type = row[7]
+            wf = row[8]
 
             if trade_1_type == 'buy':
                 buy_entry = round( trade_1_entry, decimal_places)
@@ -113,7 +114,7 @@ def gen_recomm(s,uid):
                         st_upper_range = round( float(row[11]), decimal_places)
                         st_lower_range = round( float(row[10]), decimal_places)
                         lt_rsi_avg = round( float(row[14]), decimal_places)
-                        lt_rsi_mom = round( float(row[17]), decimal_places)
+                        lt_rsi_mom = row[17]
                     i +=1
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
