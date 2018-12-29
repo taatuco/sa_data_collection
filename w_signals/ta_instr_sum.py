@@ -284,6 +284,10 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         trade_entry_sell_1 = round(float(trade_entry_sell_1), decimal_places); trade_tp_sell_1 = round(float(trade_tp_sell_1), decimal_places); trade_sl_sell_1 = round(float(trade_sl_sell_1), decimal_places)
         trade_entry_sell_2 = round(float(trade_entry_sell_2), decimal_places); trade_tp_sell_2 = round(float(trade_tp_sell_2), decimal_places); trade_sl_sell_2 = round(float(trade_sl_sell_2), decimal_places)
 
+        if trade_entry_buy_1 < 0 or trade_entry_buy_2 < 0 or trade_entry_sell_1 < 0 or trade_entry_sell_2 < 0:
+            trade_entry_buy_1 = round( last_price, decimal_places ); trade_entry_buy_2 = round( last_price, decimal_places )
+            trade_entry_sell_1 = round( last_price, decimal_places ); trade_entry_sell_2 = round( last_price, decimal_places )
+
         if trade_tp_buy_1 < 0:
             trade_tp_buy_1 = 0
         if trade_sl_buy_1 < 0:
