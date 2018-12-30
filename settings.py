@@ -20,8 +20,8 @@ class sa_path:
     def get_path_feed(self):
         return self.rdir + "\\feed"
 
-    def get_path_signals(self):
-        return self.rdir + "\\w_signals"
+    def get_path_core(self):
+        return self.rdir + "\\core"
 
     def get_path_portfolios(self):
         return self.rdir + "\\portfolios"

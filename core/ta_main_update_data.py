@@ -19,7 +19,7 @@ sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
-sys.path.append(os.path.abspath( sett.get_path_signals() ))
+sys.path.append(os.path.abspath( sett.get_path_core() ))
 from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_tln import *

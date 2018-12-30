@@ -27,7 +27,7 @@ db_srv = access_obj.db_server()
 sys.path.append(os.path.abspath( sett.get_path_feed() ))
 from add_feed_type import *
 
-sys.path.append(os.path.abspath( sett.get_path_signals() ))
+sys.path.append(os.path.abspath( sett.get_path_core() ))
 from ta_instr_sum import *
 
 from pathlib import Path
