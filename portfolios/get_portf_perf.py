@@ -52,10 +52,10 @@ def get_portf_perf_summ(s,uid):
 
 def get_portf_perf():
     portf_symbol_suffix = get_portf_suffix()
-    df = datetime.datetime.now() - timedelta(days=360)
+    df = datetime.datetime.now() - timedelta(days=365)
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.fullname "+\
+    sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.fullname, instruments.account_reference "+\
     "FROM `symbol_list` INNER JOIN instruments ON symbol_list.symbol = instruments.symbol "+\
     "WHERE symbol_list.symbol LIKE '"+portf_symbol_suffix+"%' ORDER BY symbol_list.symbol"
     cr.execute(sql)
@@ -65,11 +65,12 @@ def get_portf_perf():
         portf_symbol = row[0]
         portf_uid = row[1]
         portf_fullname = row[2]
+        account_reference = row[3]
 
         i = 0
         j = 365
         d = df
-        portf_nav = 0
+        portf_nav = account_reference
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "DELETE FROM chart_data WHERE uid = "+ str(portf_uid)
