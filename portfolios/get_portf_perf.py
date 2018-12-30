@@ -27,6 +27,9 @@ db_srv = access_obj.db_server()
 sys.path.append(os.path.abspath( sett.get_path_feed() ))
 from add_feed_type import *
 
+sys.path.append(os.path.abspath( sett.get_path_core() ))
+from get_instr_perf_summ import *
+
 from pathlib import Path
 
 import pymysql.cursors
@@ -37,6 +40,15 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+def get_portf_perf_summ(s,uid):
+    pps = instr_sum_data(portf_symbol, portf_uid)
+    y1 = pps.get_pct_1Yp(); m6 = pps.get_pct_6Mp(); m3 = pps.get_pct_3Mp(); m1 = pps.get_pct_1Mp(); w1 = pps.get_pct_1Wp()
+
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "UPDATE instruments SET y1="+ str(y1) +", m6="+ str(m6) +", m3="+ str(m3) +", m1="+ str(m1) +", w1="+ str(w1) +" "+\
+    "WHERE symbol='"+ str(s)  +"' "
+    cr.execute(sql)
+    connection.commit()
 
 def get_portf_perf():
     portf_symbol_suffix = get_portf_suffix()
@@ -104,4 +116,5 @@ def get_portf_perf():
 
             i +=1
         cr_i.close()
+        get_portf_perf_summ(portf_symbol, portf_uid)
     cr.close()
