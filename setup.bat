@@ -74,7 +74,7 @@ DEL /F /Q %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%w_signals\ta_main_update_data.py" >> %SET_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\ta_main_update_data.py" >> %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\portf_main_get_data.py" >> %SET_DATA%
 @ECHO exit >> %SET_DATA%
 
