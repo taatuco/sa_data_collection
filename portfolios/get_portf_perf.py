@@ -41,7 +41,7 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 def get_portf_perf_summ(s,uid):
-    pps = instr_sum_data(portf_symbol, portf_uid)
+    pps = instr_sum_data(s, uid)
     y1 = pps.get_pct_1Yp(); m6 = pps.get_pct_6Mp(); m3 = pps.get_pct_3Mp(); m1 = pps.get_pct_1Mp(); w1 = pps.get_pct_1Wp()
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
@@ -67,7 +67,7 @@ def get_portf_perf():
         portf_fullname = row[2]
 
         i = 0
-        j = 360
+        j = 365
         d = df
         portf_nav = 0
 
