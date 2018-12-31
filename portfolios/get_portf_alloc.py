@@ -171,7 +171,7 @@ def get_portf_alloc():
                 print(portf_symbol +": " + alloc_symbol )
 
                 cr_x = connection.cursor(pymysql.cursors.SSCursor)
-                sql_x = 'UPDATE portfolios SET alloc_fullname="'+ alloc_fullname +'", order_type="' + alloc_order_type + '", '+\
+                sql_x = 'UPDATE portfolios SET quantity='+ portf_item_quantity +', alloc_fullname="'+ alloc_fullname +'", order_type="' + alloc_order_type + '", '+\
                 'dollar_amount='+ str(alloc_dollar_amount) +', entry_level="'+ entry_level +'", expiration='+ alloc_expiration +' '+\
                 'WHERE symbol ="'+ alloc_symbol+'" AND portf_symbol ="' + portf_symbol + '" '
                 print(sql_x)
