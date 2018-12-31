@@ -63,8 +63,8 @@ def set_signals_feed(s):
         uid = row[7]
         disabled = row[8]
 
-        short_title = symbol
-        short_description = fullname
+        short_title = fullname
+        short_description = symbol
         content = sector
         url = "s/?uid="+ str(uid)
         ranking = str( abs(round(w_forecast_change,5)) )
