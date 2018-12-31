@@ -52,7 +52,7 @@ def get_portf_perf_summ(s,uid):
 
 def get_portf_perf():
     portf_symbol_suffix = get_portf_suffix()
-    df = datetime.datetime.now() - timedelta(days=365)
+    df = datetime.datetime.now() - timedelta(days=370)
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.fullname, instruments.account_reference "+\
@@ -68,7 +68,7 @@ def get_portf_perf():
         account_reference = row[3]
 
         i = 0
-        j = 365
+        j = 370
         d = df
         portf_nav = account_reference
 
