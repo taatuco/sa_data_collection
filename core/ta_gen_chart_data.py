@@ -10,6 +10,7 @@ import time
 from datetime import timedelta
 import csv
 from pathlib import Path
+from get_pct_change import *
 
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -103,7 +104,10 @@ def gen_chart(s,uid):
         st_lower_trend_line = '0'
         st_upper_trend_line = '0'
         draw_st = False
+        ini_price = 0
+        pct_change = 0
 
+        i = 0
 
         for row in rs:
 
@@ -142,17 +146,25 @@ def gen_chart(s,uid):
                     st_lower_trend_line = '0'
                     st_upper_trend_line = '0'
 
+            if i == 0:
+                ini_val = price
+                pct_change = 0
+            else:
+                pct_change = get_pct_change(ini_val, price)
+
+
             sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
             "lt_upper_trend_line, lt_lower_trend_line, "+\
             "st_upper_trend_line, st_lower_trend_line, "+\
-            "rsi, rsi_oversold, rsi_overbought, ma200, target_price) "+\
+            "rsi, rsi_oversold, rsi_overbought, ma200, target_price, percent_perf) "+\
             "VALUES ("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+",'0',"+\
             str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
             str(st_upper_trend_line)+","+st_lower_trend_line+","+\
-            str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+")"
+            str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+","+str(pct_change) +")"
             print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
             cr_t.execute(sql_t)
             connection.commit()
+            i += 1
 
         f = data_src+str(uid)+'f.csv'
         filepath = Path(f)
