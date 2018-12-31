@@ -7,7 +7,7 @@ def get_pct_change(ini_val,new_val):
 
     if not new_val == 0:
         if new_val < ini_val:
-            r = (ini_val - new_val) / ini_val
+            r =  ( (ini_val - new_val) / ini_val ) * (-1)
         else:
             r = (new_val - ini_val) / new_val
     else:
