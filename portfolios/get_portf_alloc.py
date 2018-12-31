@@ -91,7 +91,7 @@ class portf_data:
         for row in rs:
             pip_s = row[0]
             price_s = row[1]
-            salloc = int( pip_s * price_s )
+            salloc = ( pip_s * price_s )
         q = round( (self.portf_big_alloc_price / salloc) * self.portf_multip  , 2)
 
         return q
