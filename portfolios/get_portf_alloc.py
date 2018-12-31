@@ -40,6 +40,63 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+class portf_data:
+
+    portf_multip = 0
+    portf_big_alloc_price = 0
+    portf_total_alloc_amount = 0
+    portf_account_ref = 0
+
+    def __init__(self, portf_s):
+
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT account_reference FROM instruments WHERE symbol='"+ portf_s +"' "
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            self.portf_account_ref = row[0]
+
+
+        sql = "SELECT symbol FROM portfolios WHERE portf_symbol = '"+ portf_s +"'"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs:
+            cr_s = connection.cursor(pymysql.cursors.SSCursor)
+            sql_s = "SELECT instruments.pip, price_instruments_data.price_close "+\
+            "FROM instruments JOIN price_instruments_data ON instruments.symbol = price_instruments_data.symbol "+\
+            "WHERE price_instruments_data.symbol='"+ str(row[0]) +"' "+\
+            "ORDER BY price_instruments_data.date DESC LIMIT 1"
+            cr_s.execute(sql_s)
+            rs_s = cr_s.fetchall()
+            for row in rs_s:
+                pip_s = row[0]
+                price_s = row[1]
+                salloc = int( pip_s * price_s )
+                if salloc > self.portf_big_alloc_price:
+                    self.portf_big_alloc_price = salloc
+                self.portf_total_alloc_amount = self.portf_total_alloc_amount + salloc
+
+        self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
+
+    def get_quantity(self, alloc_s):
+
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT instruments.pip, price_instruments_data.price_close "+\
+        "FROM instruments JOIN price_instruments_data ON instruments.symbol = price_instruments_data.symbol "+\
+        "WHERE price_instruments_data.symbol='"+ alloc_s +"' "+\
+        "ORDER BY price_instruments_data.date DESC LIMIT 1"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        q = 0
+        for row in rs:
+            pip_s = row[0]
+            price_s = row[0]
+            salloc = int( pip_s * price_s )
+        q = round( (self.portf_big_alloc_price / salloc) * self.portf_multip  , 2)
+
+        return q
+
+
 def get_portf_alloc():
 
     portf_symbol_suffix = get_portf_suffix()
@@ -60,6 +117,7 @@ def get_portf_alloc():
         portf_nav = 0
         alloc_forc_pnl = 0
 
+        portfd = portf_data(portf_symbol)
 
         cr_pf = connection.cursor(pymysql.cursors.SSCursor)
         sql_pf = "SELECT symbol, quantity FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
@@ -69,15 +127,13 @@ def get_portf_alloc():
         for row in rs_pf:
             print(sql_pf+": "+ os.path.basename(__file__) )
             portf_item_symbol = row[0]
-            portf_item_quantity = row[1]
-
+            portf_item_quantity = portfd.get_quantity(portf_item_symbol)
 
             cr_p = connection.cursor(pymysql.cursors.SSCursor)
             sql_p = "SELECT price_close, date FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"
             cr_p.execute(sql_p)
             rs_p = cr_p.fetchall()
             print(sql_p+": "+ os.path.basename(__file__) )
-
 
             for row in rs_p:
                 alloc_price = row[0]
