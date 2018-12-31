@@ -92,9 +92,9 @@ class portf_data:
             pip_s = row[0]
             price_s = row[1]
             salloc = ( pip_s * price_s )
+        q = round( (self.portf_big_alloc_price / salloc) * self.portf_multip  , 2)
         if q < 0.01:
             q = 0.01
-        q = round( (self.portf_big_alloc_price / salloc) * self.portf_multip  , 2)
 
         return q
 
