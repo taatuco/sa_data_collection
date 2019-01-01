@@ -91,7 +91,7 @@ def get_portf_perf():
                 cr_c = connection.cursor(pymysql.cursors.SSCursor)
                 sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity, instruments.pip " +\
                 "FROM portfolios JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
-                "JOIN instruments ON portfolio.symbol = instruments.symbol "+\
+                "JOIN instruments ON portfolios.symbol = instruments.symbol "+\
                 "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
                 print(sql_c)
 
