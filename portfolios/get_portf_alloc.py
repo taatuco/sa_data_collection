@@ -187,7 +187,7 @@ def get_portf_alloc():
                 cr_x.close()
 
                 alloc_forc_data = forecast_data(alloc_uid)
-                alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity  )
+                alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity * alloc_pip )
                 portf_forc_return = portf_forc_return + alloc_forc_pnl
                 portf_nav = portf_nav + alloc_dollar_amount
             cr_t.close()
