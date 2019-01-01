@@ -45,12 +45,14 @@ connection = pymysql.connect(host=db_srv,
 
 try:
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol, uid FROM symbol_list WHERE symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
+    sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
+    "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
     cr.execute(sql)
     rs = cr.fetchall()
     for row in rs:
-        uid = row[1]
         s = row[0]
+        uid = row[1]
+        asset_class = row[2]
 
         cr_pip = connection.cursor(pymysql.cursors.SSCursor)
         sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
@@ -117,7 +119,7 @@ try:
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
-        get_instr_sum(s,uid,pip,dn)
+        get_instr_sum(s,uid,asset_class,dn)
         get_day_up_dwn_stat(s,uid)
         set_signals_feed(s)
         gen_recomm(s,uid)

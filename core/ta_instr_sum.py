@@ -244,11 +244,11 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
     except Exception as e: print(e)
 
 
-def get_instr_sum(s,uid,pip,dn):
+def get_instr_sum(s,uid,asset_class,dn):
 
-    #Convert to pips for FX instruments
-    m = pip
-    if pip == 100000:
+    m = 1
+    #Convert from percentage to pips for forex
+    if asset_class == 'FX:':
         m = 10000
 
     instr_data = instr_sum_data(s,uid)
