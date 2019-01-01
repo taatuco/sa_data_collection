@@ -247,11 +247,12 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
 def get_instr_sum(s,uid,pip,dn):
 
     #Convert to pips for FX instruments
-    m = 10000
+    m = pip
+    if pip == 100000:
+        m = 10000
 
     instr_data = instr_sum_data(s,uid)
     forc_data = forecast_data(uid)
-    #f = sett.get_path_src()+"\\"+str(uid)+"s.csv"
     # ---
     y1_pct = float(instr_data.get_pct_1Yp() )* m
     m6_pct = float(instr_data.get_pct_6Mp() )* m
