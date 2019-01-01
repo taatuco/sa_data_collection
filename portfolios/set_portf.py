@@ -84,7 +84,7 @@ def set_portf_fx():
         connection.commit()
     except Exception as e: print(e)
     sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference) VALUES "+\
-    "('" + portf_symbol_suffix + "FXONE','No-Fly Zone Airspace','FX:','GO>',5,100000,1,'pips','With an exposure in the foreign exchange market, the defined porfolio projects an absolute positive return in the next couple days.',1000)"
+    "('" + portf_symbol_suffix + "FXONE','No-Fly Zone Airspace','FX:','GO>',5,1,1,'USD','With an exposure in the foreign exchange market, the defined porfolio projects an absolute positive return in the next couple days.',1000)"
     try:
         cr.execute(sql)
         connection.commit()
