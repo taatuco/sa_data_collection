@@ -145,7 +145,7 @@ def update_forecast_table(s,wf,frc,d,pip):
 
         w_forecast_display_info = str(round(float(wf*100),2)) + " " + unit
         if unit == 'pips':
-            w_forecast_display_info = str(round(float(wf*pip),0)) +" "+ unit
+            w_forecast_display_info = str(round(float(wf*10000),0)) +" "+ unit
         if unit == '%':
             w_forecast_display_info = str(round(float(wf*100),2)) + unit
 

@@ -40,8 +40,8 @@ connection.commit()
 
 ######## English ########
 lang_en = "en"
-price_under_200ma_en ="The price is currently below the 200-day average, which indicates a downward pressure on {symbol} to further decline in the longer term"
-price_above_200ma_en ="The price is currently above the 200-day average, which indicates an upward pressure on {symbol} to further rally in the longer term"
+price_under_200ma_en ="The price is currently below the 200-day average, which indicates a downward pressure on {symbol} to further decline in the longer term."
+price_above_200ma_en ="The price is currently above the 200-day average, which indicates an upward pressure on {symbol} to further rally in the longer term."
 st_upper_range_above_price_range_en ="The near term upper range is at {st_upper_range} above the last daily closing. At that level, sellers might rush to cover their positions leading to a possible retest of the near-term lower range before in continues with the rally."
 st_lower_range_below_price_range_en ="The near term lower range is at {st_lower_range} below the last daily closing. At that level, buyers might be interested to buy more, leading to higher price potential."
 upper_range_below_price_downtrend_en ="{symbol} break out through the near term upper range at {st_upper_range}. {symbol} might be temporarily overbought, which could result in a correction in price accordingly."

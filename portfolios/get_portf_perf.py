@@ -89,8 +89,9 @@ def get_portf_perf():
             #for each item get the pnl
             if d < datetime.datetime.now():
                 cr_c = connection.cursor(pymysql.cursors.SSCursor)
-                sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity " +\
-                "FROM portfolios INNER JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
+                sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity, instruments.pip " +\
+                "FROM portfolios JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
+                "JOIN instruments ON portfolio.symbol = instruments.symbol "+\
                 "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
                 print(sql_c)
 
@@ -100,7 +101,8 @@ def get_portf_perf():
                 for row in rs_c:
                     pnl_c = row[0]
                     quantity_c = row[1]
-                    portf_pnl = portf_pnl + (pnl_c * quantity_c)
+                    pip_c = row[2]
+                    portf_pnl = portf_pnl + (pnl_c * quantity_c * pip_c)
                     portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
                 cr_c.close()
                 portf_nav = round( portf_nav + portf_pnl, 2)
