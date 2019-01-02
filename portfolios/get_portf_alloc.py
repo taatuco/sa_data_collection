@@ -46,7 +46,6 @@ class portf_data:
     portf_big_alloc_price = 0
     portf_total_alloc_amount = 0
     portf_account_ref = 0
-    portf_reduce_risk_by = 3
 
     def __init__(self, portf_s):
 
@@ -80,6 +79,8 @@ class portf_data:
         self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
 
     def get_quantity(self, alloc_s):
+
+        portf_reduce_risk_by = 3
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT instruments.pip, price_instruments_data.price_close "+\
