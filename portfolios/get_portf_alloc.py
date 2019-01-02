@@ -80,7 +80,7 @@ class portf_data:
 
     def get_quantity(self, alloc_s):
 
-        portf_reduce_risk_by = 3
+        portf_reduce_risk_by = 4
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT instruments.pip, price_instruments_data.price_close "+\
