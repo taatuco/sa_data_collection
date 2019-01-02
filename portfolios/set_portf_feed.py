@@ -62,8 +62,8 @@ def set_portf_feed():
         w_forecast_display_info = row[6]
         uid = row[7]
 
-        short_title = symbol
-        short_description = fullname
+        short_title = fullname
+        short_description = symbol
         content = sector
         url = "p/?uid="+str(uid)
         ranking = str( abs(round(w_forecast_change,5)) )
