@@ -5,6 +5,9 @@
 
 import sys
 import os
+from pathlib import Path
+import numpy as np
+
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -17,8 +20,6 @@ access_obj = sa_db_access()
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
-from pathlib import Path
-
 import pymysql.cursors
 connection = pymysql.connect(host=db_srv,
                              user=db_usr,
@@ -27,32 +28,7 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-cr = connection.cursor(pymysql.cursors.SSCursor)
 
-sql = "DELETE FROM sectors"
-cr.execute(sql)
-
-sql = "INSERT INTO sectors(id, sector) VALUES "+\
-"('1','FX'), "+\
-"('2','Cryptocurrency'), "+\
-"('17','Index'), "+\
-"('4','Industrials'), "+\
-"('5','Technology'), "+\
-"('6','Health Care'), "+\
-"('7','Consumer Discretionary'), "+\
-"('8','Utilities'), "+\
-"('9','Financials'), "+\
-"('10','Materials'), "+\
-"('11','Treasury Bond'), "+\
-"('12','Consumer Staples'), "+\
-"('13','Energy'), "+\
-"('14','Telecom and Services'), "+\
-"('15','Real Estates'), "+\
-"('19','Multi-asset'), "+\
-"('18','Commodities')"
-
-
-try:
+def get_stdev(sql,period):
     cr.execute(sql)
-    connection.commit()
-except Exception as e: print(e)
+    a = list( cr.fetchall() )

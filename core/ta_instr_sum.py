@@ -23,10 +23,7 @@ sys.path.append(os.path.abspath(sett.get_path_core() ))
 from get_instr_perf_summ import *
 
 import pymysql.cursors
-db_usr = access_obj.username()
-db_pwd = access_obj.password()
-db_name = access_obj.db_name()
-db_srv = access_obj.db_server()
+db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 connection = pymysql.connect(host=db_srv,
                              user=db_usr,
