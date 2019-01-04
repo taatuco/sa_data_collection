@@ -6,4 +6,4 @@ SmartAlpha developed by Daiviet Huynh, Arnold Tegue Simo and Graham Kaiya, known
 ### Requirements:
 Python 3.7.1+  
 R-3.5.1+  
-rstudioapi (https://cran.rstudio.com/web/packages/rstudioapi/)
+rstudioapi

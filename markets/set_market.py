@@ -37,7 +37,7 @@ cr.execute(sql)
 
 sql = "INSERT INTO markets(market_id, market_label) VALUES "+\
 "('GO>','Global'), "+\
-"('US>','U.S. Market')"
+"('US>','U.S.')"
 
 print(sql +": "+ os.path.basename(__file__) )
 

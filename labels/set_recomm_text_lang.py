@@ -55,17 +55,20 @@ downtrend_recomm_en ="{symbol} in the near term is technically negative. An oppo
 portf_descr_en = "As per the "+ get_product_name() +" proprietary algorithm, projected profit of up to {display_forecast} for every {account_minimum} {unit} invested is achievable within the next 7 days with the following allocation: {portf_recomm} The specified portfolio has achieved an aggregated profit of {portf_last_price} {unit} in the last 12 months with as a reference a trading account of {account_minimum} {unit}."
 portf_recomm_buy_en = "buy {portf_alloc_instr} below {portf_alloc_entry_price}"
 portf_recomm_sell_en = "sell {portf_alloc_instr} above {portf_alloc_entry_price}"
+portf_risk_consider_en = "With a {account_reference} {unit} trading account as reference, there is a potential risk that the portfolio get exposed to a {dollar_amount} {unit} loss according to the last 30 days price pattern. In percentage terms, the portfolio can be affected to a {percentage} volatility."
 
 
 sql = "INSERT INTO recommendations(lang, price_under_200ma, price_above_200ma, "+\
 "st_upper_range_above_price_range, st_lower_range_below_price_range, "+\
 "upper_range_below_price_downtrend, lower_range_above_price_uptrend, "+\
 "rsi_oversold, rsi_overbought, rsi_weak, rsi_strong, "+\
-"uptrend_recomm, downtrend_recomm, portf_descr, portf_recomm_buy, portf_recomm_sell) VALUES "+\
+"uptrend_recomm, downtrend_recomm, portf_descr, portf_recomm_buy, portf_recomm_sell, "+\
+"portf_risk_consider) VALUES "+\
 "('"+lang_en+"', '"+price_under_200ma_en+"', '"+price_above_200ma_en+"', "+\
 "'"+st_upper_range_above_price_range_en+"', '"+st_lower_range_below_price_range_en+"', '"+upper_range_below_price_downtrend_en+"', "+\
 "'"+lower_range_above_price_uptrend_en+"', '"+rsi_oversold_en+"', '"+rsi_overbought_en+"', '"+rsi_weak_en+"', "+\
-"'"+rsi_strong_en+"', '"+uptrend_recomm_en+"', '"+downtrend_recomm_en+"', '"+portf_descr_en+"', '"+portf_recomm_buy_en+ "', '"+portf_recomm_sell_en+"')"
+"'"+rsi_strong_en+"', '"+uptrend_recomm_en+"', '"+downtrend_recomm_en+"', '"+portf_descr_en+"', '"+portf_recomm_buy_en+ "', '"+portf_recomm_sell_en+"'"+\
+"'"+portf_risk_consider_en+"'"  +")"
 print(sql)
 
 try:
