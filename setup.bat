@@ -2,7 +2,7 @@ REM Edt Configuration here #####################################################
 SET R_VER=R-3.5.1
 SET PY_VER=Python37-32
 SET PY_BS=beautifulsoup4
-SET SA_FRC_SCRIPT=%SYSTEMDRIVE%\smartalpha\sa_fr\get_forecast_data.bat
+SET SA_FRC_SCRIPT=%SYSTEMDRIVE%\smartalpha\sa_frc\get_forecast_data.bat
 
 SET GET_DATA_TIME_ST=01:00
 SET GET_FRC_TIME_ST=05:00
