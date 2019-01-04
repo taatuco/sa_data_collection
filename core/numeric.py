@@ -30,5 +30,6 @@ connection = pymysql.connect(host=db_srv,
 
 
 def get_stdev(sql,period):
+    cr = connection.cursor(pymysql.cursors.SSCursor)
     cr.execute(sql)
     a = list( cr.fetchall() )
