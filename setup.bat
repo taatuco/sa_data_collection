@@ -2,6 +2,7 @@ REM Edt Configuration here #####################################################
 SET R_VER=R-3.5.1
 SET PY_VER=Python37-32
 SET PY_BS=beautifulsoup4
+SET SA_FRC_SCRIPT=%SYSTEMDRIVE%\smartalpha\sa_fr\get_forecast_data.bat
 
 SET GET_DATA_TIME_ST=01:00
 SET GET_FRC_TIME_ST=05:00
@@ -68,9 +69,7 @@ REM ### Cryptocompare
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
-@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_asc.R" >> %GET_FRC%
-@ECHO ping 127.0.0.1 -n 60 > nul >> %GET_FRC%
-@ECHO START "" %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_forecast\forecast_arima_dsc.R" >> %GET_FRC%
+@ECHO START "" "%SA_FRC_SCRIPT%" >> %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_DATA%
