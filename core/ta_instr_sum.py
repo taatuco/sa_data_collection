@@ -232,6 +232,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         stdev_st = get_stdev(sql)
         maximum_dd_st = get_mdd(sql)
         romad_st = get_romad(sql)
+        volatility_risk_st = get_volatility_risk(sql)
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
@@ -240,7 +241,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         "trade_2_entry="+str(trade_entry_buy_2)+",trade_2_tp="+str(trade_tp_buy_2)+",trade_2_sl="+str(trade_sl_buy_2)+",trade_2_type='buy',"+\
         "trade_3_entry="+str(trade_entry_sell_1)+",trade_3_tp="+str(trade_tp_sell_1)+",trade_3_sl="+str(trade_sl_sell_1)+",trade_3_type='sell',"+\
         "trade_4_entry="+str(trade_entry_sell_2)+",trade_4_tp="+str(trade_tp_sell_2)+",trade_4_sl="+str(trade_sl_sell_2)+",trade_4_type='sell', "+\
-        "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+", romad_st="+  str(romad_st) +"  "+\
+        "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+", romad_st="+  str(romad_st) + ", volatility_risk_st="+ str(volatility_risk_st) +"  "+\
         "WHERE symbol='"+s+"' "
         print(sql_i)
         cr_i.execute(sql_i)

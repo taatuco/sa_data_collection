@@ -46,10 +46,12 @@ def get_portf_perf_summ(s,uid):
     stdev_st = get_stdev(sql)
     maximum_dd_st = get_mdd(sql)
     romad_st = get_romad(sql)
+    volatility_risk_st = get_volatility_risk(sql)
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "UPDATE instruments SET y1="+ str(y1) +", m6="+ str(m6) +", m3="+ str(m3) +", m1="+ str(m1) +", w1="+ str(w1) +", "+\
-    " stdev_st="+ str(stdev_st) + ", maximum_dd_st="+ str(maximum_dd_st) + ", romad_st="+ str(romad_st) +" WHERE symbol='"+ str(s)  +"' "
+    " stdev_st="+ str(stdev_st) + ", maximum_dd_st="+ str(maximum_dd_st) + ", romad_st="+ str(romad_st) + ", volatility_risk_st="+ str(volatility_risk_st) +\
+    " WHERE symbol='"+ str(s)  +"' "
     cr.execute(sql)
     connection.commit()
 
