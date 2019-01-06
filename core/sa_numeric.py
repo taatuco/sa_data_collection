@@ -98,7 +98,7 @@ def get_romad(sql):
     try:
         #sql with one column as numerical value to compute return on maximum drawdown
         #ordered by date ASC
-        cr = connection.cursor(pymysql.SSCursor)
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         cr.execute(sql)
         rs = cr.fetchall()
         i = 0
