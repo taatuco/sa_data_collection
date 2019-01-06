@@ -248,7 +248,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
     except Exception as e: print(e)
 
 
-def get_instr_sum(s,uid,asset_class,dn):
+def get_instr_sum(s,uid,asset_class,dn,pip):
 
     m = 1
     #Convert from percentage to pips for forex
