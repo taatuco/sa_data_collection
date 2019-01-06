@@ -7,6 +7,7 @@ import sys
 import os
 from pathlib import Path
 import numpy as np
+import math as math
 from math import exp, expm1
 
 
@@ -51,6 +52,7 @@ def get_stdev(sql):
         cr.execute(sql)
         a = list( cr.fetchall() )
         r = np.std(a)
+        print('stdev='+str(r) )
     except Exception as e: print(e)
 
     return r
@@ -88,6 +90,7 @@ def get_mdd(sql):
                 pct_dd = cur_dd
 
         r = pct_dd
+        print('mdd='+ str(r) )
     except Exception as e: print(e)
 
     return r
@@ -109,10 +112,13 @@ def get_romad(sql):
                 first = row[0]
             last = row[0]
 
+        print('f='+str(first) + ' l='+str(last) )
+
         rt = get_pct_change(first,last)
         dd = get_mdd(sql)
 
         r = rt / dd
+        print('romad='+ str(r) )
     except Exception as e: print(e)
 
     return r
