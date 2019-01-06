@@ -240,7 +240,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         "trade_2_entry="+str(trade_entry_buy_2)+",trade_2_tp="+str(trade_tp_buy_2)+",trade_2_sl="+str(trade_sl_buy_2)+",trade_2_type='buy',"+\
         "trade_3_entry="+str(trade_entry_sell_1)+",trade_3_tp="+str(trade_tp_sell_1)+",trade_3_sl="+str(trade_sl_sell_1)+",trade_3_type='sell',"+\
         "trade_4_entry="+str(trade_entry_sell_2)+",trade_4_tp="+str(trade_tp_sell_2)+",trade_4_sl="+str(trade_sl_sell_2)+",trade_4_type='sell', "+\
-        "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+","+   +"  "+\
+        "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+", romad_st="+  str(romad_st) +"  "+\
         "WHERE symbol='"+s+"' "
         print(sql_i)
         cr_i.execute(sql_i)
