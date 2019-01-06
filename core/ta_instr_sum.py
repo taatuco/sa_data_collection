@@ -227,7 +227,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         if trade_sl_sell_2 < 0:
             trade_sl_sell_2 = 0
 
-        sql = "SELECT price_close FROM instruments WHERE symbol='"+ str(s) +"' ORDER BY date LIMIT 30"
+        sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+ str(s) +"' ORDER BY date LIMIT 30"
         stdev_st = get_stdev(sql)
         maximum_dd_st = get_mdd(sql)
         romad_st = get_romad(sql)
