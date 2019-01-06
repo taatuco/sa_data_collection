@@ -111,6 +111,7 @@ def get_romad(sql):
             if i == 0:
                 first = row[0]
             last = row[0]
+            i += 1
 
         print('f='+str(first) + ' l='+str(last) )
 
