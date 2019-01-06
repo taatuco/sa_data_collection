@@ -26,6 +26,7 @@ from add_feed_type import *
 
 sys.path.append(os.path.abspath( sett.get_path_core() ))
 from get_instr_perf_summ import *
+from sa_numeric import *
 
 from pathlib import Path
 
@@ -40,10 +41,14 @@ connection = pymysql.connect(host=db_srv,
 def get_portf_perf_summ(s,uid):
     pps = instr_sum_data(s, uid)
     y1 = pps.get_pct_1Yp(); m6 = pps.get_pct_6Mp(); m3 = pps.get_pct_3Mp(); m1 = pps.get_pct_1Mp(); w1 = pps.get_pct_1Wp()
+    sql = "SELECT price_close FROM chart_data WHERE uid="+ str(uid) +" ORDER BY date LIMIT 30"
+    stdev_st = get_stdev(sql)
+    maximum_dd_st = get_mdd(sql)
+    romad_st = get_romad(sql)
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "UPDATE instruments SET y1="+ str(y1) +", m6="+ str(m6) +", m3="+ str(m3) +", m1="+ str(m1) +", w1="+ str(w1) +" "+\
-    "WHERE symbol='"+ str(s)  +"' "
+    sql = "UPDATE instruments SET y1="+ str(y1) +", m6="+ str(m6) +", m3="+ str(m3) +", m1="+ str(m1) +", w1="+ str(w1) +", "+\
+    " stdev_st="+ str(stdev_st) + ", maximum_dd_st="+ str(maximum_dd_st) + ", romad_st="+ str(romad_st) +" WHERE symbol='"+ str(s)  +"' "
     cr.execute(sql)
     connection.commit()
 

@@ -21,6 +21,7 @@ access_obj = sa_db_access()
 
 sys.path.append(os.path.abspath(sett.get_path_core() ))
 from get_instr_perf_summ import *
+from sa_numeric import *
 
 import pymysql.cursors
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
@@ -226,13 +227,19 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         if trade_sl_sell_2 < 0:
             trade_sl_sell_2 = 0
 
+        sql = "SELECT price_close FROM instruments WHERE uid="+ str(uid) +" ORDER BY date LIMIT 30"
+        stdev_st = get_stdev(sql)
+        maximum_dd_st = get_mdd(sql)
+        romad_st = get_romad(sql)
+
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
         "signal_type='"+ signal_type +"',signal_entry='"+ signal_entry +"',signal_expiration="+ str(signal_expiration) + ","+\
         "trade_1_entry="+str(trade_entry_buy_1)+",trade_1_tp="+str(trade_tp_buy_1)+",trade_1_sl="+str(trade_sl_buy_1)+",trade_1_type='buy',"+\
         "trade_2_entry="+str(trade_entry_buy_2)+",trade_2_tp="+str(trade_tp_buy_2)+",trade_2_sl="+str(trade_sl_buy_2)+",trade_2_type='buy',"+\
         "trade_3_entry="+str(trade_entry_sell_1)+",trade_3_tp="+str(trade_tp_sell_1)+",trade_3_sl="+str(trade_sl_sell_1)+",trade_3_type='sell',"+\
-        "trade_4_entry="+str(trade_entry_sell_2)+",trade_4_tp="+str(trade_tp_sell_2)+",trade_4_sl="+str(trade_sl_sell_2)+",trade_4_type='sell' "+\
+        "trade_4_entry="+str(trade_entry_sell_2)+",trade_4_tp="+str(trade_tp_sell_2)+",trade_4_sl="+str(trade_sl_sell_2)+",trade_4_type='sell', "+\
+        "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+","+   +"  "+\
         "WHERE symbol='"+s+"' "
         print(sql_i)
         cr_i.execute(sql_i)

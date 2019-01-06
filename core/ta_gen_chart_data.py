@@ -10,7 +10,7 @@ import time
 from datetime import timedelta
 import csv
 from pathlib import Path
-from get_pct_change import *
+from sa_numeric import *
 
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
