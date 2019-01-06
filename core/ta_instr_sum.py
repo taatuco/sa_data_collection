@@ -228,7 +228,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
             trade_sl_sell_2 = 0
 
         dm = datetime.datetime.now() - timedelta(days=30) ; dm.strftime('%Y%m%d')
-        sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+ str(s) +"' AND date >="+ dm +" ORDER BY date"
+        sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+ str(s) +"' AND date >="+ str(dm) +" ORDER BY date"
         stdev_st = get_stdev(sql)
         maximum_dd_st = get_mdd(sql)
         romad_st = get_romad(sql)

@@ -42,7 +42,7 @@ def get_portf_perf_summ(s,uid):
     pps = instr_sum_data(s, uid)
     y1 = pps.get_pct_1Yp(); m6 = pps.get_pct_6Mp(); m3 = pps.get_pct_3Mp(); m1 = pps.get_pct_1Mp(); w1 = pps.get_pct_1Wp()
     dm = datetime.datetime.now() - timedelta(days=30) ; dm.strftime('%Y%m%d')
-    sql = "SELECT price_close FROM chart_data WHERE uid="+ str(uid) +" AND date >="+ dm +" ORDER BY date"
+    sql = "SELECT price_close FROM chart_data WHERE uid="+ str(uid) +" AND date >="+ str(dm) +" ORDER BY date"
     stdev_st = get_stdev(sql)
     maximum_dd_st = get_mdd(sql)
     romad_st = get_romad(sql)
