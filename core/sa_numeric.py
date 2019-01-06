@@ -57,16 +57,24 @@ def get_stdev(sql):
 
     return r
 
-def get_volatility_risk(sql):
+def get_volatility_risk(sql,is_portf,s):
 
     r = 0
 
     try:
         #sql with one numerical column to compute volatility risk
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: lp = row[0]
+
+        if is_portf:
+            sql_i = "SELECT account_reference FROM instruments WHERE symbol='"+ s +"'"
+            cr.execute(sql_i)
+            rs = cr.fetchall()
+            for row in rs: lp = row[0]
+        else:
+            cr.execute(sql)
+            rs = cr.fetchall()
+            for row in rs: lp = row[0]
+
         stdev = get_stdev(sql)
         rp = lp - stdev
         r = abs( get_pct_change(lp,rp)  )
@@ -84,7 +92,7 @@ def get_mdd(sql):
         cr.execute(sql)
         rs = cr.fetchall()
         top = 0
-        breset = math.pow(2,10)
+        breset = math.pow(10,100)
         bottom = breset
         pct_dd = 0
         cur_dd = 0

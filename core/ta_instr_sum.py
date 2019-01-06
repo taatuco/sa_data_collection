@@ -232,7 +232,7 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         stdev_st = get_stdev(sql)
         maximum_dd_st = get_mdd(sql)
         romad_st = get_romad(sql)
-        volatility_risk_st = get_volatility_risk(sql)
+        volatility_risk_st = get_volatility_risk(sql, False,'')
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
