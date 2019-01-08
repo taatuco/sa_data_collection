@@ -5,6 +5,7 @@
 
 library(base)
 library(rstudioapi)
+selected_symbol = 'BABA'
 
 get_dir <- function() {
   args <- commandArgs(trailingOnly = FALSE)
@@ -49,8 +50,7 @@ collect_data <- function() {
   myDbname <- get_sa_db_name()
   myPort <- 3306
   con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
-
-  sql <- "SELECT yahoo_finance, uid FROM symbol_list WHERE symbol ='NYSE:CCEP' "
+  sql <- paste("SELECT yahoo_finance, uid FROM symbol_list WHERE symbol LIKE '%", selected_symbol ,"%' ", sep = "")
   res <- dbSendQuery(con, sql)
 
   tryCatch({

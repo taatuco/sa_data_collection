@@ -110,10 +110,9 @@ class rsi_data:
                           "LIMIT "+str(self.p)
             cr_get_avg_g.execute(sql_get_avg_g)
             rs_avg_g = cr_get_avg_g.fetchall()
-            if cr_get_avg_g.rowcount == self.p:
-                for row in rs_avg_g:
-                    tt_gain = tt_gain + row[0]
-                rsi_data.c_curr_avg_gain = tt_gain / self.p
+            for row in rs_avg_g:
+                tt_gain = tt_gain + row[0]
+            rsi_data.c_curr_avg_gain = tt_gain / self.p
             cr_get_avg_g.close()
         else:
             #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(period-1)+ (GAIN) ) / period
@@ -131,10 +130,9 @@ class rsi_data:
                           "LIMIT "+str(self.p)
             cr_get_avg_l.execute(sql_get_avg_l)
             rs_avg_l = cr_get_avg_l.fetchall()
-            if cr_get_avg_l.rowcount == self.p:
-                for row in rs_avg_l:
-                    tt_loss = tt_loss + row[0]
-                rsi_data.c_curr_avg_loss = tt_loss / self.p
+            for row in rs_avg_l:
+                tt_loss = tt_loss + row[0]
+            rsi_data.c_curr_avg_loss = tt_loss / self.p
             cr_get_avg_l.close()
         else:
             #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
