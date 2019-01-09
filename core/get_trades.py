@@ -31,9 +31,10 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-def get_trades(s,uid,dc):
+def get_trades(s,dc):
+
+    r = False
     try:
-        #start from date
         daycount = dc
         dfrom = datetime.datetime.now() - timedelta(days=daycount) ; dfrom_str = dfrom.strftime('%Y%m%d')
 
@@ -43,11 +44,14 @@ def get_trades(s,uid,dc):
         trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0; trade_decimal_places = 0;
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "DELETE trades WHERE symbol ='"+ s +"' "
+        cr.execute(sql)
+        connection.commit()
+
         sql = "SELECT decimal_places FROM instruments WHERE symbol = '"+ s +"' "
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: trade_decimal_places = row[0]
-
 
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
@@ -97,7 +101,10 @@ def get_trades(s,uid,dc):
             try:
                 cr_i.execute(sql_i)
                 connection.commit()
+                r = True
             except:
                 pass
 
     except Exception as e: print(e)
+
+    return r
