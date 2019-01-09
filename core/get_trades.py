@@ -43,7 +43,7 @@ def get_trades(s,uid,dc):
         trade_pnl_pct = 0; trade_status = ''
 
         cr_1 = connection.cursor(pymysql.cursors.SSCursor)
-        sql_1 = "SELECT symbol, date, price_close, target_price"+\
+        sql_1 = "SELECT symbol, date, price_close, target_price "+\
         "FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dfrom_str + " ORDER BY date"
         cr_1.execute(sql_1)
         rs_1 = cr_1.fetchall()
@@ -53,7 +53,7 @@ def get_trades(s,uid,dc):
             price_close_1 = row[2]
             target_price_1 = row[3]
 
-            dto = dfrom + timedelta(days=7) ; dto_str = dto.strftime('%Y%m%d')
+            dto = date_1 + timedelta(days=7) ; dto_str = dto.strftime('%Y%m%d')
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
             sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dto_str + " ORDER BY date "
             cr_2.execute(sql_2)
