@@ -40,9 +40,15 @@ def get_trades(s,uid,dc):
         trade_symbol = ''; trade_order_type = ''
         trade_entry_price = ''; trade_entry_date = dfrom
         trade_expiration_date = dfrom; trade_close_price = -1
-        trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0
+        trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0; trade_decimal_places = 0;
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT decimal_places FROM instruments WHERE symbol = '"+ s +"' "
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: trade_decimal_places = row[0]
+
+
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
@@ -56,8 +62,8 @@ def get_trades(s,uid,dc):
         for row in rs_1:
             symbol_1 = row[0]
             date_1 = row[1]
-            price_close_1 = row[2]
-            target_price_1 = row[3]
+            price_close_1 = round( row[2], trade_decimal_places)
+            target_price_1 = round( row[3], trade_decimal_places)
 
             dto = date_1 + timedelta(days=7) ; dto_str = dto.strftime('%Y%m%d')
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
@@ -66,13 +72,13 @@ def get_trades(s,uid,dc):
             cr_2.execute(sql_2)
             rs_2 = cr_2.fetchall()
             date_2 = None; price_close_2 = -1
-            for row in rs_2: date_2 = row[0]; price_close_2 = row[1]
+            for row in rs_2: date_2 = row[0]; round( price_close_2 = row[1], trade_decimal_places)
 
             trade_symbol = s
-            if price_close_1 <= target_price_1:
-                trade_order_type = 'buy'
-            else:
-                trade_order_type = 'sell'
+
+            if price_close_1 <= target_price_1: trade_order_type = 'buy'
+            else: trade_order_type = 'sell'
+
             trade_entry_price = price_close_1; trade_entry_date = date_1
             trade_expiration_date = date_2; trade_close_price = price_close_2
             if price_close_2 == -1:
