@@ -44,7 +44,7 @@ def get_trades(s,dc):
         trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0; trade_decimal_places = 0;
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "DELETE trades WHERE symbol ='"+ s +"' "
+        sql = "DELETE FROM trades WHERE symbol ='"+ s +"' "
         cr.execute(sql)
         connection.commit()
 
