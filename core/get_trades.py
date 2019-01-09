@@ -76,7 +76,7 @@ def get_trades(s,dc):
             cr_2.execute(sql_2)
             rs_2 = cr_2.fetchall()
             date_2 = None; price_close_2 = -1
-            for row in rs_2: date_2 = row[0]; round( price_close_2 = row[1], trade_decimal_places)
+            for row in rs_2: date_2 = row[0]; price_close_2 = round( row[1], trade_decimal_places)
 
             trade_symbol = s
 
