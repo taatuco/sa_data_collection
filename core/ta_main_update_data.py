@@ -29,6 +29,7 @@ from set_signals_feed import *
 from ta_gen_recomm import *
 from ta_gen_chart_data import *
 from get_frc_pnl import *
+from get_trades import *
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
@@ -122,6 +123,7 @@ try:
         gen_recomm(s,uid)
         gen_chart(s,uid)
         get_forecast_pnl(s,uid)
+        get_trades(s,370)
 
     cr.close()
 
