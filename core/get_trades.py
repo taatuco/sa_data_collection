@@ -40,7 +40,13 @@ def get_trades(s,uid,dc):
         trade_symbol = ''; trade_order_type = ''
         trade_entry_price = ''; trade_entry_date = dfrom
         trade_expiration_date = dfrom; trade_close_price = -1
-        trade_pnl_pct = 0; trade_status = ''
+        trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0
+
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: trade_last_price = row[0]
 
         cr_1 = connection.cursor(pymysql.cursors.SSCursor)
         sql_1 = "SELECT symbol, date, price_close, target_price "+\
@@ -55,11 +61,12 @@ def get_trades(s,uid,dc):
 
             dto = date_1 + timedelta(days=7) ; dto_str = dto.strftime('%Y%m%d')
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
-            sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dto_str + " ORDER BY date "
+            sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dto_str + " ORDER BY date LIMIT 1"
+            print(sql_2)
             cr_2.execute(sql_2)
             rs_2 = cr_2.fetchall()
             date_2 = None; price_close_2 = -1
-            for row in rs_2: date_2 = row[0]; price_close_2 = row[1]; break
+            for row in rs_2: date_2 = row[0]; price_close_2 = row[1]
 
             trade_symbol = s
             if price_close_1 <= target_price_1:
@@ -68,21 +75,23 @@ def get_trades(s,uid,dc):
                 trade_order_type = 'sell'
             trade_entry_price = price_close_1; trade_entry_date = date_1
             trade_expiration_date = date_2; trade_close_price = price_close_2
-            if trade_order_type == 'buy':
-                trade_pnl_pct = get_pct_change(price_close_1, price_close_2)
-            else:
-                trade_pnl_pct = get_pct_change(price_close_2, price_close_1)
             if price_close_2 == -1:
                 trade_status = 'active'
+                if trade_order_type == 'buy': trade_pnl_pct = get_pct_change(price_close_1, trade_last_price)
+                else: trade_pnl_pct = get_pct_change(trade_last_price, price_close_1)
             else:
                 trade_status = 'expired'
+                if trade_order_type == 'buy': trade_pnl_pct = get_pct_change(price_close_1, price_close_2)
+                else: trade_pnl_pct = get_pct_change(price_close_2, price_close_1)
 
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
             sql_i = "INSERT INTO trades(symbol, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status) "+\
             "VALUES ('"+ trade_symbol +"','"+ trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
             str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"')"
-            cr_i.execute(sql_i)
-            connection.commit()
-
+            try:
+                cr_i.execute(sql_i)
+                connection.commit()
+            except:
+                pass
 
     except Exception as e: print(e)
