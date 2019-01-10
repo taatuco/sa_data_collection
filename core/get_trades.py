@@ -48,10 +48,12 @@ def get_trades(s,dc):
         cr.execute(sql)
         connection.commit()
 
-        sql = "SELECT decimal_places FROM instruments WHERE symbol = '"+ s +"' "
+        sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol = '"+ s +"' "
         cr.execute(sql)
         rs = cr.fetchall()
-        for row in rs: trade_decimal_places = row[0]
+        for row in rs:
+            trade_decimal_places = row[0]
+            trade_fullname = row[1]
 
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
@@ -84,19 +86,22 @@ def get_trades(s,dc):
             else: trade_order_type = 'sell'
 
             trade_entry_price = price_close_1; trade_entry_date = date_1
-            trade_expiration_date = date_2; trade_close_price = price_close_2
+            if date_2 is not None: trade_expiration_date = date_2
+            else: trade_expiration_date = date_1 + timedelta(days=7)
+            trade_close_price = price_close_2
             if price_close_2 == -1:
                 trade_status = 'active'
                 if trade_order_type == 'buy': trade_pnl_pct = get_pct_change(price_close_1, trade_last_price)
                 else: trade_pnl_pct = get_pct_change(trade_last_price, price_close_1)
+
             else:
                 trade_status = 'expired'
                 if trade_order_type == 'buy': trade_pnl_pct = get_pct_change(price_close_1, price_close_2)
                 else: trade_pnl_pct = get_pct_change(price_close_2, price_close_1)
 
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
-            sql_i = "INSERT INTO trades(symbol, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status) "+\
-            "VALUES ('"+ trade_symbol +"','"+ trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
+            sql_i = "INSERT INTO trades(symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status) "+\
+            "VALUES ('"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
             str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"')"
             try:
                 cr_i.execute(sql_i)
