@@ -38,10 +38,11 @@ def get_trades(s,uid,dc):
         daycount = dc
         dfrom = datetime.datetime.now() - timedelta(days=daycount) ; dfrom_str = dfrom.strftime('%Y%m%d')
 
-        trade_symbol = ''; trade_order_type = ''
+        trade_symbol = s; trade_order_type = ''
         trade_entry_price = ''; trade_entry_date = dfrom
         trade_expiration_date = dfrom; trade_close_price = -1
-        trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0; trade_decimal_places = 0;
+        trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0
+        trade_decimal_places = 0; trade_url = "s/?uid="+ str(uid)
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "DELETE FROM trades WHERE symbol ='"+ s +"' AND status='active' "
@@ -80,8 +81,6 @@ def get_trades(s,uid,dc):
             date_2 = None; price_close_2 = -1
             for row in rs_2: date_2 = row[0]; price_close_2 = round( row[1], trade_decimal_places)
 
-            trade_symbol = s
-
             if price_close_1 <= target_price_1: trade_order_type = 'buy'
             else: trade_order_type = 'sell'
 
@@ -100,9 +99,9 @@ def get_trades(s,uid,dc):
                 else: trade_pnl_pct = get_pct_change(price_close_2, price_close_1)
 
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
-            sql_i = "INSERT INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status) "+\
+            sql_i = "INSERT INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status, url) "+\
             "VALUES ("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
-            str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"')"
+            str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
             try:
                 cr_i.execute(sql_i)
                 connection.commit()
