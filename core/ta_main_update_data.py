@@ -123,7 +123,7 @@ try:
         gen_recomm(s,uid)
         gen_chart(s,uid)
         get_forecast_pnl(s,uid)
-        get_trades(s,370)
+        get_trades(s,uid,370)
 
     cr.close()
 

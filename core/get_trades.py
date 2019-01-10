@@ -31,7 +31,7 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-def get_trades(s,dc):
+def get_trades(s,uid,dc):
 
     r = False
     try:
@@ -100,8 +100,8 @@ def get_trades(s,dc):
                 else: trade_pnl_pct = get_pct_change(price_close_2, price_close_1)
 
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
-            sql_i = "INSERT INTO trades(symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status) "+\
-            "VALUES ('"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
+            sql_i = "INSERT INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status) "+\
+            "VALUES ("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
             str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"')"
             try:
                 cr_i.execute(sql_i)
