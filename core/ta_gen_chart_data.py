@@ -177,7 +177,7 @@ def gen_chart(s,uid):
             str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
             str(st_upper_trend_line)+","+st_lower_trend_line+","+\
             str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+","+\
-            str(pct_change)+","+ str(signal_price) +","+ str(percent_signal) +")"
+            str(pct_change)+","+ str(signal_price) +","+ str(pct_signal) +")"
             print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
             cr_t.execute(sql_t)
             connection.commit()
