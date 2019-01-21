@@ -160,7 +160,7 @@ def gen_chart(s,uid):
             if i == 0:
                 ini_val = price
                 pct_change = 0
-                signal_price = 100
+                signal_price = price
                 ini_signal = signal_price
                 pct_signal = 0
             else:
