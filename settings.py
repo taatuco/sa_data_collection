@@ -35,8 +35,5 @@ class sa_path:
 def get_portf_suffix():
     return "PRF:"
 
-def get_signal_data_suffix():
-    return "SGNXX:"
-
 def get_product_name():
     return "SmartAlpha"
