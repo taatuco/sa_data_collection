@@ -114,7 +114,9 @@ def gen_chart(s,uid):
         draw_st = False
         ini_price = 0
         pct_change = 0
-        signal_perf = 0
+        ini_signal = 0
+        signal_price = 0
+        pct_signal = 0
 
         i = 0
 
@@ -158,21 +160,24 @@ def gen_chart(s,uid):
             if i == 0:
                 ini_val = price
                 pct_change = 0
-                signal_perf = 100
+                signal_price = 100
+                ini_signal = signal_price
+                pct_signal = 0
             else:
                 pct_change = get_pct_change(ini_val, price)
-                signal_perf =  signal_perf + ( signal_perf * float( get_trade_pnl(uid, date.strftime("%Y%m%d") ) ) )
+                signal_price =  signal_price + ( signal_price * float( get_trade_pnl(uid, date.strftime("%Y%m%d") ) ) )
+                pct_signal = get_pct_change(ini_signal, signal_price)
 
 
             sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
             "lt_upper_trend_line, lt_lower_trend_line, "+\
             "st_upper_trend_line, st_lower_trend_line, "+\
-            "rsi, rsi_oversold, rsi_overbought, ma200, target_price, percent_perf, signal_perf) "+\
+            "rsi, rsi_oversold, rsi_overbought, ma200, target_price, percent_perf, signal_price, percent_signal) "+\
             "VALUES ("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+",'0',"+\
             str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
             str(st_upper_trend_line)+","+st_lower_trend_line+","+\
             str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+","+\
-            str(pct_change)+","+ str(signal_perf) +")"
+            str(pct_change)+","+ str(signal_price) +","+ str(percent_signal) +")"
             print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
             cr_t.execute(sql_t)
             connection.commit()
