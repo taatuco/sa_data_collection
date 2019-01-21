@@ -85,6 +85,7 @@ def gen_chart(s,uid):
 
                 i +=1
 
+        cr_p = connection.cursor(pymysql.cursors.SSCursor)
         cr_t = connection.cursor(pymysql.cursors.SSCursor)
         sql_t = "DELETE FROM chart_data WHERE uid=" + str(uid)
         cr_t.execute(sql_t)
@@ -104,6 +105,7 @@ def gen_chart(s,uid):
         draw_st = False
         ini_price = 0
         pct_change = 0
+        sgnxx_price = 0
 
         i = 0
 
@@ -150,6 +152,9 @@ def gen_chart(s,uid):
             else:
                 pct_change = get_pct_change(ini_val, price)
 
+            sgnxx_price = sgnxx_price + (pct_change *100)
+
+
 
             sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
             "lt_upper_trend_line, lt_lower_trend_line, "+\
@@ -162,6 +167,12 @@ def gen_chart(s,uid):
             print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
             cr_t.execute(sql_t)
             connection.commit()
+
+            sql_p = "INSERT INTO chart_data(uid, symbol, date, price_close) "+\
+            "VALUES ("+str(uid)+",'"+str( get_signal_data_suffix() + s)+"',"+str(date.strftime("%Y%m%d"))+","+str(sgnxx_price)+")"
+            cr_p.execute(sql_p)
+            connection.commit()
+
             i += 1
 
         f = data_src+str(uid)+'f.csv'

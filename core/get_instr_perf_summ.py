@@ -65,8 +65,7 @@ class instr_sum_data:
             sql = "SELECT symbol from symbol_list WHERE uid=" + str(uid)
             cr.execute(sql)
             rs = cr.fetchall()
-            for row in rs:
-                symbol_is_portf = row[0]
+            for row in rs: symbol_is_portf = row[0]
             if symbol_is_portf.find( get_portf_suffix() ) > -1 :
                 self.sql_select = "SELECT price_close, date FROM chart_data "+\
                                     "WHERE symbol='"+ self.s +"' "
