@@ -151,9 +151,6 @@ def gen_chart(s,uid):
             else:
                 pct_change = get_pct_change(ini_val, price)
 
-            signal_perf = signal_perf + (pct_change *100)
-
-
 
             sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
             "lt_upper_trend_line, lt_lower_trend_line, "+\
