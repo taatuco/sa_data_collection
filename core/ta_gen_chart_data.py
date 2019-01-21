@@ -158,10 +158,10 @@ def gen_chart(s,uid):
             if i == 0:
                 ini_val = price
                 pct_change = 0
-                signal_perf = 0
+                signal_perf = 100
             else:
                 pct_change = get_pct_change(ini_val, price)
-                signal_perf = signal_perf + float( get_trade_pnl(uid, date.strftime("%Y%m%d") ) )
+                signal_perf =  signal_perf + ( signal_perf * float( get_trade_pnl(uid, date.strftime("%Y%m%d") ) ) )
 
 
             sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
