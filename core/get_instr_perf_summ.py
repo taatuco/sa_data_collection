@@ -57,6 +57,7 @@ class instr_sum_data:
     d_1Wp = datetime.datetime(2000, 1, 1, 1, 1)
     d_1Wf = datetime.datetime(2000, 1, 1, 1, 1)
     lp = 0
+    lp_signal = 0
 
     def __init__(self,symbol,uid):
         try:
@@ -72,6 +73,11 @@ class instr_sum_data:
             else:
                 self.sql_select = "SELECT price_close, date FROM price_instruments_data WHERE symbol='"+ self.s + "' "
                 self.sql_select_signal = "SELECT signal_price, date from chart_data WHERE symbol='"+ self.s +"' "
+                sql = self.sql_select_signal+" ORDER BY Date DESC LIMIT 1"
+                cr.execute(sql)
+                rs = cr.fetchall()
+                for row in rs: self.lp_signal = row[0];
+
 
             sql = self.sql_select+" ORDER BY Date DESC LIMIT 1"
             cr.execute(sql)
@@ -119,20 +125,20 @@ class instr_sum_data:
 
     def get_pct_1Yp_signal(self):
         str_date = self.d_1Yp.strftime("%Y%m%d")
-        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp))
+        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp_signal))
 
     def get_pct_6Mp_signal(self):
         str_date = self.d_6Mp.strftime("%Y%m%d")
-        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp))
+        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp_signal))
 
     def get_pct_3Mp_signal(self):
         str_date = self.d_3Mp.strftime("%Y%m%d")
-        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp))
+        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp_signal))
 
     def get_pct_1Mp_signal(self):
         str_date = self.d_1Mp.strftime("%Y%m%d")
-        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp))
+        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp_signal))
 
     def get_pct_1Wp_signal(self):
         str_date = self.d_1Wp.strftime("%Y%m%d")
-        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp))
+        return str(get_pct_from_date(str_date, self.sql_select_signal, self.lp_signal))
