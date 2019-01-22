@@ -164,7 +164,8 @@ def update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,wf_pct,
 trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
 trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
 trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
-trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
+trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2,
+y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
     try:
 
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
@@ -181,6 +182,11 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
             last_price = row[0]
             last_date = row[1]
 
+        y1_pct_signal = round(float(y1_pct_signal), 3)
+        m6_pct_signal = round(float(m6_pct_signal), 3)
+        m3_pct_signal = round(float(m3_pct_signal), 3)
+        m1_pct_signal = round(float(m1_pct_signal), 3)
+        w1_pct_signal = round(float(w1_pct_signal), 3)
 
         y1_pct = round(float(y1_pct), 3)
         m6_pct = round(float(m6_pct), 3)
@@ -241,7 +247,8 @@ trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2):
         "trade_2_entry="+str(trade_entry_buy_2)+",trade_2_tp="+str(trade_tp_buy_2)+",trade_2_sl="+str(trade_sl_buy_2)+",trade_2_type='buy',"+\
         "trade_3_entry="+str(trade_entry_sell_1)+",trade_3_tp="+str(trade_tp_sell_1)+",trade_3_sl="+str(trade_sl_sell_1)+",trade_3_type='sell',"+\
         "trade_4_entry="+str(trade_entry_sell_2)+",trade_4_tp="+str(trade_tp_sell_2)+",trade_4_sl="+str(trade_sl_sell_2)+",trade_4_type='sell', "+\
-        "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+", romad_st="+  str(romad_st) + ", volatility_risk_st="+ str(volatility_risk_st) +"  "+\
+        "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+", romad_st="+  str(romad_st) + ", volatility_risk_st="+ str(volatility_risk_st) +", "+\
+        "y1_signal="+str(y1_pct_signal)+",m6_signal="+str(m6_pct_signal)+",m3_signal="+str(m3_pct_signal)+",m1_signal="+str(m1_pct_signal)+",w1_signal="+str(w1_pct_signal) +" "+\
         "WHERE symbol='"+s+"' "
         print(sql_i)
         cr_i.execute(sql_i)
@@ -260,6 +267,12 @@ def get_instr_sum(s,uid,asset_class,dn,pip):
     instr_data = instr_sum_data(s,uid)
     forc_data = forecast_data(uid)
     # ---
+    y1_pct_signal = float(instr_data.get_pct_1Yp_signal() )* m
+    m6_pct_signal = float(instr_data.get_pct_6Mp_signal() )* m
+    m3_pct_signal = float(instr_data.get_pct_3Mp_signal() )* m
+    m1_pct_signal = float(instr_data.get_pct_1Mp_signal() )* m
+    w1_pct_signal = float(instr_data.get_pct_1Wp_signal() )* m
+
     y1_pct = float(instr_data.get_pct_1Yp() )* m
     m6_pct = float(instr_data.get_pct_6Mp() )* m
     m3_pct = float(instr_data.get_pct_3Mp() )* m
@@ -292,6 +305,7 @@ def get_instr_sum(s,uid,asset_class,dn,pip):
         trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
         trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
         trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
-        trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2)
+        trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2,
+        y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal)
 
     except Exception as e: print(e)

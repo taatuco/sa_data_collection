@@ -117,13 +117,13 @@ try:
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
-        get_instr_sum(s,uid,asset_class,dn,pip)
         get_day_up_dwn_stat(s,uid)
         set_signals_feed(s)
         gen_recomm(s,uid)
         get_forecast_pnl(s,uid)
         get_trades(s,uid,370)
         gen_chart(s,uid)
+        get_instr_sum(s,uid,asset_class,dn,pip)
 
     cr.close()
 
