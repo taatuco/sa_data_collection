@@ -72,7 +72,7 @@ class instr_sum_data:
                 self.sql_select = "SELECT price_close, date FROM chart_data WHERE symbol='"+ self.s +"' "
             else:
                 self.sql_select = "SELECT price_close, date FROM price_instruments_data WHERE symbol='"+ self.s + "' "
-                self.sql_select_signal = "SELECT signal_price, date from chart_data WHERE symbol='"+ self.s +"' "
+                self.sql_select_signal = "SELECT signal_price, date from chart_data WHERE symbol='"+ self.s +"' AND forecast = 0 "
                 sql = self.sql_select_signal+" ORDER BY Date DESC LIMIT 1"
                 cr.execute(sql)
                 rs = cr.fetchall()
