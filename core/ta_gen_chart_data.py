@@ -56,7 +56,7 @@ def gen_chart(s,uid):
 
 
     n = datetime.datetime.today()
-    d = n - ( timedelta(days=365) )
+    d = n - ( timedelta(days=400) )
     lt = n - ( timedelta(days=360) )
     st = n - ( timedelta(days=180) )
 
