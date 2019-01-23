@@ -65,7 +65,6 @@ def get_volatility_risk(sql,is_portf,s):
 
         if is_portf:
             sql_i = "SELECT account_reference FROM instruments WHERE symbol='"+ s +"'"
-            print(sql_i)
             cr.execute(sql_i)
             rs = cr.fetchall()
             for row in rs: lp = row[0]
@@ -76,6 +75,7 @@ def get_volatility_risk(sql,is_portf,s):
 
         stdev = get_stdev(sql)
         rp = lp - stdev
+        print(str(rp)+ " = "+ str(lp) + " - " + str(stdev) )
         r = abs( get_pct_change(lp,rp)  )
         cr.close()
         connection.close()
