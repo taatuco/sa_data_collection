@@ -48,7 +48,7 @@ class portf_data:
             self.portf_account_ref = row[0]
         cr.close()
 
-
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol FROM portfolios WHERE portf_symbol = '"+ portf_s +"'"
         cr.execute(sql)
         rs = cr.fetchall()
