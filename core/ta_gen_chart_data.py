@@ -50,7 +50,6 @@ def gen_chart(s,uid):
     rs = cr.fetchall()
     for row in rs:
         decimal_places = int(row[0])
-    cr.close()
 
     n = datetime.datetime.today()
     d = n - ( timedelta(days=400) )
@@ -96,7 +95,6 @@ def gen_chart(s,uid):
         sql_t = "DELETE FROM chart_data WHERE uid=" + str(uid)
         cr_t.execute(sql_t)
         connection.commit()
-        cr_t.close()
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date, price_close, ma200, rsi14, rsi_overbought, rsi_oversold, target_price "+\
