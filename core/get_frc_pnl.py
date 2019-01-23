@@ -28,7 +28,7 @@ def get_forecast_pnl(s,uid):
     td = datetime.datetime.now()
     i = 0
     wdb = 7
-    nd = 360
+    nd = 20
 
 
     while i <= nd:
