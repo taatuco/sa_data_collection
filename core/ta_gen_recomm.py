@@ -23,12 +23,6 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_rsi_mom(os,ob,we,sg,lt_rsi_mom):
 
