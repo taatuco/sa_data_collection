@@ -5,7 +5,6 @@
 
 import sys
 import os
-import gc
 import time
 import datetime
 from datetime import timedelta
@@ -34,14 +33,9 @@ from get_trades import *
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 try:
+    connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
     "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
@@ -112,8 +106,6 @@ try:
                 cr_upd.execute(sql_upd)
                 connection.commit()
                 cr_upd.close()
-        gc.collect()
-        time.sleep(0.2)
         cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
@@ -124,7 +116,6 @@ try:
         get_trades(s,uid,370)
         gen_chart(s,uid)
         get_instr_sum(s,uid,asset_class,dn,pip)
-
     cr.close()
 
 finally:

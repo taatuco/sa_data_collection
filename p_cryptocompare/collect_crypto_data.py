@@ -71,3 +71,4 @@ for row in rs:
             pass
         i +=1
 cr.close()
+connection.close()

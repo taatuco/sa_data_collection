@@ -28,7 +28,6 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
-
 sql = "DELETE FROM portfolios"
 cr.execute(sql)
 connection.commit()
@@ -287,5 +286,6 @@ def set_alloc(sfx,s):
 ################################################################################
 
     cr.close()
+    connection.close()
     ##############
     return symbol

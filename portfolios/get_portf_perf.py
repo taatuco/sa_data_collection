@@ -31,12 +31,6 @@ from sa_numeric import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_portf_perf_summ(s,uid):
     pps = instr_sum_data(s, uid)
@@ -48,17 +42,21 @@ def get_portf_perf_summ(s,uid):
     romad_st = get_romad(sql)
     volatility_risk_st = get_volatility_risk(sql,True,s)
 
+    connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "UPDATE instruments SET y1="+ str(y1) +", m6="+ str(m6) +", m3="+ str(m3) +", m1="+ str(m1) +", w1="+ str(w1) +", "+\
     " stdev_st="+ str(stdev_st) + ", maximum_dd_st="+ str(maximum_dd_st) + ", romad_st="+ str(romad_st) + ", volatility_risk_st="+ str(volatility_risk_st) +\
     " WHERE symbol='"+ str(s)  +"' "
     cr.execute(sql)
     connection.commit()
+    cr.close()
+    connection.close()
 
 def get_portf_perf():
     portf_symbol_suffix = get_portf_suffix()
     df = datetime.datetime.now() - timedelta(days=370)
 
+    connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.fullname, instruments.account_reference "+\
     "FROM `symbol_list` INNER JOIN instruments ON symbol_list.symbol = instruments.symbol "+\
@@ -82,6 +80,7 @@ def get_portf_perf():
         print(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
+        cr_i.close()
 
         while (i <= j):
 
@@ -126,3 +125,4 @@ def get_portf_perf():
         cr_i.close()
         get_portf_perf_summ(portf_symbol, portf_uid)
     cr.close()
+    connection.close()

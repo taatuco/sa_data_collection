@@ -25,12 +25,6 @@ from add_feed_type import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def set_portf_feed():
 
@@ -42,6 +36,7 @@ def set_portf_feed():
     d = datetime.datetime.now()
     d = d.strftime("%Y%m%d")
 
+    connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
@@ -88,6 +83,6 @@ def set_portf_feed():
             cr_i.execute(sql_i)
             connection.commit()
             cr_i.close()
-        except:
-            pass
+        except Exception as e: print(e)
     cr.close()
+    connection.close()

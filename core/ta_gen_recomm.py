@@ -63,6 +63,7 @@ def gen_recomm(s,uid):
         last_price = 0
         decimal_places = 0
 
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol='"+s+"'"
         cr.execute(sql)
@@ -70,6 +71,7 @@ def gen_recomm(s,uid):
         for row in rs:
             decimal_places = int(row[0])
             instr_fullname = row[1]
+        cr.close()
 
 
         sql = "SELECT trade_1_entry, trade_1_tp, trade_1_sl, trade_1_type, "+\
@@ -97,6 +99,7 @@ def gen_recomm(s,uid):
                 sell_entry = round( trade_3_entry, decimal_places)
                 sell_tp = round( trade_3_tp, decimal_places)
                 sell_sl = round( trade_3_sl, decimal_places)
+        cr.close()
 
         data_src = sett.get_path_src()
         f = data_src+str(uid)+'t.csv'
@@ -120,6 +123,7 @@ def gen_recomm(s,uid):
         rs = cr.fetchall()
         for row in rs:
             last_price = row[0]
+        cr.close()
 
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
@@ -189,7 +193,9 @@ def gen_recomm(s,uid):
             sql_u = "UPDATE instruments SET recommendation='"+ str(r) +"' WHERE symbol='" + str(s) + "'"
             cr_u.execute(sql_u)
             connection.commit()
-
+            cr_u.close()
+        cr.close()
+        connection.close()
         print(str(uid) +": "+ os.path.basename(__file__) )
 
     except Exception as e: print(e)

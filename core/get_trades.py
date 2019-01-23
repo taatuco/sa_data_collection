@@ -23,13 +23,6 @@ from ta_calc_ma import *
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
 
 def get_trades(s,uid,dc):
 
@@ -43,7 +36,7 @@ def get_trades(s,uid,dc):
         trade_expiration_date = dfrom; trade_close_price = -1
         trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0
         trade_decimal_places = 0; trade_url = "s/?uid="+ str(uid)
-
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "DELETE FROM trades WHERE symbol ='"+ s +"' AND status='active' "
         cr.execute(sql)
@@ -60,7 +53,10 @@ def get_trades(s,uid,dc):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: trade_last_price = row[0]
+        cr.close()
+        connection.close()
 
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr_1 = connection.cursor(pymysql.cursors.SSCursor)
         sql_1 = "SELECT symbol, date, price_close, target_price "+\
         "FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dfrom_str + " ORDER BY date"
@@ -108,6 +104,10 @@ def get_trades(s,uid,dc):
                 r = True
             except:
                 pass
+        cr_1.close()
+        cr_2.close()
+        cr_i.close()
+        connection.close()
 
     except Exception as e: print(e)
 

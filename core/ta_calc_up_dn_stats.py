@@ -18,16 +18,11 @@ access_obj = sa_db_access()
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_count_d(s,t,p):
     try:
         cnt = 0
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql_select = "SELECT COUNT(id) FROM price_instruments_data WHERE symbol = '"+ s +"' "
 
@@ -44,10 +39,11 @@ def get_count_d(s,t,p):
         for row in rs:
             cnt = row[0]
 
-        return cnt
+        cr.close()
+        connection.close()
 
-    except:
-        pass
+        return cnt
+    except Exception as e: print(e)
 
 def get_day_up_dwn_stat(s,uid):
 

@@ -30,12 +30,6 @@ from ta_instr_sum import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 class portf_data:
 
@@ -45,13 +39,14 @@ class portf_data:
     portf_account_ref = 0
 
     def __init__(self, portf_s):
-
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT account_reference FROM instruments WHERE symbol='"+ portf_s +"' "
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
             self.portf_account_ref = row[0]
+        cr.close()
 
 
         sql = "SELECT symbol FROM portfolios WHERE portf_symbol = '"+ portf_s +"'"
@@ -72,13 +67,16 @@ class portf_data:
                 if salloc > self.portf_big_alloc_price:
                     self.portf_big_alloc_price = salloc
                 self.portf_total_alloc_amount = self.portf_total_alloc_amount + salloc
+            cr_s.close()
 
-        self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
+        self.portf_multip = self.portf_account_ref / self.
+        cr.close()
+        connection.close()
 
     def get_quantity(self, alloc_s):
 
         portf_reduce_risk_by = 4
-
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT instruments.pip, price_instruments_data.price_close "+\
         "FROM instruments JOIN price_instruments_data ON instruments.symbol = price_instruments_data.symbol "+\
@@ -99,6 +97,8 @@ class portf_data:
             q = int(q)
             if q == 0:
                 q = 1
+        cr.close()
+        connection.close()
 
         return q
 
@@ -106,6 +106,7 @@ class portf_data:
 def get_portf_alloc():
 
     portf_symbol_suffix = get_portf_suffix()
+    connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid, instruments.unit FROM instruments "+\
     "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
@@ -201,3 +202,4 @@ def get_portf_alloc():
         connection.commit()
         cr_f.close()
     cr.close()
+    connection.close()

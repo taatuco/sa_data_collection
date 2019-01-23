@@ -26,13 +26,6 @@ from sa_numeric import *
 import pymysql.cursors
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
 class forecast_data:
     ent_1_b = 0
     sl_1_b = 0
@@ -133,21 +126,21 @@ def get_forecast_pct(lp,fp):
 
 def update_forecast_table(s,wf,frc,d,pip):
     try:
-
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_d = "SELECT unit FROM instruments WHERE symbol = '"+s+"'"
         cr_d.execute(sql_d)
         rs_d = cr_d.fetchall()
         for row in rs_d:
             unit = row[0]
+        cr_d.close()
+        connection.close()
 
         w_forecast_display_info = str(round(float(wf*100),2)) + " " + unit
         if unit == 'pips':
             w_forecast_display_info = str(round(float(wf*10000),0)) +" "+ unit
         if unit == '%':
             w_forecast_display_info = str(round(float(wf*100),2)) + unit
-
-
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "UPDATE instruments SET w_forecast_change='"+str(wf)+"', w_forecast_display_info='"+ w_forecast_display_info +"' WHERE symbol='"+s+"'"
@@ -157,6 +150,8 @@ def update_forecast_table(s,wf,frc,d,pip):
         sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (date>="+ d +" AND symbol='"+s+"' AND target_price =0) "
         cr.execute(sql)
         connection.commit()
+        cr.close()
+        connection.close()
         print(sql)
     except Exception as e: print(e)
 
@@ -167,7 +162,7 @@ trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
 trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2,
 y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
     try:
-
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_d = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"' "
         cr_d.execute(sql_d)
@@ -181,6 +176,7 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
         for row in rs_d:
             last_price = row[0]
             last_date = row[1]
+        cr_d.close()
 
         y1_pct_signal = round(float(y1_pct_signal), 3)
         m6_pct_signal = round(float(m6_pct_signal), 3)
@@ -253,6 +249,8 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
         print(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
+        cr_i.close()
+        connection.close()
 
     except Exception as e: print(e)
 

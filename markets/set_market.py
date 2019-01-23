@@ -42,4 +42,5 @@ try:
     cr.execute(sql)
     connection.commit()
     cr.close()
+    connection.close()
 except Exception as e: print(e)

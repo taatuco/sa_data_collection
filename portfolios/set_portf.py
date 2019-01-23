@@ -226,7 +226,7 @@ def set_portf_us():
     cr.close()
     return ac
 
-
+connection.close()
 ################################################################################
 print(set_portf_fx() +": "+ os.path.basename(__file__) )
 print(set_portf_crypto() +": "+ os.path.basename(__file__) )

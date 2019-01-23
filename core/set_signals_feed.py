@@ -25,12 +25,6 @@ from add_feed_type import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def set_signals_feed(s):
 
@@ -42,6 +36,7 @@ def set_signals_feed(s):
     d = datetime.datetime.now()
     d = d.strftime("%Y%m%d")
 
+    connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, symbol_list.disabled FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
@@ -94,6 +89,9 @@ def set_signals_feed(s):
             sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<'"+d+"')"
             cr_i.execute(sql_i)
             connection.commit()
-
         except:
             pass
+            
+    cr.close()
+    cr_i.close()
+    connection.close()

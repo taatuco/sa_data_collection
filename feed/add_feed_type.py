@@ -20,19 +20,15 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def add_feed_type(id,ft):
     try:
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "INSERT INTO feed_type(id, feed_type) VALUES ('"+str(id)+"','"+ft+"')"
         cr.execute(sql)
         connection.commit()
         print(sql +": "+ os.path.basename(__file__) )
         cr.close()
+        connection.close()
     except Exception as e: print(e)

@@ -55,4 +55,6 @@ sql = "INSERT INTO sectors(id, sector) VALUES "+\
 try:
     cr.execute(sql)
     connection.commit()
+    cr.close()
+    connection.close()
 except Exception as e: print(e)
