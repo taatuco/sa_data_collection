@@ -52,6 +52,8 @@ try:
         rs_pip = cr_pip.fetchall()
         for row in rs_pip:
             pip = row[0]
+        cr_pip.close()
+
 
         print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
         dn = datetime.datetime.now() - timedelta(days=10)
