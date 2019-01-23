@@ -114,7 +114,7 @@ for row in rs:
     set_signals_feed(s)
     gen_recomm(s,uid)
     get_forecast_pnl(s,uid)
-    get_trades(s,uid,370)
+    get_trades(s,uid,100)
     gen_chart(s,uid)
     get_instr_sum(s,uid,asset_class,dn,pip)
 cr.close()
