@@ -54,7 +54,7 @@ class rsi_data:
         self.p = period
         import pymysql.cursors
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr_get_pr_d = connection.cursor(rsi_data.pymysql.cursors.SSCursor)
+        cr_get_pr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_get_pr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
                              "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" "+\
                              "ORDER BY date DESC LIMIT 1"
@@ -67,7 +67,7 @@ class rsi_data:
                 rsi_data.c_prev_avg_loss = row[2]
                 rsi_data.c_prev_is_ta_calc = row[3]
 
-            cr_get_curr_d = connection.cursor(rsi_data.pymysql.cursors.SSCursor)
+            cr_get_curr_d = connection.cursor(pymysql.cursors.SSCursor)
             sql_get_curr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
                                  "WHERE symbol='"+self.s+"' AND date="+str(self.d)+" "+\
                                  "ORDER BY date DESC LIMIT 1"
@@ -98,7 +98,7 @@ class rsi_data:
         if rsi_data.c_prev_avg_gain == 0:
             import pymysql.cursors
             connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-            cr_get_avg_g = connection.cursor(rsi_data.pymysql.cursors.SSCursor)
+            cr_get_avg_g = connection.cursor(pymysql.cursors.SSCursor)
             sql_get_avg_g = "SELECT gain_1d FROM price_instruments_data "+\
                           "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
                           "LIMIT "+str(self.p)
@@ -120,7 +120,7 @@ class rsi_data:
         if rsi_data.c_prev_avg_loss == 0:
             import pymysql.cursors
             connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-            cr_get_avg_l = connection.cursor(rsi_data.pymysql.cursors.SSCursor)
+            cr_get_avg_l = connection.cursor(pymysql.cursors.SSCursor)
             sql_get_avg_l = "SELECT loss_1d FROM price_instruments_data "+\
                           "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
                           "LIMIT "+str(self.p)
