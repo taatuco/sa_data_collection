@@ -44,6 +44,7 @@ def get_stdev(sql):
         #sql with just one numerical value to compute standard deviation
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
+        print(sql)
         cr.execute(sql)
         a = list( cr.fetchall() )
         r = np.std(a)
@@ -75,7 +76,6 @@ def get_volatility_risk(sql,is_portf,s):
 
         stdev = get_stdev(sql)
         rp = lp - stdev
-        print(str(rp)+ " = "+ str(lp) + " - " + str(stdev) )
         r = abs( get_pct_change(lp,rp)  )
         cr.close()
         connection.close()
