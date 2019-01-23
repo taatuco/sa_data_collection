@@ -69,7 +69,7 @@ class portf_data:
                 self.portf_total_alloc_amount = self.portf_total_alloc_amount + salloc
             cr_s.close()
 
-        self.portf_multip = self.portf_account_ref / self.
+        self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
         cr.close()
         connection.close()
 
