@@ -101,7 +101,6 @@ def get_mdd(sql):
         cur_dd = 0
         for row in rs:
             val = row[0]
-        cr.close()
 
             if val > top:
                 top = val
@@ -117,6 +116,7 @@ def get_mdd(sql):
 
             if cur_dd > pct_dd:
                 pct_dd = cur_dd
+        cr.close()
 
         r = pct_dd
         print('mdd='+ str(r) )
