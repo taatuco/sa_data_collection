@@ -51,8 +51,6 @@ try:
         s = row[0]
         uid = row[1]
         asset_class = row[2]
-    cr.close()
-
         cr_pip = connection.cursor(pymysql.cursors.SSCursor)
         sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
         cr_pip.execute(sql_pip)
