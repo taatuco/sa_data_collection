@@ -170,7 +170,7 @@ def gen_chart(s,uid):
                 signal_price =  signal_price + ( signal_price * float( get_trade_pnl(uid, date.strftime("%Y%m%d") ) ) )
                 pct_signal = get_pct_change(ini_signal, signal_price)
 
-
+            cr_t = connection.cursor(pymysql.cursors.SSCursor)
             sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
             "lt_upper_trend_line, lt_lower_trend_line, "+\
             "st_upper_trend_line, st_lower_trend_line, "+\
@@ -212,7 +212,7 @@ def gen_chart(s,uid):
                         except:
                             st_lower_trend_line = '0'
                             st_upper_trend_line = '0'
-
+                        cr_t = connection.cursor(pymysql.cursors.SSCursor)
                         sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
                         "lt_upper_trend_line, lt_lower_trend_line, "+\
                         "st_upper_trend_line, st_lower_trend_line, "+\
