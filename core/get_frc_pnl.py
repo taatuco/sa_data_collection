@@ -30,14 +30,12 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-def get_forecast_pnl(s,uid):
+def get_forecast_pnl(s,uid,nd):
 
 
     td = datetime.datetime.now()
     i = 0
     wdb = 7
-    nd = 360
-
 
     while i <= nd:
 
