@@ -62,7 +62,7 @@ try:
         print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
         dn = datetime.datetime.now() - timedelta(days=10)
         dn = dn.strftime("%Y%m%d")
-        d = datetime.datetime.now() - timedelta(days=720)
+        d = datetime.datetime.now() - timedelta(days=5)
         d = d.strftime("%Y%m%d")
 
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
