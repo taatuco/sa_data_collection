@@ -74,7 +74,6 @@ def get_trades(s,uid,dc):
             date_1 = row[1]
             price_close_1 = round( row[2], trade_decimal_places)
             target_price_1 = round( row[3], trade_decimal_places)
-        cr_1.close()
 
             dto = date_1 + timedelta(days=7) ; dto_str = dto.strftime('%Y%m%d')
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
@@ -114,6 +113,7 @@ def get_trades(s,uid,dc):
                 r = True
             except:
                 pass
+        cr_1.close()
 
     except Exception as e: print(e)
 
