@@ -85,7 +85,6 @@ try:
             rsi_oversold = rsi.get_rsi_oversold()
             ma200 = calc_ma(s,d,200)
             is_ta_calc = "1"
-        cr_d_id.close()
 
             try:
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)
@@ -113,9 +112,8 @@ try:
                 cr_upd.execute(sql_upd)
                 connection.commit()
                 cr_upd.close()
+        cr_d_id.close()
         gc.collect()
-        time.sleep(0.2)
-        # Calc other data as per symbol
         get_trend_line_data(s,uid)
         get_day_up_dwn_stat(s,uid)
         set_signals_feed(s)
