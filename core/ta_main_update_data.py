@@ -57,7 +57,7 @@ for row in rs:
     print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
     dn = datetime.datetime.now() - timedelta(days=10)
     dn = dn.strftime("%Y%m%d")
-    d = datetime.datetime.now() - timedelta(days=20)
+    d = datetime.datetime.now() - timedelta(days=10)
     d = d.strftime("%Y%m%d")
 
     cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
@@ -114,7 +114,7 @@ for row in rs:
     set_signals_feed(s)
     gen_recomm(s,uid)
     get_forecast_pnl(s,uid)
-    get_trades(s,uid,100)
+    get_trades(s,uid,370)
     gen_chart(s,uid)
     get_instr_sum(s,uid,asset_class,dn,pip)
 cr.close()
