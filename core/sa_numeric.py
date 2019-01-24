@@ -50,10 +50,10 @@ def get_stdev(sql):
         #sql with just one numerical value to compute standard deviation
         cr = connection.cursor(pymysql.cursors.SSCursor)
         cr.execute(sql)
-        cr.close()
         a = list( cr.fetchall() )
         r = np.std(a)
         print('stdev='+str(r) )
+        cr.close()
     except Exception as e: print(e)
 
     return r
