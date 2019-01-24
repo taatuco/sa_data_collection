@@ -50,6 +50,7 @@ def get_trades(s,uid,dc):
         connection.commit()
         cr.close()
 
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol = '"+ s +"' "
         cr.execute(sql)
         rs = cr.fetchall()
@@ -57,7 +58,8 @@ def get_trades(s,uid,dc):
             trade_decimal_places = row[0]
             trade_fullname = row[1]
         cr.close()
-
+        
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
