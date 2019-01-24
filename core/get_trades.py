@@ -35,7 +35,7 @@ def get_trades(s,uid,dc):
 
     r = False
     try:
-        daycount = dc
+        daycount = dc + 10
         dfrom = datetime.datetime.now() - timedelta(days=daycount) ; dfrom_str = dfrom.strftime('%Y%m%d')
 
         trade_symbol = s; trade_order_type = ''
