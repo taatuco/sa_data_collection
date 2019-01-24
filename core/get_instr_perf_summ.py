@@ -57,6 +57,7 @@ class instr_sum_data:
 
     def __init__(self,symbol,uid):
         self.s = symbol
+        import pymysql.cursors
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol from symbol_list WHERE uid=" + str(uid)
