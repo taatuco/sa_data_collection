@@ -48,7 +48,6 @@ def get_forecast_pnl(s,uid):
         pd_str = pd.strftime("%Y%m%d")
         sd_str = sd.strftime("%Y%m%d")
 
-        cr = connection.cursor(pymysql.cursors.SSCursor)
         signal = ''
         p_price_close = 0
         p_target_price = 0
@@ -56,6 +55,7 @@ def get_forecast_pnl(s,uid):
 
         print(s +": "+ sd_str +": "+ os.path.basename(__file__) )
 
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close, target_price FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ pd_str
         cr.execute(sql)
         rs = cr.fetchall()
@@ -74,7 +74,7 @@ def get_forecast_pnl(s,uid):
             id = 0
             s_pnl = 0
             s_price_close = 0
-
+            cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT id, price_close, pnl FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ sd_str
             print(sql)
             cr.execute(sql)
@@ -90,7 +90,7 @@ def get_forecast_pnl(s,uid):
                     pnl = s_price_close - p_price_close
                 if signal == "s":
                     pnl = p_price_close - s_price_close
-
+                cr = connection.cursor(pymysql.cursors.SSCursor)
                 sql = "UPDATE price_instruments_data SET pnl = " + str(pnl) + " WHERE id = " + str(id)
                 print(sql)
                 try:
