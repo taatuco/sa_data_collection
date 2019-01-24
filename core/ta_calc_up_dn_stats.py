@@ -43,6 +43,7 @@ def get_count_d(s,t,p):
         rs = cr.fetchall()
         for row in rs:
             cnt = row[0]
+        cr.close()
 
         return cnt
 

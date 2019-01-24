@@ -140,6 +140,7 @@ def update_forecast_table(s,wf,frc,d,pip):
         rs_d = cr_d.fetchall()
         for row in rs_d:
             unit = row[0]
+        cr_d.close()
 
         w_forecast_display_info = str(round(float(wf*100),2)) + " " + unit
         if unit == 'pips':
@@ -153,10 +154,13 @@ def update_forecast_table(s,wf,frc,d,pip):
         sql = "UPDATE instruments SET w_forecast_change='"+str(wf)+"', w_forecast_display_info='"+ w_forecast_display_info +"' WHERE symbol='"+s+"'"
         cr.execute(sql)
         connection.commit()
+        cr.close()
 
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (date>="+ d +" AND symbol='"+s+"' AND target_price =0) "
         cr.execute(sql)
         connection.commit()
+        cr.close()
         print(sql)
     except Exception as e: print(e)
 
@@ -174,13 +178,16 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
         rs_d = cr_d.fetchall()
         for row in rs_d:
             decimal_places = row[0]
+        cr_d.close()
 
+        cr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_d = "SELECT price_close, date FROM price_instruments_data WHERE symbol='"+ s +"' ORDER BY date DESC LIMIT 1 "
         cr_d.execute(sql_d)
         rs_d = cr_d.fetchall()
         for row in rs_d:
             last_price = row[0]
             last_date = row[1]
+        cr_d.close()
 
         y1_pct_signal = round(float(y1_pct_signal), 3)
         m6_pct_signal = round(float(m6_pct_signal), 3)
@@ -253,6 +260,7 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
         print(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
+        cr_i.close()
 
     except Exception as e: print(e)
 

@@ -90,10 +90,12 @@ def set_signals_feed(s):
             if not disabled:
                 cr_i.execute(sql_i)
                 connection.commit()
+                cr_i.close()
 
             sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<'"+d+"')"
             cr_i.execute(sql_i)
             connection.commit()
-
+            cr_i.close()
         except:
             pass
+    cr.close()

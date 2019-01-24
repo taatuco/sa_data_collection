@@ -62,6 +62,7 @@ def get_forecast_pnl(s,uid):
         for row in rs:
             p_price_close = row[0]
             p_target_price = row[1]
+        cr.close()
 
         if (p_price_close > 0 and p_target_price > 0 ):
 
@@ -82,6 +83,7 @@ def get_forecast_pnl(s,uid):
                 id = row[0]
                 s_price_close = row[1]
                 s_pnl = row[2]
+            cr.close()
 
             if s_pnl == 0:
                 if signal == "b":
@@ -94,6 +96,7 @@ def get_forecast_pnl(s,uid):
                 try:
                     cr.execute(sql)
                     connection.commit()
+                    cr.close()
                 except Exception as e: print(e)
 
         i += 1

@@ -97,6 +97,7 @@ def gen_recomm(s,uid):
                 sell_entry = round( trade_3_entry, decimal_places)
                 sell_tp = round( trade_3_tp, decimal_places)
                 sell_sl = round( trade_3_sl, decimal_places)
+        cr.close()
 
         data_src = sett.get_path_src()
         f = data_src+str(uid)+'t.csv'
@@ -120,6 +121,7 @@ def gen_recomm(s,uid):
         rs = cr.fetchall()
         for row in rs:
             last_price = row[0]
+        cr.close()
 
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
@@ -189,6 +191,8 @@ def gen_recomm(s,uid):
             sql_u = "UPDATE instruments SET recommendation='"+ str(r) +"' WHERE symbol='" + str(s) + "'"
             cr_u.execute(sql_u)
             connection.commit()
+            cr_u.close()
+        cr.close()
 
         print(str(uid) +": "+ os.path.basename(__file__) )
 

@@ -86,7 +86,6 @@ class rsi_data:
                     rsi_data.c_curr_avg_gain = row[1]
                     rsi_data.c_curr_avg_loss = row[2]
                     rsi_data.c_curr_is_ta_calc = row[3]
-
             cr_get_curr_d.close()
         cr_get_pr_d.close()
 

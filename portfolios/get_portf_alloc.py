@@ -52,8 +52,9 @@ class portf_data:
         rs = cr.fetchall()
         for row in rs:
             self.portf_account_ref = row[0]
+        cr.close()
 
-
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol FROM portfolios WHERE portf_symbol = '"+ portf_s +"'"
         cr.execute(sql)
         rs = cr.fetchall()
@@ -72,6 +73,8 @@ class portf_data:
                 if salloc > self.portf_big_alloc_price:
                     self.portf_big_alloc_price = salloc
                 self.portf_total_alloc_amount = self.portf_total_alloc_amount + salloc
+            cr_s.close()
+        cr.close()
 
         self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
 
@@ -91,6 +94,8 @@ class portf_data:
             pip_s = row[0]
             price_s = row[1]
             salloc = ( pip_s * price_s )
+        cr.close()
+
         q = round( ( (self.portf_big_alloc_price / salloc) * self.portf_multip ) / portf_reduce_risk_by  , 2)
         if q < 0.01:
             q = 0.01
@@ -129,8 +134,8 @@ def get_portf_alloc():
         sql_pf = "SELECT symbol, quantity FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
         cr_pf.execute(sql_pf)
         rs_pf = cr_pf.fetchall()
-
         for row in rs_pf:
+            
             print(sql_pf+": "+ os.path.basename(__file__) )
             portf_item_symbol = row[0]
             portf_item_quantity = portfd.get_quantity(portf_item_symbol)
@@ -140,7 +145,6 @@ def get_portf_alloc():
             cr_p.execute(sql_p)
             rs_p = cr_p.fetchall()
             print(sql_p+": "+ os.path.basename(__file__) )
-
             for row in rs_p:
                 alloc_price = row[0]
                 alloc_date = row[1]

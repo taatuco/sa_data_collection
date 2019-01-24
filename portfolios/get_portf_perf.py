@@ -54,6 +54,7 @@ def get_portf_perf_summ(s,uid):
     " WHERE symbol='"+ str(s)  +"' "
     cr.execute(sql)
     connection.commit()
+    cr.close()
 
 def get_portf_perf():
     portf_symbol_suffix = get_portf_suffix()
@@ -82,6 +83,7 @@ def get_portf_perf():
         print(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
+        cr_i.close()
 
         while (i <= j):
 
@@ -123,6 +125,5 @@ def get_portf_perf():
                 except Exception as e: print(e)
 
             i +=1
-        cr_i.close()
         get_portf_perf_summ(portf_symbol, portf_uid)
     cr.close()

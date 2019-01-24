@@ -48,6 +48,7 @@ def get_trades(s,uid,dc):
         sql = "DELETE FROM trades WHERE symbol ='"+ s +"' AND status='active' "
         cr.execute(sql)
         connection.commit()
+        cr.close()
 
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol = '"+ s +"' "
         cr.execute(sql)
@@ -55,11 +56,13 @@ def get_trades(s,uid,dc):
         for row in rs:
             trade_decimal_places = row[0]
             trade_fullname = row[1]
+        cr.close()
 
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: trade_last_price = row[0]
+        cr.close()
 
         cr_1 = connection.cursor(pymysql.cursors.SSCursor)
         sql_1 = "SELECT symbol, date, price_close, target_price "+\
@@ -71,6 +74,7 @@ def get_trades(s,uid,dc):
             date_1 = row[1]
             price_close_1 = round( row[2], trade_decimal_places)
             target_price_1 = round( row[3], trade_decimal_places)
+        cr_1.close()
 
             dto = date_1 + timedelta(days=7) ; dto_str = dto.strftime('%Y%m%d')
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
@@ -80,6 +84,7 @@ def get_trades(s,uid,dc):
             rs_2 = cr_2.fetchall()
             date_2 = None; price_close_2 = -1
             for row in rs_2: date_2 = row[0]; price_close_2 = round( row[1], trade_decimal_places)
+            cr_2.close()
 
             if price_close_1 <= target_price_1: trade_order_type = 'buy'
             else: trade_order_type = 'sell'
@@ -105,6 +110,7 @@ def get_trades(s,uid,dc):
             try:
                 cr_i.execute(sql_i)
                 connection.commit()
+                cr_i.close()
                 r = True
             except:
                 pass

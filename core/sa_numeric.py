@@ -50,6 +50,7 @@ def get_stdev(sql):
         #sql with just one numerical value to compute standard deviation
         cr = connection.cursor(pymysql.cursors.SSCursor)
         cr.execute(sql)
+        cr.close()
         a = list( cr.fetchall() )
         r = np.std(a)
         print('stdev='+str(r) )
@@ -70,10 +71,12 @@ def get_volatility_risk(sql,is_portf,s):
             cr.execute(sql_i)
             rs = cr.fetchall()
             for row in rs: lp = row[0]
+            cr.close()
         else:
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs: lp = row[0]
+            cr.close()
 
         stdev = get_stdev(sql)
         rp = lp - stdev
@@ -98,6 +101,7 @@ def get_mdd(sql):
         cur_dd = 0
         for row in rs:
             val = row[0]
+        cr.close()
 
             if val > top:
                 top = val
@@ -137,6 +141,7 @@ def get_romad(sql):
                 first = row[0]
             last = row[0]
             i += 1
+        cr.close()
 
         print('f='+str(first) + ' l='+str(last) )
 

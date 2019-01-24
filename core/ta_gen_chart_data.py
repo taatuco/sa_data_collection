@@ -40,6 +40,7 @@ def get_trade_pnl(uid,d):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
+        cr.close()
     except Exception as e: print(e)
     return r
 
@@ -52,7 +53,7 @@ def gen_chart(s,uid):
     rs = cr.fetchall()
     for row in rs:
         decimal_places = int(row[0])
-
+    cr.close()
 
 
     n = datetime.datetime.today()
@@ -99,6 +100,7 @@ def gen_chart(s,uid):
         sql_t = "DELETE FROM chart_data WHERE uid=" + str(uid)
         cr_t.execute(sql_t)
         connection.commit()
+        cr_t.close()
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date, price_close, ma200, rsi14, rsi_overbought, rsi_oversold, target_price "+\
@@ -181,8 +183,10 @@ def gen_chart(s,uid):
             print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
             cr_t.execute(sql_t)
             connection.commit()
+            cr_t.close()
 
             i += 1
+        cr.close()
 
         f = data_src+str(uid)+'f.csv'
         filepath = Path(f)
@@ -220,5 +224,6 @@ def gen_chart(s,uid):
                         print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
                         cr_t.execute(sql_t)
                         connection.commit()
+                        cr_t.close()
 
                     i +=1

@@ -29,21 +29,18 @@ def calc_ma(symbol_id, date_id, ma_period):
                                  db=db_name,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
-    try:
-        from_date =  datetime.datetime.strptime(date_id, '%Y%m%d') - ( timedelta(days=ma_period) )
-        from_date = from_date.strftime("%Y%m%d")
-        ma_period = str(ma_period)
-        ma = 0
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
-        "WHERE symbol='"+symbol_id+"' AND date<="+date_id+" AND date>="+ from_date
-        cr.execute(sql)
-        rs = cr.fetchall()
-        if rs:
-            for row in rs:
-                ma = row[0]
-        cr.close()
-        return(ma)
 
-    finally:
-        connection.close()
+    from_date =  datetime.datetime.strptime(date_id, '%Y%m%d') - ( timedelta(days=ma_period) )
+    from_date = from_date.strftime("%Y%m%d")
+    ma_period = str(ma_period)
+    ma = 0
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
+    "WHERE symbol='"+symbol_id+"' AND date<="+date_id+" AND date>="+ from_date
+    cr.execute(sql)
+    rs = cr.fetchall()
+    if rs:
+        for row in rs:
+            ma = row[0]
+    cr.close()
+    return(ma)

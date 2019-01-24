@@ -39,6 +39,7 @@ try:
     rs_cnt = cr_cnt.fetchall()
     for row in rs_cnt:
         j = ( ((int(row[0]) )/2)+1)
+    cr_cnt.close()
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol, uid FROM symbol_list WHERE symbol LIKE '%"+ selected_symbol +"%'"

@@ -70,4 +70,5 @@ for row in rs:
         except:
             pass
         i +=1
+    cr_i.close()
 cr.close()

@@ -51,6 +51,7 @@ try:
         s = row[0]
         uid = row[1]
         asset_class = row[2]
+    cr.close()
 
         cr_pip = connection.cursor(pymysql.cursors.SSCursor)
         sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
@@ -58,6 +59,7 @@ try:
         rs_pip = cr_pip.fetchall()
         for row in rs_pip:
             pip = row[0]
+        cr_pip.close()
 
         print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
         dn = datetime.datetime.now() - timedelta(days=10)
@@ -85,6 +87,7 @@ try:
             rsi_oversold = rsi.get_rsi_oversold()
             ma200 = calc_ma(s,d,200)
             is_ta_calc = "1"
+        cr_d_id.close()
 
             try:
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)
@@ -114,7 +117,6 @@ try:
                 cr_upd.close()
         gc.collect()
         time.sleep(0.2)
-        cr_d_id.close()
         # Calc other data as per symbol
         get_trend_line_data(s,uid)
         get_day_up_dwn_stat(s,uid)
