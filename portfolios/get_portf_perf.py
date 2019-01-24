@@ -115,7 +115,7 @@ def get_portf_perf():
                 portf_nav = round( portf_nav + portf_pnl, 2)
 
                 try:
-
+                    cr_i = connection.cursor(pymysql.cursors.SSCursor)
                     sql_i = "INSERT INTO chart_data(uid, symbol, date, price_close) "+\
                     "VALUES (" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
                     print(sql_i)
