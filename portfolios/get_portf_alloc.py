@@ -126,6 +126,7 @@ def get_portf_alloc():
 
         portfd = portf_data(portf_symbol)
 
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr_pf = connection.cursor(pymysql.cursors.SSCursor)
         sql_pf = "SELECT symbol, quantity FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
         cr_pf.execute(sql_pf)
@@ -135,7 +136,7 @@ def get_portf_alloc():
             print(sql_pf+": "+ os.path.basename(__file__) )
             portf_item_symbol = row[0]
             portf_item_quantity = portfd.get_quantity(portf_item_symbol)
-
+            connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
             cr_p = connection.cursor(pymysql.cursors.SSCursor)
             sql_p = "SELECT price_close, date FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"
             cr_p.execute(sql_p)
@@ -148,7 +149,7 @@ def get_portf_alloc():
                 alloc_expiration = alloc_date + timedelta(days=7)
                 alloc_expiration = alloc_expiration.strftime("%Y%m%d")
             cr_p.close()
-
+            connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
             cr_t = connection.cursor(pymysql.cursors.SSCursor)
             sql_t = "SELECT instruments.symbol, instruments.fullname, instruments.decimal_places, "+\
             "instruments.w_forecast_change, instruments.pip, symbol_list.uid FROM instruments "+\
@@ -176,7 +177,7 @@ def get_portf_alloc():
                 entry_level = alloc_entry_level_sign + ' ' + str( round( float(alloc_price), alloc_decimal_places) )
 
                 print(portf_symbol +": " + alloc_symbol )
-
+                connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
                 cr_x = connection.cursor(pymysql.cursors.SSCursor)
                 sql_x = 'UPDATE portfolios SET quantity='+ str(portf_item_quantity) +', alloc_fullname="'+ alloc_fullname +'", order_type="' + alloc_order_type + '", '+\
                 'dollar_amount='+ str(alloc_dollar_amount) +', entry_level="'+ entry_level +'", expiration='+ alloc_expiration +' '+\
@@ -195,6 +196,7 @@ def get_portf_alloc():
         ### Updatedb
         portf_perc_return = (100/(portf_nav/portf_forc_return))/100
         w_forecast_display_info = "+" + portf_unit + " " + str( round(portf_forc_return,2) )
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr_f = connection.cursor(pymysql.cursors.SSCursor)
         sql_f = "UPDATE instruments SET w_forecast_change=" + str(portf_perc_return) + ", w_forecast_display_info='" + w_forecast_display_info + "' " +\
         "WHERE symbol='"+portf_symbol+"' "
