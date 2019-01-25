@@ -36,9 +36,9 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 def get_update_instr_data(fm):
 
     if fm == 1:
-        nd_scan = 10
-    else:
         nd_scan = 370
+    else:
+        nd_scan = 10
 
     import pymysql.cursors
     connection = pymysql.connect(host=db_srv,
@@ -126,7 +126,7 @@ def get_update_instr_data(fm):
                 get_day_up_dwn_stat(s,uid)
                 set_signals_feed(s)
                 gen_recomm(s,uid)
-                get_forecast_pnl(s,uid,nd_scan)
+            get_forecast_pnl(s,uid,nd_scan)
             get_trades(s,uid,nd_scan)
             get_instr_sum(s,uid,asset_class,dn,pip)
 
