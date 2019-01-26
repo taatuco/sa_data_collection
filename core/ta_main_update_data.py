@@ -126,6 +126,7 @@ def get_update_instr_data(fm):
                 get_day_up_dwn_stat(s,uid)
                 set_signals_feed(s)
                 gen_recomm(s,uid)
+                gen_chart(s,uid)
             get_forecast_pnl(s,uid,nd_scan)
             get_trades(s,uid,nd_scan)
             get_instr_sum(s,uid,asset_class,dn,pip)

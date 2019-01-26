@@ -43,25 +43,27 @@ for row in rs:
     avs = row[2]
 
     print(s+": "+ os.path.basename(__file__) )
+    try:
+        data = { "function": "TIME_SERIES_DAILY",
+        "symbol": avs,
+        "interval" : "60min",
+        "datatype": "json",
+        "apikey": api_key }
+        response = requests.get(url, data)
+        data = response.json()
+        a = (data['Time Series (Daily)']['2014-01-24'])
+        print(a[key]['4. close'] + " " + a[key]['2. high'] + " " + a[key]['5. volume'])
+    except Exception as e:
+        print(e)
+        pass
 
-    data = { "function": "TIME_SERIES_DAILY",
-    "symbol": avs,
-    "interval" : "60min",
-    "datatype": "json",
-    "apikey": api_key }
-    response = requests.get(url, data)
-    data = response.json()
-    a = (data['Time Series (Daily)']['2014-01-24'])
-    print(a[key]['4. close'] + " " + a[key]['2. high'] + " " + a[key]['5. volume'])
-
-
-    #sql_i = "INSERT INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
-    #print(sql_i)
-    #try:
-    #    cr_i.execute(sql_i)
-    #    connection.commit()
-    #    cr_i.close()
-    #except:
-    #    pass
-    #cr_i.close()
+    sql_i = "INSERT INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
+    print(sql_i)
+    try:
+        cr_i.execute(sql_i)
+        connection.commit()
+        cr_i.close()
+    except:
+        pass
+    cr_i.close()
 cr.close()
