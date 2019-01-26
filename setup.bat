@@ -28,7 +28,7 @@ SET SET_DATA="%SA_DATA_DIR%sa_4_set_data.bat"
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
 SET GET_OA_DATA="%SA_DATA_DIR%r_oanda\get_oanda_data.bat"
 SET GET_CC_DATA="%SA_DATA_DIR%p_cryptocompare\get_cryptocompare_data.bat"
-
+SET GET_AV_DATA="%SA_DATA_DIR%p_alphavantage\get_alphavantage_data.bat"
 
 SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
 SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
@@ -78,6 +78,11 @@ MKDIR "%SA_DATA_DIR%r_oanda\src"
 REM ### Cryptocompare
 @ECHO %_PY_EXE% "%SA_DATA_DIR%p_cryptocompare\collect_crypto_data.py" > %GET_CC_DATA%
 @ECHO exit >> %GET_CC_DATA%
+
+REM ### Alphavantage
+@ECHO %_PY_EXE% "%SA_DATA_DIR%p_alphavantage\collect_stocks_data.py" > %GET_AV_DATA%
+@ECHO %_PIP_EXE% install alpha_vantage >> %GET_AV_DATA%
+@ECHO exit >> %GET_AV_DATA%
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
