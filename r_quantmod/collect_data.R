@@ -58,7 +58,11 @@ collect_data <- function() {
   qm_src <- "yahoo"
   yx <- year(now())
   mx <- month(now())
-  dfrom <- get_date_prev_month(yx,mx,"01")
+  dx <- day(now())
+  if (dx > 28) {
+    dx <- 28
+  }
+  dfrom <- get_date_prev_month(yx,mx,dx)
 
   ### Connect to MySQL database to retrieve list of symbols
   db_usr <- get_sa_usr()

@@ -24,12 +24,7 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "SELECT symbol_list.symbol, symbol_list.uid, symbol_list.fsym, symbol_list.tsym FROM symbol_list INNER JOIN instruments ON symbol_list.symbol = instruments.symbol WHERE instruments.asset_class = 'CR:'"
@@ -58,8 +53,8 @@ for row in rs:
     i= 1
     cr_i = connection.cursor(pymysql.cursors.SSCursor)
     while i<k:
-        pc = j['Data'][i]['close']
-        d = j['Data'][i]['time']
+        pc = j['Time Series (Daily)'][i]['close']
+        d = j['Time Series (Daily)'][i]['time']
         dt = datetime.utcfromtimestamp(int(d))
         sql_i = "INSERT INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
         print(sql_i)
