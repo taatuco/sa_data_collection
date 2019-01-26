@@ -44,7 +44,7 @@ for row in rs:
 
     print(s+": "+ os.path.basename(__file__) )
 
-    data = { "function": "TIME_SERIES_INTRADAY",
+    data = { "function": "TIME_SERIES_DAILY",
     "symbol": avs,
     "interval" : "60min",
     "datatype": "json",
