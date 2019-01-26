@@ -53,8 +53,8 @@ for row in rs:
     i= 1
     cr_i = connection.cursor(pymysql.cursors.SSCursor)
     while i<k:
-        pc = j['data'][i]['close']
-        d = j['data'][i]['time']
+        pc = j['Data'][i]['close']
+        d = j['Data'][i]['time']
         dt = datetime.utcfromtimestamp(int(d))
         sql_i = "INSERT INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
         print(sql_i)
