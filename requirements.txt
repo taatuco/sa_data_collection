@@ -1,0 +1,14 @@
+mysql-Python
+PyMySQL
+python-dateutil
+beautifulsoup4
+requests
+numpy
+scipy
+matplotlib
+ipython
+jupyter
+pandas
+sympy
+nose
+alpha_vantage

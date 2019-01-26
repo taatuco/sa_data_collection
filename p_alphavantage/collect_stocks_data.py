@@ -51,10 +51,8 @@ for row in rs:
     "apikey": api_key }
     response = requests.get(url, data)
     data = response.json()
-    a = (data['Time Series (Daily)'])
-    keys = (a.keys())
-    for key in keys:
-        print(a[key] + " :: " + a[key]['4. close'] + " " + a[key]['2. high'] + " " + a[key]['5. volume'])
+    a = (data['Time Series (Daily)']['2014-01-24'])
+    print(a[key]['4. close'] + " " + a[key]['2. high'] + " " + a[key]['5. volume'])
 
 
     #sql_i = "INSERT INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"

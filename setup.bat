@@ -1,7 +1,6 @@
 REM Edt Configuration here #####################################################
 SET R_VER=R-3.5.1
 SET PY_VER=Python37-32
-SET PY_BS=beautifulsoup4
 SET SA_FRC_SCRIPT=%SYSTEMDRIVE%\smartalpha\sa_frc\get_forecast_data.bat
 
 SET GET_DATA_TIME_ST=01:00
@@ -51,7 +50,7 @@ MKDIR "%SA_DATA_DIR%src"
 @ECHO %_PIP_EXE% install mysql-python >> %GET_DATA%
 @ECHO %_PIP_EXE% install PyMySQL >> %GET_DATA%
 @ECHO %_PIP_EXE% install python-dateutil >> %GET_DATA%
-@ECHO %_PIP_EXE% install %PY_BS% >> %GET_DATA%
+@ECHO %_PIP_EXE% install beautifulsoup4 >> %GET_DATA%
 @ECHO %_PIP_EXE% install requests >> %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose >> %GET_DATA%
 @ECHO START "" %GET_QM_DATA% >> %GET_DATA%
