@@ -51,7 +51,6 @@ for row in rs:
     "apikey": api_key }
     response = requests.get(url, data)
     data = response.json()
-    print(symbol)
     a = (data['Time Series (Daily)'])
     keys = (a.keys())
     for key in keys:

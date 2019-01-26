@@ -80,8 +80,8 @@ REM ### Cryptocompare
 @ECHO exit >> %GET_CC_DATA%
 
 REM ### Alphavantage
-@ECHO %_PY_EXE% "%SA_DATA_DIR%p_alphavantage\collect_stocks_data.py" > %GET_AV_DATA%
-@ECHO %_PIP_EXE% install alpha_vantage >> %GET_AV_DATA%
+@ECHO %_PIP_EXE% install alpha_vantage > %GET_AV_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%p_alphavantage\collect_stocks_data.py" >> %GET_AV_DATA%
 @ECHO exit >> %GET_AV_DATA%
 
 REM ### 2 Get Forecast
