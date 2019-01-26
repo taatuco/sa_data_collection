@@ -55,7 +55,7 @@ for row in rs:
     a = (data['Time Series (Daily)'])
     keys = (a.keys())
     for key in keys:
-        print(a[key] + " :: " a[key]['4. close'] + " " + a[key]['2. high'] + " " + a[key]['5. volume'])
+        print(a[key] + " :: " + a[key]['4. close'] + " " + a[key]['2. high'] + " " + a[key]['5. volume'])
 
 
     #sql_i = "INSERT INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
