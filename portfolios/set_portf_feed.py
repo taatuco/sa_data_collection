@@ -74,7 +74,7 @@ def set_portf_feed():
         print(search +": "+ os.path.basename(__file__) )
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date=<'"+d+"')"
+        sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date<='"+d+"')"
         cr_i.execute(sql_i)
         connection.commit()
 
