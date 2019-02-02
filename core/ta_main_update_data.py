@@ -130,6 +130,7 @@ def get_update_instr_data(fm):
             get_forecast_pnl(s,uid,nd_scan)
             get_trades(s,uid,nd_scan)
             get_instr_sum(s,uid,asset_class,dn,pip)
+            set_signals_feed(s)
 
         cr.close()
 
