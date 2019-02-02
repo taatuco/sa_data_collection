@@ -95,11 +95,11 @@ def set_signals_feed(s):
             pass
         try:
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
-            sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<'"+d+"')"
+            sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date=<'"+d+"')"
             cr_i.execute(sql_i)
             connection.commit()
             cr_i.close()
         except Exception as e:
-            print(e)
-            pass            
+            print(e + ' ' + os.path.basename(__file__) ) 
+            pass
     cr.close()

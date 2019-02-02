@@ -84,10 +84,11 @@ def set_portf_feed():
         try:
             cr_i.execute(sql_i)
             connection.commit()
-            sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date<'"+d+"')"
+            sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date=<'"+d+"')"
             cr_i.execute(sql_i)
             connection.commit()
             cr_i.close()
-        except:
+        except Exception as e:
+            print(e + ' ' + os.path.basename(__file__) )
             pass
     cr.close()
