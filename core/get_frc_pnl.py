@@ -73,9 +73,11 @@ def get_forecast_pnl(s,uid,nd):
 
             id = 0
             s_pnl = 0
+            s_pnl_long = 0
+            s_pnl_short = 0
             s_price_close = 0
             cr = connection.cursor(pymysql.cursors.SSCursor)
-            sql = "SELECT id, price_close, pnl FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ sd_str
+            sql = "SELECT id, price_close, pnl, pnl_long, pnl_short FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ sd_str
             print(sql)
             cr.execute(sql)
             rs = cr.fetchall()
@@ -83,9 +85,11 @@ def get_forecast_pnl(s,uid,nd):
                 id = row[0]
                 s_price_close = row[1]
                 s_pnl = row[2]
+                s_pnl_long = row[3]
+                s_pnl_short = row[4]
             cr.close()
 
-            if s_pnl == 0:
+            if s_pnl == 0 or s_pnl_long == 0 or s_pnl_short == 0:
                 if signal == "b":
                     pnl = s_price_close - p_price_close
                     pnl_long = pnl
