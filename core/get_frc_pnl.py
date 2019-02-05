@@ -50,6 +50,8 @@ def get_forecast_pnl(s,uid,nd):
         p_price_close = 0
         p_target_price = 0
         pnl = 0
+        pnl_long = 999
+        pnl_short = 999
 
         print(s +": "+ sd_str +": "+ os.path.basename(__file__) )
 
@@ -86,10 +88,12 @@ def get_forecast_pnl(s,uid,nd):
             if s_pnl == 0:
                 if signal == "b":
                     pnl = s_price_close - p_price_close
+                    pnl_long = pnl
                 if signal == "s":
                     pnl = p_price_close - s_price_close
+                    pnl_short = pnl
                 cr = connection.cursor(pymysql.cursors.SSCursor)
-                sql = "UPDATE price_instruments_data SET pnl = " + str(pnl) + " WHERE id = " + str(id)
+                sql = "UPDATE price_instruments_data SET pnl = " + str(pnl) + ", pnl_long = " + str(pnl_long) + ", pnl_short = " + str(pnl_short) + " WHERE id = " + str(id)
                 print(sql)
                 try:
                     cr.execute(sql)
