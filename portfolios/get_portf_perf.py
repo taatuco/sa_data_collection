@@ -90,13 +90,14 @@ def get_portf_perf():
             d = d + timedelta(days=1)
             d_str = d.strftime("%Y%m%d")
             portf_pnl = 0
-            portf_content = ''
+            #portf_content = ''
 
             #get portfolio allocations
             #for each item get the pnl
             if d < datetime.datetime.now():
                 cr_c = connection.cursor(pymysql.cursors.SSCursor)
-                sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity, instruments.pip " +\
+                sql_c = "SELECT price_instruments_data.pnl, portfolios.quantity, instruments.pip, "+\
+                "price_instruments_data.pnl_long, price_instruments_data.pnl_short, portfolios.strategy_order_type " +\
                 "FROM portfolios JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
                 "JOIN instruments ON portfolios.symbol = instruments.symbol "+\
                 "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
@@ -109,8 +110,17 @@ def get_portf_perf():
                     pnl_c = row[0]
                     quantity_c = row[1]
                     pip_c = row[2]
-                    portf_pnl = portf_pnl + (pnl_c * quantity_c * pip_c)
-                    portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
+                    pnl_long_c = row[3]
+                    pnl_short_c = row[4]
+                    strategy_order_type_c = row[5]
+                    if strategy_order_type_c = 'long/short':
+                        portf_pnl = portf_pnl + (pnl_c * quantity_c * pip_c)
+                    if strategy_order_type_c = 'long':
+                        portf_pnl = portf_pnl + (pnl_long_c * quantity_c * pip_c)
+                    if strategy_order_type_c = 'short':
+                        portf_pnl = portf_pnl + (pnl_short_c * quantity_c * pip_c)
+
+                    #portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
                 cr_c.close()
                 portf_nav = round( portf_nav + portf_pnl, 2)
 
