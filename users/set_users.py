@@ -81,7 +81,7 @@ def gen_users(n):
                 nickname = name
                 username = name + '@smartalphatrade.com'
                 password = set_user_uid()
-                avatar_id  set_user_avatar_id()
+                avatar_id  = set_user_avatar_id()
                 created_on = str(d)
                 default_profile = ''
                 lang = 'en'
@@ -92,7 +92,7 @@ def gen_users(n):
                 nickname = name
                 username = name + '@' + nickname + '.com'
                 password = set_user_uid()
-                avatar_id  set_user_avatar_id()
+                avatar_id  = set_user_avatar_id()
                 created_on = str(d)
                 default_profile = ''
                 lang = 'en'
