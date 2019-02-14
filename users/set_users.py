@@ -53,7 +53,7 @@ def set_nickname():
         rs = cr.fetchall()
         for row in rs: p2 = row[0]
         cr.close()
-        num = str( get_random_num(99) )
+        num = str( random.randint(1,99) )
         r = p1 + p2 + num
     except Exception as e: print(e)
     return r
