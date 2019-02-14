@@ -8,6 +8,7 @@ import os
 import datetime
 import time
 import random
+import string
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
