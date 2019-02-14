@@ -96,7 +96,7 @@ def gen_users(n):
                 password = set_user_uid()
                 avatar_id  = set_user_avatar_id()
                 created_on = str(d)
-                default_profile = ''
+                default_profile = set_default_profile()
                 lang = 'en'
                 is_bot = 1
 
