@@ -92,19 +92,21 @@ def gen_users(n):
                 uid = set_user_uid()
                 name = set_nickname()
                 nickname = name
-                username = name + '@' + nickname + '.com'
+                username = name + '@smartalphatrade.com'
                 password = set_user_uid()
                 avatar_id  = set_user_avatar_id()
                 created_on = str(d)
                 default_profile = set_default_profile()
                 lang = 'en'
                 is_bot = 1
-
-            sql = "INSERT INTO users(uid, name, nickname, username, password, avatar_id, created_on, default_profile, lang, is_bot) VALUES "+\
-            "('"+ str(uid) +"','"+ str(name) +"','"+ str(nickname) +"','"+ str(username) +"','"+ str(password) +"',"+ str(avatar_id) +",'"+ str(created_on) +"','"+ str(default_profile) +"','"+ str(lang) +"',"+str(is_bot)+")"
-            print(sql)
-            cr.execute(sql)
-            connection.commit()
+            try:
+                sql = "INSERT INTO users(uid, name, nickname, username, password, avatar_id, created_on, default_profile, lang, is_bot) VALUES "+\
+                "('"+ str(uid) +"','"+ str(name) +"','"+ str(nickname) +"','"+ str(username) +"','"+ str(password) +"',"+ str(avatar_id) +",'"+ str(created_on) +"','"+ str(default_profile) +"','"+ str(lang) +"',"+str(is_bot)+")"
+                print(sql)
+                cr.execute(sql)
+                connection.commit()
+            except:
+                pass
         cr.close()
 
     except Exception as e: print(e)
