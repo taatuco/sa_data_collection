@@ -6,7 +6,7 @@ import os
 import sys
 
 
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
+sys.path.append(os.path.abspath( get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
