@@ -107,5 +107,4 @@ def gen_users(n):
 
     except Exception as e: print(e)
 
-
-    gen_users(2000)
+gen_users(2000)
