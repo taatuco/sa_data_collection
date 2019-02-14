@@ -35,6 +35,7 @@ def get_trades(s,uid,dc):
 
     r = False
     try:
+        if dc > 100: dc = 100
         daycount = dc + 10
         dfrom = datetime.datetime.now() - timedelta(days=daycount) ; dfrom_str = dfrom.strftime('%Y%m%d')
 
@@ -58,7 +59,7 @@ def get_trades(s,uid,dc):
             trade_decimal_places = row[0]
             trade_fullname = row[1]
         cr.close()
-        
+
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
