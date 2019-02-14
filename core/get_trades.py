@@ -35,7 +35,6 @@ def get_trades(s,uid,dc):
 
     r = False
     try:
-        if dc > 100: dc = 100
         daycount = dc + 10
         dfrom = datetime.datetime.now() - timedelta(days=daycount) ; dfrom_str = dfrom.strftime('%Y%m%d')
 
