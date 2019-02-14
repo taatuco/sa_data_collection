@@ -45,25 +45,25 @@ def get_user_smartalpha_id():
         cr.close()
     except Exception as e: print(e)
     return r
-
-
-portf_symbol_suffix = get_portf_suffix()
-cr = connection.cursor(pymysql.cursors.SSCursor)
-sql = "DELETE FROM instruments WHERE symbol LIKE '" + portf_symbol_suffix + "%' "
-cr.execute(sql)
-connection.commit()
-sql = "DELETE FROM symbol_list WHERE symbol LIKE '"+ portf_symbol_suffix +"%' "
-cr.execute(sql)
-connection.commit()
-sql = "DELETE FROM chart_data WHERE symbol LIKE '"+ portf_symbol_suffix +"%' "
-cr.execute(sql)
-connection.commit()
-sql = "DELETE FROM feed WHERE symbol LIKE '%"+ portf_symbol_suffix +"%' "
-cr.execute(sql)
-connection.commit()
-cr.close()
-
 owner_sa_bot_id = get_user_smartalpha_id()
+
+def ini_portf():
+    portf_symbol_suffix = get_portf_suffix()
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "DELETE FROM instruments WHERE symbol LIKE '" + portf_symbol_suffix + "%' "
+    cr.execute(sql)
+    connection.commit()
+    sql = "DELETE FROM symbol_list WHERE symbol LIKE '"+ portf_symbol_suffix +"%' "
+    cr.execute(sql)
+    connection.commit()
+    sql = "DELETE FROM chart_data WHERE symbol LIKE '"+ portf_symbol_suffix +"%' "
+    cr.execute(sql)
+    connection.commit()
+    sql = "DELETE FROM feed WHERE symbol LIKE '%"+ portf_symbol_suffix +"%' "
+    cr.execute(sql)
+    connection.commit()
+    cr.close()
+
 
 '''
 ### Template description for portfolio:
@@ -242,6 +242,7 @@ def set_portf_us():
 
 
 ################################################################################
+ini_portf()
 print(set_portf_fx() +": "+ os.path.basename(__file__) )
 print(set_portf_crypto() +": "+ os.path.basename(__file__) )
 print(set_portf_commo() +": "+ os.path.basename(__file__) )

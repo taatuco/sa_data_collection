@@ -32,6 +32,20 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+def get_portf_content(user_id):
+    r = ''
+    try:
+        nickname = ''
+        avatar_id = ''
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT nickname, avatar_id FROM users WHERE id="+ str(user_id)
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: nickname = row[0]; avatar_id = row[1]
+        r = '<img src="static/avatar/'+ str(avatar_id) +'.png" style="vertical-align: middle;border-style: none;width: 30px;">&nbsp;<strong>'+nickname+'</strong>'
+    except Exception as e: print(e)
+    return r
+
 def set_portf_feed():
 
     feed_id = 9
@@ -43,7 +57,7 @@ def set_portf_feed():
     d = d.strftime("%Y%m%d")
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, instruments.owner FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol LIKE '"+ get_portf_suffix() +"%'"
 
@@ -58,10 +72,11 @@ def set_portf_feed():
         sector = row[5]
         w_forecast_display_info = row[6]
         uid = row[7]
+        owner = row[8]
 
         short_title = fullname
         short_description = symbol
-        content = sector
+        content = get_portf_content(owner)
         url = "p/?uid="+str(uid)
         ranking = str( abs(round(w_forecast_change,5)) )
         type = str(feed_id)
