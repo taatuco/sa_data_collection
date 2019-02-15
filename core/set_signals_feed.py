@@ -63,7 +63,7 @@ def set_signals_feed(s):
         short_title = fullname
         short_description = symbol
         content = sector
-        url = "s/?uid="+ str(uid)
+        url = "{burl}s/?uid="+ str(uid)
         ranking = str( abs(round(w_forecast_change,5)) )
         type = str(feed_id)
 

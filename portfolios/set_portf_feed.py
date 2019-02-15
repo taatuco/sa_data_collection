@@ -42,7 +42,7 @@ def get_portf_content(user_id):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: nickname = row[0]; avatar_id = row[1]
-        r = '<img src="static/avatar/'+ str(avatar_id) +'.png" style="vertical-align: middle;border-style: none;width: 30px;">&nbsp;<strong>'+nickname+'</strong>'
+        r = '<img src="{burl}static/avatar/'+ str(avatar_id) +'.png" style="vertical-align: middle;border-style: none;width: 30px;">&nbsp;<strong>'+nickname+'</strong>'
     except Exception as e: print(e)
     return r
 
@@ -77,7 +77,7 @@ def set_portf_feed():
         short_title = fullname
         short_description = symbol
         content = get_portf_content(owner)
-        url = "p/?uid="+str(uid)
+        url = "{burl}p/?uid="+str(uid)
         ranking = str( abs(round(w_forecast_change,5)) )
         type = str(feed_id)
 

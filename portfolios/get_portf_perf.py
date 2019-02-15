@@ -117,10 +117,11 @@ def get_portf_perf():
                         portf_pnl = portf_pnl + (pnl_c * quantity_c * pip_c)
                     if strategy_order_type_c == 'long':
                         portf_pnl = portf_pnl + (pnl_long_c * quantity_c * pip_c)
+                        if pnl_long_c == 999: portf_pnl = 0
                     if strategy_order_type_c == 'short':
                         portf_pnl = portf_pnl + (pnl_short_c * quantity_c * pip_c)
+                        if pnl_short_c == 999: portf_pnl = 0
 
-                    #portf_content = portf_content +" (" + str(pnl_c) + " * "+ str(quantity_c) +") "
                 cr_c.close()
                 portf_nav = round( portf_nav + portf_pnl, 2)
 

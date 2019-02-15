@@ -9,6 +9,7 @@ import datetime
 from datetime import timedelta
 import time
 import csv
+import random
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -78,7 +79,7 @@ class portf_data:
 
         self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
 
-    def get_quantity(self, alloc_s):
+    def get_quantity(self, alloc_s, alloc_coef):
 
         portf_reduce_risk_by = 4
 
@@ -96,7 +97,7 @@ class portf_data:
             salloc = ( pip_s * price_s )
         cr.close()
 
-        q = round( ( (self.portf_big_alloc_price / salloc) * self.portf_multip ) / portf_reduce_risk_by  , 2)
+        q = round( (( (self.portf_big_alloc_price / salloc) * self.portf_multip ) / portf_reduce_risk_by )*alloc_coef , 2)
         if q < 0.01:
             q = 0.01
 
@@ -107,6 +108,16 @@ class portf_data:
 
         return q
 
+
+def get_conviction_coef(c):
+    r = 1.01
+    try:
+        if c == 'weak': r = random.randint(3,8)
+        if c == 'neutral': r = random.randint(8,20)
+        if c == 'strong': r = random.randint(21,80)
+        r = (r * 0.01) + 1
+    except Exception as e: print(e)
+    return r
 
 def get_portf_alloc():
 
@@ -131,14 +142,16 @@ def get_portf_alloc():
         portfd = portf_data(portf_symbol)
 
         cr_pf = connection.cursor(pymysql.cursors.SSCursor)
-        sql_pf = "SELECT symbol, quantity FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
+        sql_pf = "SELECT symbol, quantity, strategy_conviction FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
         cr_pf.execute(sql_pf)
         rs_pf = cr_pf.fetchall()
         for row in rs_pf:
-            
+
             print(sql_pf+": "+ os.path.basename(__file__) )
             portf_item_symbol = row[0]
-            portf_item_quantity = portfd.get_quantity(portf_item_symbol)
+            portf_item_conviction = row[2]
+            portf_item_conviction_coef = get_conviction_coef(portf_item_conviction)
+            portf_item_quantity = portfd.get_quantity(portf_item_symbol,portf_item_conviction_coef)
 
             cr_p = connection.cursor(pymysql.cursors.SSCursor)
             sql_p = "SELECT price_close, date FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"
