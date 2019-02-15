@@ -32,9 +32,9 @@ cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "DELETE FROM markets"
 cr.execute(sql)
 
-sql = "INSERT INTO markets(market_id, market_label) VALUES "+\
-"('GO>','Global'), "+\
-"('US>','U.S.')"
+sql = "INSERT INTO markets(market_id, market_label, currency_code) VALUES "+\
+"('GO>','Global','pts'), "+\
+"('US>','U.S.','USD')"
 
 print(sql +": "+ os.path.basename(__file__) )
 
