@@ -122,7 +122,6 @@ def get_portf_perf():
                     if strategy_order_type_c == 'short':
                         portf_pnl = portf_pnl + (pnl_short_c * quantity_c * pip_c)
                         if pnl_short_c == 999: portf_pnl = 0
-                cr_c.close()
                 portf_nav = round( portf_nav + portf_pnl, 2)
 
             if i > 0:
@@ -132,8 +131,8 @@ def get_portf_perf():
             inserted_value = inserted_value + sep + "(" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
             print(inserted_value)
             i +=1
-            get_portf_perf_summ(portf_symbol, portf_uid)
-            
+        get_portf_perf_summ(portf_symbol, portf_uid)
+
         try:
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
             sql_i = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close) VALUES "+\
