@@ -132,8 +132,8 @@ def get_portf_perf():
             inserted_value = inserted_value + sep + "(" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
             print(inserted_value)
             i +=1
-
-        get_portf_perf_summ(portf_symbol, portf_uid)
+            get_portf_perf_summ(portf_symbol, portf_uid)
+            
         try:
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
             sql_i = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close) VALUES "+\
