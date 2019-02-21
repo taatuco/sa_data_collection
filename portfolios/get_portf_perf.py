@@ -129,7 +129,6 @@ def get_portf_perf():
             else:
                 sep = ''
             inserted_value = inserted_value + sep + "(" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
-            print(inserted_value)
             i +=1
         get_portf_perf_summ(portf_symbol, portf_uid)
 
