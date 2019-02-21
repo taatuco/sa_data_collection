@@ -130,7 +130,6 @@ def get_portf_perf():
                     sep = ''
                 inserted_value = inserted_value + sep + "(" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
             i +=1
-        get_portf_perf_summ(portf_symbol, portf_uid)
 
         try:
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
@@ -141,5 +140,6 @@ def get_portf_perf():
             connection.commit()
             cr_i.close()
         except Exception as e: print(e)
+        get_portf_perf_summ(portf_symbol, portf_uid)
 
     cr.close()
