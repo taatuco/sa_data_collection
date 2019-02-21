@@ -124,11 +124,11 @@ def get_portf_perf():
                         if pnl_short_c == 999: portf_pnl = 0
                 portf_nav = round( portf_nav + portf_pnl, 2)
 
-            if i > 0:
-                sep = ', '
-            else:
-                sep = ''
-            inserted_value = inserted_value + sep + "(" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
+                if i > 0:
+                    sep = ', '
+                else:
+                    sep = ''
+                inserted_value = inserted_value + sep + "(" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
             i +=1
         get_portf_perf_summ(portf_symbol, portf_uid)
 
