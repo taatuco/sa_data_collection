@@ -76,6 +76,7 @@ def get_portf_perf():
         i = 0
         j = 370
         d = df
+        inserted_value = ''
         portf_nav = account_reference
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
@@ -121,20 +122,26 @@ def get_portf_perf():
                     if strategy_order_type_c == 'short':
                         portf_pnl = portf_pnl + (pnl_short_c * quantity_c * pip_c)
                         if pnl_short_c == 999: portf_pnl = 0
-
                 cr_c.close()
                 portf_nav = round( portf_nav + portf_pnl, 2)
 
-                try:
-                    cr_i = connection.cursor(pymysql.cursors.SSCursor)
-                    sql_i = "INSERT INTO chart_data(uid, symbol, date, price_close) "+\
-                    "VALUES (" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
-                    print(sql_i)
-                    cr_i.execute(sql_i)
-                    connection.commit()
-
-                except Exception as e: print(e)
-
+            if i > 0:
+                sep = ', '
+            else:
+                sep = ''
+            inserted_value = inserted_value + sep + "(" + str(portf_uid) + ",'"+ str(portf_symbol) +"','" + str(d_str) + "'," + str(portf_nav) + ")"
+            print(inserted_value)
             i +=1
+
         get_portf_perf_summ(portf_symbol, portf_uid)
+        try:
+            cr_i = connection.cursor(pymysql.cursors.SSCursor)
+            sql_i = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close) VALUES "+\
+            inserted_value
+            print(sql_i)
+            cr_i.execute(sql_i)
+            connection.commit()
+            cr_i.close()
+        except Exception as e: print(e)
+
     cr.close()
