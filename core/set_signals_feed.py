@@ -91,7 +91,7 @@ def set_signals_feed(s):
         else:
             sep = ','
         inserted_values = inserted_values + sep +\
-        ('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
+        "('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"')"
 
