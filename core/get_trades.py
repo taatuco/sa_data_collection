@@ -121,6 +121,7 @@ def get_trades(s,uid,dc):
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "INSERT INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status, url) VALUES "+ inserted_value
         try:
+            print(sql_i)
             cr_i.execute(sql_i)
             connection.commit()
             cr_i.close()
