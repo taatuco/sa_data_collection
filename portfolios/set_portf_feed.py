@@ -89,7 +89,8 @@ def set_portf_feed():
 
         if i == 0:
             sep = ''
-        else: ','
+        else:
+            sep = ','
         inserted_value = inserted_value + sep +\
         "('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
