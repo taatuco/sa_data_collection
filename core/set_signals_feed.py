@@ -49,6 +49,8 @@ def set_signals_feed(s):
 
     cr.execute(sql)
     rs = cr.fetchall()
+    i = 0
+    inserted_values = ''
     for row in rs:
         symbol = row[0]
         fullname = row[1].replace("'","")
@@ -84,18 +86,25 @@ def set_signals_feed(s):
         cr_i.execute(sql_i)
         connection.commit()
 
-        sql_i = "INSERT INTO feed"+\
-        "(date, short_title, short_description, content, url,"+\
-            " ranking, symbol, type, badge, "+\
-        "search, asset_class, market) "+\
-        "VALUES ('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
+        if i == 0:
+            sep = ''
+        else:
+            sep = ','
+        inserted_values = inserted_values + sep +\
+        ('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"')"
-        try:
-            if not disabled:
-                cr_i.execute(sql_i)
-                connection.commit()
+
+    cr.close()
+
+    sql_i = "INSERT IGNORE INTO feed"+\
+    "(date, short_title, short_description, content, url,"+\
+    " ranking, symbol, type, badge, "+\
+    "search, asset_class, market) VALUES " + inserted_values
+    try:
+        if not disabled:
+            cr_i.execute(sql_i)
+            connection.commit()
         except:
             pass
-        cr_i.close()
-    cr.close()
+            cr_i.close()

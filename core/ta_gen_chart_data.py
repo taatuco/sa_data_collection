@@ -121,6 +121,7 @@ def gen_chart(s,uid):
         pct_signal = 0
 
         i = 0
+        inserted_values = ''
 
         for row in rs:
 
@@ -165,27 +166,32 @@ def gen_chart(s,uid):
                 signal_price = price
                 ini_signal = signal_price
                 pct_signal = 0
+                sep = ''
             else:
                 pct_change = get_pct_change(ini_val, price)
                 signal_price =  signal_price + ( signal_price * float( get_trade_pnl(uid, date.strftime("%Y%m%d") ) ) )
                 pct_signal = get_pct_change(ini_signal, signal_price)
+                sep = ','
 
-            cr_t = connection.cursor(pymysql.cursors.SSCursor)
-            sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
-            "lt_upper_trend_line, lt_lower_trend_line, "+\
-            "st_upper_trend_line, st_lower_trend_line, "+\
-            "rsi, rsi_oversold, rsi_overbought, ma200, target_price, percent_perf, signal_price, percent_signal) "+\
-            "VALUES ("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+",'0',"+\
+            inserted_values = inserted_values + sep +\
+            "("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+",'0',"+\
             str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
             str(st_upper_trend_line)+","+st_lower_trend_line+","+\
             str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+","+\
             str(pct_change)+","+ str(signal_price) +","+ str(pct_signal) +")"
-            print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
-            cr_t.execute(sql_t)
-            connection.commit()
-            cr_t.close()
 
             i += 1
+
+        cr_t = connection.cursor(pymysql.cursors.SSCursor)
+        sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close, forecast, "+\
+        "lt_upper_trend_line, lt_lower_trend_line, "+\
+        "st_upper_trend_line, st_lower_trend_line, "+\
+        "rsi, rsi_oversold, rsi_overbought, ma200, target_price, percent_perf, signal_price, percent_signal) VALUES "+ inserted_values
+        print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
+        cr_t.execute(sql_t)
+        connection.commit()
+        cr_t.close()
+
         cr.close()
 
         f = data_src+str(uid)+'f.csv'
@@ -194,6 +200,7 @@ def gen_chart(s,uid):
             with open(f) as csvfile:
                 readCSV = csv.reader(csvfile, delimiter=',')
                 i = 1
+                inserted_values = ''
                 forecast = '0'
                 for row in readCSV:
                     if (i >= 2):
@@ -212,18 +219,26 @@ def gen_chart(s,uid):
                         except:
                             st_lower_trend_line = '0'
                             st_upper_trend_line = '0'
-                        cr_t = connection.cursor(pymysql.cursors.SSCursor)
-                        sql_t = "INSERT INTO chart_data(uid, symbol, date, price_close, forecast, "+\
-                        "lt_upper_trend_line, lt_lower_trend_line, "+\
-                        "st_upper_trend_line, st_lower_trend_line, "+\
-                        "rsi, rsi_oversold, rsi_overbought, ma200, target_price) "+\
-                        "VALUES ("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+","+str(forecast)+","+\
-                        str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
-                        str(st_upper_trend_line)+","+st_lower_trend_line+","+\
-                        str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+")"
-                        print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
-                        cr_t.execute(sql_t)
-                        connection.commit()
-                        cr_t.close()
+
+                    if i == 1:
+                        sep = ''
+                    else:
+                        sep = ','
+
+                    inserted_values = inserted_values + sep +\
+                    "("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+","+str(forecast)+","+\
+                    str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
+                    str(st_upper_trend_line)+","+st_lower_trend_line+","+\
+                    str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+")"
 
                     i +=1
+
+                cr_t = connection.cursor(pymysql.cursors.SSCursor)
+                sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close, forecast, "+\
+                "lt_upper_trend_line, lt_lower_trend_line, "+\
+                "st_upper_trend_line, st_lower_trend_line, "+\
+                "rsi, rsi_oversold, rsi_overbought, ma200, target_price) VALUES "+ inserted_values
+                print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
+                cr_t.execute(sql_t)
+                connection.commit()
+                cr_t.close()

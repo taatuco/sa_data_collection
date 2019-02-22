@@ -32,7 +32,7 @@ cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "DELETE FROM asset_class"
 cr.execute(sql)
 
-sql = "INSERT INTO asset_class(asset_class_id, asset_class_name) VALUES "+\
+sql = "INSERT IGNORE INTO asset_class(asset_class_id, asset_class_name) VALUES "+\
 "('CR:','Crypto'), "+\
 "('EQ:','Equity'), "+\
 "('FX:','Forex'), "+\

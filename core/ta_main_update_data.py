@@ -119,6 +119,7 @@ def get_update_instr_data(fm):
                     cr_upd.execute(sql_upd)
                     connection.commit()
                     cr_upd.close()
+                    
             cr_d_id.close()
             gc.collect()
             if fm == 1:
