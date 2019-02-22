@@ -92,7 +92,7 @@ def get_trades(s,uid,dc):
             if price_close_1 <= target_price_1: trade_order_type = 'buy'
             else: trade_order_type = 'sell'
 
-            trade_entry_price = price_close_1 + timedelta(days=1); trade_entry_date = date_1
+            trade_entry_price = price_close_1; trade_entry_date = date_1 + timedelta(days=1)
             if date_2 is not None: trade_expiration_date = date_2
             else: trade_expiration_date = date_1 + timedelta(days=7)
             trade_close_price = price_close_2
