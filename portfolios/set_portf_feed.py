@@ -103,7 +103,7 @@ def set_portf_feed():
     cr_i.execute(sql_i)
     connection.commit()
 
-    sql_i = "INSERT INTO feed"+\
+    sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
         " ranking, symbol, type, badge, "+\
     "search, asset_class, market) VALUES " + inserted_value
