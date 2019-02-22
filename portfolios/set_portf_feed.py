@@ -63,6 +63,8 @@ def set_portf_feed():
 
     cr.execute(sql)
     rs = cr.fetchall()
+    i = 0
+    inserted_value = ''
     for row in rs:
         symbol = row[0]
         fullname = row[1].replace("'","")
@@ -82,29 +84,35 @@ def set_portf_feed():
         type = str(feed_id)
 
         badge = w_forecast_display_info
-
         search = asset_class + market + symbol + " " + fullname
-
-
         print(search +": "+ os.path.basename(__file__) )
 
-        cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date<='"+d+"')"
-        cr_i.execute(sql_i)
-        connection.commit()
-
-        sql_i = "INSERT INTO feed"+\
-        "(date, short_title, short_description, content, url,"+\
-            " ranking, symbol, type, badge, "+\
-        "search, asset_class, market) "+\
-        "VALUES ('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
+        if i == 0:
+            sep = ''
+        else: ','
+        inserted_value = inserted_value + sep +\
+        "('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"')"
-        try:
-            cr_i.execute(sql_i)
-            connection.commit()
-        except Exception as e:
-            print(e + ' ' + os.path.basename(__file__) )
-            pass
-        cr_i.close()
+
+        i += 1
+
+    cr_i = connection.cursor(pymysql.cursors.SSCursor)
+    sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date<='"+d+"')"
+    cr_i.execute(sql_i)
+    connection.commit()
+
+    sql_i = "INSERT INTO feed"+\
+    "(date, short_title, short_description, content, url,"+\
+        " ranking, symbol, type, badge, "+\
+    "search, asset_class, market) VALUES " + inserted_value
+    try:
+        cr_i.execute(sql_i)
+        connection.commit()
+    except Exception as e:
+        print(e + ' ' + os.path.basename(__file__) )
+        pass
+    cr_i.close()
+
+
     cr.close()
