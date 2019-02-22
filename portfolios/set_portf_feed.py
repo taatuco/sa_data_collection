@@ -106,6 +106,7 @@ def set_portf_feed():
     "(date, short_title, short_description, content, url,"+\
         " ranking, symbol, type, badge, "+\
     "search, asset_class, market) VALUES " + inserted_value
+    print(sql_i)
     try:
         cr_i.execute(sql_i)
         connection.commit()
