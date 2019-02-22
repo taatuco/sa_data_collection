@@ -71,6 +71,8 @@ def get_trades(s,uid,dc):
         "FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dfrom_str + " ORDER BY date"
         cr_1.execute(sql_1)
         rs_1 = cr_1.fetchall()
+        i = 0
+        inserted_value = ''
         for row in rs_1:
             symbol_1 = row[0]
             date_1 = row[1]
@@ -90,7 +92,7 @@ def get_trades(s,uid,dc):
             if price_close_1 <= target_price_1: trade_order_type = 'buy'
             else: trade_order_type = 'sell'
 
-            trade_entry_price = price_close_1; trade_entry_date = date_1
+            trade_entry_price = price_close_1 + timedelta(days=1); trade_entry_date = date_1
             if date_2 is not None: trade_expiration_date = date_2
             else: trade_expiration_date = date_1 + timedelta(days=7)
             trade_close_price = price_close_2
@@ -104,18 +106,28 @@ def get_trades(s,uid,dc):
                 if trade_order_type == 'buy': trade_pnl_pct = get_pct_change(price_close_1, price_close_2)
                 else: trade_pnl_pct = get_pct_change(price_close_2, price_close_1)
 
-            cr_i = connection.cursor(pymysql.cursors.SSCursor)
-            sql_i = "INSERT INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status, url) "+\
-            "VALUES ("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
+            if i == 0:
+                sep = ''
+            else:
+                sep = ','
+
+            inserted_value = inserted_value + sep + "("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
             str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
-            try:
-                cr_i.execute(sql_i)
-                connection.commit()
-                cr_i.close()
-                r = True
-            except:
-                pass
+
+            i += 1
+
         cr_1.close()
+
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "INSERT INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status, url) VALUES "+ inserted_value
+        try:
+            cr_i.execute(sql_i)
+            connection.commit()
+            cr_i.close()
+            r = True
+        except:
+            pass
+
 
     except Exception as e: print(e)
 
