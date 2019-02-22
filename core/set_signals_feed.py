@@ -105,6 +105,6 @@ def set_signals_feed(s):
         if not disabled:
             cr_i.execute(sql_i)
             connection.commit()
-        except:
-            pass
-            cr_i.close()
+    except:
+        pass
+        cr_i.close()
