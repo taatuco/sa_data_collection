@@ -44,6 +44,7 @@ try:
     cr.execute(sql)
     rs = cr.fetchall()
     i = 1
+    inserted_values = ''
     for row in rs:
         if (i <= j):
             uid = row[1]
@@ -63,14 +64,16 @@ try:
                         price_close = row[4]
                         print(s +": ("+str(i)+"/"+str(j)+"): "+price_date+": "+ os.path.basename(__file__) )
                         if price_close != "open" and price_close != "NA":
-                            try:
-                                cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
-                                sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close) VALUES ('"+s+"',"+price_date+","+price_close+");"
-                                cr_q_ins.execute(sql_q_ins)
-                                connection.commit()
-                                cr_q_ins.close()
-                            except:
-                                pass
+                            if i == 1:
+                                sep = ''
+                            else:
+                                sep = ','
+                            inserted_values = inserted_values + sep + "('"+s+"',"+price_date+","+price_close+")"
+                    cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
+                    sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values
+                    cr_q_ins.execute(sql_q_ins)
+                    connection.commit()
+                    cr_q_ins.close()
             i+=1
         else:
             break

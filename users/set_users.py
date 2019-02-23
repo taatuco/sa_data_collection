@@ -100,7 +100,7 @@ def gen_users(n):
                 lang = 'en'
                 is_bot = 1
             try:
-                sql = "INSERT INTO users(uid, name, nickname, username, password, avatar_id, created_on, default_profile, lang, is_bot) VALUES "+\
+                sql = "INSERT IGNORE INTO users(uid, name, nickname, username, password, avatar_id, created_on, default_profile, lang, is_bot) VALUES "+\
                 "('"+ str(uid) +"','"+ str(name) +"','"+ str(nickname) +"','"+ str(username) +"','"+ str(password) +"',"+ str(avatar_id) +",'"+ str(created_on) +"','"+ str(default_profile) +"','"+ str(lang) +"',"+str(is_bot)+")"
                 print(sql)
                 cr.execute(sql)

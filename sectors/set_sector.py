@@ -32,7 +32,7 @@ cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "DELETE FROM sectors"
 cr.execute(sql)
 
-sql = "INSERT INTO sectors(id, sector) VALUES "+\
+sql = "INSERT IGNORE INTO sectors(id, sector) VALUES "+\
 "('1','FX'), "+\
 "('2','Cryptocurrency'), "+\
 "('17','Index'), "+\
