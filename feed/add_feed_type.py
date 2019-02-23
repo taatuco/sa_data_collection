@@ -30,7 +30,7 @@ connection = pymysql.connect(host=db_srv,
 def add_feed_type(id,ft):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "INSERT INTO feed_type(id, feed_type) VALUES ('"+str(id)+"','"+ft+"')"
+        sql = "INSERT IGNORE INTO feed_type(id, feed_type) VALUES ('"+str(id)+"','"+ft+"')"
         cr.execute(sql)
         connection.commit()
         print(sql +": "+ os.path.basename(__file__) )

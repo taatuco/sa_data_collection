@@ -40,7 +40,7 @@ lang_en = "en"
 portf_description_en ="This {market_asset_class} portfolio is designed by {nickname}."
 
 
-sql = "INSERT INTO labels(lang, portf_description) VALUES "+\
+sql = "INSERT IGNORE INTO labels(lang, portf_description) VALUES "+\
 "('"+lang_en+"', '"+  portf_description_en +"') "
 print(sql)
 

@@ -43,6 +43,8 @@ try:
         if filepath.exists():
             with open(file_str) as csvfile:
                 readCSV = csv.reader(csvfile, delimiter=',')
+                i = 0
+                inserted_values = ''
                 for row in readCSV:
                     time.sleep(0.2)
                     price_date = row[0]
@@ -53,14 +55,16 @@ try:
                     price_close = row[1]
                     print(s +": "+ os.path.basename(__file__) )
                     if price_close != "NA":
-                        try:
-                            cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
-                            sql_q_ins = "INSERT INTO price_instruments_data (symbol, date, price_close) VALUES ('"+s+"',"+price_date+","+price_close+");"
-                            cr_q_ins.execute(sql_q_ins)
-                            connection.commit()
-                            cr_q_ins.close()
-                        except:
-                            pass
+                        if i == 0:
+                            sep = ''
+                        else:
+                            sep = ','
+                        inserted_values = inserted_values + sep + "('"+s+"',"+price_date+","+price_close+")"
+                cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
+                sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values
+                cr_q_ins.execute(sql_q_ins)
+                connection.commit()
+                cr_q_ins.close()
     cr.close()
 
 finally:

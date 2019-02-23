@@ -32,7 +32,7 @@ cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "DELETE FROM languages"
 cr.execute(sql)
 
-sql = "INSERT INTO languages(id, language) VALUES "+\
+sql = "INSERT IGNORE INTO languages(id, language) VALUES "+\
 "('en','English'), "+\
 "('fr','Français'), "+\
 "('th','ไทย')"

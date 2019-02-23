@@ -55,7 +55,7 @@ portf_recomm_sell_en = "sell {portf_alloc_instr} above {portf_alloc_entry_price}
 portf_risk_consider_en = "With a {account_reference} {unit} trading account as reference, there is a potential risk that the portfolio get exposed to a {dollar_amount} {unit} loss according to the last 30 days price pattern. In percentage terms, the portfolio can be affected to a {percentage} volatility."
 
 
-sql = "INSERT INTO recommendations(lang, price_under_200ma, price_above_200ma, "+\
+sql = "INSERT IGNORE INTO recommendations(lang, price_under_200ma, price_above_200ma, "+\
 "st_upper_range_above_price_range, st_lower_range_below_price_range, "+\
 "upper_range_below_price_downtrend, lower_range_above_price_uptrend, "+\
 "rsi_oversold, rsi_overbought, rsi_weak, rsi_strong, "+\

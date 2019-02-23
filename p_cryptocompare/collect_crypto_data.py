@@ -56,7 +56,7 @@ for row in rs:
         pc = j['Data'][i]['close']
         d = j['Data'][i]['time']
         dt = datetime.utcfromtimestamp(int(d))
-        sql_i = "INSERT INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
+        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
         print(sql_i)
         try:
             cr_i.execute(sql_i)

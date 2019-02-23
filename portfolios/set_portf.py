@@ -87,13 +87,13 @@ cr.close()
 def set_portf_fx():
     cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "fx"
-    sql = "INSERT INTO symbol_list(symbol) VALUES "+\
+    sql = "INSERT IGNORE INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "FXONE')"
     try:
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
+    sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "FXONE','No-Fly Global Forex long/short','FX:','GO>',5,1,1,'USD','With an exposure in the foreign exchange market, the defined porfolio projects an absolute positive return in the next couple days.',1000,"+ str(owner_sa_bot_id) +")"
     try:
         cr.execute(sql)
@@ -109,13 +109,13 @@ def set_portf_fx():
 def set_portf_crypto():
     cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "crypto"
-    sql = "INSERT INTO symbol_list(symbol) VALUES "+\
+    sql = "INSERT IGNORE INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "CRYPTONE')"
     try:
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
+    sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "CRYPTONE','The Hot Potato Global Crypto long/short','CR:','GO>',5,1,2,'USD','This is a quantamental portfolio trading on some of the most lucrative financial assets, the portfolio consists of a long/short strategy on most popular cryptocurrencies.',1000,"+ str(owner_sa_bot_id) +")"
     try:
         cr.execute(sql)
@@ -131,13 +131,13 @@ def set_portf_crypto():
 def set_portf_commo():
     cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "commo"
-    sql = "INSERT INTO symbol_list(symbol) VALUES "+\
+    sql = "INSERT IGNORE INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "COMMONE')"
     try:
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
+    sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "COMMONE','Gold Digger Global Commodities long/short','CO:','GO>',2,1,18,'USD','This portfolio includes two of the most traded commodities products.',1000,"+ str(owner_sa_bot_id) +")"
     try:
         cr.execute(sql)
@@ -153,14 +153,14 @@ def set_portf_commo():
 def set_portf_multi():
     cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "multi"
-    sql = "INSERT INTO symbol_list(symbol) VALUES "+\
+    sql = "INSERT IGNORE INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "MULTIONE'), "+\
     "('" + portf_symbol_suffix + "GOJONE')"
     try:
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
+    sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "MULTIONE','Milkshake Global Multi-asset long/short','MA:','GO>',5,1,19,'USD','This is a quantamental portfolio trading on some of the most lucrative financial assets, a combination of relevant stocks and cryptocurrencies.',1000,"+ str(owner_sa_bot_id) +"), "+\
     "('" + portf_symbol_suffix + "GOJONE','Safe Haven Global Multi-asset long/short','MA:','GO>',5,1,19,'USD','This is a playsafe portfolio, involving only Gold ETF and Japanese Yen.',1000,"+ str(owner_sa_bot_id) +")"
     try:
@@ -178,7 +178,7 @@ def set_portf_multi():
 def set_portf_us():
     cr = connection.cursor(pymysql.cursors.SSCursor)
     ac = "us"
-    sql = "INSERT INTO symbol_list(symbol) VALUES "+\
+    sql = "INSERT IGNORE INTO symbol_list(symbol) VALUES "+\
     "('" + portf_symbol_suffix + "INDXONE'), "+\
     "('" + portf_symbol_suffix + "INDUONEUS'), "+\
     "('" + portf_symbol_suffix + "TECHONEUS'), "+\
@@ -199,7 +199,7 @@ def set_portf_us():
         cr.execute(sql)
         connection.commit()
     except Exception as e: print(e)
-    sql = "INSERT INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
+    sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "INDXONE','The Escalator Global Equity long/short','EQ:','GO>',2,1,17,'USD','This portfolio includes carefully selected world major indices traded with a long/short strategy.',1000,"+ str(owner_sa_bot_id) +"), "+\
     "('" + portf_symbol_suffix + "INDUONEUS','Smoke Up U.S. Equity long/short','EQ:','US>',2,1,4,'USD','This portfolio is a combination of assets from different industries statistically selected to provide positive gains over the next week.',1000,"+ str(owner_sa_bot_id) +"), "+\
     "('" + portf_symbol_suffix + "TECHONEUS','Time Travel U.S. Equity long/short','EQ:','US>',2,1,5,'USD','A simple yet highly vetted long/short portfolio of three US equities in the Tech industry.',1000,"+ str(owner_sa_bot_id) +"), "+\
