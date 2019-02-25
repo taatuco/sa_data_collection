@@ -63,6 +63,7 @@ try:
                         i += 1
                 cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                 sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values
+                print(sql_q_ins)
                 cr_q_ins.execute(sql_q_ins)
                 connection.commit()
                 cr_q_ins.close()
