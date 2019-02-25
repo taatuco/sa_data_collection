@@ -51,19 +51,24 @@ for row in rs:
     j = json.loads(f.read())
     k = len(j['Data'])
     i= 1
+    inserted_values = ''
     cr_i = connection.cursor(pymysql.cursors.SSCursor)
     while i<k:
         pc = j['Data'][i]['close']
         d = j['Data'][i]['time']
         dt = datetime.utcfromtimestamp(int(d))
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
-        print(sql_i)
-        try:
-            cr_i.execute(sql_i)
-            connection.commit()
-            cr_i.close()
-        except:
-            pass
-        i +=1
+        if i == 1:
+            sep = ''
+        else:
+            sep = ','
+        inserted_values = inserted_values + sep + "('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
+        print(inserted_values)
+        i += 1
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES " + inserted_values
+    try:
+        cr_i.execute(sql_i)
+        connection.commit()
+    except:
+        pass
     cr_i.close()
 cr.close()
