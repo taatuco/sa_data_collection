@@ -43,8 +43,9 @@ try:
     sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol ASC"
     cr.execute(sql)
     rs = cr.fetchall()
+    ii = 1
     for row in rs:
-        if (i <= j):
+        if (ii <= j):
             uid = row[1]
             s = row[0]
             file_str = csvdir+str(uid)+'.csv'
@@ -75,6 +76,7 @@ try:
                     cr_q_ins.execute(sql_q_ins)
                     connection.commit()
                     cr_q_ins.close()
+        ii += 1
         else:
             break
     cr.close()
