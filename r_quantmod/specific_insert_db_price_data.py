@@ -78,7 +78,7 @@ try:
                     cr_q_ins.execute(sql_q_ins)
                     connection.commit()
                     cr_q_ins.close()
-        ii += 1
+            ii += 1
         else:
             break
     cr.close()
