@@ -43,8 +43,6 @@ try:
     sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol ASC"
     cr.execute(sql)
     rs = cr.fetchall()
-    i = 1
-    inserted_values = ''
     for row in rs:
         if (i <= j):
             uid = row[1]
@@ -54,6 +52,8 @@ try:
             if filepath.exists():
                 with open(file_str) as csvfile:
                     readCSV = csv.reader(csvfile, delimiter=',')
+                    i = 1
+                    inserted_values = ''
                     for row in readCSV:
                         time.sleep(0.2)
                         price_date = row[0]
@@ -69,13 +69,12 @@ try:
                                 sep = ','
                             inserted_values = inserted_values + sep + "('"+s+"',"+price_date+","+price_close+")"
                             print(s +": ("+str(i)+"/"+str(j)+"): "+price_date+": "+ os.path.basename(__file__) + " - " + inserted_values)
-
+                        i += 1
                     cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                     sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values
                     cr_q_ins.execute(sql_q_ins)
                     connection.commit()
                     cr_q_ins.close()
-            i += 1
         else:
             break
     cr.close()
