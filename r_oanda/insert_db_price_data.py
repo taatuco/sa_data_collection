@@ -54,13 +54,13 @@ try:
                     price_date = '%.8s' % price_date
                     price_close = row[1]
                     print(s +": "+ os.path.basename(__file__) )
-                    if price_close != "NA" or price_date != "":
-                        if i == 0:
+                    if price_close != "NA" or i > 0:
+                        if i == 1:
                             sep = ''
                         else:
                             sep = ','
                         inserted_values = inserted_values + sep + "('"+s+"',"+price_date+","+price_close+")"
-                        i += 1
+                    i += 1
                 cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                 sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values
                 print(sql_q_ins)
