@@ -62,20 +62,20 @@ try:
                         price_date = price_date.replace('-','')
                         price_date = '%.8s' % price_date
                         price_close = row[4]
-                        print(s +": ("+str(i)+"/"+str(j)+"): "+price_date+": "+ os.path.basename(__file__) )
-                        if price_close != "open" and price_close != "NA":
-                            if i == 1:
+                        if price_close != "open" and price_close != "NA" and i > 1:
+                            if i == 2:
                                 sep = ''
                             else:
                                 sep = ','
                             inserted_values = inserted_values + sep + "('"+s+"',"+price_date+","+price_close+")"
+                            print(s +": ("+str(i)+"/"+str(j)+"): "+price_date+": "+ os.path.basename(__file__) + " - " + inserted_values)
 
                     cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                     sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values
                     cr_q_ins.execute(sql_q_ins)
                     connection.commit()
                     cr_q_ins.close()
-            i+=1
+            i += 1
         else:
             break
     cr.close()
