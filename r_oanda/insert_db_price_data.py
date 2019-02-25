@@ -54,7 +54,7 @@ try:
                     price_date = '%.8s' % price_date
                     price_close = row[1]
                     print(s +": "+ os.path.basename(__file__) )
-                    if price_close != "NA" or i > 0:
+                    if price_close != "NA" and i > 0:
                         if i == 1:
                             sep = ''
                         else:
