@@ -119,11 +119,33 @@ def get_conviction_coef(c):
     except Exception as e: print(e)
     return r
 
+def get_market_conv_rate(m):
+    r = ''
+    try:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT conv_to_usd FROM markets WHERE market_id = '"+ str(m) +"'"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: r = row[0]
+    except Exception as e: print(e)
+    return r
+
+def get_market_currency(m):
+    r = ''
+    try:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT currency_code FROM markets WHERE market_id = '"+ str(m) +"'"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: r = row[0]
+    except Exception as e: print(e)
+    return r
+
 def get_portf_alloc():
 
     portf_symbol_suffix = get_portf_suffix()
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid, instruments.unit FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid, instruments.unit, instruments.market FROM instruments "+\
     "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol LIKE '"+portf_symbol_suffix+"%' ORDER BY instruments.symbol"
     cr.execute(sql)
@@ -134,6 +156,8 @@ def get_portf_alloc():
         portf_fullname = row[1]
         portf_uid = row[2]
         portf_unit = row[3]
+        portf_market = row[4]
+        portf_currency = get_market_currency(portf_market)
         portf_forc_return = 0
         portf_perc_return = 0
         portf_nav = 0
@@ -167,7 +191,7 @@ def get_portf_alloc():
 
             cr_t = connection.cursor(pymysql.cursors.SSCursor)
             sql_t = "SELECT instruments.symbol, instruments.fullname, instruments.decimal_places, "+\
-            "instruments.w_forecast_change, instruments.pip, symbol_list.uid FROM instruments "+\
+            "instruments.w_forecast_change, instruments.pip, symbol_list.uid, instruments.market FROM instruments "+\
             "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol WHERE instruments.symbol ='"+portf_item_symbol+"'"
 
             cr_t.execute(sql_t)
@@ -181,13 +205,23 @@ def get_portf_alloc():
                 alloc_w_forecast_change = row[3]
                 alloc_pip = row[4]
                 alloc_uid = row[5]
+                alloc_market = row[6]
                 if alloc_w_forecast_change >= 0:
                     alloc_entry_level_sign = '<'
                     alloc_order_type = 'buy'
                 else:
                     alloc_entry_level_sign = '>'
                     alloc_order_type = 'sell'
-                alloc_dollar_amount = round( portf_item_quantity * alloc_price, int(alloc_decimal_places) ) * alloc_pip
+
+                if portf_currency != 'USD':
+                    alloc_conv_rate = 1
+                else:
+                    alloc_conv_rate = get_market_conv_rate(alloc_market)
+
+                alloc_dollar_amount = round( portf_item_quantity * alloc_price * alloc_conv_rate, int(alloc_decimal_places) ) * alloc_pip
+                portf_item_quantity = round(portf_item_quantity / alloc_conv_rate,2)
+                if portf_item_quantity < 0.01: portf_item_quantity = 0.01
+
 
                 entry_level = alloc_entry_level_sign + ' ' + str( round( float(alloc_price), alloc_decimal_places) )
 
