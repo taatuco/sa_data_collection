@@ -56,7 +56,7 @@ def get_trades(s,uid,dc):
         rs = cr.fetchall()
         for row in rs:
             trade_decimal_places = row[0]
-            trade_fullname = row[1]
+            trade_fullname = row[1].replace("'","`")
         cr.close()
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
