@@ -81,7 +81,7 @@ def get_trades(s,uid,dc):
 
             dto = date_1 + timedelta(days=6) ; dto_str = dto.strftime('%Y%m%d')
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
-            sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dto_str + " ORDER BY date LIMIT 1"
+            sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >" + dto_str + " ORDER BY date LIMIT 1"
             print(sql_2)
             cr_2.execute(sql_2)
             rs_2 = cr_2.fetchall()
