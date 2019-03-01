@@ -59,7 +59,7 @@ def set_portf_feed():
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, instruments.romad_st FROM instruments "+\
     "JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
-    "WHERE instruments.symbol LIKE '"+ get_portf_suffix() +"%'"
+    "WHERE instruments.symbol LIKE '"+ get_portf_suffix() +"%' AND y1 > 0"
 
     cr.execute(sql)
     rs = cr.fetchall()
@@ -98,10 +98,10 @@ def set_portf_feed():
 
         i += 1
 
-    cr_i = connection.cursor(pymysql.cursors.SSCursor)
-    sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date<='"+d+"')"
-    cr_i.execute(sql_i)
-    connection.commit()
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date<='"+d+"')"
+        cr_i.execute(sql_i)
+        connection.commit()
 
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
