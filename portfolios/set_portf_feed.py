@@ -51,25 +51,12 @@ def get_portf_ranking(s,rank):
     try:
         count_positive_year = 0
         count_blown_portf = 0
-        pip_divider = 10000
-        divider = 1
-        unit = ''
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT unit FROM instruments WHERE symbol ='"+ s +"' "
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: unit = row[0]
-
-        if unit == 'pips':
-            divider = pip_divider
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT COUNT(*) FROM instruments WHERE symbol ='"+ s +"' AND y1>0 "
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: count_positive_year = row[0]
-
-
 
         sql = "SELECT COUNT(*) FROM price_instruments_data WHERE symbol ='"+ s +"' AND price_close <= 0 "
         cr.execute(sql)
@@ -80,8 +67,6 @@ def get_portf_ranking(s,rank):
             r = float(rank) * 0.01
         if count_blown_portf > 0:
             r = float(rank) * 0.01
-
-        r = r / divider
 
         cr.close()
     except Exception as e: print(e)

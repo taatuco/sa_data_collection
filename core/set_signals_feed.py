@@ -32,6 +32,26 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
+def get_signal_ranking(s,rank):
+    r = 0
+    try:
+        unit = ''
+        divider = 1
+        pip_divider = 10000
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT unit FROM instruments WHERe symbol = '"+ s +"'"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: unit = row[0]
+
+        if unit == 'pips':
+            divider = pip_divider
+
+        r = float(rank) / divider
+
+    except Exception as e: print(e)
+    return r
+
 def set_signals_feed(s):
 
     feed_id = 1
@@ -67,7 +87,7 @@ def set_signals_feed(s):
         short_description = symbol
         content = sector
         url = "{burl}s/?uid="+ str(uid)
-        ranking = str( m1_signal )
+        ranking = str( get_signal_ranking(symbol, m1_signal ) )
         type = str(feed_id)
 
         if float(w_forecast_change) < 0:
