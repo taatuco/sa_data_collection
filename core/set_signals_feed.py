@@ -43,7 +43,7 @@ def set_signals_feed(s):
     d = d.strftime("%Y%m%d")
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, symbol_list.disabled, instruments.romad_st FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, symbol_list.disabled, instruments.m1_signal FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%' "
 
@@ -61,13 +61,13 @@ def set_signals_feed(s):
         w_forecast_display_info = row[6]
         uid = row[7]
         disabled = row[8]
-        romad_st = row[9]
+        m1_signal = row[9]
 
         short_title = fullname
         short_description = symbol
         content = sector
         url = "{burl}s/?uid="+ str(uid)
-        ranking = str( romad_st )
+        ranking = str( m1_signal )
         type = str(feed_id)
 
         if float(w_forecast_change) < 0:

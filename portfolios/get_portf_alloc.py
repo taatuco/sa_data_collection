@@ -173,9 +173,13 @@ def get_portf_alloc():
 
             print(sql_pf+": "+ os.path.basename(__file__) )
             portf_item_symbol = row[0]
+            portf_initial_item_quantity = row[1]
             portf_item_conviction = row[2]
             portf_item_conviction_coef = get_conviction_coef(portf_item_conviction)
-            portf_item_quantity = portfd.get_quantity(portf_item_symbol,portf_item_conviction_coef)
+            if portf_initial_item_quantity == 1:
+                portf_item_quantity = portfd.get_quantity(portf_item_symbol,portf_item_conviction_coef)
+            else:
+                portf_item_quantity = portf_initial_item_quantity
 
             cr_p = connection.cursor(pymysql.cursors.SSCursor)
             sql_p = "SELECT price_close, date FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"

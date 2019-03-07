@@ -42,9 +42,9 @@ def set_alloc(sfx,s):
 ################################################################################
     if (symbol == sfx+"FXONE" ):
         sql = "INSERT IGNORE INTO portfolios(portf_symbol, symbol, quantity, strategy_order_type, strategy_conviction) VALUES "+\
-        "('" + sfx + "FXONE','EURUSD',1000,'long/short','neutral'),"+\
-        "('" + sfx + "FXONE','GBPUSD',1000,'long/short','neutral'),"+\
-        "('" + sfx + "FXONE','EURGBP',1000,'long/short','neutral')"
+        "('" + sfx + "FXONE','EURUSD',1,'long/short','neutral'),"+\
+        "('" + sfx + "FXONE','GBPUSD',1,'long/short','neutral'),"+\
+        "('" + sfx + "FXONE','EURGBP',1,'long/short','neutral')"
         try:
             cr.execute(sql)
             connection.commit()
