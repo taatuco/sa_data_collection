@@ -46,6 +46,31 @@ def get_portf_content(user_id):
     except Exception as e: print(e)
     return r
 
+def get_portf_ranking(s,rank):
+    r = 0
+    try:
+        count_positive_year = 0
+        count_blown_portf = 0
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT COUNT(*) FROM instruments WHERE symbol ='"+ s +"' AND y1>0 "
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: count_positive_year = row[0]
+
+        sql = "SELECT COUNT(*) FROM price_instruments_data WHERE symbol ='"+ s +"' AND price_close <= 0 "
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: count_blown_portf = row[0]
+
+        if count_positive_year > 0:
+            r = float(rank) * 0.01
+        if count_blown_portf > 0:
+            r = float(rank) * 0.01
+
+        cr.close()
+    except Exception as e: print(e)
+    return r
+
 def set_portf_feed():
 
     feed_id = 9
@@ -80,7 +105,7 @@ def set_portf_feed():
         short_description = symbol
         content = get_portf_content(owner)
         url = "{burl}p/?uid="+str(uid)
-        ranking = str( romad_st )
+        ranking =  str( get_portf_ranking(symbol, romad_st) )
         type = str(feed_id)
 
         badge = w_forecast_display_info
