@@ -66,9 +66,9 @@ def get_portf_ranking(s,rank):
         r = float(rank)
 
         if count_negative_year > 0:
-            r = float(rank) * 0.01
+            r = float(rank) - 88
         if count_blown_portf > 0:
-            r = float(rank) * 0.01
+            r = float(rank) - 99
 
         cr.close()
     except Exception as e: print(e)
