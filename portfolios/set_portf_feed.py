@@ -144,5 +144,20 @@ def set_portf_feed():
         pass
     cr_i.close()
 
+    i = 1
+    portf_symbol = ''
+    cr_r = connection.cursor(pymysql.cursors.SSCursor)
+    sql_r = "SELECT symbol FROM feed WHERE symbol LIKE '"+ get_portf_suffix() +"%' ORDER BY ranking DESC"
+    cr_r.execute(sql_r)
+    rs_r = cr_r.fetchall()
+    for row in rs_r:
+        portf_symbol = row[0]
+        cr_u = connection.cursor(pymysql.cursors.SSCursor)
+        sql_u = "UPDATE feed SET globalRank = "+ str(i) + " WHERE symbol = '"+ str(portf_symbol) +"'"
+        print(sql_u)
+        cr_u.execute(sql_u)
+        i += 1
+    connection.commit()
+    cr_r.close()
 
     cr.close()
