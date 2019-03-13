@@ -145,9 +145,11 @@ def set_portf_feed():
     cr_i.close()
 
     i = 1
+    d = datetime.datetime.now() ; d = d.strftime('%Y%m')
+
     portf_symbol = ''
     cr_r = connection.cursor(pymysql.cursors.SSCursor)
-    sql_r = "SELECT symbol FROM feed WHERE symbol LIKE '"+ get_portf_suffix() +"%' ORDER BY ranking DESC"
+    sql_r = "SELECT feed.*, instruments.creation_date FROM feed JOIN instruments ON feed.symbol = instruments.symbol WHERE feed.type = 9 AND instruments.creation_date < "+d+"01 ORDER BY feed.ranking DESC"
     cr_r.execute(sql_r)
     rs_r = cr_r.fetchall()
     for row in rs_r:
