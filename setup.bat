@@ -44,6 +44,7 @@ REM ### Setup default data
 %_PY_EXE% "%SA_DATA_DIR%users\set_users.py"
 %_PY_EXE% "%SA_DATA_DIR%portfolios\set_portf.py"
 %_PY_EXE% "%SA_DATA_DIR%portfolios\set_strat.py"
+%_PY_EXE% "%SA_DATA_DIR%portfolios\gen_portf.py"
 
 REM ### 1 Get Data
 DEL /F /Q %GET_DATA%
