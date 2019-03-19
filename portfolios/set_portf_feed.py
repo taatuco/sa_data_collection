@@ -69,7 +69,7 @@ def get_portf_ranking(s,rank,stdev_st):
             r = float(rank) - 500
         if count_blown_portf > 0:
             r = float(rank) - 10000
-        r = r + float(stdev_st*100)
+        r = r - float(stdev_st*100)
 
         cr.close()
     except Exception as e: print(e)
