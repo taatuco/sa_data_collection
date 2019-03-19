@@ -33,8 +33,7 @@ def set_portf_symbol():
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: symbol = symbol + row[0]
-        d = datetime.datetime.now(); frmd = datetime.datetime.strftime(d, '%d')
-        symbol = symbol + frmd
+        symbol = symbol + str( random.randint(1,999) )
         r = get_portf_suffix() + symbol.upper()
         cr.close()
         connection.close()
