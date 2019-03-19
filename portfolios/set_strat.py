@@ -35,13 +35,13 @@ connection = pymysql.connect(host=db_srv,
 def gen_strategies():
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
-                sql = "INSERT IGNORE INTO strategies(codename,description) VALUES "+\
-                "('ls','long/short'), "+\
-                "('l','long-only'), "+\
-                "('s','short-only') "
-                print(sql)
-                cr.execute(sql)
-                connection.commit()
+        sql = "INSERT IGNORE INTO strategies(codename,description) VALUES "+\
+        "('ls','long/short'), "+\
+        "('l','long-only'), "+\
+        "('s','short-only') "
+        print(sql)
+        cr.execute(sql)
+        connection.commit()
         cr.close()
     except Exception as e: print(e)
 
