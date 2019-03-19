@@ -76,8 +76,10 @@ class portf_data:
                 self.portf_total_alloc_amount = self.portf_total_alloc_amount + salloc
             cr_s.close()
         cr.close()
-
-        self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
+        try:
+            self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
+        except:
+            self.portf_multip = 1
 
     def get_quantity(self, alloc_s, alloc_coef):
 
