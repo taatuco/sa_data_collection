@@ -46,7 +46,7 @@ def get_portf_content(user_id):
     except Exception as e: print(e)
     return r
 
-def get_portf_ranking(s,rank):
+def get_portf_ranking(s,rank,stdev_st):
     r = 0
     try:
         count_negative_year = 0
@@ -66,9 +66,10 @@ def get_portf_ranking(s,rank):
         r = float(rank)
 
         if count_negative_year > 0:
-            r = float(rank) - 88
+            r = float(rank) - 500
         if count_blown_portf > 0:
-            r = float(rank) - 99
+            r = float(rank) - 10000
+        r = r + float(stdev_st*100)
 
         cr.close()
     except Exception as e: print(e)
@@ -85,7 +86,7 @@ def set_portf_feed():
     d = d.strftime("%Y%m%d")
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, instruments.romad_st FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, instruments.romad_st, instruments.stdev_st FROM instruments "+\
     "JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol LIKE '"+ get_portf_suffix() +"%'"
 
@@ -103,12 +104,13 @@ def set_portf_feed():
         uid = row[6]
         owner = row[7]
         romad_st = row[8]
+        stdev_st = row[9]
 
         short_title = fullname
         short_description = symbol
         content = get_portf_content(owner)
         url = "{burl}p/?uid="+str(uid)
-        ranking =  str( get_portf_ranking(symbol, romad_st) )
+        ranking =  str( get_portf_ranking(symbol, romad_st, stdev_st) )
         type = str(feed_id)
 
         badge = w_forecast_display_info
