@@ -77,24 +77,24 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
             r = r - float(stdev_st*100)
         #Rank up yearly performance
         if float(y1) > 0.05:
-            r = r + float(y1 * 100)
+            r = r + float(y1 * 20)
         if float(y1) > 0.09:
-            r = r + float(y1 * 100)
+            r = r + float(y1 * 40)
         #Rank up 6-month performance
         if float(m6) > 0.05:
-            r = r + float(m6 * 100)
+            r = r + float(m6 * 10)
         if float(m6) > 0.09:
-            r = r + float(m6 * 100)
+            r = r + float(m6 * 20)
         #Rank up 3-month performance
         if float(m3) > 0.05:
-            r = r + float(m3 * 100)
+            r = r + float(m3 * 5)
         if float(m3) > 0.09:
-            r = r + float(m3 * 100)
+            r = r + float(m3 * 10)
         #Rank up 1-month performance
         if float(m1) > 0.05:
-            r = r + float(m1 * 100)
+            r = r + float(m1 * 2)
         if float(m1) > 0.09:
-            r = r + float(m1 * 100)
+            r = r + float(m1 * 1)
 
         cr.close()
     except Exception as e: print(e)
