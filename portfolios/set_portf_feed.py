@@ -46,7 +46,7 @@ def get_portf_content(user_id):
     except Exception as e: print(e)
     return r
 
-def get_portf_ranking(s,rank,stdev_st):
+def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
     r = 0
     try:
         count_negative_year = 0
@@ -64,12 +64,37 @@ def get_portf_ranking(s,rank,stdev_st):
         for row in rs: count_blown_portf = 1
 
         r = float(rank)
-
+        #Rank down negative year
         if count_negative_year > 0:
             r = float(rank) - 500
+        #Rank down blown portfolio
         if count_blown_portf > 0:
-            r = float(rank) - 10000
+            r = float(rank) - 9999
+        #Rank down high volatility risk
         r = r - float(stdev_st*100)
+        #Rank down portfolio with no movement
+        if float(stdev_st) < 10:
+            r = r - float(stdev_st*100)
+        #Rank up yearly performance
+        if float(y1) > 0.05:
+            r = r + float(y1 * 100)
+        if float(y1) > 0.09:
+            r = r + float(y1 * 100)
+        #Rank up 6-month performance
+        if float(m6) > 0.05:
+            r = r + float(m6 * 100)
+        if float(m6) > 0.09:
+            r = r + float(m6 * 100)
+        #Rank up 3-month performance
+        if float(m3) > 0.05:
+            r = r + float(m3 * 100)
+        if float(m3) > 0.09:
+            r = r + float(m3 * 100)
+        #Rank up 1-month performance
+        if float(m1) > 0.05:
+            r = r + float(m1 * 100)
+        if float(m1) > 0.09:
+            r = r + float(m1 * 100)
 
         cr.close()
     except Exception as e: print(e)
@@ -86,7 +111,10 @@ def set_portf_feed():
     d = d.strftime("%Y%m%d")
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, instruments.romad_st, instruments.stdev_st FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, "+\
+    "instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, "+\
+    "instruments.romad_st, instruments.stdev_st, instruments.y1, instruments.m6, instruments.m3, instruments.m1 "+\
+    "FROM instruments "+\
     "JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol LIKE '"+ get_portf_suffix() +"%'"
 
@@ -105,12 +133,16 @@ def set_portf_feed():
         owner = row[7]
         romad_st = row[8]
         stdev_st = row[9]
+        y1 = row[10]
+        m6 = row[11]
+        m3 = row[12]
+        m1 = row[13]
 
         short_title = fullname
         short_description = symbol
         content = get_portf_content(owner)
         url = "{burl}p/?uid="+str(uid)
-        ranking =  str( get_portf_ranking(symbol, romad_st, stdev_st) )
+        ranking =  str( get_portf_ranking(symbol, romad_st, stdev_st,y1,m6,m3,m1) )
         type = str(feed_id)
 
         badge = w_forecast_display_info
