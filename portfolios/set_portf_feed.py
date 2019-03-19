@@ -53,15 +53,15 @@ def get_portf_ranking(s,rank):
         count_blown_portf = 0
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT COUNT(*) FROM instruments WHERE symbol ='"+ s +"' AND y1<=0 "
+        sql = "SELECT symbol FROM instruments WHERE symbol ='"+ s +"' AND y1<=0 "
         cr.execute(sql)
         rs = cr.fetchall()
-        for row in rs: count_negative_year = row[0]
+        for row in rs: count_negative_year = 1
 
-        sql = "SELECT COUNT(*) FROM chart_data WHERE symbol ='"+ s +"' AND price_close <= 0 "
+        sql = "SELECT symbol FROM chart_data WHERE symbol ='"+ s +"' AND price_close <= 0 "
         cr.execute(sql)
         rs = cr.fetchall()
-        for row in rs: count_blown_portf = row[0]
+        for row in rs: count_blown_portf = 1
 
         r = float(rank)
 

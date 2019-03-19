@@ -91,7 +91,6 @@ def get_portf_perf():
             d = d + timedelta(days=1)
             d_str = d.strftime("%Y%m%d")
             portf_pnl = 0
-            #portf_content = ''
 
             #get portfolio allocations
             #for each item get the pnl
