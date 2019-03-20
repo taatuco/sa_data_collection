@@ -95,6 +95,10 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
             r = r + float(m1 * 2)
         if float(m1) > 0.09:
             r = r + float(m1 * 1)
+            
+        if float(m1) < 0.01:
+            r = r - 500
+
 
         cr.close()
     except Exception as e: print(e)
