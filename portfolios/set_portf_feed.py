@@ -69,12 +69,12 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
             r = float(rank) - 500
         #Rank down blown portfolio
         if count_blown_portf > 0:
-            r = float(rank) - 9999
+            r = float(rank) - 999999
         #Rank down high volatility risk
         r = r - float(stdev_st*100)
         #Rank down portfolio with no movement
         if float(stdev_st) < 10:
-            r = r - 500
+            r = r - 9999
         else:
             #Rank up yearly performance
             if float(y1) > 0.05:
