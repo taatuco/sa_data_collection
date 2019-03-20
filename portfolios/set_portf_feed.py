@@ -75,30 +75,27 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         #Rank down portfolio with no movement
         if float(stdev_st) < 10:
             r = r - 500
-        #Rank up yearly performance
-        if float(y1) > 0.05:
-            r = r + float(y1 * 20)
-        if float(y1) > 0.09:
-            r = r + float(y1 * 40)
-        #Rank up 6-month performance
-        if float(m6) > 0.05:
-            r = r + float(m6 * 10)
-        if float(m6) > 0.09:
-            r = r + float(m6 * 20)
-        #Rank up 3-month performance
-        if float(m3) > 0.05:
-            r = r + float(m3 * 5)
-        if float(m3) > 0.09:
-            r = r + float(m3 * 10)
-        #Rank up 1-month performance
-        if float(m1) > 0.05:
-            r = r + float(m1 * 2)
-        if float(m1) > 0.09:
-            r = r + float(m1 * 1)
-            
-        if float(m1) < 0.01:
-            r = r - 500
-
+        else:
+            #Rank up yearly performance
+            if float(y1) > 0.05:
+                r = r + float(y1 * 2)
+            if float(y1) > 0.09:
+                r = r + float(y1 * 5)
+            #Rank up 6-month performance
+            if float(m6) > 0.05:
+                r = r + float(m6 * 5)
+            if float(m6) > 0.09:
+                r = r + float(m6 * 10)
+            #Rank up 3-month performance
+            if float(m3) > 0.05:
+                r = r + float(m3 * 10)
+            if float(m3) > 0.09:
+                r = r + float(m3 * 20)
+            #Rank up 1-month performance
+            if float(m1) > 0.05:
+                r = r + float(m1 * 20)
+            if float(m1) > 0.09:
+                r = r + float(m1 * 40)
 
         cr.close()
     except Exception as e: print(e)
