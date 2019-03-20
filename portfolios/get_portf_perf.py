@@ -121,7 +121,12 @@ def get_portf_perf():
                     if strategy_order_type_c == 'short':
                         portf_pnl = portf_pnl + (pnl_short_c * quantity_c * pip_c)
                         if pnl_short_c == 999: portf_pnl = 0
+
+                    if d_str == '20190306' and portf_uid == 2441:
+                        print('########################### ' + str(portf_pnl) + ' = ' + str(portf_pnl) + '('+ str(pnl_c) + '*' + str(quantity_c) + '*' + str(pip_c) +')'    )
+
                 portf_nav = round( portf_nav + portf_pnl, 2)
+
 
                 if i > 0:
                     sep = ', '
