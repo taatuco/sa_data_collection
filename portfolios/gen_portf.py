@@ -49,7 +49,19 @@ def set_portf_fullname(s,ac,m,st):
     except Exception as e: print(e)
     return r
 
-def get_portf_description(ac,m,st):
+def get_nickname(id):
+    r = ''
+    try:
+        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT nickname FROM users WHERE id="+ str(id)
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: r = row[0]
+    except Exception as e: print(e)
+    return r
+
+def get_portf_description(ac,m,st,id):
     r = ''
     try:
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
@@ -58,7 +70,7 @@ def get_portf_description(ac,m,st):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: portf_description = row[0]
-        nickname = get_nickname()
+        nickname = get_nickname(id)
         market_asset_class = ac + ' ' + m + ' '+ st
         portf_description = portf_description.replace('{market_asset_class}',market_asset_class)
         portf_description = portf_description.replace('{nickname}',nickname)
@@ -189,9 +201,9 @@ def create_portf(ac,m,sy):
         pip = 1
         sector = 0
         unit = get_unit(m)
-        portf_description = get_portf_description(ac,m,st)
-        account_reference = 1000
         portf_owner = set_portf_owner()
+        portf_description = get_portf_description(ac,m,st,portf_owner)
+        account_reference = 1000
 
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)

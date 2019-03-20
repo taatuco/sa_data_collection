@@ -64,6 +64,9 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         for row in rs: count_blown_portf = 1
 
         r = float(rank)
+        #Negative monthly return 
+        if float(rank) <= 0:
+            r = r - 9999
         #Rank down negative year
         if count_negative_year > 0:
             r = float(rank) - 500
