@@ -74,7 +74,7 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         r = r - float(stdev_st*100)
         #Rank down portfolio with no movement
         if float(stdev_st) < 10:
-            r = r - float(stdev_st*100)
+            r = r - 500
         #Rank up yearly performance
         if float(y1) > 0.05:
             r = r + float(y1 * 20)
