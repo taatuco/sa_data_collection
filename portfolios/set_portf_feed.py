@@ -73,24 +73,24 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         else:
             #Rank up yearly performance
             if float(y1) > 0.05:
-                r = r + float(y1 * 2)
+                r = r + 500
             if float(y1) > 0.09:
-                r = r + float(y1 * 5)
+                r = r + 900
             #Rank up 6-month performance
             if float(m6) > 0.05:
-                r = r + float(m6 * 5)
+                r = r + 500
             if float(m6) > 0.09:
-                r = r + float(m6 * 10)
+                r = r + 900
             #Rank up 3-month performance
             if float(m3) > 0.05:
-                r = r + float(m3 * 10)
+                r = r + 500
             if float(m3) > 0.09:
-                r = r + float(m3 * 20)
+                r = r + 900
             #Rank up 1-month performance
             if float(m1) > 0.05:
-                r = r + float(m1 * 20)
+                r = r + 1000
             if float(m1) > 0.09:
-                r = r + float(m1 * 40)
+                r = r + 2000
 
         #Rank down blown portfolio
         if count_blown_portf > 0:
