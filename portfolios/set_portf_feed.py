@@ -86,7 +86,7 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
             r = float(rank) - 500
         else:
             if max_drawdown_reached:
-                r = r - 100
+                r = r - 999
             #Rank up yearly performance
             if float(y1) > 0.05:
                 r = r + 500
