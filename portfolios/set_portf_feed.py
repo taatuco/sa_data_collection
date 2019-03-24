@@ -78,8 +78,6 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         for row in rs: max_drawdown_reached = True
 
         r = float(rank)
-        if max_drawdown_reached:
-            r = r - 999
         #Negative monthly return
         if float(rank) <= 0:
             r = r - 9999
@@ -87,6 +85,8 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         if count_negative_year > 0:
             r = float(rank) - 500
         else:
+            if max_drawdown_reached:
+                r = r - 999
             #Rank up yearly performance
             if float(y1) > 0.05:
                 r = r + 500
