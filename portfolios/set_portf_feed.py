@@ -72,7 +72,7 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
 
         drawdown_pct_threshold = 0.3
         drawdown_account_max = float(account_start) - (float(account_start) * float(drawdown_pct_threshold) )
-        sql = "SELECT price_close FROM chart_data WHERE symbol ='"+ s +"' AND price_close < "+ drawdown_account_max + " LIMIT 1"
+        sql = "SELECT price_close FROM chart_data WHERE symbol ='"+ s +"' AND price_close < "+ str(drawdown_account_max) + " LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: max_drawdown_reached = True
