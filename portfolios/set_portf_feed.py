@@ -65,14 +65,14 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         for row in rs: count_blown_portf = 1
 
         account_start = 1000
-        sql = "SELECT price_close FROM chart_data WHERE symbol ='"+ s +"' ORDER BY date ASC LIMIT 1"
+        sql = "SELECT account_reference FROM instruments WHERE symbol='"+ s +"'"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: account_start = row[0]
 
         drawdown_pct_threshold = 0.3
         drawdown_account_max = account_start - (account_start * drawdown_pct_threshold)
-        sql = "SELECT price_close FROM chart_data WHERE symbol ='"+ s +"' AND price_close < "+ drawdown_account_max
+        sql = "SELECT price_close FROM chart_data WHERE symbol ='"+ s +"' AND price_close < "+ drawdown_account_max + " LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: max_drawdown_reached = True
