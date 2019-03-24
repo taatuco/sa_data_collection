@@ -79,7 +79,7 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
 
         r = float(rank)
         if max_drawdown_reached:
-            r = r - 9999
+            r = r - 999
         #Negative monthly return
         if float(rank) <= 0:
             r = r - 9999
