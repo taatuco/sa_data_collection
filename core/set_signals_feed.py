@@ -91,9 +91,9 @@ def set_signals_feed(s):
         type = str(feed_id)
 
         if float(w_forecast_change) < 0:
-            badge = "down " + w_forecast_display_info
+            badge = '<i class="fas fa-caret-down"></i>&nbsp;' + w_forecast_display_info
         elif float(w_forecast_change) > 0:
-            badge = "up " + w_forecast_display_info
+            badge = '<i class="fas fa-caret-up"></i>&nbsp;' + w_forecast_display_info
         else:
             badge = w_forecast_display_info
 
