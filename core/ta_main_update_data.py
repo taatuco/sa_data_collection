@@ -40,6 +40,15 @@ def get_update_instr_data(fm,is_update_all):
     else:
         nd_scan = 10
 
+    specific_symbol = sys.argv[1]
+
+    if specific_symbol == None:
+        sql_parse_list = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
+        "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
+    else:
+        sql_parse_list = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
+        "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol = '"+ str(specific_symbol) +"'"
+
     import pymysql.cursors
     connection = pymysql.connect(host=db_srv,
                                  user=db_usr,
@@ -50,8 +59,7 @@ def get_update_instr_data(fm,is_update_all):
 
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
-        "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
+        sql = sql_parse_list
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
