@@ -21,8 +21,6 @@ access_obj = sa_db_access()
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 def calc_ma(symbol_id, date_id, ma_period):
-    ma = 0
-    time.sleep(0.0001)
     try:
         import pymysql.cursors
         connection = pymysql.connect(host=db_srv,
@@ -40,6 +38,7 @@ def calc_ma(symbol_id, date_id, ma_period):
         "WHERE symbol='"+symbol_id+"' AND date<="+date_id+" AND date>="+ from_date
         cr.execute(sql)
         rs = cr.fetchall()
+        ma = 0
         if rs:
             for row in rs:
                 ma = row[0]
