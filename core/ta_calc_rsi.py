@@ -55,6 +55,7 @@ class rsi_data:
         self.d = date
         self.p = period
 
+        import pymysql.cursors
         connection = pymysql.connect(host=db_srv,
         user=db_usr,
         password=db_pwd,
@@ -102,7 +103,7 @@ class rsi_data:
     def get_avg_gain(self):
         #(FIRST_AVG, GAIN, LOSS) = AVERAGE( (GAIN) ), AVERAGE( (LOSS) ) (if count> period)
         # In case previous is 0 then get average of last period
-
+        import pymysql.cursors
         connection = pymysql.connect(host=db_srv,
         user=db_usr,
         password=db_pwd,
@@ -131,6 +132,7 @@ class rsi_data:
 
     def get_avg_loss(self):
         #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
+        import pymysql.cursors
         connection = pymysql.connect(host=db_srv,
         user=db_usr,
         password=db_pwd,
