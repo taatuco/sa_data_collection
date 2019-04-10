@@ -44,5 +44,5 @@ def calc_ma(symbol_id, date_id, ma_period):
                 ma = row[0]
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: print(symbol_id + " ::: " + e)
     return(ma)
