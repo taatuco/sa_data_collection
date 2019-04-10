@@ -82,7 +82,6 @@ def get_update_instr_data(fm,is_update_all):
             cr_d_id.execute(sql_d_id)
             rs_d = cr_d_id.fetchall()
             for row in rs_d:
-                time.sleep(0.01)
                 d = str(row[1]).replace("-","")
                 id = row[0]
                 rsi = rsi_data(s,d,14)
