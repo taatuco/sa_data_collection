@@ -43,4 +43,5 @@ def calc_ma(symbol_id, date_id, ma_period):
         for row in rs:
             ma = row[0]
     cr.close()
+    connection.close()
     return(ma)

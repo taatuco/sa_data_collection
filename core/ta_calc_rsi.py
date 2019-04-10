@@ -48,18 +48,19 @@ class rsi_data:
     c_rsi = 0
 
     import pymysql.cursors
-    connection = pymysql.connect(host=db_srv,
-                                 user=db_usr,
-                                 password=db_pwd,
-                                 db=db_name,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
 
 
     def __init__(self, symbol, date, period):
         self.s = symbol
         self.d = date
         self.p = period
+
+        connection = pymysql.connect(host=db_srv,
+        user=db_usr,
+        password=db_pwd,
+        db=db_name,
+        charset='utf8mb4',
+        cursorclass=pymysql.cursors.DictCursor)
 
         cr_get_pr_d = rsi_data.connection.cursor(rsi_data.pymysql.cursors.SSCursor)
         sql_get_pr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
@@ -88,6 +89,7 @@ class rsi_data:
                     rsi_data.c_curr_is_ta_calc = row[3]
             cr_get_curr_d.close()
         cr_get_pr_d.close()
+        connection.close()
 
 
     def get_gain(self):
@@ -100,6 +102,14 @@ class rsi_data:
     def get_avg_gain(self):
         #(FIRST_AVG, GAIN, LOSS) = AVERAGE( (GAIN) ), AVERAGE( (LOSS) ) (if count> period)
         # In case previous is 0 then get average of last period
+
+        connection = pymysql.connect(host=db_srv,
+        user=db_usr,
+        password=db_pwd,
+        db=db_name,
+        charset='utf8mb4',
+        cursorclass=pymysql.cursors.DictCursor)
+
         tt_gain = 0
         if rsi_data.c_prev_avg_gain == 0:
             #with rsi_data.connection.cursor() as cr_get_avg_g:
@@ -116,10 +126,18 @@ class rsi_data:
         else:
             #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(period-1)+ (GAIN) ) / period
             rsi_data.c_curr_avg_gain = ( ( rsi_data.c_prev_avg_gain * (self.p-1) )+ rsi_data.c_curr_gain )/self.p
+        connection.close()
         return rsi_data.c_curr_avg_gain
 
     def get_avg_loss(self):
         #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
+        connection = pymysql.connect(host=db_srv,
+        user=db_usr,
+        password=db_pwd,
+        db=db_name,
+        charset='utf8mb4',
+        cursorclass=pymysql.cursors.DictCursor)
+
         tt_loss = 0
         if rsi_data.c_prev_avg_loss == 0:
             #with rsi_data.connection.cursor() as cr_get_avg_l:
@@ -136,6 +154,7 @@ class rsi_data:
         else:
             #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
             rsi_data.c_curr_avg_loss = ( ( rsi_data.c_prev_avg_loss * (self.p-1) )+ rsi_data.c_curr_loss )/self.p
+        connection.close()
         return rsi_data.c_curr_avg_loss
 
 
