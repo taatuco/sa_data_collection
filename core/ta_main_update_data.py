@@ -95,11 +95,11 @@ def get_update_instr_data(fm,is_update_all):
                 rsi_overbought = rsi.get_rsi_overbought()
                 rsi_oversold = rsi.get_rsi_oversold()
                 ma200 = calc_ma(s,d,200)
-                ma10 = calc_ma(s,d,10)
-                ma20 = calc_ma(s,d,20)
-                ma30 = calc_ma(s,d,30)
-                ma40 = calc_ma(s,d,40)
-                ma50 = calc_ma(s,d,50)
+                #ma10 = calc_ma(s,d,10)
+                #ma20 = calc_ma(s,d,20)
+                #ma30 = calc_ma(s,d,30)
+                #ma40 = calc_ma(s,d,40)
+                #ma50 = calc_ma(s,d,50)
 
                 is_ta_calc = "1"
 
