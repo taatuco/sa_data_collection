@@ -22,6 +22,7 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 
 def calc_ma(symbol_id, date_id, ma_period):
     ma = 0
+    time.sleep(0.2)
     try:
         import pymysql.cursors
         connection = pymysql.connect(host=db_srv,

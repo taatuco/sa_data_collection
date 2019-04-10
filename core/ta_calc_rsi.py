@@ -5,6 +5,7 @@
 
 import sys
 import os
+import time
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -55,7 +56,7 @@ class rsi_data:
             self.s = symbol
             self.d = date
             self.p = period
-
+            time.sleep(0.2)
             import pymysql.cursors
             connection = pymysql.connect(host=db_srv,
             user=db_usr,
@@ -106,6 +107,7 @@ class rsi_data:
         #(FIRST_AVG, GAIN, LOSS) = AVERAGE( (GAIN) ), AVERAGE( (LOSS) ) (if count> period)
         # In case previous is 0 then get average of last period
         try:
+            time.sleep(0.2)
             import pymysql.cursors
             connection = pymysql.connect(host=db_srv,
             user=db_usr,
@@ -137,6 +139,7 @@ class rsi_data:
     def get_avg_loss(self):
         #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
         try:
+            time.sleep(0.2)
             import pymysql.cursors
             connection = pymysql.connect(host=db_srv,
             user=db_usr,
