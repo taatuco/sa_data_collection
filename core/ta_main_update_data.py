@@ -33,7 +33,7 @@ from get_trades import *
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
-def get_update_instr_data(fm):
+def get_update_instr_data(fm,is_update_all):
 
     if fm == 1:
         nd_scan = 370
@@ -72,9 +72,13 @@ def get_update_instr_data(fm):
             d = datetime.datetime.now() - timedelta(days=nd_scan)
             d = d.strftime("%Y%m%d")
 
+            if is_update_all:
+                sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+") ORDER BY date ASC"
+            else:
+                sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+" and is_ta_calc=0) ORDER BY date ASC"
+
             cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
-            sql_d_id = "SELECT id, date FROM price_instruments_data "+\
-            "WHERE (symbol='"+s+"' and date>"+d+" and is_ta_calc=0) ORDER BY date ASC"
+            sql_d_id = sql_select_instr
             cr_d_id.execute(sql_d_id)
             rs_d = cr_d_id.fetchall()
             for row in rs_d:
