@@ -61,6 +61,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
+            if is_update_all: time.sleep(0.2)
             s = row[0]
             uid = row[1]
             asset_class = row[2]
