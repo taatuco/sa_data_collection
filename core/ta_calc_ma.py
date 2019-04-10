@@ -21,6 +21,7 @@ access_obj = sa_db_access()
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 def calc_ma(symbol_id, date_id, ma_period):
+    ma = 0
     try:
         import pymysql.cursors
         connection = pymysql.connect(host=db_srv,
@@ -33,7 +34,6 @@ def calc_ma(symbol_id, date_id, ma_period):
         from_date =  datetime.datetime.strptime(date_id, '%Y%m%d') - ( timedelta(days=ma_period) )
         from_date = from_date.strftime("%Y%m%d")
         ma_period = str(ma_period)
-        ma = 0
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
         "WHERE symbol='"+symbol_id+"' AND date<="+date_id+" AND date>="+ from_date
