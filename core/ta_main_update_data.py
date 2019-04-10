@@ -33,16 +33,14 @@ from get_trades import *
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
-def get_update_instr_data(fm,is_update_all):
+def get_update_instr_data(fm,is_update_all,specific_symbol):
 
     if fm == 1:
         nd_scan = 370
     else:
         nd_scan = 10
 
-    specific_symbol = sys.argv[1]
-
-    if specific_symbol == None:
+    if specific_symbol == None or specific_symbol == '':
         sql_parse_list = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
         "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
     else:

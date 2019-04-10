@@ -5,4 +5,4 @@
 
 from ta_main_update_data import *
 
-get_update_instr_data(0,False)
+get_update_instr_data(0,False,'')
