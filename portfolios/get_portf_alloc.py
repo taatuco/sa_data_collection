@@ -86,7 +86,7 @@ class portf_data:
         portf_reduce_risk_by = 4
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT instruments.pip, price_instruments_data.price_close "+\
+        sql = "SELECT instruments.pip, price_instruments_data.price_close, instruments.volatility_risk_st "+\
         "FROM instruments JOIN price_instruments_data ON instruments.symbol = price_instruments_data.symbol "+\
         "WHERE price_instruments_data.symbol='"+ alloc_s +"' "+\
         "ORDER BY price_instruments_data.date DESC LIMIT 1"
@@ -96,8 +96,12 @@ class portf_data:
         for row in rs:
             pip_s = row[0]
             price_s = row[1]
+            volatility_risk_st = row[2]
             salloc = ( pip_s * price_s )
         cr.close()
+
+        portf_reduce_risk_by = round(volatility_risk_st * 200,0)
+        if portf_reduce_risk_by < 1: portf_reduce_risk_by = 4        
 
         q = round( (( (self.portf_big_alloc_price / salloc) * self.portf_multip ) / portf_reduce_risk_by )*alloc_coef , 2)
         if q < 0.01:
@@ -253,7 +257,7 @@ def get_portf_alloc():
             portf_perc_return = (100/(portf_nav/portf_forc_return))/100
         except:
             portf_perc_return = 0
-            
+
         w_forecast_display_info = "+" + portf_unit + " " + str( round(portf_forc_return,2) )
         cr_f = connection.cursor(pymysql.cursors.SSCursor)
         sql_f = "UPDATE instruments SET w_forecast_change=" + str(portf_perc_return) + ", w_forecast_display_info='" + w_forecast_display_info + "' " +\

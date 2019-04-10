@@ -91,6 +91,12 @@ def get_update_instr_data(fm):
                 rsi_overbought = rsi.get_rsi_overbought()
                 rsi_oversold = rsi.get_rsi_oversold()
                 ma200 = calc_ma(s,d,200)
+                ma10 = calc_ma(s,d,10)
+                ma20 = calc_ma(s,d,20)
+                ma30 = calc_ma(s,d,30)
+                ma40 = calc_ma(s,d,40)
+                ma50 = calc_ma(s,d,50)
+
                 is_ta_calc = "1"
 
                 try:
@@ -106,6 +112,11 @@ def get_update_instr_data(fm):
                     "rsi_overbought="+str(rsi_overbought)+", "+\
                     "rsi_oversold="+str(rsi_oversold)+", "+\
                     "ma200="+str(ma200)+ ", "+\
+                    "ma10="+str(ma10)+ ", "+\
+                    "ma20="+str(ma20)+ ", "+\
+                    "ma30="+str(ma30)+ ", "+\
+                    "ma40="+str(ma40)+ ", "+\
+                    "ma50="+str(ma50)+ ", "+\
                     "is_ta_calc="+str(is_ta_calc)+" "+\
                     "WHERE id="+str(id)
                     cr_upd.execute(sql_upd)
@@ -119,7 +130,7 @@ def get_update_instr_data(fm):
                     cr_upd.execute(sql_upd)
                     connection.commit()
                     cr_upd.close()
-                    
+
             cr_d_id.close()
             gc.collect()
             if fm == 1:

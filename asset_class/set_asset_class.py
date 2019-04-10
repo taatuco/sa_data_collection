@@ -34,7 +34,7 @@ cr.execute(sql)
 
 sql = "INSERT IGNORE INTO asset_class(asset_class_id, asset_class_name) VALUES "+\
 "('CR:','Crypto'), "+\
-"('EQ:','Equity'), "+\
+"('EQ:','Stocks'), "+\
 "('FX:','Forex'), "+\
 "('PF:','Portfolio'), "+\
 "('CO:','Commodities'), "+\
