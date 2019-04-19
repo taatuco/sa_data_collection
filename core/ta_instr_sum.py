@@ -81,9 +81,7 @@ class forecast_data:
                         self.ent_2_s = row[3] #upper 80 last row row[3]
                         self.sl_2_s = row[5] #upper 95 last row row[5]
                         self.tp_2_s = row[4] #lower 95 last row row[4]
-                        ########################################################
                         self.frc_pt = target_price
-                        ########################################################
                     i +=1
         print(str(uid) +": "+ os.path.basename(__file__) )
 
