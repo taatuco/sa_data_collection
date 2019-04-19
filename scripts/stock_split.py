@@ -18,6 +18,9 @@ sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
+sys.path.append(os.path.abspath( sett.get_path_core() ))
+from ta_gen_chart_data import *
+
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 
@@ -66,17 +69,27 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
         cr.close()
         connection.close()
 
+
+        sql = "SELECT uid FROM symbol_list WHERE symbol = '"+ str(symbol) +"'"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: uid = row[0]
+        try:
+            gen_chart(symbol,uid)
+        except:
+            pass
+
     except Exception as e: print(e)
 
 
-print("##########################################################################")
+print("###############################################################################")
 print("Stock split and reverse split function")
 print("--------------------------------------")
 print("correct_stock_split_price(symbol,to_this_date_included, split_factor)")
 print(" ")
 print("provide the following parameters:")
 print("(1) symbol")
-print("(2) date until the split day (included)")
+print("(2) date until the split day (included). ie: 20190410 (for April 10, 2019)")
 print("(3) multiplier. ie: reverse split: 1/4 split = then it is 4")
 print("(3) multiplier. ie: split: 4 split = then it is 0.25")
-print("##########################################################################")
+print("###############################################################################")
