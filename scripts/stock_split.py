@@ -61,10 +61,13 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
             new_ma50 = ma50 * split_factor
             sql_update = 'UPDATE price_instruments_data SET price_close = ' + str(new_price_close) + ', target_price = ' + str(new_target_price) +\
             ', ma200 = ' + str(new_ma200) + ', ma10 = ' + str(new_ma10) + ', ma20 = ' + str(new_ma20) + ', ma30 = ' + str(new_ma30) + ', ma40 = ' + str(new_ma40) + ', ma50 = ' + str(new_ma50) + ' ' +\
-            'WHERE symbol = "'+ symbol +'" AND date = ' + str(this_date)
+            'WHERE symbol = "'+ symbol +'" AND date = ' + str(this_date.strftime('%Y%m%d') )
             print(sql_update)
-            cr.execute(sql_update)
-            connection.commit()
+            try:
+                cr.execute(sql_update)
+                connection.commit()
+            except:
+                pass
 
         sql = "SELECT uid FROM symbol_list WHERE symbol = '"+ str(symbol) +"'"
         cr.execute(sql)
