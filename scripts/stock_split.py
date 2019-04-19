@@ -66,10 +66,6 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
             cr.execute(sql_update)
             connection.commit()
 
-        cr.close()
-        connection.close()
-
-
         sql = "SELECT uid FROM symbol_list WHERE symbol = '"+ str(symbol) +"'"
         cr.execute(sql)
         rs = cr.fetchall()
@@ -78,6 +74,9 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
             gen_chart(symbol,uid)
         except:
             pass
+
+        cr.close()
+        connection.close()
 
     except Exception as e: print(e)
 
