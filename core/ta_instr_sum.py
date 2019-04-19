@@ -52,7 +52,7 @@ class forecast_data:
 
         target_price = 0
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT instruments.target_price FROM instruments JOIN symbol_list ON symbol_list.symbol = instruments.symbol WHERE symbol_list.uid = " + str(uid)
+        sql = "SELECT price_instruments_data.target_price FROM price_instruments_data JOIN symbol_list ON symbol_list.symbol = price_instruments_data.symbol WHERE symbol_list.uid = " + str(uid) + " ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: target_price = row[0]
