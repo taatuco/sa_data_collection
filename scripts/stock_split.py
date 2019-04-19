@@ -64,3 +64,10 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
         connection.close()
 
     except Exception as e: print(e)
+
+
+
+    print("#####################################################################")
+    print("correct_stock_split_price(symbol,to_this_date_included, split_factor)")
+    print("provide symbol, then the date until the split day and the multiplier.")
+    print("#####################################################################")
