@@ -49,6 +49,15 @@ class forecast_data:
     frc_pt = 0
 
     def __init__(self, uid):
+
+        target_price = 0
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT instruments.target_price FROM instruments JOIN symbol_list ON symbol_list.symbol = instruments.symbol WHERE symbol_list.uid = " + str(uid)
+        cr.execute(sql)
+        rs = cr.fetchall()
+        for row in rs: target_price = row[0]
+        cr.close()
+
         forc_src = sett.get_path_src()
         ext = ".csv"
         file_str = forc_src+str(uid)+'f.csv'
@@ -72,7 +81,9 @@ class forecast_data:
                         self.ent_2_s = row[3] #upper 80 last row row[3]
                         self.sl_2_s = row[5] #upper 95 last row row[5]
                         self.tp_2_s = row[4] #lower 95 last row row[4]
-                        self.frc_pt = row[1] #forecast point 1W
+                        ########################################################
+                        self.frc_pt = target_price
+                        ########################################################
                     i +=1
         print(str(uid) +": "+ os.path.basename(__file__) )
 
