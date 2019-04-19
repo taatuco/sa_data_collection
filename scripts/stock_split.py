@@ -59,6 +59,9 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
             sql_update = 'UPDATE price_instruments_data SET price_close = ' + str(new_price_close) + ', target_price = ' + str(new_target_price) +\
             ', ma200 = ' + str(new_ma200) + ', ma10 = ' + str(new_ma10) + ', ma20 = ' + str(new_ma20) + ', ma30 = ' + str(new_ma30) + ', ma40 = ' + str(new_ma40) + ', ma50 = ' + str(new_ma50) + ' ' +\
             'WHERE symbol = "'+ symbol +'" AND date = ' + str(this_date)
+            print(sql_update)
+            cr.execute(sql_update)
+            connection.commit()
 
         cr.close()
         connection.close()
@@ -67,7 +70,14 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
 
 
 
-    print("#####################################################################")
+    print("##########################################################################")
+    print("Stock split and reverse split function")
+    print("--------------------------------------")
     print("correct_stock_split_price(symbol,to_this_date_included, split_factor)")
-    print("provide symbol, then the date until the split day and the multiplier.")
-    print("#####################################################################")
+    print(" ")
+    print("provide the following parameters:")
+    print("(1) symbol")
+    print("(2) date until the split day (included)")
+    print("(3) multiplier. ie: reverse split: 1/4 split = then it is 4")
+    print("(3) multiplier. ie: split: 4 split = then it is 0.25")
+    print("##########################################################################")
