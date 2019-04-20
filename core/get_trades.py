@@ -31,7 +31,7 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-def get_trades(s,uid,dc):
+def get_trades(s,uid,dc,full_update):
 
     r = False
     try:
@@ -44,8 +44,13 @@ def get_trades(s,uid,dc):
         trade_pnl_pct = 0; trade_status = ''; trade_last_price = 0
         trade_decimal_places = 0; trade_url = "s/?uid="+ str(uid)
 
+        if full_update:
+            sql_delete_trades = "DELETE FROM trades WHERE symbol = '"+ s +"' "
+        else:
+            sql_delete_trades = "DELETE FROM trades WHERE symbol ='"+ s +"' AND status='active' "
+
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "DELETE FROM trades WHERE symbol ='"+ s +"' AND status='active' "
+        sql = sql_delete_trades
         cr.execute(sql)
         connection.commit()
         cr.close()

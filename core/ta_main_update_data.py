@@ -150,7 +150,12 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 gen_recomm(s,uid)
                 gen_chart(s,uid)
             get_forecast_pnl(s,uid,nd_scan)
-            get_trades(s,uid,nd_scan)
+
+            if is_update_all:
+                get_trades(s,uid,nd_scan,True)
+            else:
+                get_trades(s,uid,nd_scan,False)
+
             get_instr_sum(s,uid,asset_class,dn,pip)
             set_signals_feed(s)
 
