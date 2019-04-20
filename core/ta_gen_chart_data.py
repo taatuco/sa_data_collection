@@ -225,6 +225,14 @@ def gen_chart(s,uid):
                     else:
                         sep = ','
 
+                    if i == 8:
+                        cr_fp = connection.cursor(pymysql.cursors.SSCursor)
+                        sql_fp = "SELECT target_price FROM price_instruments_data WHERE symbol = '"+ str(s) +"' ORDER BY date DESC LIMIT 1"
+                        cr_fp.execute(sql_fp)
+                        rs_fp = cr_fp.fetchall()
+                        for row in rs_fp: forecast = str(row[0])
+                        cr_fp.close()
+
                     inserted_values = inserted_values + sep +\
                     "("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+","+str(forecast)+","+\
                     str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
