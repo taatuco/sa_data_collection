@@ -24,12 +24,12 @@ from ta_calc_ma import *
 from ta_calc_rsi import *
 from ta_calc_tln import *
 from ta_instr_sum import *
-from ta_calc_up_dn_stats import *
 from set_signals_feed import *
 from ta_gen_recomm import *
 from ta_gen_chart_data import *
 from get_frc_pnl import *
 from get_trades import *
+from ta_calc_trend import *
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
@@ -106,6 +106,10 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 ma30 = calc_ma(s,d,30)
                 ma40 = calc_ma(s,d,40)
                 ma50 = calc_ma(s,d,50)
+                trend = trend_data(s,d)
+                ta_3d_trend = trend.get_3d_trend()
+                ta_5d_trend = trend.get_5d_trend()
+                ta_7d_trend = trend.get_7d_trend()
 
                 is_ta_calc = "1"
 
@@ -145,7 +149,6 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             gc.collect()
             if fm == 1:
                 get_trend_line_data(s,uid)
-                get_day_up_dwn_stat(s,uid)
                 set_signals_feed(s)
                 gen_recomm(s,uid)
                 gen_chart(s,uid)
