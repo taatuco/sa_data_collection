@@ -30,7 +30,7 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 
-def get_forecast_pnl(s,uid,nd):
+def get_forecast_pnl(s,uid,nd, full_update):
 
 
     td = datetime.datetime.now()
@@ -89,7 +89,7 @@ def get_forecast_pnl(s,uid,nd):
                 s_pnl_short = row[4]
             cr.close()
 
-            if s_pnl == 0 or s_pnl_long == 0 or s_pnl_short == 0:
+            if (s_pnl == 0 or s_pnl_long == 0 or s_pnl_short == 0) or (full_update):
                 if signal == "b":
                     pnl = s_price_close - p_price_close
                     pnl_long = pnl
