@@ -26,7 +26,7 @@ class trend_data:
     ta_5d_trend = ''
     ta_7d_trend = ''
 
-    def __init__(symbol, datestr):
+    def __init__(self, symbol, datestr):
         try:
 
             ta_3d_count_up = 0 ; ta_3d_count_down = 0
