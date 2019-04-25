@@ -51,9 +51,8 @@ class trend_data:
                 price_close = row[0]
 
                 if i > 0:
-                    if i <= 7:
-                        if price_close > previous_close: ta_7d_count_up += 1
-                        if price_close < previous_close: ta_7d_count_down += 1
+                    if price_close > previous_close: ta_7d_count_up += 1
+                    if price_close < previous_close: ta_7d_count_down += 1
                     if i >= 2:
                         if price_close > previous_close: ta_5d_count_up += 1
                         if price_close < previous_close: ta_5d_count_down += 1
