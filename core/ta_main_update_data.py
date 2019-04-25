@@ -131,9 +131,9 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                     "ma30="+str(ma30)+ ", "+\
                     "ma40="+str(ma40)+ ", "+\
                     "ma50="+str(ma50)+ ", "+\
-                    "3dtrend="+str(ta_3d_trend)+ ", "+\
-                    "5dtrend="+str(ta_5d_trend)+ ", "+\
-                    "7dtrend="+str(ta_7d_trend)+ ", "+\
+                    "3dtrend='"+str(ta_3d_trend)+ "', "+\
+                    "5dtrend='"+str(ta_5d_trend)+ "', "+\
+                    "7dtrend='"+str(ta_7d_trend)+ "', "+\
                     "is_ta_calc="+str(is_ta_calc)+" "+\
                     "WHERE id="+str(id)
                     cr_upd.execute(sql_upd)
