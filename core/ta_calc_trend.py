@@ -54,10 +54,10 @@ class trend_data:
                     if i <= 7:
                         if price_close > previous_close: ta_7d_count_up += 1
                         if price_close < previous_close: ta_7d_count_down += 1
-                    if i <= 5:
+                    if i >= 2:
                         if price_close > previous_close: ta_5d_count_up += 1
                         if price_close < previous_close: ta_5d_count_down += 1
-                    if i <= 3:
+                    if i >= 4:
                         if price_close > previous_close: ta_3d_count_up += 1
                         if price_close < previous_close: ta_3d_count_down += 1
 
@@ -65,19 +65,19 @@ class trend_data:
                 i += 1
 
             if ta_7d_count_up >= ta_7d_count_down:
-                self.ta_7d_trend = 'u'
+                trend_data.ta_7d_trend = 'u'
             else:
                 self.ta_7d_trend = 'd'
 
             if ta_5d_count_up >= ta_5d_count_down:
-                self.ta_5d_trend = 'u'
+                trend_data.ta_5d_trend = 'u'
             else:
-                self.ta_5d_trend = 'd'
+                trend_data.ta_5d_trend = 'd'
 
             if ta_3d_count_up >= ta_3d_count_down:
-                self.ta_3d_trend = 'u'
+                trend_data.ta_3d_trend = 'u'
             else:
-                self.ta_3d_trend = 'd'
+                trend_data.ta_3d_trend = 'd'
 
 
             cr.close()
