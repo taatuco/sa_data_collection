@@ -42,7 +42,7 @@ class trend_data:
                                          cursorclass=pymysql.cursors.DictCursor)
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT price_close FROM price_instruments_data "+\
-            "WHERE symbol='"+ str(symbol) +"' AND date <= "+ str(datestr) + " AND date >= DATE_SUB("+ str(datestr) +",INTERVAL 7 DAY); ORDER BY date"
+            "WHERE symbol='"+ str(symbol) +"' AND date <= "+ str(datestr) + " AND date >= DATE_SUB("+ str(datestr) +",INTERVAL 7 DAY) ORDER BY date"
             cr.execute(sql)
             rs = cr.fetchall()
             i = 0
@@ -83,7 +83,7 @@ class trend_data:
             connection.close()
 
 
-        except Exception as e: print( str(symbol_id) + " ::: " + str(e) )
+        except Exception as e: print( str(symbol) + " ::: " + str(e) )
 
     def get_3d_trend(self):
         return trend_data.ta_3d_trend
