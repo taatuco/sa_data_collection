@@ -41,10 +41,10 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
 
     if specific_symbol == None or specific_symbol == '':
         sql_parse_list = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
-        "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' ORDER BY symbol"
+        "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' AND symbol_list.disabled = 0 ORDER BY symbol"
     else:
         sql_parse_list = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
-        "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol = '"+ str(specific_symbol) +"'"
+        "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol = '"+ str(specific_symbol) +"' AND symbol_list.disabled = 0"
 
     import pymysql.cursors
     connection = pymysql.connect(host=db_srv,
