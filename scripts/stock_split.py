@@ -74,12 +74,15 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
         cr.close()
         connection.close()
 
+        print('Done!')
+
     except Exception as e: print(e)
 
 
 print("###############################################################################")
 print("Stock split and reverse split function")
 print("--------------------------------------")
+print("IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT")
 print("correct_stock_split_price(symbol,to_this_date_included, split_factor)")
 print(" ")
 print("provide the following parameters:")
@@ -87,4 +90,6 @@ print("(1) symbol")
 print("(2) date until the split day (included). ie: 20190410 (for April 10, 2019)")
 print("(3) multiplier. ie: reverse split: 1/4 split = then it is 4")
 print("(3) multiplier. ie: split: 4 split = then it is 0.25")
+print("(3) multiplier. ie: price before was $2 then new price is $14 then multiplier will be 7")
+print("(3) multiplier. ie: price before was $10 then new price is $5 then multiplier will be 0.5")
 print("###############################################################################")

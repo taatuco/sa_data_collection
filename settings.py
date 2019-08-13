@@ -38,3 +38,11 @@ def get_portf_suffix():
 
 def get_product_name():
     return "SmartAlpha"
+
+def get_reply_to_email(w):
+    r = ''
+    if w == 'email':
+        r = 'no-reply@smartalphatrade.com'
+    if w == 'name':
+        r = 'SmartAlpha Intelligence'
+    return r
