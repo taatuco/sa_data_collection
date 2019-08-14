@@ -40,7 +40,7 @@ def send_mail(to_email,to_displayName,bcc,subject,textmsg):
         header = 'To:' + to_email + '\n' + 'From: '+ to_displayName +' <' + to_email + '>\n' +\
                  'Subject:'+ subject +' \n'
         print(header)
-        msg = header + textmsg
+        msg = header + '\n' + textmsg + '\n'
 
         smtpserver.sendmail(smtp_user, tolist, msg)
         smtpserver.quit()
