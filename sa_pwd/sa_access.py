@@ -24,6 +24,7 @@ class sa_db_access:
 
     def smtp_password(self):
         smtp_pwd = '__smtp_password__'
+        return smtp_pwd
 
     def smtp_server(self):
         smtp_srv = 'localhost'
