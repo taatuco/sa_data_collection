@@ -44,7 +44,7 @@ def get_reply_to_email(w):
     if w == 'email':
         r = 'no-reply@smartalphatrade.com'
     if w == 'name':
-        r = 'SmartAlpha'
+        r = 'SmartAlpha Intelligence'
     return r
 
 def get_email_txt_signature():
