@@ -39,8 +39,12 @@ def send_mail(to_email,to_displayName,bcc,subject,textmsg):
         smtpserver.login(smtp_user, smtp_pwd)
         header = 'To:' + to_email + '\n' + 'From: '+ to_displayName +' <' + to_email + '>\n' +\
                  'Subject:'+ subject +' \n'
+
         print(header)
-        msg = header + '\n' + textmsg + '\n'
+        seperator = ', '
+        print(seperator.join(bcc))
+
+        msg = header + '\n' + textmsg + '\n' + get_email_txt_signature() + '\n'
 
         smtpserver.sendmail(smtp_user, tolist, msg)
         smtpserver.quit()

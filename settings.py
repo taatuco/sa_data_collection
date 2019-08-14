@@ -46,3 +46,29 @@ def get_reply_to_email(w):
     if w == 'name':
         r = 'SmartAlpha Intelligence'
     return r
+
+def get_email_txt_signature():
+
+    r = '\n'+\
+    'SmartAlpha Trading Intelligence'+\
+    '\n'+\
+    '\n'+\
+    'eml: info@taatu.co'+\
+    '\n'+\
+    'twtr: @gotaatu'+\
+    '\n'+\
+    'lknd: https://www.linkedin.com/company/taatu-limited'+\
+    '\n'+\
+    'web: http://smartalphatrade.com'+\
+    '\n'+\
+    '\n'+\
+    'Taatu Ltd.'+\
+    '\n'+\
+    '27 Old Gloucester Street, London, WC1N 3AX, UK'+\
+    '\n'+\
+
+
+
+
+
+    return r
