@@ -23,7 +23,7 @@ def send_intel_report():
 
         l_subject = 'Intelligence Report'
         l_report_url = 'http://smartalphatrade.com/?dashboard=1'
-        l_msgtext = 'Hello,'+'\n'+'This is your daily trading intelligence report. '+ '\n' +'Access to your report: '+ l_report_url
+        l_msgtext = 'Hello,'+'\n'+'We have compiled your intelligence briefing for today. '+ '\n' +'Access to your report: '+ l_report_url
         today = datetime.date.today()
         todayStr = today.strftime('%Y-%b-%d')
         send_to_email = get_reply_to_email('email')

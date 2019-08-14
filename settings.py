@@ -50,7 +50,7 @@ def get_reply_to_email(w):
 def get_email_txt_signature():
 
     r = '\n'+\
-    'SmartAlpha Trading Intelligence'+\
+    'SmartAlpha Team'+\
     '\n'+\
     'Taatu Ltd.'+\
     '\n'+\
