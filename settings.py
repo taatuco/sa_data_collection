@@ -65,10 +65,6 @@ def get_email_txt_signature():
     'Taatu Ltd.'+\
     '\n'+\
     '27 Old Gloucester Street, London, WC1N 3AX, UK'+\
-    '\n'+\
-
-
-
-
+    '\n'
 
     return r
