@@ -38,6 +38,14 @@ def send_intel_report():
 def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_displayName, subject, textmsg):
     try:
 
+        import pymysql.cursors
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT username FROM users WHERE is_bot=0'
         cr.execute(sql)
