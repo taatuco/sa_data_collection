@@ -47,7 +47,7 @@ def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_dis
                                      cursorclass=pymysql.cursors.DictCursor)
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'SELECT username FROM users WHERE is_bot=0'
+        sql = 'SELECT DISTINCT username FROM users JOIN instruments ON instruments.owner = users.id WHERE users.is_bot=0'
         cr.execute(sql)
         rs = cr.fetchall()
 
