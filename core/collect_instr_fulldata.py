@@ -4,5 +4,7 @@
 # LICENSE file in the root directory of this source tree.
 
 from ta_main_update_data import *
+from send_intel_report_email import *
 
 get_update_instr_data(1,False,'')
+send_intel_report()
