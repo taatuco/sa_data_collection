@@ -22,7 +22,7 @@ def send_intel_report():
         num_of_second_interval = 60
 
         l_subject = 'Daily Briefing'
-        l_report_url = 'http://smartalphatrade.com/?dashboard=1'
+        l_report_url = 'http://smartalphatrade.com/intelligence'
         l_msgtext = 'Hello,'+'\n'+'We have compiled your intelligence briefing for today. '+ '\n' +'Access to your report: '+ l_report_url
         today = datetime.date.today()
         todayStr = today.strftime('%Y-%b-%d')
