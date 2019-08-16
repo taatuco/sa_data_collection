@@ -42,7 +42,7 @@ def get_product_name():
 def get_reply_to_email(w):
     r = ''
     if w == 'email':
-        r = 'no-reply@smartalphatrade.com'
+        r = 'info@taatu.co'
     if w == 'name':
         r = 'SmartAlpha Intelligence'
     return r
