@@ -78,6 +78,29 @@ def compile_market_snapshot():
             _11_BTC_day_up_week_down = row[20]
             _11_BTC_day_down_week_down = row[21]
 
+        _1_worldstocks_day_up_week_down = _1_worldstocks_day_up_week_down
+        _1_worldstocks_day_down_week_up = _1_worldstocks_day_down_week_up
+        _2_worldstocks_day_up_week_up = _2_worldstocks_day_up_week_up
+        _2_worldstocks_day_down_week_down = _2_worldstocks_day_down_week_down
+        _3_worldstocks_day_up_ma10_down = _3_worldstocks_day_up_ma10_down
+        _3_worldstocks_day_down_ma10_up = _3_worldstocks_day_down_ma10_up
+        _4_worldstocks_day_up_ma10_up = _4_worldstocks_day_up_ma10_up
+        _4_worldstocks_day_down_ma10_down = _4_worldstocks_day_down_ma10_down
+        _5_vix_day_up_week_down = _5_vix_day_up_week_down
+        _5_vix_day_down_week_down = _5_vix_day_down_week_down
+        _6_vix_day_up_week_up = _6_vix_day_up_week_up
+        _6_vix_day_down_week_up = _6_vix_day_down_week_up
+        _7_worldstocks_up_JPY_down = _7_worldstocks_up_JPY_down
+        _7_worldstocks_down_JPY_down = _7_worldstocks_down_JPY_down
+        _8_workdstocks_up_JPY_up = _8_workdstocks_up_JPY_up
+        _8_worldstocks_down_JPY_up = _8_worldstocks_down_JPY_up
+        _9_gold_up = _9_gold_up
+        _9_gold_down = _9_gold_down
+        _10_BTC_day_up_week_up = _10_BTC_day_up_week_up
+        _10_BTC_day_down_week_up = _10_BTC_day_down_week_up
+        _11_BTC_day_up_week_down = _11_BTC_day_up_week_down
+        _11_BTC_day_down_week_down = _11_BTC_day_down_week_down
+
 
     except Exception as e: print(e)
 
