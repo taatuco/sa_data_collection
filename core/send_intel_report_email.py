@@ -91,14 +91,20 @@ def get_perf(s,p):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
-            w1 = str(row[0])
-            d1 = str(row[1])
             unit = str(row[2])
+
+            if unit == '%':
+                w1 = str( round(row[0]*100,2) )
+                d1 = str( round(row[1]*100,2) )
+
+            if unit == 'pips':
+                w1 = str( round(row[0],0) )
+                d1 = str( round(row[1],0) )
 
         sep = ''
         if unit !='%': sep = ' '
-        if p == 'd1': r = d1 + ' ' + unit
-        if p == 'w1': r = w1 + ' ' + unit
+        if p == 'd1': r = d1 + sep + unit
+        if p == 'w1': r = w1 + sep + unit
 
     except Exception as e: print(e)
     return r
@@ -143,32 +149,32 @@ def compile_market_snapshot():
 
         for row in rs:
             _1_worldstocks_day_up_week_down = ( row[0].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
-            _1_worldstocks_day_down_week_up = ( row[1].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
-            _2_worldstocks_day_up_week_up = ( row[2].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
-            _2_worldstocks_day_down_week_down = ( row[3].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
+            _1_worldstocks_day_down_week_up = ( row[1].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
+            _2_worldstocks_day_up_week_up = ( row[2].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
+            _2_worldstocks_day_down_week_down = ( row[3].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
 
-            _3_worldstocks_day_up_ma10_down = ( row[4].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
-            _3_worldstocks_day_down_ma10_up = ( row[5].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
-            _4_worldstocks_day_up_ma10_up = ( row[6].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
-            _4_worldstocks_day_down_ma10_down = ( row[7].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
+            _3_worldstocks_day_up_ma10_down = ( row[4].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
+            _3_worldstocks_day_down_ma10_up = ( row[5].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
+            _4_worldstocks_day_up_ma10_up = ( row[6].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
+            _4_worldstocks_day_down_ma10_down = ( row[7].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
 
-            _5_vix_day_up_week_down = ( row[8].replace(day_percent,d1_vix) ).replace(day_percent,w1_vix)
-            _5_vix_day_down_week_down = ( row[9].replace(day_percent,d1_vix) ).replace(day_percent,w1_vix)
-            _6_vix_day_up_week_up = ( row[10].replace(day_percent,d1_vix) ).replace(day_percent,w1_vix)
-            _6_vix_day_down_week_up = ( row[11].replace(day_percent,d1_vix) ).replace(day_percent,w1_vix)
+            _5_vix_day_up_week_down = ( row[8].replace(day_percent,d1_vix) ).replace(week_percent,w1_vix)
+            _5_vix_day_down_week_down = ( row[9].replace(day_percent,d1_vix) ).replace(week_percent,w1_vix)
+            _6_vix_day_up_week_up = ( row[10].replace(day_percent,d1_vix) ).replace(week_percent,w1_vix)
+            _6_vix_day_down_week_up = ( row[11].replace(day_percent,d1_vix) ).replace(week_percent,w1_vix)
 
-            _7_worldstocks_up_JPY_down = ( row[12].replace(day_percent,d1_jpy) ).replace(day_percent,w1_jpy)
-            _7_worldstocks_down_JPY_down = ( row[13].replace(day_percent,d1_jpy) ).replace(day_percent,w1_jpy)
-            _8_workdstocks_up_JPY_up = ( row[14].replace(day_percent,d1_jpy) ).replace(day_percent,w1_jpy)
-            _8_worldstocks_down_JPY_up = ( row[15].replace(day_percent,d1_jpy) ).replace(day_percent,w1_jpy)
+            _7_worldstocks_up_JPY_down = ( row[12].replace(day_percent,d1_jpy) ).replace(week_percent,w1_jpy)
+            _7_worldstocks_down_JPY_down = ( row[13].replace(day_percent,d1_jpy) ).replace(week_percent,w1_jpy)
+            _8_workdstocks_up_JPY_up = ( row[14].replace(day_percent,d1_jpy) ).replace(week_percent,w1_jpy)
+            _8_worldstocks_down_JPY_up = ( row[15].replace(day_percent,d1_jpy) ).replace(week_percent,w1_jpy)
 
-            _9_gold_up = ( row[16].replace(day_percent,d1_gold) ).replace(day_percent,w1_gold)
-            _9_gold_down = ( row[17].replace(day_percent,d1_gold) ).replace(day_percent,w1_gold)
+            _9_gold_up = ( row[16].replace(day_percent,d1_gold) ).replace(week_percent,w1_gold)
+            _9_gold_down = ( row[17].replace(day_percent,d1_gold) ).replace(week_percent,w1_gold)
 
-            _10_BTC_day_up_week_up = ( row[18].replace(day_percent,d1_btc) ).replace(day_percent,w1_btc)
-            _10_BTC_day_down_week_up = ( row[19].replace(day_percent,d1_btc) ).replace(day_percent,w1_btc)
-            _11_BTC_day_up_week_down = ( row[20].replace(day_percent,d1_btc) ).replace(day_percent,w1_btc)
-            _11_BTC_day_down_week_down = ( row[21].replace(day_percent,d1_btc) ).replace(day_percent,w1_btc)
+            _10_BTC_day_up_week_up = ( row[18].replace(day_percent,d1_btc) ).replace(week_percent,w1_btc)
+            _10_BTC_day_down_week_up = ( row[19].replace(day_percent,d1_btc) ).replace(week_percent,w1_btc)
+            _11_BTC_day_up_week_down = ( row[20].replace(day_percent,d1_btc) ).replace(week_percent,w1_btc)
+            _11_BTC_day_down_week_down = ( row[21].replace(day_percent,d1_btc) ).replace(week_percent,w1_btc)
 
         if get_condition(symbol_worldstocks,symbol_jpy,'d1_w1') == 'd1_up_w1_down': report = report +' '+ _1_worldstocks_day_up_week_down
         if get_condition(symbol_worldstocks,symbol_jpy,'d1_w1') == 'd1_down_w1_up': report = report +' '+ _1_worldstocks_day_down_week_up
@@ -224,7 +230,7 @@ def send_intel_report():
 
         l_subject = 'Daily Briefing'
         l_report_url = 'http://smartalphatrade.com/intelligence'
-        l_msgtext = 'Hello,'+'\n'+ compile_market_snapshot() + '\n'+'We have compiled your intelligence briefing for today. '+ '\n' +'Access to your report: '+ l_report_url
+        l_msgtext = 'Good day,'+'\n'+ compile_market_snapshot() + '\n'+' '+ '\n' +'Access to your intelligence report: '+ l_report_url
         today = datetime.date.today()
         todayStr = today.strftime('%Y-%b-%d')
         send_to_email = get_reply_to_email('email')
