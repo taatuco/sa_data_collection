@@ -61,10 +61,10 @@ def get_condition(s,sj,w):
             if d1 > 0 and d1 > ma10: r = 'd1_up_ma10_up'
             if d1 < 0 and d1 < ma10: r = 'd1_down_ma10_down'
         if w == 'd1_jpy':
-            if d1 > 0 and jpyd1 < 0: r = 'd1_up_jpy_down'
-            if d1 < 0 and jpyd1 < 0: r = 'd1_down_jpy_down'
-            if d1 > 0 and jpyd1 > 0: r = 'd1_up_jpy_up'
-            if d1 < 0 and jpyd1 > 0: r = 'd1_down_jpy_up'
+            if d1 > 0 and jpyd1*(-1) < 0: r = 'd1_up_jpy_down'
+            if d1 < 0 and jpyd1*(-1) < 0: r = 'd1_down_jpy_down'
+            if d1 > 0 and jpyd1*(-1) > 0: r = 'd1_up_jpy_up'
+            if d1 < 0 and jpyd1*(-1) > 0: r = 'd1_down_jpy_up'
         if w == 'gold':
             if d1 > 0: r = 'd1_up'
             if d1 < 0: r = 'd1_down'
@@ -73,11 +73,14 @@ def get_condition(s,sj,w):
     except Exception as e: print(e)
     return r
 
-def get_perf(s,p):
+def get_perf(s,p,reverse):
     r = ''
     w1 = ''
     d1 = ''
     unit = ''
+    multiplier = 1
+    if reverse: multiplier = -1
+
     try:
         import pymysql.cursors
         connection = pymysql.connect(host=db_srv,
@@ -94,12 +97,12 @@ def get_perf(s,p):
             unit = str(row[2])
 
             if unit == '%':
-                w1 = str( round(row[0]*100,2) )
-                d1 = str( round(row[1]*100,2) )
+                w1 = str( round(row[0]*100,2)*multiplier )
+                d1 = str( round(row[1]*100,2)*multiplier )
 
             if unit == 'pips':
-                w1 = str( round(row[0],0) )
-                d1 = str( round(row[1],0) )
+                w1 = str( round(row[0],0)*multiplier )
+                d1 = str( round(row[1],0)*multiplier )
 
         sep = ''
         if unit !='%': sep = ' '
@@ -114,11 +117,11 @@ def compile_market_snapshot():
     report = ''
     try:
         language = 'en'
-        symbol_worldstocks = 'NYSEARCA:URTH'; d1_worldstocks = get_perf(symbol_worldstocks,'d1'); w1_worldstocks = get_perf(symbol_worldstocks,'w1')
-        symbol_vix = 'INDEXCBOE:BVZ'; d1_vix = get_perf(symbol_vix,'d1'); w1_vix = get_perf(symbol_vix,'w1')
-        symbol_jpy = 'USDJPY'; d1_jpy = get_perf(symbol_jpy,'d1'); w1_jpy = get_perf(symbol_jpy,'w1')
-        symbol_gold = 'GLD'; d1_gold = get_perf(symbol_gold,'d1'); w1_gold = get_perf(symbol_gold,'w1')
-        symbol_btc = 'BITCOIN'; d1_btc = get_perf(symbol_btc,'d1'); w1_btc = get_perf(symbol_btc,'w1')
+        symbol_worldstocks = 'NYSEARCA:URTH'; d1_worldstocks = get_perf(symbol_worldstocks,'d1',False); w1_worldstocks = get_perf(symbol_worldstocks,'w1',False)
+        symbol_vix = 'INDEXCBOE:BVZ'; d1_vix = get_perf(symbol_vix,'d1',False); w1_vix = get_perf(symbol_vix,'w1',False)
+        symbol_jpy = 'USDJPY'; d1_jpy = get_perf(symbol_jpy,'d1',True); w1_jpy = get_perf(symbol_jpy,'w1',True)
+        symbol_gold = 'GLD'; d1_gold = get_perf(symbol_gold,'d1',False); w1_gold = get_perf(symbol_gold,'w1',False)
+        symbol_btc = 'BITCOIN'; d1_btc = get_perf(symbol_btc,'d1',False); w1_btc = get_perf(symbol_btc,'w1',False)
 
         day_percent = '{day_percent}'
         week_percent = '{week_percent}'
