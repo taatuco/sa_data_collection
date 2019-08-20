@@ -22,6 +22,7 @@ def get_condition(s,sj,w):
     d1 = 0
     ma10 = 0
     jpyd1 = 0
+    jpyw1 = 0
     try:
 
         import pymysql.cursors
@@ -40,7 +41,7 @@ def get_condition(s,sj,w):
         sql = 'SELECT w1, d1 FROM instruments WHERE symbol = "'+ str(sj) +'" '
         cr.execute(sql)
         rs = cr.fetchall()
-        for row in rs: w1 = row[0]; jpyd1 = row[1]
+        for row in rs: jpyw1 = row[0]*(-1); jpyd1 = row[1]*(-1)
 
 
         sql = 'SELECT ma10 FROM price_instruments_data WHERE symbol = "'+ str(s) +'" ORDER BY date DESC LIMIT 1'
