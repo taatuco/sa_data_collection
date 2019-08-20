@@ -38,17 +38,17 @@ connection.commit()
 ######## English ########
 #{keyword}
 lang_en = "en"
-_1_worldstocks_day_up_week_down_en = 'Stocks climbed by {day_percent} on {yesterday} after declining by {week_percent} since last week.'
-_1_worldstocks_day_down_week_up_en = 'Stocks felt by {day_percent} on {yesterday} after advancing by {week_percent} since last week.'
-_2_worldstocks_day_up_week_up_en = 'Stocks continue to climb by {day_percent} on {yesterday} reinforcing its upside by {week_percent} since last week.'
-_2_worldstocks_day_down_week_down_en = 'Stocks continue to decline by {day_percent} on {yesterday} contributing to a loss of {week_percent} since last week.'
+_1_worldstocks_day_up_week_down_en = 'Stocks climbed by {day_percent} on previous session after declining by {week_percent} since last week.'
+_1_worldstocks_day_down_week_up_en = 'Stocks felt by {day_percent} on previous session after advancing by {week_percent} since last week.'
+_2_worldstocks_day_up_week_up_en = 'Stocks continue to climb by {day_percent} on previous session reinforcing its upside by {week_percent} since last week.'
+_2_worldstocks_day_down_week_down_en = 'Stocks continue to decline by {day_percent} on previous session contributing to a loss of {week_percent} since last week.'
 _3_worldstocks_day_up_ma10_down_en = 'Despite the Global Stock Market closed higher, it prevails under the 10-day average which could suggest some limitations in further gains in the near-term.'
 _3_worldstocks_day_down_ma10_up_en = 'Despite the Global Stock Market closed lower, it resides above the 10-day average which could suggest a likely near-term rebound.'
 _4_worldstocks_day_up_ma10_up_en = 'As the Global Stock Market is closing higher and evolving above its 10-day average exhibits a certain optimism that could lead the Equity Market in the near-term to extend its bullish momentum.'
 _4_worldstocks_day_down_ma10_down_en = 'As the Global Stock Market is closing lower and evolving below its 10-day average unveils a certain deterioration of confidence that could lead the Equity Market in the near-term to extend its bearish momentum.'
 _5_vix_day_up_week_down_en = 'Volatility is increasing by {day_percent} expressing a growing uncertainty from the investors, yet, confidence is somehow preserved as shown by the Volatility Index trending down for a week.'
 _5_vix_day_down_week_down_en = 'Volatility decreased by {day_percent} expressing investors\' confidence in risk assets. The Volatility Index is trending down for a week suggesting momentarily optimism in the stock market.'
-_6_vix_day_up_week_up_en = 'Volatility progress by {day_percent} since {yesterday} attesting a continuation of investors\' confidence deterioration since last week.'
+_6_vix_day_up_week_up_en = 'Volatility progress by {day_percent} since previous session attesting a continuation of investors\' confidence deterioration since last week.'
 _6_vix_day_down_week_up_en = 'Volatility decreased by {day_percent} showing a return of investors\' confidence in the Equity Market since last week.'
 _7_worldstocks_up_JPY_down_en = 'The Yen depreciated against the US dollar as risk appetite improves, prompting investors to abandon the safe-haven currency.'
 _7_worldstocks_down_JPY_down_en = 'The Yen depreciated against the US dollar as investors might regain confidence and urged to abandon the safe-haven currency to seek higher returns in riskier assets.'

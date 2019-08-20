@@ -16,6 +16,64 @@ sett = sa_path()
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
+def compile_market_snapshot():
+    try:
+        language = 'en'
+
+        import pymysql.cursors
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = 'SELECT ' +\
+        'lang, '+\
+        '_1_worldstocks_day_up_week_down, _1_worldstocks_day_down_week_up, '+\
+        '_2_worldstocks_day_up_week_up, _2_worldstocks_day_down_week_down, '+\
+        '_3_worldstocks_day_up_ma10_down, _3_worldstocks_day_down_ma10_up, '+\
+        '_4_worldstocks_day_up_ma10_up, _4_worldstocks_day_down_ma10_down, '+\
+        '_5_vix_day_up_week_down, _5_vix_day_down_week_down, '+\
+        '_6_vix_day_up_week_up, _6_vix_day_down_week_up, '+\
+        '_7_worldstocks_up_JPY_down, _7_worldstocks_down_JPY_down, '+\
+        '_8_workdstocks_up_JPY_up, _8_worldstocks_down_JPY_up, '+\
+        '_9_gold_up, _9_gold_down, '+\
+        '_10_BTC_day_up_week_up, _10_BTC_day_down_week_up, '+\
+        '_11_BTC_day_up_week_down, _11_BTC_day_down_week_down '+\
+        'FROM briefing WHERE lang="'+ language +'"'
+        cr.execute(sql)
+        rs = cr.fetchall()
+
+        for row in rs:
+            _1_worldstocks_day_up_week_down = row[0]
+            _1_worldstocks_day_down_week_up = row[1]
+            _2_worldstocks_day_up_week_up = row[2]
+            _2_worldstocks_day_down_week_down = row[3]
+            _3_worldstocks_day_up_ma10_down = row[4]
+            _3_worldstocks_day_down_ma10_up = row[5]
+            _4_worldstocks_day_up_ma10_up = row[6]
+            _4_worldstocks_day_down_ma10_down = row[7]
+            _5_vix_day_up_week_down = row[8]
+            _5_vix_day_down_week_down = row[9]
+            _6_vix_day_up_week_up = row[10]
+            _6_vix_day_down_week_up = row[11]
+            _7_worldstocks_up_JPY_down = row[12]
+            _7_worldstocks_down_JPY_down = row[13]
+            _8_workdstocks_up_JPY_up = row[14]
+            _8_worldstocks_down_JPY_up = row[15]
+            _9_gold_up = row[16]
+            _9_gold_down = row[17]
+            _10_BTC_day_up_week_up = row[18]
+            _10_BTC_day_down_week_up = row[19]
+            _11_BTC_day_up_week_down = row[20]
+            _11_BTC_day_down_week_down = row[21]
+
+
+
+
+    except Exception as e: print(e)
+
 def send_intel_report():
     try:
         num_of_email_limit_per_message = 55
