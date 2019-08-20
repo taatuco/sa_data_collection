@@ -38,6 +38,7 @@ REM ### Setup default data
 %_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
 %_PY_EXE% "%SA_DATA_DIR%labels\set_labels.py"
 %_PY_EXE% "%SA_DATA_DIR%labels\set_recomm_text_lang.py"
+%_PY_EXE% "%SA_DATA_DIR%labels\set_briefing_text_lang.py"
 %_PY_EXE% "%SA_DATA_DIR%asset_class\set_asset_class.py"
 %_PY_EXE% "%SA_DATA_DIR%markets\set_market.py"
 %_PY_EXE% "%SA_DATA_DIR%sectors\set_sector.py"
