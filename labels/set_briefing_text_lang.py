@@ -70,7 +70,7 @@ sql = 'INSERT IGNORE INTO briefing'+\
 '("'+ lang_en  +'","'+_1_worldstocks_day_up_week_down_en+'","'+_1_worldstocks_day_down_week_up_en+'","'+_2_worldstocks_day_up_week_up_en+'","'+_2_worldstocks_day_down_week_down_en+'","'+\
 _3_worldstocks_day_up_ma10_down_en+'","'+_3_worldstocks_day_down_ma10_up_en+'","'+_4_worldstocks_day_up_ma10_up_en+'","'+_4_worldstocks_day_down_ma10_down_en+'","'+\
 _5_vix_day_up_week_down_en+'","'+_5_vix_day_down_week_down_en+'","'+_6_vix_day_up_week_up_en+'","'+_6_vix_day_down_week_up_en+'","'+_7_worldstocks_up_JPY_down_en+'","'+\
-_7_worldstocks_down_JPY_down_en+'","'+_8_workdstocks_up_JPY_up_en+'","'+_8_worldstocks_down_JPY_up_en+'","'+_9_gold_up,_9_gold_down_en+'","'+_10_BTC_day_up_week_up_en+'","'+\
+_7_worldstocks_down_JPY_down_en+'","'+_8_workdstocks_up_JPY_up_en+'","'+_8_worldstocks_down_JPY_up_en+'","'+_9_gold_up_en+'","'+_9_gold_down_en+'","'+_10_BTC_day_up_week_up_en+'","'+\
 _10_BTC_day_down_week_up_en+'","'+_11_BTC_day_up_week_down_en+'","'+_11_BTC_day_down_week_down_en+'")'
 
 print(sql)
