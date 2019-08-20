@@ -37,7 +37,7 @@ def get_condition(s,sj,w):
         rs = cr.fetchall()
         for row in rs: w1 = row[0]; d1 = row[1]
 
-        sql = 'SELECT d1 unit FROM instruments WHERE symbol = "'+ str(sj) +'" '
+        sql = 'SELECT w1, d1 FROM instruments WHERE symbol = "'+ str(sj) +'" '
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: w1 = row[0]; jpyd1 = row[1]
@@ -95,7 +95,8 @@ def get_perf(s,p):
             d1 = str(row[1])
             unit = str(row[2])
 
-        sep = ''; if unit =!='%': sep = ' '
+        sep = ''
+        if unit !='%': sep = ' '
         if p == 'd1': r = d1 + ' ' + unit
         if p == 'w1': r = w1 + ' ' + unit
 
@@ -104,12 +105,13 @@ def get_perf(s,p):
 
 def compile_market_snapshot():
     r = ''
+    report = ''
     try:
         language = 'en'
-        symbol_worldstocks = 'NYSEARCA:URTH'; d1_worldstocks = get_perf(symbol_worldstocks,'d1'); w1_wordstocks = get_perf(symbol_worldstocks,'w1')
+        symbol_worldstocks = 'NYSEARCA:URTH'; d1_worldstocks = get_perf(symbol_worldstocks,'d1'); w1_worldstocks = get_perf(symbol_worldstocks,'w1')
         symbol_vix = 'INDEXCBOE:BVZ'; d1_vix = get_perf(symbol_vix,'d1'); w1_vix = get_perf(symbol_vix,'w1')
         symbol_jpy = 'USDJPY'; d1_jpy = get_perf(symbol_jpy,'d1'); w1_jpy = get_perf(symbol_jpy,'w1')
-        symbol_gold = 'GLD'; d1_gld = get_perf(symbol_gold,'d1'); w1_gld = get_perf(symbol_gold,'w1')
+        symbol_gold = 'GLD'; d1_gold = get_perf(symbol_gold,'d1'); w1_gold = get_perf(symbol_gold,'w1')
         symbol_btc = 'BITCOIN'; d1_btc = get_perf(symbol_btc,'d1'); w1_btc = get_perf(symbol_btc,'w1')
 
         day_percent = '{day_percent}'
@@ -124,7 +126,6 @@ def compile_market_snapshot():
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT ' +\
-        'lang, '+\
         '_1_worldstocks_day_up_week_down, _1_worldstocks_day_down_week_up, '+\
         '_2_worldstocks_day_up_week_up, _2_worldstocks_day_down_week_down, '+\
         '_3_worldstocks_day_up_ma10_down, _3_worldstocks_day_down_ma10_up, '+\
@@ -141,7 +142,7 @@ def compile_market_snapshot():
         rs = cr.fetchall()
 
         for row in rs:
-            _1_worldstocks_day_up_week_down = ( row[0].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
+            _1_worldstocks_day_up_week_down = ( row[0].replace(day_percent,d1_worldstocks) ).replace(week_percent,w1_worldstocks)
             _1_worldstocks_day_down_week_up = ( row[1].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
             _2_worldstocks_day_up_week_up = ( row[2].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
             _2_worldstocks_day_down_week_down = ( row[3].replace(day_percent,d1_worldstocks) ).replace(day_percent,w1_worldstocks)
@@ -203,9 +204,9 @@ def compile_market_snapshot():
         cnt = 0
         for row in rs: cnt = row[0]
         if cnt == 0:
-            sql = "INSERT IGNORE INTO reports(lang,market_snapshot) VALUES('"+ language +"','"+ report +"')"
+            sql = 'INSERT IGNORE INTO reports(lang,market_snapshot) VALUES("'+ language +'","'+ report +'")'
         else:
-            sql = "UPDATE reports SET market_snapshot ='"+ report +"' WHERE lang='"+ language +"'"
+            sql = 'UPDATE reports SET market_snapshot =""'+ report +'" WHERE lang="'+ language +'"'
 
         cr.execute(sql)
         connection.commit()
