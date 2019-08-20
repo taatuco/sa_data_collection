@@ -51,7 +51,7 @@ def get_condition(s,sj,w):
         cr.close()
 
         if w == 'd1_w1':
-            if d1 > 0 and w1 < 0: r = 'd1_up_w1_up'
+            if d1 > 0 and w1 < 0: r = 'd1_up_w1_down'
             if d1 < 0 and w1 > 0: r = 'd1_down_w1_up'
             if d1 > 0 and w1 > 0: r = 'd1_up_w1_up'
             if d1 < 0 and w1 < 0: r = 'd1_down_w1_down'
