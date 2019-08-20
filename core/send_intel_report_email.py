@@ -206,7 +206,7 @@ def compile_market_snapshot():
         if cnt == 0:
             sql = 'INSERT IGNORE INTO reports(lang,market_snapshot) VALUES("'+ language +'","'+ report +'")'
         else:
-            sql = 'UPDATE reports SET market_snapshot =""'+ report +'" WHERE lang="'+ language +'"'
+            sql = 'UPDATE reports SET market_snapshot ="'+ report +'" WHERE lang="'+ language +'"'
 
         cr.execute(sql)
         connection.commit()
