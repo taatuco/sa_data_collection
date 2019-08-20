@@ -20,6 +20,15 @@ def compile_market_snapshot():
     try:
         language = 'en'
 
+        symbol_worldstocks = 'NYSEARCA:URTH'; d1_worldstocks = 0; w1_wordstocks = 0; unit_worldstocks = '%'
+        symbol_vix = 'INDEXCBOE:BVZ'; d1_vix = 0; w1_vix = 0; unit_vix = '%'
+        symbol_jpy = 'USDJPY'; d1_jpy = 0; w1_jpy = 0; unit_jpy = '%'
+        symbol_gold = 'GLD'; d1_gld = 0; w1_gld = 0; unit_gold = '%'
+        symbol_btc = 'BITCOIN'; d1_btc = 0; w1_btc = 0; unit_btc = '%'
+
+        day_percent = '{day_percent}'
+        week_percent = '{week_percent}'
+
         import pymysql.cursors
         connection = pymysql.connect(host=db_srv,
                                      user=db_usr,
@@ -68,8 +77,6 @@ def compile_market_snapshot():
             _10_BTC_day_down_week_up = row[19]
             _11_BTC_day_up_week_down = row[20]
             _11_BTC_day_down_week_down = row[21]
-
-
 
 
     except Exception as e: print(e)
