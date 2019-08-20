@@ -44,6 +44,22 @@ def get_pct_from_date(d, sql_select, lp):
         pct = ( (lp - pp) / pp)
     return pct
 
+def get_prev_session_date(symbol):
+    r = datetime.datetime(2000, 1, 1, 1, 1)
+    try:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = "SELECT date from price_instruments_data WHERE symbol = '"+ str(symbol) +"' ORDER BY date DESC LIMIT 2"
+        cr.execute(sql)
+        rs = cr.fetchall()
+        i = 1
+        for row in rs:
+            if i == 2: r = row[0]
+            i += 1
+        cr.close()
+
+    except Exception as e: print(e)
+    return r
+
 
 class instr_sum_data:
     s = ""
@@ -56,6 +72,7 @@ class instr_sum_data:
     d_3Mp = datetime.datetime(2000, 1, 1, 1, 1)
     d_1Mp = datetime.datetime(2000, 1, 1, 1, 1)
     d_1Wp = datetime.datetime(2000, 1, 1, 1, 1)
+    d_1Dp = datetime.datetime(2000, 1, 1, 1, 1)
     d_1Wf = datetime.datetime(2000, 1, 1, 1, 1)
     lp = 0
     lp_signal = 0
@@ -91,6 +108,7 @@ class instr_sum_data:
         self.d_3Mp = self.ld - ( timedelta(days=90) )
         self.d_1Mp = self.ld - ( timedelta(days=30) )
         self.d_1Wp = self.ld - ( timedelta(days=7) )
+        self.d_1Dp = get_prev_session_date(self.s)
         self.d_1Wf = 0
 
     def get_uid(self):
@@ -120,6 +138,10 @@ class instr_sum_data:
 
     def get_pct_1Wp(self):
         str_date = self.d_1Wp.strftime("%Y%m%d")
+        return str(get_pct_from_date(str_date, self.sql_select, self.lp))
+
+    def get_pct_1Dp(self):
+        str_date = self.d_1Dp.strftime("%Y%m%d")
         return str(get_pct_from_date(str_date, self.sql_select, self.lp))
 
     def get_pct_1Yp_signal(self):

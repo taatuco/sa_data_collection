@@ -173,7 +173,7 @@ def update_forecast_table(s,wf,frc,d,pip):
         print(sql)
     except Exception as e: print(e)
 
-def update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,wf_pct,
+def update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,d1_pct,wf_pct,
 trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
 trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
 trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
@@ -209,6 +209,7 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
         m3_pct = round(float(m3_pct), 3)
         m1_pct = round(float(m1_pct), 3)
         w1_pct = round(float(w1_pct), 3)
+        d1_pct = round(float(d1_pct), 3)
         wf_pct = round(float(wf_pct), 3)
 
         if wf_pct >=0:
@@ -257,7 +258,7 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
         volatility_risk_st = get_volatility_risk(sql, False,'')
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",wf="+str(wf_pct)+","+\
+        sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+",m3="+str(m3_pct)+",m1="+str(m1_pct)+",w1="+str(w1_pct)+",d1="+str(d1_pct)+",wf="+str(wf_pct)+","+\
         "signal_type='"+ signal_type +"',signal_entry='"+ signal_entry +"',signal_expiration="+ str(signal_expiration) + ","+\
         "trade_1_entry="+str(trade_entry_buy_1)+",trade_1_tp="+str(trade_tp_buy_1)+",trade_1_sl="+str(trade_sl_buy_1)+",trade_1_type='buy',"+\
         "trade_2_entry="+str(trade_entry_buy_2)+",trade_2_tp="+str(trade_tp_buy_2)+",trade_2_sl="+str(trade_sl_buy_2)+",trade_2_type='buy',"+\
@@ -295,6 +296,7 @@ def get_instr_sum(s,uid,asset_class,dn,pip):
     m3_pct = float(instr_data.get_pct_3Mp() )* m
     m1_pct = float(instr_data.get_pct_1Mp() )* m
     w1_pct = float(instr_data.get_pct_1Wp() )* m
+    d1_pct = float(instr_data.get_pct_1Dp() )* m
     frc_pt = forc_data.get_frc_pt()
     lp_pt = instr_data.get_lp()
     wf = get_forecast_pct(lp_pt, frc_pt )
@@ -318,7 +320,7 @@ def get_instr_sum(s,uid,asset_class,dn,pip):
     # ---
     try:
         update_forecast_table(s,wf,frc_pt,dn,pip)
-        update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,wf_pct,
+        update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,d1_pct,wf_pct,
         trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
         trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
         trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
