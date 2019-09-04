@@ -51,7 +51,7 @@ def set_widgets_tradebook(feed_id):
         short_title = 'Tradebook'
         short_description = 'Tradebook'
         content = 'Tradebook'
-        url = '{burl}/w/?funcname=get_trades_box(0,burl,1)'
+        url = '{burl}w/?funcname=get_trades_box(0,burl,1)'
         ranking = '-1'
         symbol = ''
         type = str(feed_id)
