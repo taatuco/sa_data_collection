@@ -40,7 +40,8 @@ def set_widgets_feed(s):
 
         set_widgets_tradingview_chart(s,feed_id)
         set_widgets_tradebook(feed_id)
-        set_widgets_from_url(feed_id,'My Portfolio(s)','{burl}ls/?w=portf','PORT: List of your Portfolio(s)')
+        set_widgets_from_url(feed_id,'My Portfolio(s)','{burl}ls/?w=portf','PORT: List of my Portfolio(s)')
+        set_widgets_from_url(feed_id,'Dashboard','{burl}?dashboard=1','DASH: Dashboard - All relevant info in One place')
         set_widgets_from_url(feed_id,'All Signals','{burl}ls/?w=instr&x=','SIGNAL:GO> All Trading Signals')
         set_widgets_from_url(feed_id,'FX Signals','{burl}ls/?w=instr&x=FX:','SIGNAL:FX:GO> Forex Trading Signals')
         set_widgets_from_url(feed_id,'All Stocks Signals','{burl}ls/?w=instr&x=EQ:','SIGNAL:EQ: All stocks Trading Signals')
