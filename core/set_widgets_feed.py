@@ -69,6 +69,7 @@ def set_widgets_tradingview_chart(s):
         short_description = symbol
         content = sector
         url = "{burl}w/?funcname=get_tradingview_chart("+ str(uid) +",0,0)"
+        badge = ''
         ranking = '-1'
         type = str(feed_id)
         search = "CHART:" + asset_class + market + symbol + " " + fullname
