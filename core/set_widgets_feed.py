@@ -40,7 +40,46 @@ def set_widgets_feed(s):
 
         set_widgets_tradingview_chart(s,feed_id)
         set_widgets_tradebook(feed_id)
+        set_widgets_from_url(feed_id,'My Portfolio(s)','{burl}ls/?w=portf','PORT: List of your Portfolio(s)')
+        set_widgets_from_url(feed_id,'All Signals','{burl}ls/?w=instr&x=','SIGNAL:GO> All Trading Signals')
+        set_widgets_from_url(feed_id,'FX Signals','{burl}ls/?w=instr&x=FX:','SIGNAL:FX:GO> Forex Trading Signals')
+        set_widgets_from_url(feed_id,'All Stocks Signals','{burl}ls/?w=instr&x=EQ:','SIGNAL:EQ: All stocks Trading Signals')
+        set_widgets_from_url(feed_id,'Crypto Signals','{burl}ls/?w=instr&x=CR:','SIGNAL:CR:GO> Cryptocurrency Trading Signals')
 
+    except Exception as e: print(e)
+
+def set_widgets_from_url(feed_id,short_title,url,search):
+    try:
+        d = datetime.datetime.now()
+        d = d.strftime("%Y%m%d")
+        short_description = short_title
+        content = short_title
+        ranking = '-1'
+        symbol = ''
+        type = str(feed_id)
+        badge = ''
+        asset_class = '-'
+        market = '-'
+
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+
+
+        inserted_values = " " +\
+        "('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
+        "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
+        "'"+search+"','"+asset_class+"','"+market+"')"
+
+
+        sql_i = "INSERT IGNORE INTO feed"+\
+        "(date, short_title, short_description, content, url,"+\
+        " ranking, symbol, type, badge, "+\
+        "search, asset_class, market) VALUES " + inserted_values
+        try:
+            cr_i.execute(sql_i)
+            connection.commit()
+        except:
+            pass
+        cr_i.close()
     except Exception as e: print(e)
 
 def set_widgets_tradebook(feed_id):
@@ -56,7 +95,7 @@ def set_widgets_tradebook(feed_id):
         symbol = ''
         type = str(feed_id)
         badge = ''
-        search = 'TB:<GO> Tradebook'
+        search = 'TB: Tradebook'
         asset_class = '-'
         market = '-'
 
