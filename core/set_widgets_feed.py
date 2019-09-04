@@ -74,9 +74,8 @@ def set_widgets_tradebook(feed_id):
         " ranking, symbol, type, badge, "+\
         "search, asset_class, market) VALUES " + inserted_values
         try:
-            if not disabled:
-                cr_i.execute(sql_i)
-                connection.commit()
+            cr_i.execute(sql_i)
+            connection.commit()
         except:
             pass
         cr_i.close()
