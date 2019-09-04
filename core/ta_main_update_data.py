@@ -25,6 +25,7 @@ from ta_calc_rsi import *
 from ta_calc_tln import *
 from ta_instr_sum import *
 from set_signals_feed import *
+from set_widgets_feed import *
 from ta_gen_recomm import *
 from ta_gen_chart_data import *
 from get_frc_pnl import *
@@ -143,7 +144,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             gc.collect()
             if fm == 1:
                 get_trend_line_data(s,uid)
-                set_signals_feed(s)
+                #set_signals_feed(s)
                 gen_recomm(s,uid)
                 gen_chart(s,uid)
             get_forecast_pnl(s,uid,nd_scan,is_update_all)
@@ -155,6 +156,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
 
             get_instr_sum(s,uid,asset_class,dn,pip)
             set_signals_feed(s)
+            set_widgets_feed(s)
 
         cr.close()
 

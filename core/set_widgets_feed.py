@@ -32,30 +32,15 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def get_signal_ranking(s,rank):
-    r = 0
+def set_widgets_feed(s):
     try:
-        unit = ''
-        divider = 1
-        pip_divider = 10000
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT unit FROM instruments WHERe symbol = '"+ s +"'"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: unit = row[0]
-
-        if unit == 'pips':
-            divider = pip_divider
-
-        r = float(rank) / divider
-
+        set_widgets_tradingview_chart(s)
     except Exception as e: print(e)
-    return r
 
-def set_signals_feed(s):
+def set_widgets_tradingview_chart(s):
 
-    feed_id = 1
-    feed_type = "signals"
+    feed_id = 2
+    feed_type = "widgets"
     add_feed_type(feed_id, feed_type)
 
     #Date [Today date]
@@ -63,7 +48,7 @@ def set_signals_feed(s):
     d = d.strftime("%Y%m%d")
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, symbol_list.disabled, instruments.m1_signal FROM instruments "+\
+    sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, sectors.sector, symbol_list.uid, symbol_list.disabled FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%' "
 
@@ -76,33 +61,22 @@ def set_signals_feed(s):
         fullname = row[1].replace("'","")
         asset_class = row[2]
         market = row[3]
-        w_forecast_change = row[4]
-        sector = row[5]
-        w_forecast_display_info = row[6]
-        uid = row[7]
-        disabled = row[8]
-        m1_signal = row[9]
+        sector = row[4]
+        uid = row[5]
+        disabled = row[6]
 
         short_title = fullname
         short_description = symbol
         content = sector
-        url = "{burl}s/?uid="+ str(uid)
-        ranking = str( get_signal_ranking(symbol, m1_signal ) )
+        url = "{burl}w/?funcname=get_tradingview_chart("+ str(uid) +",0,0)"
+        ranking = '-1'
         type = str(feed_id)
-
-        if float(w_forecast_change) < 0:
-            badge = '<i class="fas fa-caret-down"></i>&nbsp;' + w_forecast_display_info
-        elif float(w_forecast_change) > 0:
-            badge = '<i class="fas fa-caret-up"></i>&nbsp;' + w_forecast_display_info
-        else:
-            badge = w_forecast_display_info
-
-        search = asset_class + market + symbol + " " + fullname
+        search = "CHART:" + asset_class + market + symbol + " " + fullname
 
         print(search +": "+ os.path.basename(__file__) )
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+"' AND type="+ type +")"
+        sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+" AND type="+ type +"')"
         cr_i.execute(sql_i)
         connection.commit()
 
