@@ -46,6 +46,7 @@ def set_widgets_feed(s):
         set_widgets_from_url(feed_id,'FX Signals','{burl}ls/?w=instr&x=FX:','SIGNAL:FX:GO> Forex Trading Signals')
         set_widgets_from_url(feed_id,'All Stocks Signals','{burl}ls/?w=instr&x=EQ:','SIGNAL:EQ: All stocks Trading Signals')
         set_widgets_from_url(feed_id,'Crypto Signals','{burl}ls/?w=instr&x=CR:','SIGNAL:CR:GO> Cryptocurrency Trading Signals')
+        set_widgets_from_url(feed_id,'Economic Calendar','{burl}w/?funcname=get_tradingview_ecocal(0,0)','ECOCAL:GO> Economic Calendar')
 
     except Exception as e: print(e)
 
