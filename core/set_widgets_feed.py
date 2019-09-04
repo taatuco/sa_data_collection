@@ -76,7 +76,7 @@ def set_widgets_tradingview_chart(s):
         print(search +": "+ os.path.basename(__file__) )
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+" AND type="+ type +"')"
+        sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+"' AND type="+ type +")"
         cr_i.execute(sql_i)
         connection.commit()
 
