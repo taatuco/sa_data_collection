@@ -34,14 +34,56 @@ connection = pymysql.connect(host=db_srv,
 
 def set_widgets_feed(s):
     try:
-        set_widgets_tradingview_chart(s)
+        feed_id = 2
+        feed_type = "widgets"
+        add_feed_type(feed_id, feed_type)
+
+        set_widgets_tradingview_chart(s,feed_id)
+        set_widgets_tradebook(feed_id)
+
     except Exception as e: print(e)
 
-def set_widgets_tradingview_chart(s):
+def set_widgets_tradebook(feed_id):
+    try:
 
-    feed_id = 2
-    feed_type = "widgets"
-    add_feed_type(feed_id, feed_type)
+        d = datetime.datetime.now()
+        d = d.strftime("%Y%m%d")
+        short_title = 'Tradebook'
+        short_description = 'Tradebook'
+        content = 'Tradebook'
+        url = '{burl}/w/?funcname=get_trades_box(0,burl,1)'
+        ranking = '-1'
+        symbol = ''
+        type = str(feed_id)
+        badge = ''
+        search = 'TB:<GO> Tradebook'
+        asset_class = '-'
+        market = '-'
+
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+
+
+        inserted_values = " " +\
+        "('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
+        "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
+        "'"+search+"','"+asset_class+"','"+market+"')"
+
+
+        sql_i = "INSERT IGNORE INTO feed"+\
+        "(date, short_title, short_description, content, url,"+\
+        " ranking, symbol, type, badge, "+\
+        "search, asset_class, market) VALUES " + inserted_values
+        try:
+            if not disabled:
+                cr_i.execute(sql_i)
+                connection.commit()
+        except:
+            pass
+        cr_i.close()
+
+    except Exception as e: print(e)
+
+def set_widgets_tradingview_chart(s,feed_id):
 
     #Date [Today date]
     d = datetime.datetime.now()
