@@ -72,7 +72,7 @@ def set_widgets_tradingview_chart(s):
         badge = ''
         ranking = '-1'
         type = str(feed_id)
-        search = "CHART:" + asset_class + market + symbol + " " + fullname
+        search = "CHART:" + symbol + " " + fullname
 
         print(search +": "+ os.path.basename(__file__) )
 
