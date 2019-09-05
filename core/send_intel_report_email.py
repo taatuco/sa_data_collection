@@ -44,10 +44,12 @@ def get_condition(s,sj,w):
         for row in rs: jpyw1 = row[0]*(-1); jpyd1 = row[1]*(-1)
 
 
-        sql = 'SELECT ma10 FROM price_instruments_data WHERE symbol = "'+ str(s) +'" ORDER BY date DESC LIMIT 1'
+        sql = 'SELECT ma10, price_close FROM price_instruments_data WHERE symbol = "'+ str(s) +'" ORDER BY date DESC LIMIT 1'
         cr.execute(sql)
         rs = cr.fetchall()
-        for row in rs: ma10 = row[0]
+        for row in rs:
+            ma10 = row[0]
+            s_price = row[1]
 
         cr.close()
 
@@ -57,10 +59,10 @@ def get_condition(s,sj,w):
             if d1 > 0 and w1 > 0: r = 'd1_up_w1_up'
             if d1 < 0 and w1 < 0: r = 'd1_down_w1_down'
         if w == 'd1_ma10':
-            if d1 > 0 and d1 < ma10: r = 'd1_up_ma10_down'
-            if d1 < 0 and d1 > ma10: r = 'd1_down_ma10_up'
-            if d1 > 0 and d1 > ma10: r = 'd1_up_ma10_up'
-            if d1 < 0 and d1 < ma10: r = 'd1_down_ma10_down'
+            if d1 > 0 and s_price < ma10: r = 'd1_up_ma10_down'
+            if d1 < 0 and s_price > ma10: r = 'd1_down_ma10_up'
+            if d1 > 0 and s_price > ma10: r = 'd1_up_ma10_up'
+            if d1 < 0 and s_price < ma10: r = 'd1_down_ma10_down'
         if w == 'd1_jpy':
             if d1 > 0 and jpyd1 < 0: r = 'd1_up_jpy_down'
             if d1 < 0 and jpyd1 < 0: r = 'd1_down_jpy_down'
