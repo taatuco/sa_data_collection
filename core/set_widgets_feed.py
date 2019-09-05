@@ -39,7 +39,7 @@ def set_widgets_feed(s):
         add_feed_type(feed_id, feed_type)
 
         set_widgets_tradingview_chart(s,feed_id)
-        set_widgets_tradebook(feed_id)
+        set_widgets_from_url(feed_id,'Tradebook','{burl}w/?funcname=get_trades_box(0,burl,1)','TB: Tradebook')
         set_widgets_from_url(feed_id,'My Portfolio(s)','{burl}ls/?w=portf','PORT: List of my Portfolio(s)')
         set_widgets_from_url(feed_id,'Dashboard','{burl}?dashboard=1','DASH: Dashboard - All relevant info in One place')
         set_widgets_from_url(feed_id,'All Signals','{burl}ls/?w=instr&x=','SIGNAL:GO> All Trading Signals')
@@ -82,45 +82,6 @@ def set_widgets_from_url(feed_id,short_title,url,search):
         except:
             pass
         cr_i.close()
-    except Exception as e: print(e)
-
-def set_widgets_tradebook(feed_id):
-    try:
-
-        d = datetime.datetime.now()
-        d = d.strftime("%Y%m%d")
-        short_title = 'Tradebook'
-        short_description = 'Tradebook'
-        content = 'Tradebook'
-        url = '{burl}w/?funcname=get_trades_box(0,burl,1)'
-        ranking = '-1'
-        symbol = ''
-        type = str(feed_id)
-        badge = ''
-        search = 'TB: Tradebook'
-        asset_class = '-'
-        market = '-'
-
-        cr_i = connection.cursor(pymysql.cursors.SSCursor)
-
-
-        inserted_values = " " +\
-        "('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
-        "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"')"
-
-
-        sql_i = "INSERT IGNORE INTO feed"+\
-        "(date, short_title, short_description, content, url,"+\
-        " ranking, symbol, type, badge, "+\
-        "search, asset_class, market) VALUES " + inserted_values
-        try:
-            cr_i.execute(sql_i)
-            connection.commit()
-        except:
-            pass
-        cr_i.close()
-
     except Exception as e: print(e)
 
 def set_widgets_tradingview_chart(s,feed_id):
