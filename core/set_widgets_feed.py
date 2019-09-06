@@ -39,12 +39,14 @@ def set_widgets_feed(s):
         add_feed_type(feed_id, feed_type)
 
         set_widgets_tradingview_chart(s,feed_id)
+        set_widgets_from_url(feed_id,'FX Heatmap','{burl}w/?funcname=get_tradingview_fxheatmap(0,0)','FX:GO>HM: Forex Heat Map')
         set_widgets_from_url(feed_id,'Tradebook','{burl}w/?funcname=get_trades_box(0,burl,1)','TB: Tradebook')
         set_widgets_from_url(feed_id,'My Portfolio(s)','{burl}ls/?w=portf','PORT: List of my Portfolio(s)')
         set_widgets_from_url(feed_id,'Dashboard','{burl}?dashboard=1','DASH: Dashboard - All relevant info in One place')
         set_widgets_from_url(feed_id,'All Signals','{burl}ls/?w=instr&x=','SIGNAL:GO> All Trading Signals')
         set_widgets_from_url(feed_id,'FX Signals','{burl}ls/?w=instr&x=FX:','SIGNAL:FX:GO> Forex Trading Signals')
         set_widgets_from_url(feed_id,'All Stocks Signals','{burl}ls/?w=instr&x=EQ:','SIGNAL:EQ: All stocks Trading Signals')
+        set_widgets_from_url(feed_id,'U.S. Stocks Signals','{burl}ls/?w=instr&x=US>','SIGNAL:EQ:US> U.S. stocks Trading Signals')
         set_widgets_from_url(feed_id,'Crypto Signals','{burl}ls/?w=instr&x=CR:','SIGNAL:CR:GO> Cryptocurrency Trading Signals')
         set_widgets_from_url(feed_id,'Economic Calendar','{burl}w/?funcname=get_tradingview_ecocal(0,0)&refreshw=1800','ECOCAL:GO> Economic Calendar')
 
