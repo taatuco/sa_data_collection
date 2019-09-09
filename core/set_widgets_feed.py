@@ -43,6 +43,7 @@ def set_widgets_feed(s):
         set_widgets_from_url(feed_id,'Tradebook','{burl}w/?funcname=get_trades_box(0,burl,1)','TB: Tradebook')
         set_widgets_from_url(feed_id,'My Portfolio(s)','{burl}ls/?w=portf','PORT: List of my Portfolio(s)')
         set_widgets_from_url(feed_id,'Dashboard','{burl}?dashboard=1','DASH: Dashboard - All relevant info in One place')
+        set_widgets_from_url(feed_id,'Top Portfolios','{burl}ls/?w=portf&x=','TOPPORT: Traders Top Portfolios')
         set_widgets_from_url(feed_id,'All Signals','{burl}ls/?w=instr&x=','SIGNAL:GO> All Trading Signals')
         set_widgets_from_url(feed_id,'FX Signals','{burl}ls/?w=instr&x=FX:','SIGNAL:FX:GO> Forex Trading Signals')
         set_widgets_from_url(feed_id,'All Stocks Signals','{burl}ls/?w=instr&x=EQ:','SIGNAL:EQ: All stocks Trading Signals')
