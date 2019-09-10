@@ -41,26 +41,30 @@ sql = "INSERT IGNORE INTO newsdata(name, url, format, type, asset_class, market,
 "('Seeking Alpha News','https://seekingalpha.com/api/sa/combined/{symbol}.xml','rss','specific','','','en'), "+\
 "('Seeking Alpha Global News','https://seekingalpha.com/market_currents.xml','rss','global','EQ:','','en'), "+\
 "('Investing.com News','https://www.investing.com/rss/news_285.rss','rss','global','','','en'), " +\
-"('Investing.com Stocks News','https://www.investing.com/rss/news_25.rss','rss','global','EQ:','','en') "+\
-"('Investing.com Crypto News','https://www.investing.com/rss/news_301.rss','rss','global','CR:','','en') "+\
-"('Investing.com Forex News','https://www.investing.com/rss/news_1.rss','rss','global','FX:','','en') "+\
-"('FXEmpire News','https://www.fxempire.com/api/v1/en/articles/rss/news','rss','global','FX:','','en') "+\
-"('Daily Forex','https://www.dailyforex.com/rss/forexnews.xml','rss','global','FX:','','en') "+\
-"('Forex Live','https://www.forexlive.com/feed/news','rss','global','FX:','','en') "+\
-"('DailyFX News','https://rss.dailyfx.com/feeds/forex_market_news','rss','global','FX:','','en') "+\
-"('DailyFX Daily Briefing','https://rss.dailyfx.com/feeds/daily_briefings','rss','global','FX:','','en') "+\
-"('DailyFX Forecast','https://rss.dailyfx.com/feeds/forecasts','rss','global','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "+\
-"('','','','','','','en') "
-
+"('Investing.com Stocks News','https://www.investing.com/rss/news_25.rss','rss','global','EQ:','','en'), "+\
+"('Investing.com Crypto News','https://www.investing.com/rss/news_301.rss','rss','global','CR:','','en'), "+\
+"('Investing.com Forex News','https://www.investing.com/rss/news_1.rss','rss','global','FX:','','en'), "+\
+"('FXEmpire News','https://www.fxempire.com/api/v1/en/articles/rss/news','rss','global','FX:','','en'), "+\
+"('Daily Forex','https://www.dailyforex.com/rss/forexnews.xml','rss','global','FX:','','en'), "+\
+"('Forex Live','https://www.forexlive.com/feed/news','rss','global','FX:','','en'), "+\
+"('DailyFX News','https://rss.dailyfx.com/feeds/forex_market_news','rss','global','FX:','','en'), "+\
+"('DailyFX Daily Briefing','https://rss.dailyfx.com/feeds/daily_briefings','rss','global','FX:','','en'), "+\
+"('DailyFX Forecast','https://rss.dailyfx.com/feeds/forecasts','rss','global','','','en'), "+\
+"('Realtime Forex News','https://www.realtimeforex.com/rss/','rss','global','','','en'), "+\
+"('Cointelegraph All News','https://cointelegraph.com/rss','rss','global','','','en'), "+\
+"('Cointelegraph Altcoin News','https://cointelegraph.com/rss/tag/altcoin','rss','global','','','en'), "+\
+"('Cointelegraph Bitcoin News','https://cointelegraph.com/rss/tag/bitcoin','rss','global','','','en'), "+\
+"('Cointelegraph Ethereum News','https://cointelegraph.com/rss/tag/ethereum','rss','global','','','en'), "+\
+"('Cointelegraph Litecoin News','https://cointelegraph.com/rss/tag/litecoin','rss','global','','','en'), "+\
+"('Cointelegraph Monero News','https://cointelegraph.com/rss/tag/monero','rss','global','','','en'), "+\
+"('Coindesk News','http://feeds.feedburner.com/CoinDesk','rss','global','','','en'), "+\
+"('Bitcoin com News','https://news.bitcoin.com/feed/','rss','global','','','en'), "+\
+"('Minegate News','https://minergate.com/blog/feed/','rss','global','','','en'), "+\
+"('NewsBTC','https://www.newsbtc.com/feed/','rss','global','','','en'), "+\
+"('CryptoNinja','https://www.cryptoninjas.net/feed/','rss','global','','','en'), "+\
+"('WalletInvestor','https://walletinvestor.com/blog/feed/','rss','global','','','en'), "+\
+"('Finance Magnates','https://www.financemagnates.com/cryptocurrency/feed/','rss','global','','','en'), "+\
+"('Bitcoin Magazine','https://bitcoinmagazine.com/feed','rss','global','','','en')"
 print(sql +": "+ os.path.basename(__file__) )
 
 try:

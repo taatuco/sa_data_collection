@@ -42,6 +42,7 @@ REM ### Setup default data
 %_PY_EXE% "%SA_DATA_DIR%asset_class\set_asset_class.py"
 %_PY_EXE% "%SA_DATA_DIR%markets\set_market.py"
 %_PY_EXE% "%SA_DATA_DIR%sectors\set_sector.py"
+%_PY_EXE% "%SA_DATA_DIR%newsdata\set_newsdata.py"
 %_PY_EXE% "%SA_DATA_DIR%users\set_users.py"
 %_PY_EXE% "%SA_DATA_DIR%portfolios\set_portf.py"
 %_PY_EXE% "%SA_DATA_DIR%portfolios\set_strat.py"
