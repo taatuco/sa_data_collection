@@ -57,6 +57,7 @@ MKDIR "%SA_DATA_DIR%src"
 @ECHO %_PIP_EXE% install python-dateutil >> %GET_DATA%
 @ECHO %_PIP_EXE% install beautifulsoup4 >> %GET_DATA%
 @ECHO %_PIP_EXE% install requests >> %GET_DATA%
+@ECHO %_PIP_EXE% install feedparser >> %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose >> %GET_DATA%
 @ECHO START "" %GET_QM_DATA% >> %GET_DATA%
 @ECHO START "" %GET_OA_DATA% >> %GET_DATA%
