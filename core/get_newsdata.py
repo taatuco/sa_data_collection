@@ -88,7 +88,7 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
             url = str(post.link)
             search = url
             cr = connection.cursor(pymysql.cursors.SSCursor)
-            sql = 'INSERT INTO feed(date, short_title, short_description, '+\
+            sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
             'url, type, search, asset_class, market, lang) VALUES '+\
             '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
             str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\')'
