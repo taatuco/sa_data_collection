@@ -47,39 +47,57 @@ def get_newsdata():
         feed_id = 3
         feed_type = "news"
         add_feed_type(feed_id, feed_type)
+        get_newsdata_rss(d,feed_id)
 
     except Exception as e: print(e)
 
-def get_newsdata_global_rss(d,feed_id):
+def get_newsdata_rss(d,feed_id):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE type="global" AND format="rss"'
+        sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"'
         cr.execute(sql)
         rs = cr.fetchall()
 
-        sep = ''
-        insert_line = ''
-        date_d = ''
-        short_title = ''
-        short_description = ''
-        url = ''
-        format = ''
-        type = str(feed_id)
-        search = ''
-        asset_class = ''
-        market = ''
-        lang = ''
-        #INSERT INTO feed(date, short_title, short_description, url, type, search, asset_class, market, lang)
-        #VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7],[value-8],[value-9])
         for row in rs:
-            url = row[0]
-            feed = feedparser.parse(url)
+            feed_url = row[0]
+            format = row[1]
+            type = row[2]
+            asset_class = row[3]
+            market = row[4]
+            lang = row[5]
 
-            for post in feed.entries:
-                print(post.title)
-                print(post.description)
-                print(post.published)
+            if format == str('global'):
+                get_rss_global(feed_id,d,feed_url,asset_class,market,lang)
 
         cr.close()
 
     except Exception as e: print(e)
+
+def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
+    try:
+        feed = feedparser.parse(feed_url)
+        sep = ''
+        insert_line = ''
+        short_title = ''
+        short_description = ''
+        url = ''
+        search = url
+        i = 1
+        for post in feed.entries:
+            short_title = str(post.title)
+            short_description = str(post.description) + ' '+ str(post.published)
+            url = str(post.link)
+            if i > 1: sep = ','
+            insert_line = insert_line + sep + '('+ str(date_d)+','+str(short_title)+','+str(short_description)+','+\
+            str(url)+','+str(feed_id)+','+str(search)+','+str(asset_class)+','+str(market)+','+str(lang)+')'
+            i += 1
+            
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = 'INSERT INTO feed(date, short_title, short_description, '+\
+        'url, type, search, asset_class, market, lang) VALUES '+ insert_line
+        cr.execute(sql)
+        connection.commit()
+        print(sql +": "+ os.path.basename(__file__) )
+        cr.close()
+
+    except Exception as e: print(s)
