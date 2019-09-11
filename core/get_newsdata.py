@@ -66,7 +66,7 @@ def get_newsdata_rss(d,feed_id):
             market = row[4]
             lang = row[5]
 
-            if format == str('global'):
+            if type == str('global'):
                 get_rss_global(feed_id,d,feed_url,asset_class,market,lang)
 
         cr.close()
@@ -91,7 +91,7 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
             insert_line = insert_line + sep + '('+ str(date_d)+','+str(short_title)+','+str(short_description)+','+\
             str(url)+','+str(feed_id)+','+str(search)+','+str(asset_class)+','+str(market)+','+str(lang)+')'
             i += 1
-            
+
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'INSERT INTO feed(date, short_title, short_description, '+\
         'url, type, search, asset_class, market, lang) VALUES '+ insert_line
