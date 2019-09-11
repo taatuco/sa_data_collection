@@ -79,19 +79,21 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
         sep = ''
         insert_line = ''
         short_title = ''
+        short_description = ''
         url = ''
         search = url
         i = 1
         for post in feed.entries:
-            short_title = str(post.title).replace("'",'`') +' '+ str(post.published)
+            short_title = str(post.title).replace("'","`")
+            short_description = str(post.description).replace("'","`") + ' '+ str(post.published)
             url = str(post.link)
             if i > 1: sep = ','
-            insert_line = insert_line + sep + '('+ str(date_d)+','+str(short_title)+','+\
-            str(url)+','+str(feed_id)+','+str(search)+','+str(asset_class)+','+str(market)+','+str(lang)+')'
+            insert_line = insert_line + sep + '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
+            str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\')'
             i += 1
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'INSERT INTO feed(date, short_title, '+\
+        sql = 'INSERT INTO feed(date, short_title, short_description, '+\
         'url, type, search, asset_class, market, lang) VALUES '+ insert_line
         cr.execute(sql)
         connection.commit()
