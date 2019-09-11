@@ -84,8 +84,8 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
         search = url
         i = 1
         for post in feed.entries:
-            short_title = str(post.title)
-            short_description = str(post.description) + ' '+ str(post.published)
+            short_title = str(post.title).replace("'",'`')
+            short_description = str(post.description).replace("'",'`') + ' '+ str(post.published)
             url = str(post.link)
             if i > 1: sep = ','
             insert_line = insert_line + sep + '('+ str(date_d)+','+str(short_title)+','+str(short_description)+','+\
