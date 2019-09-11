@@ -40,6 +40,8 @@ def get_newsdata():
 
         for post in feed.entries:
             print(post.title)
+            print(post.description)
+            print(post.published)
 
 
     except Exception as e: print(e)
