@@ -118,9 +118,10 @@ def get_rss_specific(feed_id,date_d,feed_url,asset_class,market,lang):
         for row in rs:
             yahoo_finance = row[0]
             seekingalpha = row[1]
-            feed_url = feed_url.replace('{seekingalpha}', seekingalpha)
-            feed_url = feed_url.replace('{yahoo_finance}', yahoo_finance)
-            feed = feedparser.parse(feed_url)
+            feed_url_selection = feed_url.replace('{seekingalpha}', seekingalpha)
+            feed_url_selection = feed_url.replace('{yahoo_finance}', yahoo_finance)
+            feed = feedparser.parse(feed_url_selection)
+            print(feed_url_selection)
 
             insert_line = ''
             short_title = ''
