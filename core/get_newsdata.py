@@ -69,7 +69,7 @@ def get_newsdata_rss(d,feed_id):
             if type == str('global'):
                 get_rss_global(feed_id,d,feed_url,asset_class,market,lang)
             if type == str('specific'):
-                get_rss_specific(feed_id,d,feed_url,asset_class,market,lang)
+                get_rss_specific(feed_id,d,feed_url,lang)
 
         cr.close()
 
@@ -107,19 +107,24 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
 
     except Exception as e: print(s)
 
-def get_rss_specific(feed_id,date_d,feed_url,asset_class,market,lang):
+def get_rss_specific(feed_id,date_d,feed_url,lang):
     try:
 
         cr_s = connection.cursor(pymysql.cursors.SSCursor)
-        sql_s = 'SELECT symbol, yahoo_finance, seekingalpha FROM symbol_list WHERE disabled=0 AND seekingalpha<>"" OR yahoo_finance<>"" ORDER BY symbol'
+        sql_s = 'SELECT symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.asset_class, instruments.market '+\
+        'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
+        'WHERE symbol_list.disabled=0 AND symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"" ORDER BY symbol'
         cr_s.execute(sql_s)
         rs = cr_s.fetchall()
 
         for row in rs:
-            yahoo_finance = row[0]
-            seekingalpha = row[1]
+            symbol = row[0]
+            yahoo_finance = row[1]
+            seekingalpha = row[2]
+            asset_class = row[3]
+            market = row[4]
             feed_url_selection = feed_url.replace('{seekingalpha}', seekingalpha)
-            feed_url_selection = feed_url.replace('{yahoo_finance}', yahoo_finance)
+            feed_url_selection = feed_url_selection.replace('{yahoo_finance}', yahoo_finance)
             feed = feedparser.parse(feed_url_selection)
             print(feed_url_selection)
 
@@ -128,6 +133,7 @@ def get_rss_specific(feed_id,date_d,feed_url,asset_class,market,lang):
             short_description = ''
             url = ''
             search = ''
+            content = symbol
             i = 1
             for post in feed.entries:
                 short_title = str(post.title).replace("'","`")
@@ -140,9 +146,10 @@ def get_rss_specific(feed_id,date_d,feed_url,asset_class,market,lang):
                 search = url
                 cr = connection.cursor(pymysql.cursors.SSCursor)
                 sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-                'url, type, search, asset_class, market, lang) VALUES '+\
+                'url, type, search, asset_class, market, lang, content) VALUES '+\
                 '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
-                str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\')'
+                str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
+                str(content)+'\'' + ')'
                 cr.execute(sql)
                 connection.commit()
                 print(sql +": "+ os.path.basename(__file__) )
