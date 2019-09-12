@@ -30,6 +30,7 @@ from ta_gen_recomm import *
 from ta_gen_chart_data import *
 from get_frc_pnl import *
 from get_trades import *
+from get_newsdata import *
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
@@ -144,7 +145,6 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             gc.collect()
             if fm == 1:
                 get_trend_line_data(s,uid)
-                #set_signals_feed(s)
                 gen_recomm(s,uid)
                 gen_chart(s,uid)
             get_forecast_pnl(s,uid,nd_scan,is_update_all)

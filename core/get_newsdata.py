@@ -48,6 +48,7 @@ def get_newsdata(limit):
         feed_type = "news"
         add_feed_type(feed_id, feed_type)
         get_newsdata_rss(d,feed_id,limit)
+        if limit == 0: count_news(d,feed_id)
 
     except Exception as e: print(e)
 
@@ -70,9 +71,7 @@ def get_newsdata_rss(d,feed_id,limit):
                 get_rss_global(feed_id,d,feed_url,asset_class,market,lang,limit)
             if type == str('specific'):
                 get_rss_specific(feed_id,d,feed_url,lang,limit)
-
         cr.close()
-
     except Exception as e: print(e)
 
 def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
@@ -110,7 +109,6 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
 
 def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
     try:
-
         cr_s = connection.cursor(pymysql.cursors.SSCursor)
         sql_s = 'SELECT symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.asset_class, instruments.market '+\
         'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
@@ -154,12 +152,50 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
                 cr.execute(sql)
                 connection.commit()
                 print(sql +": "+ os.path.basename(__file__) )
-
                 if i >= limit: break
-
                 i += 1
                 cr.close()
-
         cr_s.close()
-
     except Exception as e: print(e)
+
+def count_news(d,feed_id):
+    try:
+        symbol = ''
+        vshortSymbol = ''
+        vFullname = ''
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = 'SELECT '+\
+        'instruments.symbol, '+\
+        '(SELECT SUBSTRING_INDEX(instruments.symbol,":",-1)) AS vshortSymbol, '+\
+        '(SELECT IF(INSTR(instruments.fullname, ' ') >0, LEFT(instruments.fullname, INSTR(instruments.fullname, ' ') - 1), instruments.fullname) ) AS vFullname '+\
+        'WHERE instruments.symbol NOT LIKE "%'+ get_portf_suffix() +'%"'
+        cr.execute(sql)
+        rs = cr.fetchall()
+        news_count = 0
+        for row in rs:
+            symbol = row[0]
+            vshortSymbol = row[1]
+            vFullname = row[2]
+
+            cr_s = connection.cursor(pymysql.cursors.SSCursor)
+            sql_s = 'SELECT COUNT(*) FROM feed '+\
+            'WHERE type = '+ str(feed_id) ' AND '+\
+            '(short_title LIKE "%'+ str(vshortSymbol) +'%" OR short_title LIKE "%'+ str(vFullname) +'%" OR '+\
+            'short_description LIKE "%'+ str(vshortSymbol) +'%" OR short_description LIKE "%'+ str(vFullname) +'%")'
+            cr_s.execute(sql_s)
+            rs_s = cr_s.fetchall()
+            for row in rs_s:
+                news_count = row[0]
+            cr_s.close()
+
+            #insert news_count value to table instruments
+            cr_u = connection.cursor(pymysql.cursors.SSCursor)
+            sql_u = 'UPDATE instruments SET news_count_1d = ' str(news_count) + ' WHERE symbol = "'+ str(symbol) +'"'
+            print(sql_u)
+            cr_u.execute(sql_u)
+            connection.commit()
+            cr_u.close()
+        cr.close()
+
+    except Exception as e:
+        raise
