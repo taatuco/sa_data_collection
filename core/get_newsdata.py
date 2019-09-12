@@ -37,7 +37,7 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def get_newsdata():
+def get_newsdata(limit):
     try:
 
         #Date [Today date]
@@ -46,12 +46,12 @@ def get_newsdata():
 
         feed_id = 3
         feed_type = "news"
-        add_feed_type(feed_id, feed_type)
-        get_newsdata_rss(d,feed_id)
+        add_feed_type(feed_id, feed_type,limit)
+        get_newsdata_rss(d,feed_id,limit)
 
     except Exception as e: print(e)
 
-def get_newsdata_rss(d,feed_id):
+def get_newsdata_rss(d,feed_id,limit):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"'
@@ -67,15 +67,15 @@ def get_newsdata_rss(d,feed_id):
             lang = row[5]
 
             if type == str('global'):
-                get_rss_global(feed_id,d,feed_url,asset_class,market,lang)
+                get_rss_global(feed_id,d,feed_url,asset_class,market,lang,limit)
             if type == str('specific'):
-                get_rss_specific(feed_id,d,feed_url,lang)
+                get_rss_specific(feed_id,d,feed_url,lang,limit)
 
         cr.close()
 
     except Exception as e: print(e)
 
-def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
+def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
     try:
         feed = feedparser.parse(feed_url)
         insert_line = ''
@@ -102,12 +102,13 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
             connection.commit()
             print(sql +": "+ os.path.basename(__file__) )
 
+            if i >= limit: break
             i += 1
         cr.close()
 
     except Exception as e: print(s)
 
-def get_rss_specific(feed_id,date_d,feed_url,lang):
+def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
     try:
 
         cr_s = connection.cursor(pymysql.cursors.SSCursor)
@@ -153,6 +154,9 @@ def get_rss_specific(feed_id,date_d,feed_url,lang):
                 cr.execute(sql)
                 connection.commit()
                 print(sql +": "+ os.path.basename(__file__) )
+
+                if i >= limit: break
+
                 i += 1
                 cr.close()
 
