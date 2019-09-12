@@ -68,6 +68,8 @@ def get_newsdata_rss(d,feed_id):
 
             if type == str('global'):
                 get_rss_global(feed_id,d,feed_url,asset_class,market,lang)
+            if type == str('specific'):
+                get_rss_specific(feed_id,d,feed_url,asset_class,market,lang)
 
         cr.close()
 
@@ -107,5 +109,44 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
 
 def get_rss_specific(feed_id,date_d,feed_url,asset_class,market,lang):
     try:
-        pass
+
+        cr_s = connection.cursor(pymysql.cursors.SSCursor)
+        sql_s = 'SELECT symbol, yahoo_finance, seekingalpha FROM symbol_list WHERE disabled=0 AND seekingalpha<>"" OR yahoo_finance<>"" ORDER BY symbol'
+        cr_s.execute(sql_s)
+        rs = cr_s.fetchall()
+
+        for row in rs:
+            yahoo_finance = row[0]
+            seekingalpha = row[1]
+            feed = feedparser.parse(feed_url).replace('{seekingalpha}', seekingalpha)
+            feed = feedparser.parse(feed_url).replace('{yahoo_finance}', yahoo_finance)
+
+            insert_line = ''
+            short_title = ''
+            short_description = ''
+            url = ''
+            search = ''
+            i = 1
+            for post in feed.entries:
+                short_title = str(post.title).replace("'","`")
+                try:
+                    short_description = str(post.description).replace("'","`") + ' '+ str(post.published)
+                except:
+                    short_description = str(post.published)
+
+                url = str(post.link)
+                search = url
+                cr = connection.cursor(pymysql.cursors.SSCursor)
+                sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
+                'url, type, search, asset_class, market, lang) VALUES '+\
+                '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
+                str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\')'
+                cr.execute(sql)
+                connection.commit()
+                print(sql +": "+ os.path.basename(__file__) )
+                i += 1
+                cr.close()
+
+        cr_s.close()
+
     except Exception as e: print(e)
