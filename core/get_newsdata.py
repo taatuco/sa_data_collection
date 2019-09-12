@@ -84,7 +84,11 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
         i = 1
         for post in feed.entries:
             short_title = str(post.title).replace("'","`")
-            short_description = str(post.description).replace("'","`") + ' '+ str(post.published)
+            try:
+                short_description = str(post.description).replace("'","`") + ' '+ str(post.published)
+            except:
+                short_description = str(post.published)
+
             url = str(post.link)
             search = url
             cr = connection.cursor(pymysql.cursors.SSCursor)
@@ -100,3 +104,8 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang):
         cr.close()
 
     except Exception as e: print(s)
+
+def get_rss_specific(feed_id,date_d,feed_url,asset_class,market,lang):
+    try:
+        pass
+    except Exception as e: print(e)
