@@ -7,6 +7,7 @@ import sys
 import os
 import datetime
 import time
+from datetime import timedelta
 import feedparser
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,13 +43,15 @@ def get_newsdata(limit):
 
         #Date [Today date]
         d = datetime.datetime.now()
+        dn = datetime.datetime.now() - timedelta(days=1)
         d = d.strftime("%Y%m%d")
+        dn = dn.strftime("%Y%m%d")
 
         feed_id = 3
         feed_type = "news"
         add_feed_type(feed_id, feed_type)
         get_newsdata_rss(d,feed_id,limit)
-        if limit == 0: count_news(d,feed_id)
+        if limit == 0: count_news(dn,feed_id)
 
     except Exception as e: print(e)
 
@@ -158,7 +161,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
         cr_s.close()
     except Exception as e: print(e)
 
-def count_news(d,feed_id):
+def count_news(dn,feed_id):
     try:
         symbol = ''
         vshortSymbol = ''
@@ -167,8 +170,9 @@ def count_news(d,feed_id):
         sql = 'SELECT '+\
         'instruments.symbol, '+\
         '(SELECT SUBSTRING_INDEX(instruments.symbol,":",-1)) AS vshortSymbol, '+\
-        '(SELECT IF(INSTR(instruments.fullname, ' ') >0, LEFT(instruments.fullname, INSTR(instruments.fullname, ' ') - 1), instruments.fullname) ) AS vFullname '+\
+        '(SELECT IF(INSTR(instruments.fullname, " ") >0, LEFT(instruments.fullname, INSTR(instruments.fullname, " ") - 1), instruments.fullname) ) AS vFullname '+\
         'WHERE instruments.symbol NOT LIKE "%'+ get_portf_suffix() +'%"'
+        print(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         news_count = 0
@@ -181,7 +185,8 @@ def count_news(d,feed_id):
             sql_s = 'SELECT COUNT(*) FROM feed '+\
             'WHERE type = '+ str(feed_id) + ' AND '+\
             '(short_title LIKE "%'+ str(vshortSymbol) +'%" OR short_title LIKE "%'+ str(vFullname) +'%" OR '+\
-            'short_description LIKE "%'+ str(vshortSymbol) +'%" OR short_description LIKE "%'+ str(vFullname) +'%")'
+            'short_description LIKE "%'+ str(vshortSymbol) +'%" OR short_description LIKE "%'+ str(vFullname) +'%") AND '+\
+            'date>='+ str(dn)
             cr_s.execute(sql_s)
             rs_s = cr_s.fetchall()
             for row in rs_s:
