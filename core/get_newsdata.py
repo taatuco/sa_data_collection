@@ -188,6 +188,7 @@ def count_news(dn,feed_id):
             '(short_title LIKE "%'+ str(vFullname) +'%" OR '+\
             'short_description LIKE "%'+ str(vFullname) +'%" OR content LIKE "%'+ str(symbol) +'%") AND '+\
             'date>='+ str(dn)
+            print(sql)
             cr_s.execute(sql_s)
             rs_s = cr_s.fetchall()
             for row in rs_s:
