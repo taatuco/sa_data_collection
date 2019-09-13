@@ -185,8 +185,8 @@ def count_news(dn,feed_id):
             cr_s = connection.cursor(pymysql.cursors.SSCursor)
             sql_s = 'SELECT COUNT(*) FROM feed '+\
             'WHERE type = '+ str(feed_id) + ' AND '+\
-            '(short_title LIKE "%'+ str(vshortSymbol) +'%" OR short_title LIKE "%'+ str(vFullname) +'%" OR '+\
-            'short_description LIKE "%'+ str(vshortSymbol) +'%" OR short_description LIKE "%'+ str(vFullname) +'%") AND '+\
+            '(short_title LIKE "%'+ str(vFullname) +'%" OR '+\
+            'short_description LIKE "%'+ str(vFullname) +'%" OR content LIKE "%'+ str(symbol) +'%") AND '+\
             'date>='+ str(dn)
             cr_s.execute(sql_s)
             rs_s = cr_s.fetchall()
