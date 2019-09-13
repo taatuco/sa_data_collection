@@ -171,6 +171,7 @@ def count_news(dn,feed_id):
         'instruments.symbol, '+\
         '(SELECT SUBSTRING_INDEX(instruments.symbol,":",-1)) AS vshortSymbol, '+\
         '(SELECT IF(INSTR(instruments.fullname, " ") >0, LEFT(instruments.fullname, INSTR(instruments.fullname, " ") - 1), instruments.fullname) ) AS vFullname '+\
+        'FROM instruments '+\
         'WHERE instruments.symbol NOT LIKE "%'+ get_portf_suffix() +'%"'
         print(sql)
         cr.execute(sql)
