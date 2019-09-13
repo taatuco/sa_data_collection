@@ -113,20 +113,23 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
 def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
     try:
         cr_s = connection.cursor(pymysql.cursors.SSCursor)
-        sql_s = 'SELECT symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.asset_class, instruments.market '+\
+        sql_s = 'SELECT instruments.asset_class, instruments.market, '+
+        'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname '+\
         'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
         'WHERE symbol_list.disabled=0 AND symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"" ORDER BY symbol'
         cr_s.execute(sql_s)
         rs = cr_s.fetchall()
 
         for row in rs:
-            symbol = row[0]
-            yahoo_finance = row[1]
-            seekingalpha = row[2]
-            asset_class = row[3]
-            market = row[4]
+            asset_class = row[0]
+            market = row[1]
+            symbol = row[2]
+            yahoo_finance = row[3]
+            seekingalpha = row[4]
+            instrument_fullname = row[5]
             feed_url_selection = feed_url.replace('{seekingalpha}', seekingalpha)
             feed_url_selection = feed_url_selection.replace('{yahoo_finance}', yahoo_finance)
+            feed_url_selection = feed_url_selection.replace('{instrument_fullname}', instrument_fullname)
             feed = feedparser.parse(feed_url_selection)
             print(feed_url_selection)
 
@@ -170,7 +173,7 @@ def count_news(dn,feed_id):
         sql = 'SELECT '+\
         'instruments.symbol, '+\
         '(SELECT SUBSTRING_INDEX(instruments.symbol,":",-1)) AS vshortSymbol, '+\
-        '(SELECT IF(INSTR(instruments.fullname, " ") >0, LEFT(instruments.fullname, INSTR(instruments.fullname, " ") - 1), instruments.fullname) ) AS vFullname '+\
+        'instruments.fullname,'+\
         'FROM instruments '+\
         'WHERE instruments.symbol NOT LIKE "%'+ get_portf_suffix() +'%"'
         print(sql)
@@ -180,13 +183,13 @@ def count_news(dn,feed_id):
         for row in rs:
             symbol = row[0]
             vshortSymbol = row[1]
-            vFullname = row[2]
+            fullname = row[2]
 
             cr_s = connection.cursor(pymysql.cursors.SSCursor)
             sql_s = 'SELECT COUNT(*) FROM feed '+\
             'WHERE type = '+ str(feed_id) + ' AND '+\
-            '(short_title LIKE "%'+ str(vFullname) +'%" OR '+\
-            'short_description LIKE "%'+ str(vFullname) +'%" OR content LIKE "%'+ str(symbol) +'%") AND '+\
+            '(short_title LIKE "%'+ str(fullname) +'%" OR '+\
+            'short_description LIKE "%'+ str(fullname) +'%" OR content LIKE "%'+ str(symbol) +'%") AND '+\
             'date>='+ str(dn)
             print(sql_s)
             cr_s.execute(sql_s)
