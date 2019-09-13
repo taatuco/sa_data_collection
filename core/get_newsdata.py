@@ -179,7 +179,7 @@ def count_news(d,feed_id):
 
             cr_s = connection.cursor(pymysql.cursors.SSCursor)
             sql_s = 'SELECT COUNT(*) FROM feed '+\
-            'WHERE type = '+ str(feed_id) ' AND '+\
+            'WHERE type = '+ str(feed_id) + ' AND '+\
             '(short_title LIKE "%'+ str(vshortSymbol) +'%" OR short_title LIKE "%'+ str(vFullname) +'%" OR '+\
             'short_description LIKE "%'+ str(vshortSymbol) +'%" OR short_description LIKE "%'+ str(vFullname) +'%")'
             cr_s.execute(sql_s)
@@ -188,14 +188,12 @@ def count_news(d,feed_id):
                 news_count = row[0]
             cr_s.close()
 
-            #insert news_count value to table instruments
             cr_u = connection.cursor(pymysql.cursors.SSCursor)
-            sql_u = 'UPDATE instruments SET news_count_1d = ' str(news_count) + ' WHERE symbol = "'+ str(symbol) +'"'
+            sql_u = 'UPDATE instruments SET news_count_1d = ' + str(news_count) + ' WHERE symbol = "'+ str(symbol) +'"'
             print(sql_u)
             cr_u.execute(sql_u)
             connection.commit()
             cr_u.close()
         cr.close()
 
-    except Exception as e:
-        raise
+    except Exception as e: print(e)
