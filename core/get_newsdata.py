@@ -113,7 +113,7 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
 def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
     try:
         cr_s = connection.cursor(pymysql.cursors.SSCursor)
-        sql_s = 'SELECT instruments.asset_class, instruments.market, '+
+        sql_s = 'SELECT instruments.asset_class, instruments.market, '+\
         'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname '+\
         'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
         'WHERE symbol_list.disabled=0 AND symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"" ORDER BY symbol'
@@ -173,7 +173,7 @@ def count_news(dn,feed_id):
         sql = 'SELECT '+\
         'instruments.symbol, '+\
         '(SELECT SUBSTRING_INDEX(instruments.symbol,":",-1)) AS vshortSymbol, '+\
-        'instruments.fullname,'+\
+        'instruments.fullname '+\
         'FROM instruments '+\
         'WHERE instruments.symbol NOT LIKE "%'+ get_portf_suffix() +'%"'
         print(sql)
