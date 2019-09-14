@@ -52,7 +52,7 @@ def get_newsdata(limit):
         if limit == 0: limit = 1000
         add_feed_type(feed_id, feed_type)
         get_newsdata_rss(d,feed_id,limit)
-        count_news(dn,feed_id)
+        if limit == 0: count_news(dn,feed_id)
 
     except Exception as e: print(e)
 

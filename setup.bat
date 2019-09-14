@@ -23,6 +23,7 @@ SET GET_DATA="%SA_DATA_DIR%sa_1_get_data.bat"
 SET GET_FRC="%SA_DATA_DIR%sa_2_get_forecast.bat"
 SET SET_FULLDATA="%SA_DATA_DIR%sa_3_set_fulldata.bat"
 SET SET_DATA="%SA_DATA_DIR%sa_4_set_data.bat"
+SET GET_NEWSDATA="%SA_DATA_DIR%sa_5_get_newsdata.bat"
 
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
 SET GET_OA_DATA="%SA_DATA_DIR%r_oanda\get_oanda_data.bat"
@@ -33,8 +34,8 @@ SET _R_SCRIPT_EXE="C:\Program Files\R\%R_VER%\bin\x64\Rscript.exe"
 SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
 SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
 
-
 REM ### Setup default data
+REM ### NOTE: REMOVE THIS BLOCK TO NOT OVERWRITE EXISTING DATA ###
 %_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
 %_PY_EXE% "%SA_DATA_DIR%labels\set_labels.py"
 %_PY_EXE% "%SA_DATA_DIR%labels\set_recomm_text_lang.py"
@@ -58,6 +59,7 @@ MKDIR "%SA_DATA_DIR%src"
 @ECHO %_PIP_EXE% install beautifulsoup4 >> %GET_DATA%
 @ECHO %_PIP_EXE% install requests >> %GET_DATA%
 @ECHO %_PIP_EXE% install feedparser >> %GET_DATA%
+@ECHO %_PIP_EXE% install vaderSentiment >> %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose >> %GET_DATA%
 @ECHO START "" %GET_QM_DATA% >> %GET_DATA%
 @ECHO START "" %GET_OA_DATA% >> %GET_DATA%
@@ -104,6 +106,11 @@ DEL /F /Q %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_instr_data.py" >> %SET_DATA%
 @ECHO exit >> %SET_DATA%
 
+REM ### 5 Get NewsData
+DEL /F /Q %GET_NEWSDATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_news_data.py" >> %GET_NEWSDATA%
+@ECHO exit >> %GET_NEWSDATA%
+
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_FORECAST /TR %GET_FRC% /RI 0 /ST %GET_FRC_TIME_ST% /F
@@ -118,3 +125,6 @@ SCHTASKS /Create /SC DAILY /TN SMARTALPHA_SET_DATA_6 /TR %SET_DATA% /RI 0 /ST %S
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_SET_DATA_7 /TR %SET_DATA% /RI 0 /ST %SET_DATA_TIME_7_ST% /F
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_SET_DATA_8 /TR %SET_DATA% /RI 0 /ST %SET_DATA_TIME_8_ST% /F
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_SET_DATA_9 /TR %SET_DATA% /RI 0 /ST %SET_DATA_TIME_9_ST% /F
+
+REM ### SET NewsData collection
+SCHTASKS /CREATE SC MINUTE /MO 30 /TN SMARTALPHA_GET_NEWS_DATA /TR %GET_NEWSDATA% /F

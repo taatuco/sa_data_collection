@@ -13,3 +13,4 @@ sympy
 nose
 alpha_vantage
 feedparser
+vaderSentiment
