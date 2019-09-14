@@ -9,6 +9,7 @@ import datetime
 import time
 from datetime import timedelta
 import feedparser
+from get_sentiment_score import *
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -90,6 +91,7 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
         search = ''
         sep = ''
         insert_line = ''
+        sentiment_score = 0
         i = 1
         for post in feed.entries:
             short_title = str(post.title).replace("'","`")
@@ -100,11 +102,12 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
 
             url = str(post.link)
             search = url
+            sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
 
             if i > 1: sep=','
             insert_line = insert_line + sep +\
             '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
-            str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\')'
+            str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\','+ str(sentiment_score) +'\')'
 
             if i >= limit: break
             i += 1
@@ -112,7 +115,7 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-        'url, type, search, asset_class, market, lang) VALUES '+ insert_line
+        'url, type, search, asset_class, market, lang, ranking) VALUES '+ insert_line
         cr.execute(sql)
         connection.commit()
         print(sql +": "+ os.path.basename(__file__) )
@@ -150,6 +153,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             search = ''
             sep = ''
             insert_line = ''
+            sentiment_score = 0
             i = 1
             for post in feed.entries:
                 short_title = str(post.title).replace("'","`")
@@ -160,19 +164,20 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
 
                 url = str(post.link)
                 search = url
+                sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
 
                 if i > 1: sep = ','
                 insert_line = insert_line + sep +\
                 '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
                 str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
-                str(symbol)+'\'' + ')'
+                str(symbol)+'\',\''+ str(sentiment_score) + '\')'
 
                 if i >= limit: break
                 i += 1
 
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-            'url, type, search, asset_class, market, lang, symbol) VALUES '+ insert_line
+            'url, type, search, asset_class, market, lang, symbol, ranking) VALUES '+ insert_line
             cr.execute(sql)
             connection.commit()
             print(sql +": "+ os.path.basename(__file__) )
