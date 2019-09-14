@@ -85,6 +85,8 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
         short_description = ''
         url = ''
         search = ''
+        sep = ''
+        insert_line = ''
         i = 1
         for post in feed.entries:
             short_title = str(post.title).replace("'","`")
@@ -95,17 +97,22 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
 
             url = str(post.link)
             search = url
-            cr = connection.cursor(pymysql.cursors.SSCursor)
-            sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-            'url, type, search, asset_class, market, lang) VALUES '+\
+
+            if i > 1: sep=','
+            insert_line = insert_line + sep +\
             '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
             str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\')'
-            cr.execute(sql)
-            connection.commit()
-            print(sql +": "+ os.path.basename(__file__) )
 
             if i >= limit: break
             i += 1
+
+
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
+        'url, type, search, asset_class, market, lang) VALUES '+ insert_line
+        cr.execute(sql)
+        connection.commit()
+        print(sql +": "+ os.path.basename(__file__) )
         cr.close()
 
     except Exception as e: print(s)
@@ -139,6 +146,8 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             url = ''
             search = ''
             content = symbol
+            sep = ''
+            insert_line = ''
             i = 1
             for post in feed.entries:
                 short_title = str(post.title).replace("'","`")
@@ -149,18 +158,23 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
 
                 url = str(post.link)
                 search = url
-                cr = connection.cursor(pymysql.cursors.SSCursor)
-                sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-                'url, type, search, asset_class, market, lang, content) VALUES '+\
+
+                if i > 1: sep = ','
+                insert_line = insert_line + sep +\
                 '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
                 str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
                 str(content)+'\'' + ')'
-                cr.execute(sql)
-                connection.commit()
-                print(sql +": "+ os.path.basename(__file__) )
+
                 if i >= limit: break
                 i += 1
-                cr.close()
+
+            cr = connection.cursor(pymysql.cursors.SSCursor)
+            sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
+            'url, type, search, asset_class, market, lang, content) VALUES '+ insert_line
+            cr.execute(sql)
+            connection.commit()
+            print(sql +": "+ os.path.basename(__file__) )
+            cr.close()
         cr_s.close()
     except Exception as e: print(e)
 

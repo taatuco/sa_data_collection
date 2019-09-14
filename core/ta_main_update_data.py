@@ -147,7 +147,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 get_trend_line_data(s,uid)
                 gen_recomm(s,uid)
                 gen_chart(s,uid)
-                get_newsdata(0)
+                get_newsdata(20)
             get_forecast_pnl(s,uid,nd_scan,is_update_all)
 
             if is_update_all:
