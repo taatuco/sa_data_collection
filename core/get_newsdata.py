@@ -49,6 +49,7 @@ def get_newsdata(limit):
 
         feed_id = 3
         feed_type = "news"
+        if limit == 0: limit = 1000
         add_feed_type(feed_id, feed_type)
         get_newsdata_rss(d,feed_id,limit)
         count_news(dn,feed_id)
