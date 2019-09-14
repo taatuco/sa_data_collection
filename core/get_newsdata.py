@@ -40,19 +40,21 @@ connection = pymysql.connect(host=db_srv,
 
 def get_newsdata(limit):
     try:
-
-        #Date [Today date]
         d = datetime.datetime.now()
         dn = datetime.datetime.now() - timedelta(days=1)
+        dh = datetime.datetime.now() - timedelta(days=30)
         d = d.strftime("%Y%m%d")
         dn = dn.strftime("%Y%m%d")
+        dh = dh.strftime("%Y%m%d")
 
         feed_id = 3
         feed_type = "news"
         if limit == 0: limit = 1000
         add_feed_type(feed_id, feed_type)
         get_newsdata_rss(d,feed_id,limit)
-        if limit == 0: count_news(dn,feed_id)
+        if limit == 0:
+            count_news(dn,feed_id)
+            clear_old_newsdata(dh,feed_id)
 
     except Exception as e: print(e)
 
@@ -220,4 +222,14 @@ def count_news(dn,feed_id):
             cr_u.close()
         cr.close()
 
+    except Exception as e: print(e)
+
+def clear_old_newsdata(dh,feed_id):
+    try:
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = 'DELETE FROM feed WHERE type='+ str(feed_id) + ' AND date < '+ str(dh)
+        print(sql)
+        cr.execute(sql)
+        connection.commit()
+        cr.close()
     except Exception as e: print(e)
