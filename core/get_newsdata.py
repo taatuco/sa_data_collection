@@ -145,7 +145,6 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             short_description = ''
             url = ''
             search = ''
-            content = symbol
             sep = ''
             insert_line = ''
             i = 1
@@ -163,14 +162,14 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
                 insert_line = insert_line + sep +\
                 '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
                 str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
-                str(content)+'\'' + ')'
+                str(symbol)+'\'' + ')'
 
                 if i >= limit: break
                 i += 1
 
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-            'url, type, search, asset_class, market, lang, content) VALUES '+ insert_line
+            'url, type, search, asset_class, market, lang, symbol) VALUES '+ insert_line
             cr.execute(sql)
             connection.commit()
             print(sql +": "+ os.path.basename(__file__) )
@@ -203,7 +202,7 @@ def count_news(dn,feed_id):
             sql_s = 'SELECT COUNT(*) FROM feed '+\
             'WHERE type = '+ str(feed_id) + ' AND '+\
             '(short_title LIKE "%'+ str(fullname) +'%" OR '+\
-            'short_description LIKE "%'+ str(fullname) +'%" OR content LIKE "%'+ str(symbol) +'%") AND '+\
+            'short_description LIKE "%'+ str(fullname) +'%" OR symbol LIKE "%'+ str(symbol) +'%") AND '+\
             'date>='+ str(dn)
             print(sql_s)
             cr_s.execute(sql_s)
