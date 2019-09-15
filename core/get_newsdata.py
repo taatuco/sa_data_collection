@@ -116,9 +116,11 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
         'url, type, search, asset_class, market, lang, ranking) VALUES '+ insert_line
-        cr.execute(sql)
-        connection.commit()
         print(sql +": "+ os.path.basename(__file__) )
+        try:
+            cr.execute(sql)
+            connection.commit()
+        except: pass
         cr.close()
 
     except Exception as e: print(s)
@@ -178,9 +180,11 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
             'url, type, search, asset_class, market, lang, symbol, ranking) VALUES '+ insert_line
-            cr.execute(sql)
-            connection.commit()
             print(sql +": "+ os.path.basename(__file__) )
+            try:
+                cr.execute(sql)
+                connection.commit()
+            except: pass
             cr.close()
         cr_s.close()
     except Exception as e: print(e)
