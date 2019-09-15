@@ -4,4 +4,4 @@
 # LICENSE file in the root directory of this source tree.
 from get_newsdata import *
 
-get_newsdata(10)
+get_newsdata(5)

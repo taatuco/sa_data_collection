@@ -129,7 +129,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
     try:
         cr_s = connection.cursor(pymysql.cursors.SSCursor)
         sql_s = 'SELECT instruments.asset_class, instruments.market, '+\
-        'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname '+\
+        'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname, instruments.description '+\
         'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
         'WHERE symbol_list.disabled=0 AND symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"" ORDER BY symbol'
         cr_s.execute(sql_s)
@@ -142,9 +142,11 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             yahoo_finance = row[3]
             seekingalpha = row[4]
             instrument_fullname = row[5].replace(' ','+').replace('.','').replace(',','')
+            instrument_description = row[5].replace(' ','+').replace('.','').replace(',','')
             feed_url_selection = feed_url.replace('{seekingalpha}', seekingalpha)
             feed_url_selection = feed_url_selection.replace('{yahoo_finance}', yahoo_finance)
             feed_url_selection = feed_url_selection.replace('{instrument_fullname}', instrument_fullname)
+            feed_url_selection = feed_url_selection.replace('{instrument_description}', instrument_description)
             feed = feedparser.parse(feed_url_selection)
             print(feed_url_selection)
 
