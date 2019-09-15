@@ -141,13 +141,17 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             symbol = row[2]
             yahoo_finance = row[3]
             seekingalpha = row[4]
+            feed = ''
             instrument_fullname = row[5].replace(' ','+').replace('.','').replace(',','')
             instrument_description = row[5].replace(' ','+').replace('.','').replace(',','')
             feed_url_selection = feed_url.replace('{seekingalpha}', seekingalpha)
             feed_url_selection = feed_url_selection.replace('{yahoo_finance}', yahoo_finance)
             feed_url_selection = feed_url_selection.replace('{instrument_fullname}', instrument_fullname)
             feed_url_selection = feed_url_selection.replace('{instrument_description}', instrument_description)
-            feed = feedparser.parse(feed_url_selection)
+
+            if instrument_description != '' or instrument_description is not None:
+                feed = feedparser.parse(feed_url_selection)
+
             print(feed_url_selection)
 
             insert_line = ''
