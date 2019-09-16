@@ -76,8 +76,13 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
             dn = datetime.datetime.now() - timedelta(days=10)
             dn = dn.strftime("%Y%m%d")
+            dh = datetime.datetime.now() - timedelta(days=1)
+            dh = dn.strftime("%Y%m%d")
+
             d = datetime.datetime.now() - timedelta(days=nd_scan)
             d = d.strftime("%Y%m%d")
+
+            sentiment = 0
 
             if is_update_all:
                 sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+") ORDER BY date ASC"
@@ -107,7 +112,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 ma30 = calc_ma(s,d,30)
                 ma40 = calc_ma(s,d,40)
                 ma50 = calc_ma(s,d,50)
-                sentiment = get_sentiment_score_avg(s)
+                sentiment = get_sentiment_score_avg(s,dh)
                 is_ta_calc = "1"
 
                 try:
@@ -156,7 +161,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             else:
                 get_trades(s,uid,nd_scan,False)
 
-            get_instr_sum(s,uid,asset_class,dn,pip)
+            get_instr_sum(s,uid,asset_class,dn,pip,sentiment)
             set_signals_feed(s)
             set_widgets_feed(s)
 

@@ -277,7 +277,7 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal,sentiment)
     except Exception as e: print(e)
 
 
-def get_instr_sum(s,uid,asset_class,dn,pip):
+def get_instr_sum(s,uid,asset_class,dn,pip,sentiment):
 
     m = 1
     #Convert from percentage to pips for forex
@@ -320,7 +320,6 @@ def get_instr_sum(s,uid,asset_class,dn,pip):
     trade_tp_sell_2 = forc_data.get_tp_sell(2)
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
-    sentiment = get_sentiment_score_avg(s)
     try:
         update_forecast_table(s,wf,frc_pt,dn,pip)
         update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,d1_pct,wf_pct,
