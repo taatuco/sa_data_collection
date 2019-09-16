@@ -39,7 +39,7 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def get_newsdata(limit):
+def get_newsdata(limit,count_news):
     try:
         d = datetime.datetime.now()
         dn = datetime.datetime.now() - timedelta(days=1)
@@ -52,8 +52,9 @@ def get_newsdata(limit):
         feed_type = "news"
         add_feed_type(feed_id, feed_type)
         get_newsdata_rss(d,feed_id,limit)
-        count_news(dn,feed_id)
-        clear_old_newsdata(dh,feed_id)
+        if count_news:
+            count_news(dn,feed_id)
+            clear_old_newsdata(dh,feed_id)
 
     except Exception as e: print(e)
 
