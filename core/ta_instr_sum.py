@@ -8,6 +8,7 @@ import datetime
 import time
 from datetime import timedelta
 import csv
+from get_sentiment_score import *
 from pathlib import Path
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -178,7 +179,7 @@ trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
 trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
 trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
 trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2,
-y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
+y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal,sentiment):
     try:
 
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
@@ -265,7 +266,8 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal):
         "trade_3_entry="+str(trade_entry_sell_1)+",trade_3_tp="+str(trade_tp_sell_1)+",trade_3_sl="+str(trade_sl_sell_1)+",trade_3_type='sell',"+\
         "trade_4_entry="+str(trade_entry_sell_2)+",trade_4_tp="+str(trade_tp_sell_2)+",trade_4_sl="+str(trade_sl_sell_2)+",trade_4_type='sell', "+\
         "stdev_st="+ str(stdev_st)+", maximum_dd_st="+ str(maximum_dd_st)+", romad_st="+  str(romad_st) + ", volatility_risk_st="+ str(volatility_risk_st) +", "+\
-        "y1_signal="+str(y1_pct_signal)+",m6_signal="+str(m6_pct_signal)+",m3_signal="+str(m3_pct_signal)+",m1_signal="+str(m1_pct_signal)+",w1_signal="+str(w1_pct_signal) +" "+\
+        "y1_signal="+str(y1_pct_signal)+",m6_signal="+str(m6_pct_signal)+",m3_signal="+str(m3_pct_signal)+",m1_signal="+str(m1_pct_signal)+",w1_signal="+str(w1_pct_signal) +", "+\
+        "sentiment="+str(sentiment)+" "+\
         "WHERE symbol='"+s+"' "
         print(sql_i)
         cr_i.execute(sql_i)
@@ -318,6 +320,7 @@ def get_instr_sum(s,uid,asset_class,dn,pip):
     trade_tp_sell_2 = forc_data.get_tp_sell(2)
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
+    sentiment = get_sentiment_score_avg(s)
     try:
         update_forecast_table(s,wf,frc_pt,dn,pip)
         update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,d1_pct,wf_pct,
@@ -325,6 +328,6 @@ def get_instr_sum(s,uid,asset_class,dn,pip):
         trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
         trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
         trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2,
-        y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal)
+        y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal,sentiment)
 
     except Exception as e: print(e)
