@@ -39,7 +39,7 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def get_newsdata(limit,count_news):
+def get_newsdata(limit,clear_history):
     try:
         d = datetime.datetime.now()
         dn = datetime.datetime.now() - timedelta(days=1)
@@ -52,9 +52,7 @@ def get_newsdata(limit,count_news):
         feed_type = "news"
         add_feed_type(feed_id, feed_type)
         get_newsdata_rss(d,feed_id,limit)
-        if count_news:
-            count_news(dn,feed_id)
-            clear_old_newsdata(dh,feed_id)
+        if clear_history: clear_old_newsdata(dh,feed_id)
 
     except Exception as e: print(e)
 
@@ -192,50 +190,6 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             except: pass
             cr.close()
         cr_s.close()
-    except Exception as e: print(e)
-
-def count_news(dn,feed_id):
-    try:
-        symbol = ''
-        vshortSymbol = ''
-        vFullname = ''
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'SELECT '+\
-        'instruments.symbol, '+\
-        '(SELECT SUBSTRING_INDEX(instruments.symbol,":",-1)) AS vshortSymbol, '+\
-        'instruments.fullname '+\
-        'FROM instruments '+\
-        'WHERE instruments.symbol NOT LIKE "%'+ get_portf_suffix() +'%"'
-        print(sql)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        news_count = 0
-        for row in rs:
-            symbol = row[0]
-            vshortSymbol = row[1]
-            fullname = row[2]
-
-            cr_s = connection.cursor(pymysql.cursors.SSCursor)
-            sql_s = 'SELECT COUNT(*) FROM feed '+\
-            'WHERE type = '+ str(feed_id) + ' AND '+\
-            '(short_title LIKE "%'+ str(fullname) +'%" OR '+\
-            'short_description LIKE "%'+ str(fullname) +'%" OR symbol LIKE "%'+ str(symbol) +'%") AND '+\
-            'date>='+ str(dn)
-            print(sql_s)
-            cr_s.execute(sql_s)
-            rs_s = cr_s.fetchall()
-            for row in rs_s:
-                news_count = row[0]
-            cr_s.close()
-
-            cr_u = connection.cursor(pymysql.cursors.SSCursor)
-            sql_u = 'UPDATE instruments SET news_count_1d = ' + str(news_count) + ' WHERE symbol = "'+ str(symbol) +'"'
-            print(sql_u)
-            cr_u.execute(sql_u)
-            connection.commit()
-            cr_u.close()
-        cr.close()
-
     except Exception as e: print(e)
 
 def clear_old_newsdata(dh,feed_id):
