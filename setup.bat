@@ -64,18 +64,18 @@ SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
 
 REM ### Setup default data
 REM ### NOTE: REMOVE THIS BLOCK TO NOT OVERWRITE EXISTING DATA ###
-%_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
-%_PY_EXE% "%SA_DATA_DIR%labels\set_labels.py"
-%_PY_EXE% "%SA_DATA_DIR%labels\set_recomm_text_lang.py"
-%_PY_EXE% "%SA_DATA_DIR%labels\set_briefing_text_lang.py"
-%_PY_EXE% "%SA_DATA_DIR%asset_class\set_asset_class.py"
-%_PY_EXE% "%SA_DATA_DIR%markets\set_market.py"
-%_PY_EXE% "%SA_DATA_DIR%sectors\set_sector.py"
-%_PY_EXE% "%SA_DATA_DIR%newsdata\set_newsdata.py"
-%_PY_EXE% "%SA_DATA_DIR%users\set_users.py"
-%_PY_EXE% "%SA_DATA_DIR%portfolios\set_portf.py"
-%_PY_EXE% "%SA_DATA_DIR%portfolios\set_strat.py"
-%_PY_EXE% "%SA_DATA_DIR%portfolios\gen_portf.py"
+REM %_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
+REM %_PY_EXE% "%SA_DATA_DIR%labels\set_labels.py"
+REM %_PY_EXE% "%SA_DATA_DIR%labels\set_recomm_text_lang.py"
+REM %_PY_EXE% "%SA_DATA_DIR%labels\set_briefing_text_lang.py"
+REM %_PY_EXE% "%SA_DATA_DIR%asset_class\set_asset_class.py"
+REM %_PY_EXE% "%SA_DATA_DIR%markets\set_market.py"
+REM %_PY_EXE% "%SA_DATA_DIR%sectors\set_sector.py"
+REM %_PY_EXE% "%SA_DATA_DIR%newsdata\set_newsdata.py"
+REM %_PY_EXE% "%SA_DATA_DIR%users\set_users.py"
+REM %_PY_EXE% "%SA_DATA_DIR%portfolios\set_portf.py"
+REM %_PY_EXE% "%SA_DATA_DIR%portfolios\set_strat.py"
+REM %_PY_EXE% "%SA_DATA_DIR%portfolios\gen_portf.py"
 
 REM ### 1 Get Data
 DEL /F /Q %GET_DATA%
