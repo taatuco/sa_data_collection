@@ -30,6 +30,7 @@ from ta_gen_recomm import *
 from ta_gen_chart_data import *
 from get_frc_pnl import *
 from get_trades import *
+from get_sentiment_score import *
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
@@ -106,6 +107,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 ma30 = calc_ma(s,d,30)
                 ma40 = calc_ma(s,d,40)
                 ma50 = calc_ma(s,d,50)
+                sentiment = get_sentiment_score_avg(s)
                 is_ta_calc = "1"
 
                 try:
@@ -126,6 +128,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                     "ma30="+str(ma30)+ ", "+\
                     "ma40="+str(ma40)+ ", "+\
                     "ma50="+str(ma50)+ ", "+\
+                    "sentiment_1d="+str(sentiment)+", "+\
                     "is_ta_calc="+str(is_ta_calc)+" "+\
                     "WHERE id="+str(id)
                     cr_upd.execute(sql_upd)
