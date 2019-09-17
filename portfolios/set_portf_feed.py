@@ -209,7 +209,7 @@ def set_portf_feed():
         print(sql_u)
         cr_u.execute(sql_u)
         i += 1
-    connection.commit()
+        connection.commit()
     cr_r.close()
 
     cr.close()
