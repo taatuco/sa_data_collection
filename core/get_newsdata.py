@@ -40,7 +40,7 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def get_newsdata(limit,clear_history):
+def get_newsdata(limit,clear_history,what):
     try:
         d = datetime.datetime.now()
         dn = datetime.datetime.now() - timedelta(days=1)
@@ -52,12 +52,12 @@ def get_newsdata(limit,clear_history):
         feed_id = 3
         feed_type = "news"
         add_feed_type(feed_id, feed_type)
-        get_newsdata_rss(d,feed_id,limit)
+        get_newsdata_rss(d,feed_id,limit,what)
         if clear_history: clear_old_newsdata(dh,feed_id)
 
     except Exception as e: print(e)
 
-def get_newsdata_rss(d,feed_id,limit):
+def get_newsdata_rss(d,feed_id,limit,what):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"'
@@ -72,9 +72,9 @@ def get_newsdata_rss(d,feed_id,limit):
             market = row[4]
             lang = row[5]
 
-            if type == str('global'):
+            if type == str('global') and (what == 'all' or what == 'global'):
                 get_rss_global(feed_id,d,feed_url,asset_class,market,lang,limit)
-            if type == str('specific'):
+            if type == str('specific') and (what == 'all' or what == 'specific'):
                 get_rss_specific(feed_id,d,feed_url,lang,limit)
         cr.close()
     except Exception as e: print(e)
