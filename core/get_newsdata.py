@@ -5,6 +5,7 @@
 
 import sys
 import os
+import gc
 import datetime
 import time
 from datetime import timedelta
