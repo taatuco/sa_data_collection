@@ -60,7 +60,7 @@ def get_newsdata_rss(d,feed_id,limit):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"'
-        cr.executemany(sql)
+        cr.execute(sql)
         rs = cr.fetchall()
 
         for row in rs:
@@ -115,8 +115,9 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
         'url, type, search, asset_class, market, lang, ranking) VALUES '+ insert_line
         print(sql +": "+ os.path.basename(__file__) )
         try:
-            cr.executemany(sql)
+            cr.execute(sql)
             connection.commit()
+            gc.collect()
         except: pass
         cr.close()
 
@@ -129,7 +130,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
         'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname, instruments.description '+\
         'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
         'WHERE symbol_list.disabled=0 AND symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"" ORDER BY symbol'
-        cr_s.executemany(sql_s)
+        cr_s.execute(sql_s)
         rs = cr_s.fetchall()
 
         for row in rs:
@@ -185,8 +186,9 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             'url, type, search, asset_class, market, lang, symbol, ranking) VALUES '+ insert_line
             print(sql +": "+ os.path.basename(__file__) )
             try:
-                cr.executemany(sql)
+                cr.execute(sql)
                 connection.commit()
+                gc.collect()
             except: pass
             cr.close()
         cr_s.close()
@@ -197,7 +199,7 @@ def clear_old_newsdata(dh,feed_id):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'DELETE FROM feed WHERE type='+ str(feed_id) + ' AND date < '+ str(dh)
         print(sql)
-        cr.executemany(sql)
+        cr.execute(sql)
         connection.commit()
         cr.close()
     except Exception as e: print(e)
