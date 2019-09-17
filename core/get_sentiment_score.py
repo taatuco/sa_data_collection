@@ -42,10 +42,8 @@ def get_sentiment_score_avg(s,dh):
         sql = 'SELECT AVG(ranking) FROM feed WHERE symbol="'+ str(s) +'" AND type=3 AND date>='+ str(dh)
         cr.execute(sql)
         rs = cr.fetchall()
-        for row in rs:
-            avg_sentiment = row[0]
-            print(avg_sentiment)
+        for row in rs: avg_sentiment = row[0]
         cr.close()
-
+        r = avg_sentiment
     except Exception as e: print(e)
     return r
