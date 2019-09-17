@@ -38,6 +38,7 @@ def get_sentiment_score_avg(s,dh):
     r = 0
     try:
         avg_sentiment = 0
+        cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT AVG(ranking) FROM feed WHERE symbol="'+ str(s) +'" AND type=3 AND date>='+ str(dh)
         cr.execute(sql)
         rs = cr.fetchall()
