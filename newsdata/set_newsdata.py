@@ -37,7 +37,6 @@ sql = "INSERT IGNORE INTO newsdata(name, url, format, type, asset_class, market,
 "('Yahoo Finance News','https://feeds.finance.yahoo.com/rss/2.0/headline?s={yahoo_finance}','rss','specific','','','en'), "+\
 "('CNBC Top News','https://www.cnbc.com/id/100003114/device/rss/rss.html','rss','global','','','en'), "+\
 "('CNBC World News','https://www.cnbc.com/id/100727362/device/rss/rss.html','rss','global','','','en'), "+\
-"('Seeking Alpha News','https://seekingalpha.com/api/sa/combined/{seekingalpha}.xml','rss','specific','','','en'), "+\
 "('Bing News','https://www.bing.com/news/search?q={instrument_fullname}&format=rss','rss','specific','','','en'), "+\
 "('Bing News','https://www.bing.com/news/search?q={instrument_description}&format=rss','rss','specific','','','en'), "+\
 "('Google News','https://news.google.com/rss/search?q={instrument_fullname}','rss','specific','','','en'), "+\

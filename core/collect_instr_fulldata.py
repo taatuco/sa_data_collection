@@ -7,5 +7,5 @@ from ta_main_update_data import *
 from send_intel_report_email import *
 from get_newsdata import *
 get_update_instr_data(1,False,'')
-get_newsdata(1,True)
 send_intel_report()
+get_newsdata(1,True)

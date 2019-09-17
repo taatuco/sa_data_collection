@@ -201,5 +201,6 @@ def clear_old_newsdata(dh,feed_id):
         print(sql)
         cr.execute(sql)
         connection.commit()
+        gc.collect()
         cr.close()
     except Exception as e: print(e)
