@@ -138,6 +138,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                     "WHERE id="+str(id)
                     cr_upd.execute(sql_upd)
                     connection.commit()
+                    gc.collect()
                     cr_upd.close()
                     print(sql_upd)
                 except:
@@ -146,6 +147,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                     "WHERE id="+str(id)
                     cr_upd.execute(sql_upd)
                     connection.commit()
+                    gc.collect()
                     cr_upd.close()
 
             cr_d_id.close()
