@@ -80,6 +80,8 @@ REM %_PY_EXE% "%SA_DATA_DIR%portfolios\gen_portf.py"
 REM ### 1 Get Data
 DEL /F /Q %GET_DATA%
 MKDIR "%SA_DATA_DIR%src"
+@ECHO TASKKILL /F /IM explorer.exe >> %GET_DATA%
+@ECHO TASKKILL /F /IM python.exe >> %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --upgrade pip > %GET_DATA%
 @ECHO %_PIP_EXE% install mysql-python >> %GET_DATA%
 @ECHO %_PIP_EXE% install PyMySQL >> %GET_DATA%
@@ -125,17 +127,20 @@ DEL /F /Q %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_FULLDATA%
+@ECHO TASKKILL /F /IM python.exe >> %SET_FULLDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_instr_fulldata.py" >> %SET_FULLDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\portf_main_get_data.py" >> %SET_FULLDATA%
 @ECHO exit >> %SET_FULLDATA%
 
 REM ### 4 Set Data
 DEL /F /Q %SET_DATA%
+@ECHO TASKKILL /F /IM python.exe >> %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_instr_data.py" >> %SET_DATA%
 @ECHO exit >> %SET_DATA%
 
 REM ### 5 Get NewsData
 DEL /F /Q %GET_NEWSDATA%
+@ECHO TASKKILL /F /IM python.exe >> %GET_NEWSDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_news_data.py" >> %GET_NEWSDATA%
 @ECHO exit >> %GET_NEWSDATA%
 
