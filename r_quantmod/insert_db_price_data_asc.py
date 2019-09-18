@@ -6,6 +6,7 @@
 import sys
 import os
 import time
+import gc
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -76,6 +77,7 @@ try:
                     try:
                         cr_q_ins.execute(sql_q_ins)
                         connection.commit()
+                        gc.collect()
                     except: pass
                     cr_q_ins.close()
             ii += 1

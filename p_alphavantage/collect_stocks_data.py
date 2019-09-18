@@ -8,6 +8,7 @@ import json
 
 import sys
 import os
+import gc
 from datetime import datetime
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,7 +47,6 @@ for row in rs:
     try:
         data = { "function": "TIME_SERIES_DAILY",
         "symbol": avs,
-        "interval" : "60min",
         "datatype": "json",
         "apikey": api_key }
         response = requests.get(url, data)
@@ -62,7 +62,7 @@ for row in rs:
     try:
         cr_i.execute(sql_i)
         connection.commit()
-        cr_i.close()
+        gc.collect()
     except:
         pass
     cr_i.close()

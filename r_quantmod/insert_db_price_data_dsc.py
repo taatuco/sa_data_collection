@@ -6,6 +6,7 @@
 import sys
 import os
 import time
+import gc
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -75,6 +76,7 @@ try:
                     sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values
                     cr_q_ins.execute(sql_q_ins)
                     connection.commit()
+                    gc.collect()
                     cr_q_ins.close()
             ii += 1
         else:
