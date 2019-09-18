@@ -45,7 +45,7 @@ def get_newsdata(limit,clear_history,what):
         d = datetime.datetime.now()
         dn = datetime.datetime.now() - timedelta(days=1)
         dh = datetime.datetime.now() - timedelta(days=30)
-        d = d.strftime("%Y%m%d %H:%M:%S")
+        d = d.strftime("%Y-%m-%d %H:%M:%S")
         dn = dn.strftime("%Y%m%d")
         dh = dh.strftime("%Y%m%d")
 
