@@ -175,7 +175,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
 
                 if i > 1: sep = ','
                 insert_line = insert_line + sep +\
-                '(\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
+                '(\''+ str('CURRENT_TIMESTAMP')+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
                 str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
                 str(symbol)+'\','+ str(sentiment_score) + ')'
 
@@ -183,7 +183,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
                 i += 1
 
             cr = connection.cursor(pymysql.cursors.SSCursor)
-            sql = 'INSERT IGNORE INTO feed(short_title, short_description, '+\
+            sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
             'url, type, search, asset_class, market, lang, symbol, ranking) VALUES '+ insert_line
             print(sql +": "+ os.path.basename(__file__) )
             try:
