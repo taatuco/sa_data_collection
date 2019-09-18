@@ -45,7 +45,7 @@ def get_newsdata(limit,clear_history,what):
         d = datetime.datetime.now()
         dn = datetime.datetime.now() - timedelta(days=1)
         dh = datetime.datetime.now() - timedelta(days=30)
-        d = d.strftime("%Y%m%d")
+        d = d.strftime("%Y%m%d %H:%M:%S")
         dn = dn.strftime("%Y%m%d")
         dh = dh.strftime("%Y%m%d")
 
@@ -175,7 +175,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
 
                 if i > 1: sep = ','
                 insert_line = insert_line + sep +\
-                '(\''+ str('CURRENT_TIMESTAMP')+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
+                '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
                 str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
                 str(symbol)+'\','+ str(sentiment_score) + ')'
 
