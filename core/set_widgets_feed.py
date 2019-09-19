@@ -50,7 +50,7 @@ def set_widgets_feed(s):
         set_widgets_from_url(feed_id,'U.S. Stocks Signals','{burl}ls/?w=instr&x=US>','SIGNAL:EQ:US> U.S. stocks Trading Signals')
         set_widgets_from_url(feed_id,'Crypto Signals','{burl}ls/?w=instr&x=CR:','SIGNAL:CR:GO> Cryptocurrency Trading Signals')
         set_widgets_from_url(feed_id,'Economic Calendar','{burl}w/?funcname=get_tradingview_ecocal(0,0)&refreshw=1800','ECOCAL:GO> Economic Calendar')
-        set_widgets_from_url(feed_id,'World Latest News','{burl}w/?funcname=get_newsfeed(0,0,500,1)&refreshw=900','TOP:GO> World Latest News')
+        set_widgets_from_url(feed_id,'World Latest News','{burl}w/?funcname=get_newsfeed(0,0,500,1)&refreshw=900&noflexheight=1','TOP:GO> World Latest News')
 
     except Exception as e: print(e)
 
