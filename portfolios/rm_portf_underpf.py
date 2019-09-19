@@ -52,19 +52,19 @@ def rm_portf_underpf(limit_max):
             rs = cr.fetchall()
             for row in rs:
                 s = row[0]
-                rm_portf_from('feed',s)
-                rm_portf_from('chart_data',s)
-                rm_portf_from('portfolios',s)
-                rm_portf_from('instruments',s)
-                rm_portf_from('symbol_list',s)
+                rm_portf_from('feed','symbol',s)
+                rm_portf_from('chart_data','symbol',s)
+                rm_portf_from('portfolios','symbol_portf',s)
+                rm_portf_from('instruments','symbol',s)
+                rm_portf_from('symbol_list','symbol',s)
             cr.close()
 
     except Exception as e: print(e)
 
-def rm_portf_from(table,s):
+def rm_portf_from(table,column,s):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'DELETE FROM '+ str(table) +' WHERE symbol = "'+ str(s) +'"'
+        sql = 'DELETE FROM '+ str(table) +' WHERE '+ column +' = "'+ str(s) +'"'
         print(sql)
         cr.execute(sql)
         connection.commit()
