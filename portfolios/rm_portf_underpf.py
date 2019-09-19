@@ -54,7 +54,7 @@ def rm_portf_underpf(limit_max):
                 s = row[0]
                 rm_portf_from('feed','symbol',s)
                 rm_portf_from('chart_data','symbol',s)
-                rm_portf_from('portfolios','symbol_portf',s)
+                rm_portf_from('portfolios','portf_symbol',s)
                 rm_portf_from('instruments','symbol',s)
                 rm_portf_from('symbol_list','symbol',s)
             cr.close()
