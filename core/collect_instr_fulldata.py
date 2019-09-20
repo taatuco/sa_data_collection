@@ -8,4 +8,4 @@ from send_intel_report_email import *
 from get_newsdata import *
 get_update_instr_data(1,False,'')
 send_intel_report()
-get_newsdata(1,True,'global')
+get_newsdata(5,True,'specific')
