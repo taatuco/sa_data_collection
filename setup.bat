@@ -1,4 +1,8 @@
 REM Edt Configuration here #####################################################
+@ECHO Due to sometimes Windows Environment Variables are not set properly
+@ECHO For Python, pip etc... this is why it is recommended to run pip:
+@ECHO invoking python.exe (python -m pip install requests) for instance
+
 SET R_VER=R-3.5.1
 SET PY_VER=Python37-32
 SET SA_FRC_SCRIPT=%SYSTEMDRIVE%\smartalpha\sa_frc\get_forecast_data.bat
