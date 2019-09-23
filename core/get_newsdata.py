@@ -40,7 +40,13 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-def get_newsdata(limit,clear_history,what):
+def get_newsdata(limit,clear_history,what,cat):
+    #---------------------------------------------------------------------------
+    # limit = max number of post to scan and collect
+    # clear_history = if True then clear older records from the database
+    # what = the type of feed, "global" or "specific"
+    # cat = the category to scan, if 0 means all of the category will be collected
+    #---------------------------------------------------------------------------
     try:
         d = datetime.datetime.now()
         dn = datetime.datetime.now() - timedelta(days=1)
@@ -52,15 +58,19 @@ def get_newsdata(limit,clear_history,what):
         feed_id = 3
         feed_type = "news"
         add_feed_type(feed_id, feed_type)
-        get_newsdata_rss(d,feed_id,limit,what)
+        get_newsdata_rss(d,feed_id,limit,what,cat)
         if clear_history: clear_old_newsdata(dh,feed_id)
 
     except Exception as e: print(e)
 
-def get_newsdata_rss(d,feed_id,limit,what):
+def get_newsdata_rss(d,feed_id,limit,what,cat):
     try:
+        filtercat = ''
+        if cat > 0:
+            filtercat = ' AND cat=' + str(cat)
+
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"'
+        sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"' + filtercat
         cr.execute(sql)
         rs = cr.fetchall()
 
@@ -76,6 +86,7 @@ def get_newsdata_rss(d,feed_id,limit,what):
                 get_rss_global(feed_id,d,feed_url,asset_class,market,lang,limit)
             if type == str('specific') and (what == 'all' or what == 'specific'):
                 get_rss_specific(feed_id,d,feed_url,lang,limit)
+                
         cr.close()
     except Exception as e: print(e)
 
