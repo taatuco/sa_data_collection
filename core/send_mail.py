@@ -18,6 +18,8 @@ sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
 
+db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
+
 '''
 --------------------------------------------------------------------------------
 Instruction:
@@ -27,6 +29,7 @@ textmsg: use backslash n to go to next line.
 --------------------------------------------------------------------------------
 '''
 def send_mail(to_email,to_displayName,bcc,subject,textmsg):
+    r = ''
     try:
         tolist = [to_email] + bcc
         smtp_user = access_obj.smtp_username()
@@ -48,5 +51,44 @@ def send_mail(to_email,to_displayName,bcc,subject,textmsg):
 
         smtpserver.sendmail(smtp_user, tolist, msg)
         smtpserver.quit()
+
+        r = to_email + ' - ' + bcc + ' - Sending email...'
+
+    except Exception as e: print(e)
+    return r
+
+def process_mail_queue():
+    try:
+        import pymysql.cursors
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+
+        cr = connection.cursor(pymysql.cursors.SSCursor)
+        sql = 'SELECT id, from_email, from_email_displayname, send_to_email_bcc, email_subject, email_content FROM email_queue ORDER BY id'
+        cr.execute(sql)
+        rs = cr.fetchall()
+
+        rm_query = ''
+
+        for row in rs:
+            id = row[0]
+            from_email = row[1]
+            from_email_displayname = row[2]
+            send_to_email_bcc = row[3]
+            email_subject = row[4]
+            email_content = row[5]
+            print( send_mail(from_email,from_email_displayname,send_to_email_bcc,email_subject,email_content) )
+            rm_query = rm_query + 'DELETE FROM email_queue WHERE id='+ str(id)+'; '
+
+        print(rm_query)
+        cr.execute(rm_query)
+        connection.commit()
+
+        cr.close()
+        connection.close()
 
     except Exception as e: print(e)
