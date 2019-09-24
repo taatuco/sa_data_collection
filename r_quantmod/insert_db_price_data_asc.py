@@ -50,6 +50,7 @@ try:
             uid = row[1]
             s = row[0]
             file_str = csvdir+str(uid)+'.csv'
+            print(str(uid) + ' - ' + str(s) + '------------------------------' )
             filepath = Path(file_str)
             if filepath.exists():
                 with open(file_str) as csvfile:

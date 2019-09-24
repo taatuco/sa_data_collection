@@ -73,6 +73,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 pip = row[0]
             cr_pip.close()
 
+            print(str(uid) + ' - ' + str(s) + '------------------------------' )
             print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
             dn = datetime.datetime.now() - timedelta(days=10)
             dn = dn.strftime("%Y%m%d")
