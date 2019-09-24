@@ -81,6 +81,10 @@ def process_mail_queue():
             send_to_email_bcc = row[3]
             email_subject = row[4]
             email_content = row[5]
+
+            from_email = get_reply_to_email('email')
+            from_email_displayname = get_reply_to_email('name')
+
             print( send_mail(from_email,from_email_displayname,send_to_email_bcc,email_subject,email_content) )
             rm_query = rm_query + 'DELETE FROM email_queue WHERE id='+ str(id)+'; '
 
