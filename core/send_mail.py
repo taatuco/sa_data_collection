@@ -40,7 +40,7 @@ def send_mail(to_email,to_displayName,bcc,subject,textmsg):
         smtpserver.starttls()
         smtpserver.ehlo() # extra characters to permit edit
         smtpserver.login(smtp_user, smtp_pwd)
-        header = 'To:' + str(to_email) + '\n' + 'From: '+ to_displayName +' <' + str(to_email) + '>\n' +\
+        header = 'To:' + to_email + '\n' + 'From: '+ to_displayName +' <' + to_email + '>\n' +\
                  'Subject:'+ subject +' \n'
 
         print(header)
