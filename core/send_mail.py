@@ -75,7 +75,7 @@ def process_mail_queue():
         rm_query = ''
 
         id = 0
-        from_email = ''
+        from_email = []
         from_email_displayname = ''
         send_to_email_bcc = []
         email_subject = ''
@@ -83,7 +83,7 @@ def process_mail_queue():
 
         for row in rs:
             id = row[0]
-            from_email = row[1]
+            from_email.append(row[1])
             from_email_displayname = row[2]
             send_to_email_bcc.append(row[3])
             email_subject = row[4]
