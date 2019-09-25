@@ -79,6 +79,10 @@ def process_mail_queue():
         email_subject = ''
         email_content = ''
 
+        i = 1
+        condition = ''
+        where = ''
+
         for row in rs:
             from_email = []
             send_to_email_bcc = []
@@ -93,8 +97,11 @@ def process_mail_queue():
             from_email_displayname = get_reply_to_email('name')
 
             print( send_mail(from_email,from_email_displayname,send_to_email_bcc,email_subject,email_content) )
-            rm_query = rm_query + 'DELETE FROM email_queue WHERE id='+ str(id)+'; '
+            if i > 1: condition = ' OR '
+            where = where + condition + ' id='+ str(id)
+            i += 1
 
+        rm_query = 'DELETE FROM email_queue WHERE ' + where
         print(rm_query)
         cr.execute(rm_query)
         connection.commit()
