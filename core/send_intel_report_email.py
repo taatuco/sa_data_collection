@@ -278,7 +278,7 @@ def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_dis
                 print('waiting for '+ str(num_of_second_interval) + ' seconds before the next batch...' )
                 time.sleep(num_of_second_interval)
                 bcc.clear()
-                bcc.apeend(email)
+                bcc.append(email)
                 i = 1
 
         send_mail(to_email,to_displayName,bcc,subject,textmsg)
