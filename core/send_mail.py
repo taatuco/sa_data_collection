@@ -75,13 +75,13 @@ def process_mail_queue():
         rm_query = ''
 
         id = 0
-        from_email = []
         from_email_displayname = ''
-        send_to_email_bcc = []
         email_subject = ''
         email_content = ''
 
         for row in rs:
+            from_email = []
+            send_to_email_bcc = []
             id = row[0]
             from_email.append(row[1])
             from_email_displayname = row[2]
