@@ -31,7 +31,7 @@ textmsg: use backslash n to go to next line.
 def send_mail(to_email,to_displayName,bcc,subject,textmsg):
     r = ''
     try:
-        tolist = [to_email] + bcc
+        tolist = bcc
         smtp_user = access_obj.smtp_username()
         smtp_pwd = access_obj.smtp_password()
         smtpserver = smtplib.SMTP( access_obj.smtp_server(),access_obj.smtp_port() )
