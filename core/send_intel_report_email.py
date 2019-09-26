@@ -64,10 +64,10 @@ def get_condition(s,sj,w):
             if d1 > 0 and s_price > ma10: r = 'd1_up_ma10_up'
             if d1 < 0 and s_price < ma10: r = 'd1_down_ma10_down'
         if w == 'd1_jpy':
-            if d1 > 0 and jpyd1 < 0: r = 'd1_up_jpy_down'
-            if d1 < 0 and jpyd1 < 0: r = 'd1_down_jpy_down'
-            if d1 > 0 and jpyd1 > 0: r = 'd1_up_jpy_up'
-            if d1 < 0 and jpyd1 > 0: r = 'd1_down_jpy_up'
+            if d1 > 0 and jpyd1 < 1: r = 'd1_up_jpy_down'
+            if d1 < 0 and jpyd1 < 1: r = 'd1_down_jpy_down'
+            if d1 > 0 and jpyd1 > 1: r = 'd1_up_jpy_up'
+            if d1 < 0 and jpyd1 > 1: r = 'd1_down_jpy_up'
         if w == 'gold':
             if d1 > 0: r = 'd1_up'
             if d1 < 0: r = 'd1_down'
