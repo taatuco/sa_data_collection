@@ -36,7 +36,7 @@ sql = "INSERT IGNORE INTO asset_class(asset_class_id, asset_class_name) VALUES "
 "('CR:','Crypto'), "+\
 "('EQ:','Stocks'), "+\
 "('FX:','Forex'), "+\
-"('PF:','Portfolio'), "+\
+"('PRF:','Portfolio'), "+\
 "('CO:','Commodities'), "+\
 "('BD:','Bonds'), "+\
 "('MA:','Multi-asset')"
