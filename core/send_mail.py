@@ -68,7 +68,7 @@ def process_mail_queue():
                                      cursorclass=pymysql.cursors.DictCursor)
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'SELECT id, from_email, from_email_displayname, send_to_email_bcc, email_subject, email_content FROM email_queue ORDER BY id'
+        sql = 'SELECT id, from_email, from_email_displayname, send_to_email_bcc, email_subject, email_content FROM email_queue ORDER BY priority, id'
         cr.execute(sql)
         rs = cr.fetchall()
 
