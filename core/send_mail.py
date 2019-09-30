@@ -98,6 +98,8 @@ def process_mail_queue():
             if send_to_email_bcc == []:
                 send_to_email_bcc.append( get_reply_to_email('tech') )
 
+            print( str(send_to_email_bccs) )
+
             print( send_mail(from_email,from_email_displayname,send_to_email_bcc,email_subject,email_content) )
             if i > 1: condition = ' OR '
             where = where + condition + ' id='+ str(id)
