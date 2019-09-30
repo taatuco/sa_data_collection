@@ -41,10 +41,9 @@ def get_product_name():
 
 def get_reply_to_email(w):
     r = ''
-    if w == 'email':
-        r = 'no-reply@taatu.co'
-    if w == 'name':
-        r = 'SmartAlpha Intelligence'
+    if w == 'email': r = 'no-reply@taatu.co'
+    if w == 'name': r = 'SmartAlpha Intelligence'
+    if w == 'tech': r = 'tech@taatu.co'
     return r
 
 def get_email_txt_signature():
