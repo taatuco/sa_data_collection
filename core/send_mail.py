@@ -95,7 +95,7 @@ def process_mail_queue():
             if from_email == '' or from_email is None:
                 from_email = get_reply_to_email('email')
                 from_email_displayname = get_reply_to_email('name')
-            if send_to_email_bcc == []:
+            if send_to_email_bcc[0] == '':
                 send_to_email_bcc.append( get_reply_to_email('tech') )
 
             print( str(send_to_email_bcc) )
