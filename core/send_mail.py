@@ -98,7 +98,7 @@ def process_mail_queue():
             if send_to_email_bcc[0] == '':
                 send_to_email_bcc.append( get_reply_to_email('tech') )
 
-            print( str(send_to_email_bcc) )
+            print( *send_to_email_bcc, sep=',' )
 
             print( send_mail(from_email,from_email_displayname,send_to_email_bcc,email_subject,email_content) )
             if i > 1: condition = ' OR '
