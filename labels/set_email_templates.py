@@ -42,7 +42,7 @@ new_user_welcome_content_en = "{fullname},\n Thank you for joining SmartAlpha.\n
 "Your login is your email {email}. We are happy to welcome you as a member of our growing community.\n "+\
 " Feel free to get in touch with us. We are here to support you and to listen."
 
-sql = "INSERT IGNORE INTO email_templates(lang, new_user_welcome_subject_en, new_user_welcome_content_en) VALUES "+\
+sql = "INSERT IGNORE INTO email_templates(lang, new_user_welcome_subject, new_user_welcome_content) VALUES "+\
 "('"+lang_en+"', '"+  new_user_welcome_subject_en +"', '"+ new_user_welcome_content_en +"' " + ")"
 print(sql)
 
