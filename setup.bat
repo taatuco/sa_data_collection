@@ -102,6 +102,7 @@ REM ### NOTE: REMOVE THIS BLOCK TO NOT OVERWRITE EXISTING DATA ###
 REM %_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
 REM %_PY_EXE% "%SA_DATA_DIR%labels\set_labels.py"
 REM %_PY_EXE% "%SA_DATA_DIR%labels\set_recomm_text_lang.py"
+REM %_PY_EXE% "%SA_DATA_DIR%labels\set_email_templates.py"
 REM %_PY_EXE% "%SA_DATA_DIR%labels\set_briefing_text_lang.py"
 REM %_PY_EXE% "%SA_DATA_DIR%asset_class\set_asset_class.py"
 REM %_PY_EXE% "%SA_DATA_DIR%markets\set_market.py"
