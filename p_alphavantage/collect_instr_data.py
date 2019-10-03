@@ -31,7 +31,7 @@ connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = "SELECT symbol_list.symbol, symbol_list.uid, symbol_list.alphavantage FROM symbol_list INNER JOIN instruments ON symbol_list.symbol = instruments.symbol "+\
-"WHERE instruments.asset_class = 'EQ:' AND symbol_list.alphavantage NOT LIKE '' "
+"WHERE symbol_list.alphavantage NOT LIKE '' "
 cr.execute(sql)
 rs = cr.fetchall()
 i = 1
