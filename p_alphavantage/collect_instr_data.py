@@ -130,31 +130,31 @@ for row in rs:
 
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_a +"','"+str(pc_a)+"')"
-        #cr_i.execute(sql_i)
+        cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_b +"','"+str(pc_b)+"')"
-        #cr_i.execute(sql_i)
+        cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_c +"','"+str(pc_c)+"')"
-        #cr_i.execute(sql_i)
+        cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_d +"','"+str(pc_d)+"')"
-        #cr_i.execute(sql_i)
+        cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_e +"','"+str(pc_e)+"')"
-        #cr_i.execute(sql_i)
+        cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_f +"','"+str(pc_f)+"')"
-        #cr_i.execute(sql_i)
+        cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_g +"','"+str(pc_g)+"')"
-        #cr_i.execute(sql_i)
+        cr_i.execute(sql_i)
     except: pass
 
     try:
