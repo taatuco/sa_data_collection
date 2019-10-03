@@ -37,6 +37,9 @@ i = 1
 api_key = 'XWOJ8KDFY4TLNYF0'
 url = "https://www.alphavantage.co/query"
 ############################################################################
+dt = datetime.datetime.now() - timedelta(days=1)
+dtsql = dt.strftime('%Y%m%d')
+dtjson = dt.strftime('%Y-%m-%d')
 
 for row in rs:
     s = row[0]
@@ -51,17 +54,18 @@ for row in rs:
         "apikey": api_key }
         response = requests.get(url, data)
         data = response.json()
-        a = (data['Time Series (Daily)']['2014-01-24'])
+        a = (data['Time Series (Daily)'][dtjson])
         print(a[key]['4. close'] + " " + a[key]['2. high'] + " " + a[key]['5. volume'])
+        pc = a[key]['4. close']
     except Exception as e:
         print(e)
         pass
 
-    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql +"','"+str(pc)+"')"
     print(sql_i)
     try:
-        cr_i.execute(sql_i)
-        connection.commit()
+        #cr_i.execute(sql_i)
+        #connection.commit()
         gc.collect()
     except:
         pass
