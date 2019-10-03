@@ -5,13 +5,13 @@
 import requests
 import alpha_vantage
 import json
-
 import sys
 import os
 import gc
 import datetime
 import time
 from datetime import timedelta
+import random
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -36,7 +36,9 @@ cr.execute(sql)
 rs = cr.fetchall()
 i = 1
 ### Alphavantage API ######################################################
-api_key = 'XWOJ8KDFY4TLNYF0'
+api_key_1 = 'XWOJ8KDFY4TLNYF0'
+api_key_2 = 'QD7YF5M1XAQYSNUA'
+api_key_3 = 'SMOLNVP8JUAC2OZ7'
 url = "https://www.alphavantage.co/query"
 ############################################################################
 dta = datetime.datetime.now() - timedelta(days=1)
@@ -67,6 +69,12 @@ for row in rs:
     uid = row[1]
     avs = row[2]
 
+    key = random.randint(1,3)
+    if key == 1: api_key = api_key_1
+    if key == 2: api_key = api_key_2
+    if key == 3: api_key = api_key_3
+    print(api_key)
+
     print(s+": "+ os.path.basename(__file__) )
     data = { "function": "TIME_SERIES_DAILY",
     "symbol": avs,
@@ -95,8 +103,6 @@ for row in rs:
     try:
         g = (data['Time Series (Daily)'][dtjson_g])
     except: pass
-
-    print(a['4. close'] + " " + a['2. high'] + " " + a['5. volume'])
 
     try:
         pc_a = a['4. close']
@@ -151,7 +157,6 @@ for row in rs:
         #cr_i.execute(sql_i)
     except: pass
 
-    print(sql_i)
     try:
         connection.commit()
         gc.collect()

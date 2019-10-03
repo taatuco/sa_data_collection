@@ -129,6 +129,7 @@ MKDIR "%SA_DATA_DIR%src"
 @ECHO START "" %GET_QM_DATA% >> %GET_DATA%
 @ECHO START "" %GET_OA_DATA% >> %GET_DATA%
 @ECHO START "" %GET_CC_DATA% >> %GET_DATA%
+@ECHO START "" %GET_AV_DATA% >> %GET_DATA%
 
 REM ### Quantmod
 DEL /F /Q %GET_QM_DATA%
@@ -153,7 +154,7 @@ REM ### Cryptocompare
 
 REM ### Alphavantage
 @ECHO %_PIP_EXE% install alpha_vantage > %GET_AV_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%p_alphavantage\collect_stocks_data.py" >> %GET_AV_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%p_alphavantage\collect_instr_data.py" >> %GET_AV_DATA%
 @ECHO exit >> %GET_AV_DATA%
 
 REM ### 2 Get Forecast
