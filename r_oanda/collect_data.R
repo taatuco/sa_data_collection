@@ -74,7 +74,7 @@ collect_data <- function() {
   myPort <- 3306
   con <- dbConnect(m, user= db_usr, host= myHost, password= db_pwd, dbname= myDbname, port= myPort)
 
-  sql <- "SELECT oanda, uid FROM symbol_list WHERE oanda <>'' ORDER BY oanda"
+  sql <- "SELECT oanda, uid FROM symbol_list WHERE oanda <>'' AND disabled=0 ORDER BY oanda"
   res <- dbSendQuery(con, sql)
 
   tryCatch({

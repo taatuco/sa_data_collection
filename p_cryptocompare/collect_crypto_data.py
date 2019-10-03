@@ -27,7 +27,7 @@ import pymysql.cursors
 connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd,db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
-sql = "SELECT symbol_list.symbol, symbol_list.uid, symbol_list.fsym, symbol_list.tsym FROM symbol_list INNER JOIN instruments ON symbol_list.symbol = instruments.symbol WHERE instruments.asset_class = 'CR:'"
+sql = "SELECT symbol_list.symbol, symbol_list.uid, symbol_list.fsym, symbol_list.tsym FROM symbol_list INNER JOIN instruments ON symbol_list.symbol = instruments.symbol WHERE instruments.asset_class = 'CR:' AND disabled =0"
 cr.execute(sql)
 rs = cr.fetchall()
 i = 1
