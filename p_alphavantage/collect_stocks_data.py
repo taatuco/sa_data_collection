@@ -59,8 +59,8 @@ dtsql_e = dte.strftime('%Y%m%d')
 dtjson_e = dte.strftime('%Y-%m-%d')
 dtsql_f = dtf.strftime('%Y%m%d')
 dtjson_f = dtf.strftime('%Y-%m-%d')
-dtsql_g = dtb.strftime('%Y%m%d')
-dtjson_g = dtb.strftime('%Y-%m-%d')
+dtsql_g = dtg.strftime('%Y%m%d')
+dtjson_g = dtg.strftime('%Y-%m-%d')
 
 for row in rs:
     s = row[0]
@@ -68,74 +68,92 @@ for row in rs:
     avs = row[2]
 
     print(s+": "+ os.path.basename(__file__) )
+    data = { "function": "TIME_SERIES_DAILY",
+    "symbol": avs,
+    "datatype": "json",
+    "apikey": api_key }
+    response = requests.get(url, data)
+    data = response.json()
     try:
-        data = { "function": "TIME_SERIES_DAILY",
-        "symbol": avs,
-        "datatype": "json",
-        "apikey": api_key }
-        response = requests.get(url, data)
-        data = response.json()
         a = (data['Time Series (Daily)'][dtjson_a])
+    except: pass
+    try:
         b = (data['Time Series (Daily)'][dtjson_b])
+    except: pass
+    try:
         c = (data['Time Series (Daily)'][dtjson_c])
+    except: pass
+    try:
         d = (data['Time Series (Daily)'][dtjson_d])
+    except: pass
+    try:
         e = (data['Time Series (Daily)'][dtjson_e])
+    except: pass
+    try:
         f = (data['Time Series (Daily)'][dtjson_f])
+    except: pass
+    try:
         g = (data['Time Series (Daily)'][dtjson_g])
+    except: pass
 
-        print(a['4. close'] + " " + a['2. high'] + " " + a['5. volume'])
-        try:
-            pc_a = a['4. close']
-        except: pass
-        try:
-            pc_b = b['4. close']
-        except: pass
-        try:
-            pc_c = c['4. close']
-            except: pass
-        try:
-            pc_d = d['4. close']
-        except: pass
-        try:
-            pc_e = e['4. close']
-        except: pass
-        try:
-            pc_f = f['4. close']
-        except: pass
-        try:
-            pc_g = g['4. close']
-        except: pass
+    print(a['4. close'] + " " + a['2. high'] + " " + a['5. volume'])
 
-    except Exception as e:
-        print(e)
-        pass
+    try:
+        pc_a = a['4. close']
+    except: pass
+    try:
+        pc_b = b['4. close']
+    except: pass
+    try:
+        pc_c = c['4. close']
+    except: pass
+    try:
+        pc_d = d['4. close']
+    except: pass
+    try:
+        pc_e = e['4. close']
+    except: pass
+    try:
+        pc_f = f['4. close']
+    except: pass
+    try:
+        pc_g = g['4. close']
+    except: pass
+
+    cr_i = connection.cursor(pymysql.cursors.SSCursor)
 
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_a +"','"+str(pc_a)+"')"
+        #cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_b +"','"+str(pc_b)+"')"
+        #cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_c +"','"+str(pc_c)+"')"
+        #cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_d +"','"+str(pc_d)+"')"
+        #cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_e +"','"+str(pc_e)+"')"
+        #cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_f +"','"+str(pc_f)+"')"
+        #cr_i.execute(sql_i)
     except: pass
     try:
         sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_g +"','"+str(pc_g)+"')"
+        #cr_i.execute(sql_i)
     except: pass
 
     print(sql_i)
     try:
-        #cr_i.execute(sql_i)
-        #connection.commit()
+        connection.commit()
         gc.collect()
     except:
         pass
