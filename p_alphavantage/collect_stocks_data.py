@@ -96,14 +96,13 @@ for row in rs:
         print(e)
         pass
 
-    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES "+\
-    "('"+s+"','"+ dtsql_a +"','"+str(pc_a)+"'), " +\
-    "('"+s+"','"+ dtsql_b +"','"+str(pc_b)+"'), " +\
-    "('"+s+"','"+ dtsql_c +"','"+str(pc_c)+"'), " +\
-    "('"+s+"','"+ dtsql_d +"','"+str(pc_d)+"'), " +\
-    "('"+s+"','"+ dtsql_e +"','"+str(pc_e)+"'), " +\
-    "('"+s+"','"+ dtsql_f +"','"+str(pc_f)+"'), " +\
-    "('"+s+"','"+ dtsql_g +"','"+str(pc_g)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_a +"','"+str(pc_a)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_b +"','"+str(pc_b)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_c +"','"+str(pc_c)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_d +"','"+str(pc_d)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_e +"','"+str(pc_e)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_f +"','"+str(pc_f)+"')"
+    sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_g +"','"+str(pc_g)+"')"
     print(sql_i)
     try:
         #cr_i.execute(sql_i)
