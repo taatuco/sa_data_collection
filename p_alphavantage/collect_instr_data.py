@@ -104,6 +104,8 @@ for row in rs:
         g = (data['Time Series (Daily)'][dtjson_g])
     except: pass
 
+    pc_a = -1; pc_b = -1; pc_c = -1; pc_d = -1; pc_e = -1; pc_f = -1; pc_g = -1
+
     try:
         pc_a = a['4. close']
     except: pass
@@ -129,32 +131,46 @@ for row in rs:
     cr_i = connection.cursor(pymysql.cursors.SSCursor)
 
     try:
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_a +"','"+str(pc_a)+"')"
-        cr_i.execute(sql_i)
+        if pc_a != -1:
+            sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_a +"','"+str(pc_a)+"')"
+            print(sql_i)
+            cr_i.execute(sql_i)
     except: pass
     try:
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_b +"','"+str(pc_b)+"')"
-        cr_i.execute(sql_i)
+        if pc_b != -1:
+            sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_b +"','"+str(pc_b)+"')"
+            print(sql_i)
+            cr_i.execute(sql_i)
     except: pass
     try:
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_c +"','"+str(pc_c)+"')"
-        cr_i.execute(sql_i)
+        if pc_c != -1:
+            sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_c +"','"+str(pc_c)+"')"
+            print(sql_i)
+            cr_i.execute(sql_i)
     except: pass
     try:
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_d +"','"+str(pc_d)+"')"
-        cr_i.execute(sql_i)
+        if pc_d != -1:
+            sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_d +"','"+str(pc_d)+"')"
+            print(sql_i)
+            cr_i.execute(sql_i)
     except: pass
     try:
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_e +"','"+str(pc_e)+"')"
-        cr_i.execute(sql_i)
+        if pc_e != -1:
+            sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_e +"','"+str(pc_e)+"')"
+            print(sql_i)
+            cr_i.execute(sql_i)
     except: pass
     try:
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_f +"','"+str(pc_f)+"')"
-        cr_i.execute(sql_i)
+        if pc_f != -1:
+            sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_f +"','"+str(pc_f)+"')"
+            print(sql_i)
+            cr_i.execute(sql_i)
     except: pass
     try:
-        sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_g +"','"+str(pc_g)+"')"
-        cr_i.execute(sql_i)
+        if pc_g != -1:
+            sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES ('"+s+"','"+ dtsql_g +"','"+str(pc_g)+"')"
+            print(sql_i)
+            cr_i.execute(sql_i)
     except: pass
 
     try:
