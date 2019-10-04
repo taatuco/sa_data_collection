@@ -82,50 +82,65 @@ for row in rs:
     "apikey": api_key }
     response = requests.get(url, data)
     data = response.json()
+    error_a = 0; error_b = 0; error_c = 0; error_d = 0; error_e = 0; error_f = 0; error_g = 0
     try:
         a = (data['Time Series (Daily)'][dtjson_a])
-    except: pass
+    except:
+        error_a = 1
+        pass
     try:
         b = (data['Time Series (Daily)'][dtjson_b])
-    except: pass
+    except:
+        error_b = 1
+        pass
     try:
         c = (data['Time Series (Daily)'][dtjson_c])
-    except: pass
+    except:
+        error_c = 1
+        pass
     try:
         d = (data['Time Series (Daily)'][dtjson_d])
-    except: pass
+    except:
+        error_d = 1
+        pass
     try:
         e = (data['Time Series (Daily)'][dtjson_e])
-    except: pass
+    except:
+        error_e = 1
+        pass
     try:
         f = (data['Time Series (Daily)'][dtjson_f])
-    except: pass
+    except:
+        error_f = 1
+        pass
     try:
         g = (data['Time Series (Daily)'][dtjson_g])
-    except: pass
+    except:
+        error_g = 1
+        pass
 
     pc_a = -1; pc_b = -1; pc_c = -1; pc_d = -1; pc_e = -1; pc_f = -1; pc_g = -1
 
     try:
-        pc_a = a['4. close']
+        if error_a == 0: pc_a = a['4. close']
     except: pass
     try:
-        pc_b = b['4. close']
+        if error_b == 0: pc_b = b['4. close']
     except: pass
     try:
-        pc_c = c['4. close']
+        if error_c == 0: pc_c = c['4. close']
     except: pass
     try:
-        pc_d = d['4. close']
+        if error_d == 0: pc_d = d['4. close']
     except: pass
     try:
-        pc_e = e['4. close']
+        if error_e == 0: pc_e = e['4. close']
     except: pass
     try:
-        pc_f = f['4. close']
+        if error_f == 0: pc_f = f['4. close']
     except: pass
     try:
-        pc_g = g['4. close']
+        if error_g == 0: pc_g = g['4. close']
     except: pass
 
     cr_i = connection.cursor(pymysql.cursors.SSCursor)
