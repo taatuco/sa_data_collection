@@ -126,10 +126,10 @@ MKDIR "%SA_DATA_DIR%src"
 @ECHO %_PIP_EXE% install feedparser >> %GET_DATA%
 @ECHO %_PIP_EXE% install vaderSentiment >> %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose >> %GET_DATA%
-@ECHO %GET_QM_DATA% >> %GET_DATA%
-@ECHO %GET_OA_DATA% >> %GET_DATA%
-@ECHO %GET_CC_DATA% >> %GET_DATA%
-@ECHO %GET_AV_DATA% >> %GET_DATA%
+@ECHO START "" %GET_QM_DATA% >> %GET_DATA%
+@ECHO START "" %GET_OA_DATA% >> %GET_DATA%
+@ECHO START "" %GET_CC_DATA% >> %GET_DATA%
+@ECHO START "" %GET_AV_DATA% >> %GET_DATA%
 
 REM ### Quantmod
 DEL /F /Q %GET_QM_DATA%
