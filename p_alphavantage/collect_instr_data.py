@@ -39,6 +39,13 @@ i = 1
 api_key_1 = 'XWOJ8KDFY4TLNYF0'
 api_key_2 = 'QD7YF5M1XAQYSNUA'
 api_key_3 = 'SMOLNVP8JUAC2OZ7'
+api_key_4 = '7RSFBNLP7W9BEPIG'
+api_key_5 = '1P15BOIG0RPPX7RG'
+api_hey_6 = 'KJNC2D7YA2ZXN9NZ'
+api_key_7 = 'XTGE142SB2HRLQUF'
+api_key_8 = '2IT441B5KMPVJABL'
+api_key_9 = '6R22VXMUH6YXS4EU'
+
 url = "https://www.alphavantage.co/query"
 ############################################################################
 dta = datetime.datetime.now() - timedelta(days=1)
@@ -69,13 +76,20 @@ for row in rs:
     uid = row[1]
     avs = row[2]
 
-    key = random.randint(1,3)
+    key = random.randint(1,9)
     if key == 1: api_key = api_key_1
     if key == 2: api_key = api_key_2
     if key == 3: api_key = api_key_3
+    if key == 4: api_key = api_key_4
+    if key == 5: api_key = api_key_5
+    if key == 6: api_key = api_key_6
+    if key == 7: api_key = api_key_7
+    if key == 8: api_key = api_key_8
+    if key == 9: api_key = api_key_9
     print(api_key)
 
     print(s+": "+ os.path.basename(__file__) )
+    time.sleep(2)
     data = { "function": "TIME_SERIES_DAILY",
     "symbol": avs,
     "datatype": "json",
