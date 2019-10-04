@@ -41,10 +41,21 @@ api_key_2 = 'QD7YF5M1XAQYSNUA'
 api_key_3 = 'SMOLNVP8JUAC2OZ7'
 api_key_4 = '7RSFBNLP7W9BEPIG'
 api_key_5 = '1P15BOIG0RPPX7RG'
-api_hey_6 = 'KJNC2D7YA2ZXN9NZ'
+api_key_6 = 'KJNC2D7YA2ZXN9NZ'
 api_key_7 = 'XTGE142SB2HRLQUF'
 api_key_8 = '2IT441B5KMPVJABL'
 api_key_9 = '6R22VXMUH6YXS4EU'
+api_key_10 = '5A9IEEKVEV0UOSF5'
+api_key_11 = 'TVXOUAOXKT7WFYYO'
+api_key_12 = 'WMNYHOIPKY3PHGZ2'
+api_key_13 = 'YXODKAE9CLL51S3E'
+api_key_14 = '87IPWKXWR8KIH4A3'
+api_key_15 = '1PQK2WUY052WNX2P'
+api_key_16 = 'WFFCSODIGWTZ0ZKH'
+api_key_17 = 'R6R1BFEW0KCNQSOV'
+api_key_18 = 'NLOOUESWS0IPW574'
+api_key_19 = '2OCRP8COYY938MCV'
+api_key_20 = 'D8DOFBC31KYWCXZK'
 
 url = "https://www.alphavantage.co/query"
 ############################################################################
@@ -76,7 +87,7 @@ for row in rs:
     uid = row[1]
     avs = row[2]
 
-    key = random.randint(1,9)
+    key = random.randint(1,20)
     if key == 1: api_key = api_key_1
     if key == 2: api_key = api_key_2
     if key == 3: api_key = api_key_3
@@ -86,10 +97,21 @@ for row in rs:
     if key == 7: api_key = api_key_7
     if key == 8: api_key = api_key_8
     if key == 9: api_key = api_key_9
+    if key == 10: api_key = api_key_10
+    if key == 11: api_key = api_key_11
+    if key == 12: api_key = api_key_12
+    if key == 13: api_key = api_key_13
+    if key == 14: api_key = api_key_14
+    if key == 15: api_key = api_key_15
+    if key == 16: api_key = api_key_16
+    if key == 17: api_key = api_key_17
+    if key == 18: api_key = api_key_18
+    if key == 19: api_key = api_key_19
+    if key == 20: api_key = api_key_20
     print(api_key)
 
     print(s+": "+ os.path.basename(__file__) )
-    time.sleep(2)
+    time.sleep(1)
     data = { "function": "TIME_SERIES_DAILY",
     "symbol": avs,
     "datatype": "json",
