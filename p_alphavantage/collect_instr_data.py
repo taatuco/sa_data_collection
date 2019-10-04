@@ -36,6 +36,9 @@ cr.execute(sql)
 rs = cr.fetchall()
 i = 1
 ### Alphavantage API ######################################################
+# Data seems to be not  completely updated for previous day
+# before next day European market open: API max call is 5 per minute.
+##########################################################################
 api_key_1 = 'XWOJ8KDFY4TLNYF0'
 api_key_2 = 'QD7YF5M1XAQYSNUA'
 api_key_3 = 'SMOLNVP8JUAC2OZ7'
@@ -111,13 +114,14 @@ for row in rs:
     print(api_key)
 
     print(s+": "+ os.path.basename(__file__) )
-    time.sleep(1)
+    time.sleep(2)
     data = { "function": "TIME_SERIES_DAILY",
     "symbol": avs,
     "datatype": "json",
     "apikey": api_key }
     response = requests.get(url, data)
     data = response.json()
+    print(data)
     error_a = 0; error_b = 0; error_c = 0; error_d = 0; error_e = 0; error_f = 0; error_g = 0
     try:
         a = (data['Time Series (Daily)'][dtjson_a])
