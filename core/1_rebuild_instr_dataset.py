@@ -33,7 +33,7 @@ connection = pymysql.connect(host=db_srv,
 # Remove data from one day prior
 ################################################################################
 dy = datetime.datetime.now() - timedelta(days=1)
-dy = dta.strftime('%Y%m%d')
+dy = dy.strftime('%Y%m%d')
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = 'DELETE FROM price_instruments_data WHERE date >='+ str(dy)
