@@ -87,6 +87,7 @@ SET SET_DATA="%SA_DATA_DIR%sa_4_set_data.bat"
 SET GET_NEWSDATA="%SA_DATA_DIR%sa_5_get_newsdata.bat"
 SET GET_NEWSDATA_SPEC="%SA_DATA_DIR%sa_6_get_newsdata.bat"
 SET PROCESS_MAIL_Q="%SA_DATA_DIR%sa_7_process_mail_q.bat"
+SET REBUILD_DATA_SCRIPT="%SA_DATA_DIR%scripts\rebuild_data.bat"
 
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
 SET GET_OA_DATA="%SA_DATA_DIR%r_oanda\get_oanda_data.bat"
@@ -186,6 +187,14 @@ REM ### 7 Process email queue
 DEL /F /Q %PROCESS_MAIL_Q%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\process_mail_queue.py" >> %PROCESS_MAIL_Q%
 @ECHO exit >> %PROCESS_MAIL_Q%
+
+REM ### Data Rebuild Script
+DEL /F %REBUILD_DATA_SCRIPT%
+@ECHO PAUSE >> %REBUILD_DATA_SCRIPT%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT%
+@ECHO %GET_QM_DATA% >> %REBUILD_DATA_SCRIPT%
+@ECHO %SA_FRC_SCRIPT% >> %REBUILD_DATA_SCRIPT%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
