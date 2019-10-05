@@ -183,8 +183,11 @@ REM ### Data Rebuild Script
 DEL /F %REBUILD_DATA_SCRIPT%
 @ECHO PAUSE >> %REBUILD_DATA_SCRIPT%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT%
+@ECHO ping 127.0.0.1 -n 30 >> %REBUILD_DATA_SCRIPT%
 @ECHO %GET_QM_DATA% >> %REBUILD_DATA_SCRIPT%
+@ECHO ping 127.0.0.1 -n 30 >> %REBUILD_DATA_SCRIPT%
 @ECHO %SA_FRC_SCRIPT% >> %REBUILD_DATA_SCRIPT%
+@ECHO ping 127.0.0.1 -n 30 >> %REBUILD_DATA_SCRIPT%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT%
 
 REM ### Set Schedule tasks
