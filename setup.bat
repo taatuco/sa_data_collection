@@ -139,7 +139,6 @@ MKDIR "%SA_DATA_DIR%r_quantmod\src"
 @ECHO %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_quantmod\collect_data.R" >> %GET_QM_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%r_quantmod\insert_db_price_data_asc.py" >> %GET_QM_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%r_quantmod\insert_db_price_data_dsc.py" >> %GET_QM_DATA%
-@ECHO exit >> %GET_QM_DATA%
 
 REM ### Oanda
 DEL /F /Q %GET_OA_DATA%
@@ -147,16 +146,13 @@ MKDIR "%SA_DATA_DIR%r_oanda\src"
 @ECHO DEL /F /Q "%SA_DATA_DIR%r_oanda\src\*" > %GET_OA_DATA%
 @ECHO %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_oanda\collect_data.R" >> %GET_OA_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%r_oanda\insert_db_price_data.py" >> %GET_OA_DATA%
-@ECHO exit >> %GET_OA_DATA%
 
 REM ### Cryptocompare
 @ECHO %_PY_EXE% "%SA_DATA_DIR%p_cryptocompare\collect_crypto_data.py" > %GET_CC_DATA%
-@ECHO exit >> %GET_CC_DATA%
 
 REM ### Alphavantage
 @ECHO %_PIP_EXE% install alpha_vantage > %GET_AV_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%p_alphavantage\collect_instr_data.py" >> %GET_AV_DATA%
-@ECHO exit >> %GET_AV_DATA%
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
@@ -166,27 +162,22 @@ REM ### 3 Set Data
 DEL /F /Q %SET_FULLDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_instr_fulldata.py" >> %SET_FULLDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\portf_main_get_data.py" >> %SET_FULLDATA%
-@ECHO exit >> %SET_FULLDATA%
 
 REM ### 4 Set Data
 DEL /F /Q %SET_DATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_instr_data.py" >> %SET_DATA%
-@ECHO exit >> %SET_DATA%
 
 REM ### 5 Get NewsData Global
 DEL /F /Q %GET_NEWSDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_news_data.py" >> %GET_NEWSDATA%
-@ECHO exit >> %GET_NEWSDATA%
 
 REM ### 6 Get NewsData Specific
 DEL /F /Q %GET_NEWSDATA_SPEC%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_news_data_spec_set.py" >> %GET_NEWSDATA_SPEC%
-@ECHO exit >> %GET_NEWSDATA_SPEC%
 
 REM ### 7 Process email queue
 DEL /F /Q %PROCESS_MAIL_Q%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\process_mail_queue.py" >> %PROCESS_MAIL_Q%
-@ECHO exit >> %PROCESS_MAIL_Q%
 
 REM ### Data Rebuild Script
 DEL /F %REBUILD_DATA_SCRIPT%
