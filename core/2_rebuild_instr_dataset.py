@@ -17,4 +17,4 @@ get_update_instr_data(1,False,'')
 get_update_instr_data(1,False,'')
 
 
-send_mail( get_reply_to_email('tech') ),'SmartAlpha Tech Notification',get_reply_to_email('tech'), 'Data rebuild completed','Data rebuild process completed.'):
+send_mail( get_reply_to_email('tech') ,'SmartAlpha Tech Notification',get_reply_to_email('tech'), 'Data rebuild completed','Data rebuild process completed.'):
