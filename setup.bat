@@ -90,7 +90,8 @@ SET PROCESS_MAIL_Q="%SA_DATA_DIR%sa_7_process_mail_q.bat"
 SET REBUILD_DATA_SCRIPT_1="%SA_DATA_DIR%scripts\1_rebuild_data_collection.bat"
 SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
 SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
-s
+SET REBUILD_DATA_SCRIPT_4="%SA_DATA_DIR%scripts\4_rebuild_data_dataset.bat"
+
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
 SET GET_OA_DATA="%SA_DATA_DIR%r_oanda\get_oanda_data.bat"
 SET GET_CC_DATA="%SA_DATA_DIR%p_cryptocompare\get_cryptocompare_data.bat"
@@ -191,6 +192,7 @@ DEL /F %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO 1. Run 1_rebuild_data_collection to clear the existing data >> %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO 2. Run 2_rebuild_data_forecast to download the latest forecast data >> %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO 3. Run 3_rebuild_data_dataset to update all the related tables accordingly >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO 4. Run 4_rebuild_data_dataset to update instrument signals and related data >> %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO ########################################################################## >> %REBUILD_DATA_SCRIPT_1%
 @ECHO PAUSE >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_1%
@@ -204,6 +206,9 @@ DEL /F %REBUILD_DATA_SCRIPT_2%
 
 DEL /F %REBUILD_DATA_SCRIPT_3%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_3%
+
+DEL /F %REBUILD_DATA_SCRIPT_4%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\3_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_4%
 
 
 REM ### Set Schedule tasks
