@@ -63,7 +63,7 @@ try:
         d = d.strftime("%Y%m%d")
         sentiment = 0
 
-        sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+") ORDER BY date ASC"
+        sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+" and is_ta_calc=0) ORDER BY date ASC"
         cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
         sql_d_id = sql_select_instr
         cr_d_id.execute(sql_d_id)
