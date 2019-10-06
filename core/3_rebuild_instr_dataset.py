@@ -25,56 +25,54 @@ from get_sentiment_score import *
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
-def rebuild_instr_dataset():
+sql_parse_list = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
+"FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' AND symbol_list.disabled = 0 ORDER BY symbol"
 
-    sql_parse_list = "SELECT symbol_list.symbol, symbol_list.uid, instruments.asset_class "+\
-    "FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol  WHERE symbol_list.symbol NOT LIKE '"+get_portf_suffix()+"%' AND symbol_list.disabled = 0 ORDER BY symbol"
+import pymysql.cursors
+connection = pymysql.connect(host=db_srv,
+                             user=db_usr,
+                             password=db_pwd,
+                             db=db_name,
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
 
-    import pymysql.cursors
-    connection = pymysql.connect(host=db_srv,
-                                 user=db_usr,
-                                 password=db_pwd,
-                                 db=db_name,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
+try:
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = sql_parse_list
+    cr.execute(sql)
+    rs = cr.fetchall()
+    for row in rs:
+        s = row[0]
+        uid = row[1]
+        asset_class = row[2]
+        cr_pip = connection.cursor(pymysql.cursors.SSCursor)
+        sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
+        cr_pip.execute(sql_pip)
+        rs_pip = cr_pip.fetchall()
+        for row in rs_pip:
+            pip = row[0]
+        cr_pip.close()
 
-    try:
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = sql_parse_list
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs:
-            s = row[0]
-            uid = row[1]
-            asset_class = row[2]
-            cr_pip = connection.cursor(pymysql.cursors.SSCursor)
-            sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
-            cr_pip.execute(sql_pip)
-            rs_pip = cr_pip.fetchall()
-            for row in rs_pip:
-                pip = row[0]
-            cr_pip.close()
+        print(str(uid) + ' - ' + str(s) + '------------------------------' )
+        print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
+        dn = datetime.datetime.now() - timedelta(days=10)
+        dn = dn.strftime("%Y%m%d")
+        dh = datetime.datetime.now() - timedelta(days=7)
+        dh = dh.strftime("%Y%m%d")
+        d = datetime.datetime.now() - timedelta(days=370)
+        d = d.strftime("%Y%m%d")
+        sentiment = 0
 
-            print(str(uid) + ' - ' + str(s) + '------------------------------' )
-            print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
-            dn = datetime.datetime.now() - timedelta(days=10)
-            dn = dn.strftime("%Y%m%d")
-            dh = datetime.datetime.now() - timedelta(days=7)
-            dh = dh.strftime("%Y%m%d")
-            d = datetime.datetime.now() - timedelta(days=370)
-            d = d.strftime("%Y%m%d")
-            sentiment = 0
+        sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+") ORDER BY date ASC"
+        cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
+        sql_d_id = sql_select_instr
+        cr_d_id.execute(sql_d_id)
+        rs_d = cr_d_id.fetchall()
+        for row in rs_d: sentiment = get_sentiment_score_avg(s,dh)
 
-            sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+") ORDER BY date ASC"
-            cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
-            sql_d_id = sql_select_instr
-            cr_d_id.execute(sql_d_id)
-            rs_d = cr_d_id.fetchall()
-            for row in rs_d: sentiment = get_sentiment_score_avg(s,dh)
+        get_instr_sum(s,uid,asset_class,dn,pip,sentiment)
 
-            get_instr_sum(s,uid,asset_class,dn,pip,sentiment)
+    cr.close()
 
-        cr.close()
-
-    finally:
-        connection.close()
+finally:
+    connection.close()
