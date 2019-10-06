@@ -87,8 +87,10 @@ SET SET_DATA="%SA_DATA_DIR%sa_4_set_data.bat"
 SET GET_NEWSDATA="%SA_DATA_DIR%sa_5_get_newsdata.bat"
 SET GET_NEWSDATA_SPEC="%SA_DATA_DIR%sa_6_get_newsdata.bat"
 SET PROCESS_MAIL_Q="%SA_DATA_DIR%sa_7_process_mail_q.bat"
-SET REBUILD_DATA_SCRIPT="%SA_DATA_DIR%scripts\rebuild_data.bat"
-
+SET REBUILD_DATA_SCRIPT_1="%SA_DATA_DIR%scripts\1_rebuild_data_collection.bat"
+SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
+SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
+s
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
 SET GET_OA_DATA="%SA_DATA_DIR%r_oanda\get_oanda_data.bat"
 SET GET_CC_DATA="%SA_DATA_DIR%p_cryptocompare\get_cryptocompare_data.bat"
@@ -180,15 +182,28 @@ DEL /F /Q %PROCESS_MAIL_Q%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\process_mail_queue.py" >> %PROCESS_MAIL_Q%
 
 REM ### Data Rebuild Script
-DEL /F %REBUILD_DATA_SCRIPT%
-@ECHO PAUSE >> %REBUILD_DATA_SCRIPT%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%core\1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT%
-@ECHO ping 127.0.0.1 -n 30 >> %REBUILD_DATA_SCRIPT%
-@ECHO %GET_QM_DATA% >> %REBUILD_DATA_SCRIPT%
-@ECHO ping 127.0.0.1 -n 30 >> %REBUILD_DATA_SCRIPT%
-@ECHO %SA_FRC_SCRIPT% >> %REBUILD_DATA_SCRIPT%
-@ECHO ping 127.0.0.1 -n 30 >> %REBUILD_DATA_SCRIPT%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%core\2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT%
+DEL /F %REBUILD_DATA_SCRIPT_1%
+@ECHO -------------------------------------------------------------------------- >> %REBUILD_DATA_SCRIPT_1%
+@ECHO "Stock split and reverse split function" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO "--------------------------------------" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO "IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO "1. Run 1_rebuild_data_collection to clear the existing data" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO "2. Run 2_rebuild_data_forecast to download the latest forecast data" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO "3. Run 3_rebuild_data_dataset to update all the related tables accordingly" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO -------------------------------------------------------------------------- >> %REBUILD_DATA_SCRIPT_1%
+@ECHO PAUSE >> %REBUILD_DATA_SCRIPT_1%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO %GET_QM_DATA% >> %REBUILD_DATA_SCRIPT_1%
+@ECHO %GET_AV_DATA% >> %REBUILD_DATA_SCRIPT_1%
+@ECHO %GET_CC_DATA% >> %REBUILD_DATA_SCRIPT_1%
+@ECHO %GET_OA_DATA% >> %REBUILD_DATA_SCRIPT_1%
+
+DEL /F %REBUILD_DATA_SCRIPT_2%
+@ECHO %SA_FRC_SCRIPT% >> %REBUILD_DATA_SCRIPT_2%
+
+DEL /F %REBUILD_DATA_SCRIPT_3%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_3%
+
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F

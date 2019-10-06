@@ -50,3 +50,8 @@ sql = 'DELETE FROM feed WHERE type=1'
 print(sql)
 cr.execute(sql)
 connection.commit()
+
+sql = 'DELETE FROM trades'
+print(sql)
+cr.execute(sql)
+connection.commit()
