@@ -183,14 +183,14 @@ DEL /F /Q %PROCESS_MAIL_Q%
 
 REM ### Data Rebuild Script
 DEL /F %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO --------------------------------------------------------------------------" >> %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO Stock split and reverse split function" >> %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO --------------------------------------" >> %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT" >> %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO 1. Run 1_rebuild_data_collection to clear the existing data" >> %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO 2. Run 2_rebuild_data_forecast to download the latest forecast data" >> %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO 3. Run 3_rebuild_data_dataset to update all the related tables accordingly" >> %REBUILD_DATA_SCRIPT_1%
-@ECHO "@ECHO --------------------------------------------------------------------------" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO ########################################################################## >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO Stock split and reverse split function >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO -------------------------------------- >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO 1. Run 1_rebuild_data_collection to clear the existing data >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO 2. Run 2_rebuild_data_forecast to download the latest forecast data >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO 3. Run 3_rebuild_data_dataset to update all the related tables accordingly >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO ########################################################################## >> %REBUILD_DATA_SCRIPT_1%
 @ECHO PAUSE >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %GET_QM_DATA% >> %REBUILD_DATA_SCRIPT_1%
