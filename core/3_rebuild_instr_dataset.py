@@ -61,6 +61,8 @@ def rebuild_instr_dataset():
             dn = dn.strftime("%Y%m%d")
             dh = datetime.datetime.now() - timedelta(days=7)
             dh = dh.strftime("%Y%m%d")
+            d = datetime.datetime.now() - timedelta(days=370)
+            d = d.strftime("%Y%m%d")
             sentiment = 0
 
             sql_select_instr = "SELECT id, date FROM price_instruments_data WHERE (symbol='"+s+"' and date>"+d+") ORDER BY date ASC"
