@@ -184,8 +184,9 @@ DEL /F /Q %PROCESS_MAIL_Q%
 REM ### Data Rebuild Script
 DEL /F %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO ########################################################################## >> %REBUILD_DATA_SCRIPT_1%
-@ECHO @ECHO Stock split and reverse split function >> %REBUILD_DATA_SCRIPT_1%
-@ECHO @ECHO -------------------------------------- >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO Rebuild the entire dataset prices, trades, forecast data >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO -------------------------------------------------------- >> %REBUILD_DATA_SCRIPT_1%
+@ECHO @ECHO. >> %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO 1. Run 1_rebuild_data_collection to clear the existing data >> %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO 2. Run 2_rebuild_data_forecast to download the latest forecast data >> %REBUILD_DATA_SCRIPT_1%
