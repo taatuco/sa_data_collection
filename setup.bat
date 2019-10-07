@@ -209,6 +209,7 @@ DEL /F %REBUILD_DATA_SCRIPT_3%
 
 DEL /F %REBUILD_DATA_SCRIPT_4%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\3_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_4%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\portf_main_get_data.py" >> %REBUILD_DATA_SCRIPT_4%
 
 
 REM ### Set Schedule tasks
