@@ -153,16 +153,17 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
 
             cr_d_id.close()
             gc.collect()
-            if fm == 1:
-                get_trend_line_data(s,uid)
-                gen_recomm(s,uid)
-                gen_chart(s,uid)
-            get_forecast_pnl(s,uid,nd_scan,is_update_all)
 
             if is_update_all:
                 get_trades(s,uid,nd_scan,True)
             else:
                 get_trades(s,uid,nd_scan,False)
+                            
+            if fm == 1:
+                get_trend_line_data(s,uid)
+                gen_recomm(s,uid)
+                gen_chart(s,uid)
+            get_forecast_pnl(s,uid,nd_scan,is_update_all)
 
             get_instr_sum(s,uid,asset_class,dn,pip,sentiment)
             set_signals_feed(s)
