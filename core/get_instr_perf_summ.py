@@ -43,7 +43,7 @@ def get_pct_from_date(d, sql_select, lp):
     print('pp: ' + str(pp))
     if pp != 0:
         pct = ( (lp - pp) / pp)
-    print(str(pct))
+    print(str(pct) + ' = '+ '('+ str(lp) +' - '+ str(pp) +') / '+ str(pp))
     return pct
 
 def get_prev_session_date(symbol):
