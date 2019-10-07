@@ -25,12 +25,6 @@ from add_feed_type import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_signal_ranking(s,rank):
     r = 0
@@ -38,6 +32,12 @@ def get_signal_ranking(s,rank):
         unit = ''
         divider = 1
         pip_divider = 10000
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT unit FROM instruments WHERe symbol = '"+ s +"'"
         cr.execute(sql)
@@ -48,6 +48,10 @@ def get_signal_ranking(s,rank):
             divider = pip_divider
 
         r = float(rank) / divider
+
+
+        cr.close()
+        connection.close()
 
     except Exception as e: print(e)
     return r
@@ -62,6 +66,12 @@ def set_signals_feed(s):
     d = datetime.datetime.now()
     d = d.strftime("%Y%m%d")
 
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, symbol_list.disabled, instruments.m1_signal FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
@@ -101,9 +111,9 @@ def set_signals_feed(s):
 
         print(search +": "+ os.path.basename(__file__) )
 
-        cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+"' AND type="+ type +")"
-        cr_i.execute(sql_i)
+        cr_d = connection.cursor(pymysql.cursors.SSCursor)
+        sql_d = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+"' AND type="+ type +")"
+        cr_d.execute(sql_i)
         connection.commit()
 
         if i == 0:
@@ -115,7 +125,17 @@ def set_signals_feed(s):
         "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"')"
 
+        cr_d.close()
     cr.close()
+    connection.close()
+
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cr_i = connection.cursor(pymysql.cursors.SSCursor)
 
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
@@ -127,4 +147,5 @@ def set_signals_feed(s):
             connection.commit()
     except:
         pass
-        cr_i.close()
+    cr_i.close()
+    connection.close()

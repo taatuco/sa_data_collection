@@ -24,13 +24,6 @@ access_obj = sa_db_access()
 import pymysql.cursors
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
 class trend_pts:
 
     sd = datetime.datetime(2000, 1, 1, 1, 1)
@@ -45,6 +38,12 @@ class trend_pts:
         self.p = p;
         self.p2 = p/2;
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date FROM price_instruments_data "+\
                 "WHERE symbol='"+ self.s +\
@@ -56,6 +55,7 @@ class trend_pts:
         for row in rs:
             self.ed = row[0]
         cr.close()
+        connection.close()
         self.sd = self.ed - timedelta(days=self.p)
         self.md = self.ed - timedelta(days=self.p2)
 
@@ -70,6 +70,12 @@ class trend_pts:
 
     def get_val_frm_d(self,d,get_what):
         v = 0
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         dr = ""
         sl = ""
@@ -88,6 +94,7 @@ class trend_pts:
         for row in rs:
             v = row[0]
         cr.close()
+        connection.close()
         return v
 
 class tln_data:
@@ -135,6 +142,12 @@ class tln_data:
     def get_200ma_frm_d(self,d):
         v = 0
         s = self.s
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT ma200 FROM price_instruments_data WHERE (symbol ='"+s+"' AND date='"+str(d)+"') LIMIT 1"
         cr.execute(sql)
@@ -142,11 +155,18 @@ class tln_data:
         for row in rs:
             v = row[0]
         cr.close()
+        connection.close()
         return v
 
     def get_50ma_frm_d(self,d):
         v = 0
         s = self.s
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT AVG(price_close) AS p FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT 50"
         cr.execute(sql)
@@ -154,11 +174,18 @@ class tln_data:
         for row in rs:
             v = row[0]
         cr.close()
+        connection.close()
         return v
 
     def get_rsi_avg(self,d,p):
         v = 0
         s = self.s
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT AVG(rsi14) AS rsi FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT " + str(p)
         cr.execute(sql)
@@ -166,6 +193,7 @@ class tln_data:
         for row in rs:
             v = row[0]
         cr.close()
+        connection.close()
         return v
 
     def get_rsi_mom(self,v):
@@ -207,6 +235,12 @@ def get_trend_line_data(s,uid):
     sd = tl_360_l.get_sd()
     f = sett.get_path_src()+"\\"+str(uid)+"t.csv"
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date, price_close "+\
                 "FROM price_instruments_data "+\
@@ -263,6 +297,6 @@ def get_trend_line_data(s,uid):
             "st_rsi_avg":str(st_rsi_avg), "lt_rsi_avg": str(lt_rsi_avg), "st_rsi_mom": str(st_rsi_mom), "lt_rsi_mom": str(lt_rsi_mom),
             "ma200": str(ma_200_ed), "ma50": str(ma_50_ed), "st_bias": str(st_bias), "lt_bias": str(lt_bias) })
         cr.close()
-
+        connection.close()
     finally:
         gc.collect()

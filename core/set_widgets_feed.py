@@ -25,12 +25,6 @@ from add_feed_type import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def set_widgets_feed(s):
     try:
@@ -67,6 +61,12 @@ def set_widgets_from_url(feed_id,short_title,url,search):
         asset_class = '-'
         market = '-'
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
 
 
@@ -86,6 +86,7 @@ def set_widgets_from_url(feed_id,short_title,url,search):
         except:
             pass
         cr_i.close()
+        connection.close()
     except Exception as e: print(e)
 
 def set_widgets_tradingview_chart(s,feed_id):
@@ -94,6 +95,12 @@ def set_widgets_tradingview_chart(s,feed_id):
     d = datetime.datetime.now()
     d = d.strftime("%Y%m%d")
 
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, sectors.sector, symbol_list.uid, symbol_list.disabled FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
@@ -137,8 +144,17 @@ def set_widgets_tradingview_chart(s,feed_id):
         "'"+ranking+"','"+symbol+"','"+type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"')"
 
+        cr_i.close()
     cr.close()
+    connection.close()
 
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cr_i = connection.cursor(pymysql.cursors.SSCursor)
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
     " ranking, symbol, type, badge, "+\
@@ -149,4 +165,5 @@ def set_widgets_tradingview_chart(s,feed_id):
             connection.commit()
     except:
         pass
-        cr_i.close()
+    cr_i.close()
+    connection.close()

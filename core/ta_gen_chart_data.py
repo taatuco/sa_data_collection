@@ -25,22 +25,23 @@ access_obj = sa_db_access()
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_trade_pnl(uid,d):
     r = 0
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT pnl_pct FROM trades WHERE uid=" + str(uid) + " AND expiration_date = "+ str(d)
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
         cr.close()
+        connection.close()
     except Exception as e: print(e)
     return r
 
@@ -48,6 +49,12 @@ def gen_chart(s,uid):
 
     try:
         decimal_places = 2
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"'"
         cr.execute(sql)
@@ -55,6 +62,7 @@ def gen_chart(s,uid):
         for row in rs:
             decimal_places = int(row[0])
         cr.close()
+        connection.close()
 
 
         n = datetime.datetime.today()
@@ -97,12 +105,25 @@ def gen_chart(s,uid):
 
                     i +=1
 
+            connection = pymysql.connect(host=db_srv,
+                                         user=db_usr,
+                                         password=db_pwd,
+                                         db=db_name,
+                                         charset='utf8mb4',
+                                         cursorclass=pymysql.cursors.DictCursor)
             cr_t = connection.cursor(pymysql.cursors.SSCursor)
             sql_t = "DELETE FROM chart_data WHERE uid=" + str(uid)
             cr_t.execute(sql_t)
             connection.commit()
             cr_t.close()
+            connection.close()
 
+            connection = pymysql.connect(host=db_srv,
+                                         user=db_usr,
+                                         password=db_pwd,
+                                         db=db_name,
+                                         charset='utf8mb4',
+                                         cursorclass=pymysql.cursors.DictCursor)
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT date, price_close, ma200, rsi14, rsi_overbought, rsi_oversold, target_price "+\
             "FROM price_instruments_data WHERE symbol='"+s+"' AND date>=" + d + " ORDER BY date"
@@ -194,6 +215,7 @@ def gen_chart(s,uid):
             cr_t.close()
 
             cr.close()
+            connection.close()
 
             f = data_src+str(uid)+'f.csv'
             filepath = Path(f)
@@ -242,6 +264,12 @@ def gen_chart(s,uid):
 
                         i +=1
 
+                    connection = pymysql.connect(host=db_srv,
+                                                 user=db_usr,
+                                                 password=db_pwd,
+                                                 db=db_name,
+                                                 charset='utf8mb4',
+                                                 cursorclass=pymysql.cursors.DictCursor)
                     cr_t = connection.cursor(pymysql.cursors.SSCursor)
                     sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close, forecast, "+\
                     "lt_upper_trend_line, lt_lower_trend_line, "+\
@@ -251,5 +279,6 @@ def gen_chart(s,uid):
                     cr_t.execute(sql_t)
                     connection.commit()
                     cr_t.close()
-                    
+                    connection.close()
+
     except Exception as e: print(e)

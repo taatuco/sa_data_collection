@@ -23,12 +23,6 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_rsi_mom(os,ob,we,sg,lt_rsi_mom):
 
@@ -63,6 +57,12 @@ def gen_recomm(s,uid):
         last_price = 0
         decimal_places = 0
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol='"+s+"'"
         cr.execute(sql)
@@ -98,6 +98,7 @@ def gen_recomm(s,uid):
                 sell_tp = round( trade_3_tp, decimal_places)
                 sell_sl = round( trade_3_sl, decimal_places)
         cr.close()
+        connection.close()
 
         data_src = sett.get_path_src()
         f = data_src+str(uid)+'t.csv'
@@ -115,6 +116,12 @@ def gen_recomm(s,uid):
                         lt_rsi_mom = row[17]
                     i +=1
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+s+"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
@@ -122,8 +129,14 @@ def gen_recomm(s,uid):
         for row in rs:
             last_price = row[0]
         cr.close()
+        connection.close()
 
-
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT * FROM recommendations"
         cr.execute(sql)
@@ -193,6 +206,7 @@ def gen_recomm(s,uid):
             connection.commit()
             cr_u.close()
         cr.close()
+        connection.close()
 
         print(str(uid) +": "+ os.path.basename(__file__) )
 

@@ -23,13 +23,6 @@ from ta_calc_ma import *
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
 
 def get_trades(s,uid,dc,full_update):
 
@@ -49,12 +42,25 @@ def get_trades(s,uid,dc,full_update):
         else:
             sql_delete_trades = "DELETE FROM trades WHERE symbol ='"+ s +"' AND status='active' "
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = sql_delete_trades
         cr.execute(sql)
         connection.commit()
         cr.close()
+        connection.close()
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol = '"+ s +"' "
         cr.execute(sql)
@@ -63,14 +69,28 @@ def get_trades(s,uid,dc,full_update):
             trade_decimal_places = row[0]
             trade_fullname = row[1].replace("'","`")
         cr.close()
+        connection.close()
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: trade_last_price = row[0]
         cr.close()
+        connection.close()
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr_1 = connection.cursor(pymysql.cursors.SSCursor)
         sql_1 = "SELECT symbol, date, price_close, target_price "+\
         "FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dfrom_str + " ORDER BY date"
@@ -127,18 +147,25 @@ def get_trades(s,uid,dc,full_update):
             i += 1
 
         cr_1.close()
+        connection.close()
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "INSERT IGNORE INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status, url) VALUES "+ inserted_value
         try:
             print(sql_i)
             cr_i.execute(sql_i)
             connection.commit()
-            cr_i.close()
             r = True
         except:
             pass
-
+        cr_i.close()
+        connection.close()
 
     except Exception as e: print(e)
 
