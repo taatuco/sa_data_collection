@@ -75,10 +75,6 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
 
             print(str(uid) + ' - ' + str(s) + '------------------------------' )
             print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
-            dt = datetime.datetime.now()
-            dt = dt.strftime("%Y%m%d")
-            dpa = datetime.datetime.now() - timedelta(days=20)
-            dpa = dpa.strftime("%Y%m%d")
             dn = datetime.datetime.now() - timedelta(days=10)
             dn = dn.strftime("%Y%m%d")
             dh = datetime.datetime.now() - timedelta(days=7)
