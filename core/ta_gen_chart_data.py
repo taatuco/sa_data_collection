@@ -204,6 +204,12 @@ def gen_chart(s,uid):
 
                 i += 1
 
+            connection = pymysql.connect(host=db_srv,
+                                         user=db_usr,
+                                         password=db_pwd,
+                                         db=db_name,
+                                         charset='utf8mb4',
+                                         cursorclass=pymysql.cursors.DictCursor)
             cr_t = connection.cursor(pymysql.cursors.SSCursor)
             sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close, forecast, "+\
             "lt_upper_trend_line, lt_lower_trend_line, "+\
@@ -249,6 +255,12 @@ def gen_chart(s,uid):
                             sep = ','
 
                         if i == 8:
+                            connection = pymysql.connect(host=db_srv,
+                                                         user=db_usr,
+                                                         password=db_pwd,
+                                                         db=db_name,
+                                                         charset='utf8mb4',
+                                                         cursorclass=pymysql.cursors.DictCursor)
                             cr_fp = connection.cursor(pymysql.cursors.SSCursor)
                             sql_fp = "SELECT target_price FROM price_instruments_data WHERE symbol = '"+ str(s) +"' ORDER BY date DESC LIMIT 1"
                             cr_fp.execute(sql_fp)
