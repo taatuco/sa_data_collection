@@ -41,7 +41,7 @@ def get_pct_from_date(d, sql_select, lp):
         pp = row[0]
     cr.close()
     connection.close()
-    print('pp: ' + str(pp))
+    print('pp: ' + str(pp) + ' date='+ str(d) )
     if pp != 0:
         pct = ( (lp - pp) / pp)
     print(str(pct) + ' = '+ '('+ str(lp) +' - '+ str(pp) +') / '+ str(pp))
