@@ -21,17 +21,17 @@ from ta_calc_ma import *
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 
 def get_pct_from_date(d, sql_select, lp):
     pct = 0
     pp = 0
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = sql_select + "AND date <= '"+ str(d) +"' ORDER BY date DESC LIMIT 1"
     cr.execute(sql)
@@ -39,6 +39,7 @@ def get_pct_from_date(d, sql_select, lp):
     for row in rs:
         pp = row[0]
     cr.close()
+    connection.close()
 
     if pp != 0:
         pct = ( (lp - pp) / pp)
@@ -47,6 +48,12 @@ def get_pct_from_date(d, sql_select, lp):
 def get_prev_session_date(symbol):
     r = datetime.datetime(2000, 1, 1, 1, 1)
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date from price_instruments_data WHERE symbol = '"+ str(symbol) +"' ORDER BY date DESC LIMIT 2"
         cr.execute(sql)
@@ -56,6 +63,7 @@ def get_prev_session_date(symbol):
             if i == 2: r = row[0]
             i += 1
         cr.close()
+        connection.close()
 
     except Exception as e: print(e)
     return r
@@ -80,6 +88,12 @@ class instr_sum_data:
     def __init__(self,symbol,uid):
         self.s = symbol
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol from symbol_list WHERE uid=" + str(uid)
         cr.execute(sql)
@@ -91,6 +105,7 @@ class instr_sum_data:
             self.sql_select = "SELECT price_close, date FROM price_instruments_data WHERE symbol='"+ self.s + "' "
             self.sql_select_signal = "SELECT signal_price, date from chart_data WHERE symbol='"+ self.s +"' AND forecast = 0 "
             sql = self.sql_select_signal+" ORDER BY Date DESC LIMIT 1"
+            print(sql)
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs: self.lp_signal = row[0];
@@ -101,6 +116,7 @@ class instr_sum_data:
         rs = cr.fetchall()
         for row in rs: self.lp = row[0]; self.ld = row[1]
         cr.close()
+        connection.close()
 
         self.uid = uid
         self.d_1Yp = self.ld - ( timedelta(days=365) )
