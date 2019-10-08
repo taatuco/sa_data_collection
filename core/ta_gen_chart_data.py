@@ -49,6 +49,22 @@ def gen_chart(s,uid):
 
     try:
         decimal_places = 2
+
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        cr_t = connection.cursor(pymysql.cursors.SSCursor)
+        sql_t = "TRUNCATE FROM chart_data"
+        print(sql_t)
+        cr_t.execute(sql_t)
+        connection.commit()
+        cr_t.close()
+        connection.close()
+
+
         connection = pymysql.connect(host=db_srv,
                                      user=db_usr,
                                      password=db_pwd,
@@ -105,20 +121,6 @@ def gen_chart(s,uid):
                         except Exception as e: print(e)
 
                     i +=1
-
-            connection = pymysql.connect(host=db_srv,
-                                         user=db_usr,
-                                         password=db_pwd,
-                                         db=db_name,
-                                         charset='utf8mb4',
-                                         cursorclass=pymysql.cursors.DictCursor)
-            cr_t = connection.cursor(pymysql.cursors.SSCursor)
-            sql_t = "DELETE FROM chart_data WHERE uid=" + str(uid)
-            print(sql_t)
-            cr_t.execute(sql_t)
-            connection.commit()
-            cr_t.close()
-            connection.close()
 
             connection = pymysql.connect(host=db_srv,
                                          user=db_usr,
