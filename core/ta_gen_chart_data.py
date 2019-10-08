@@ -126,7 +126,7 @@ def gen_chart(s,uid):
                             st_upper_range = row[11]
                             lt_lower_range = row[12]
                             lt_upper_range = row[13]
-                            print( str(wf)+':::'+str(buy_entry)':::'+str(st_sd) )
+                            print( str(wf)+':::'+str(buy_entry)+':::'+str(st_sd) )
                         except Exception as e: print(e)
 
                     i +=1
