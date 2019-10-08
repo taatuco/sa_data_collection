@@ -126,9 +126,8 @@ def gen_chart(s,uid):
                             st_upper_range = row[11]
                             lt_lower_range = row[12]
                             lt_upper_range = row[13]
-                            print( str(wf)+':::'+str(buy_entry)+':::'+str(st_sd) )
                         except Exception as e: print(e)
-
+                    print( str(row[0])+':::'+str(row[2])+':::'+str(row[3])+':::'+str(row[4])+':::'+str(row[5]) )
                     i +=1
 
             connection = pymysql.connect(host=db_srv,
