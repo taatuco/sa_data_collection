@@ -139,6 +139,7 @@ def gen_chart(s,uid):
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT date, price_close, ma200, rsi14, rsi_overbought, rsi_oversold, target_price "+\
             "FROM price_instruments_data WHERE symbol='"+s+"' AND date>=" + d + " ORDER BY date"
+            print(sql)
             cr.execute(sql)
             rs = cr.fetchall()
 
