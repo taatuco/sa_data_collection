@@ -246,6 +246,7 @@ def get_trend_line_data(s,uid):
                 "FROM price_instruments_data "+\
                 "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
                 " ORDER BY date"
+        print(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         ttr = cr.rowcount
