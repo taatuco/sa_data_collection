@@ -45,10 +45,13 @@ def get_trade_pnl(uid,d):
     except Exception as e: print(e)
     return r
 
-def gen_chart(s,uid):
-
+def clear_chart_table(s):
     try:
-        decimal_places = 2
+
+        if s == '' or s == None:
+            sql = 'DELETE FROM chart_data WHERE symbol LIKE "'+ str(s) +'"'
+        else:
+            sql = 'TRUNCATE chart_data'
 
         connection = pymysql.connect(host=db_srv,
                                      user=db_usr,
@@ -57,14 +60,19 @@ def gen_chart(s,uid):
                                      charset='utf8mb4',
                                      cursorclass=pymysql.cursors.DictCursor)
         cr_t = connection.cursor(pymysql.cursors.SSCursor)
-        sql_t = "TRUNCATE FROM chart_data"
+        sql_t = sql
         print(sql_t)
         cr_t.execute(sql_t)
         connection.commit()
         cr_t.close()
         connection.close()
 
+    except Exception as e: print(e)
 
+def gen_chart(s,uid):
+
+    try:
+        decimal_places = 2
         connection = pymysql.connect(host=db_srv,
                                      user=db_usr,
                                      password=db_pwd,

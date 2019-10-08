@@ -57,6 +57,8 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                                  cursorclass=pymysql.cursors.DictCursor)
 
     try:
+        clear_chart_table(specific_symbol)
+
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = sql_parse_list
         cr.execute(sql)
