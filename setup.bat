@@ -6,6 +6,7 @@ REM Edt Configuration here #####################################################
 SET R_VER=R-3.5.1
 SET PY_VER=Python37-32
 SET SA_FRC_SCRIPT=%SYSTEMDRIVE%\smartalpha\sa_frc\get_forecast_data.bat
+SET SA_FRC_DIR=%SYSTEMDRIVE%\smartalpha\sa_frc\
 
 SET GET_DATA_TIME_ST=00:01
 SET GET_FRC_TIME_ST=02:00
@@ -91,6 +92,7 @@ SET REBUILD_DATA_SCRIPT_1="%SA_DATA_DIR%scripts\1_rebuild_data_collection.bat"
 SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
 SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
 SET REBUILD_DATA_SCRIPT_4="%SA_DATA_DIR%scripts\4_rebuild_data_dataset.bat"
+SET RECALC_FORCAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
 
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
 SET GET_OA_DATA="%SA_DATA_DIR%r_oanda\get_oanda_data.bat"
@@ -199,12 +201,23 @@ DEL /F %REBUILD_DATA_SCRIPT_1%
 @ECHO %GET_AV_DATA% >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %GET_CC_DATA% >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %GET_OA_DATA% >> %REBUILD_DATA_SCRIPT_1%
-
 DEL /F %REBUILD_DATA_SCRIPT_2%
 @ECHO %SA_FRC_SCRIPT% >> %REBUILD_DATA_SCRIPT_2%
-
 DEL /F %REBUILD_DATA_SCRIPT_3%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_3%
+
+REM ### Forecast Model Recalculation
+DEL /F %RECALC_FORCAST_MODEL%
+@ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO Recalculate Forecast Model and Score >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO -------------------------------------------------------- >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO. >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL%
+@ECHO PAUSE >> %RECALC_FORCAST_MODEL%
+@ECHO %_PY_EXE% "%SA_FRC_DIR%get_prediction_model_fullset.py"
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
