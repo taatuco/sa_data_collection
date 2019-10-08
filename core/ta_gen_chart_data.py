@@ -215,6 +215,7 @@ def gen_chart(s,uid):
                 str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+","+\
                 str(pct_change)+","+ str(signal_price) +","+ str(pct_signal) +")"
 
+                print(inserted_values)
                 i += 1
 
             connection = pymysql.connect(host=db_srv,
