@@ -215,10 +215,10 @@ DEL /F %RECALC_FORCAST_MODEL%
 @ECHO @ECHO. >> %RECALC_FORCAST_MODEL%
 @ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORCAST_MODEL%
 @ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO 3. This process might take more than 1 or 2 hours >> %RECALC_FORCAST_MODEL%
+@ECHO @ECHO 3. This process might take long hours probably a day or even more >> %RECALC_FORCAST_MODEL%
 @ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL%
 @ECHO PAUSE >> %RECALC_FORCAST_MODEL%
-@ECHO %_PY_EXE% "%SA_FRC_DIR%get_prediction_model_fullset.py"
+@ECHO %_PY_EXE% "%SA_FRC_DIR%get_prediction_model_fullset.py" >> %RECALC_FORCAST_MODEL%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
