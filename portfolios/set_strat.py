@@ -25,15 +25,14 @@ from pathlib import Path
 
 import pymysql.cursors
 
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
 def gen_strategies():
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "INSERT IGNORE INTO strategies(codename,description) VALUES "+\
         "('ls','long/short'), "+\
@@ -43,6 +42,7 @@ def gen_strategies():
         cr.execute(sql)
         connection.commit()
         cr.close()
+        connection.close()
     except Exception as e: print(e)
 
 gen_strategies()

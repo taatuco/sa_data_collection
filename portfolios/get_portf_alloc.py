@@ -31,12 +31,6 @@ from ta_instr_sum import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 class portf_data:
 
@@ -47,6 +41,12 @@ class portf_data:
 
     def __init__(self, portf_s):
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT account_reference FROM instruments WHERE symbol='"+ portf_s +"' "
         cr.execute(sql)
@@ -76,6 +76,7 @@ class portf_data:
                 self.portf_total_alloc_amount = self.portf_total_alloc_amount + salloc
             cr_s.close()
         cr.close()
+        connection.close()
         try:
             self.portf_multip = self.portf_account_ref / self.portf_total_alloc_amount
         except:
@@ -85,6 +86,12 @@ class portf_data:
 
         portf_reduce_risk_by = 4
 
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT instruments.pip, price_instruments_data.price_close, instruments.volatility_risk_st "+\
         "FROM instruments JOIN price_instruments_data ON instruments.symbol = price_instruments_data.symbol "+\
@@ -99,9 +106,10 @@ class portf_data:
             volatility_risk_st = row[2]
             salloc = ( pip_s * price_s )
         cr.close()
+        connection.close()
 
         portf_reduce_risk_by = round(volatility_risk_st * 200,0)
-        if portf_reduce_risk_by < 1: portf_reduce_risk_by = 4        
+        if portf_reduce_risk_by < 1: portf_reduce_risk_by = 4
 
         q = round( (( (self.portf_big_alloc_price / salloc) * self.portf_multip ) / portf_reduce_risk_by )*alloc_coef , 2)
         if q < 0.01:
@@ -128,28 +136,50 @@ def get_conviction_coef(c):
 def get_market_conv_rate(m):
     r = ''
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT conv_to_usd FROM markets WHERE market_id = '"+ str(m) +"'"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
+        cr.close()
+        connection.close()
     except Exception as e: print(e)
     return r
 
 def get_market_currency(m):
     r = ''
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT currency_code FROM markets WHERE market_id = '"+ str(m) +"'"
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
+        cr.close()
+        connection.close()
     except Exception as e: print(e)
     return r
 
 def get_portf_alloc():
 
     portf_symbol_suffix = get_portf_suffix()
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid, instruments.unit, instruments.market FROM instruments "+\
     "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
@@ -266,3 +296,4 @@ def get_portf_alloc():
         connection.commit()
         cr_f.close()
     cr.close()
+    connection.close()

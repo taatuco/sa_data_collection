@@ -26,24 +26,26 @@ from add_feed_type import *
 from pathlib import Path
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_portf_content(user_id):
     r = ''
     try:
         nickname = ''
         avatar_id = ''
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT nickname, avatar_id FROM users WHERE id="+ str(user_id)
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: nickname = row[0]; avatar_id = row[1]
         r = '<img src="{burl}static/avatar/'+ str(avatar_id) +'.png" style="vertical-align: middle;border-style: none;width: 30px;">&nbsp;<strong>'+nickname+'</strong>'
+        cr.close()
+        connection.close()
     except Exception as e: print(e)
     return r
 
@@ -53,7 +55,12 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
         count_negative_year = 0
         count_blown_portf = 0
         max_drawdown_reached = False
-
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol FROM instruments WHERE symbol ='"+ s +"' AND y1<=0 "
         cr.execute(sql)
@@ -114,6 +121,7 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
             r = float(rank) - 999999
 
         cr.close()
+        connection.close()
     except Exception as e: print(e)
     return r
 
@@ -126,7 +134,12 @@ def set_portf_feed():
     #Date [Today date]
     d = datetime.datetime.now()
     d = d.strftime("%Y%m%d")
-
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, "+\
     "instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, "+\
@@ -213,5 +226,5 @@ def set_portf_feed():
         connection.commit()
         gc.collect()
     cr_r.close()
-
     cr.close()
+    connection.close()

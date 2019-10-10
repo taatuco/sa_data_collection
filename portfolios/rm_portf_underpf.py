@@ -21,17 +21,17 @@ access_obj = sa_db_access()
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
 
 def rm_portf_underpf(limit_max):
     total = 0
     quant_to_rm = 0
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT COUNT(*) FROM instruments JOIN users ON instruments.owner = users.id'
         cr.execute(sql)
@@ -58,16 +58,24 @@ def rm_portf_underpf(limit_max):
                 rm_portf_from('instruments','symbol',s)
                 rm_portf_from('symbol_list','symbol',s)
             cr.close()
+        connection.close()
 
     except Exception as e: print(e)
 
 def rm_portf_from(table,column,s):
     try:
+        connection = pymysql.connect(host=db_srv,
+                                     user=db_usr,
+                                     password=db_pwd,
+                                     db=db_name,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'DELETE FROM '+ str(table) +' WHERE '+ column +' = "'+ str(s) +'"'
         print(sql)
         cr.execute(sql)
         connection.commit()
         cr.close()
+        connection.close()
         gc.collect()
     except Exception as e: print(e)
