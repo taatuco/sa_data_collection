@@ -96,6 +96,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             sql_d_id = sql_select_instr
             cr_d_id.execute(sql_d_id)
             rs_d = cr_d_id.fetchall()
+            case_block = ''
             for row in rs_d:
                 d = str(row[1]).replace("-","")
                 id = row[0]
@@ -119,39 +120,58 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 is_ta_calc = "1"
 
                 try:
-                    cr_upd = connection.cursor(pymysql.cursors.SSCursor)
-                    sql_upd = "UPDATE price_instruments_data SET "+\
-                    "change_1d="+str(change_1d)+", "+\
-                    "gain_1d="+str(gain_1d)+", "+\
-                    "loss_1d="+str(loss_1d)+", "+\
-                    "avg_gain="+str(avg_gain)+", "+\
-                    "avg_loss="+str(avg_loss)+", "+\
-                    "rs14="+str(rs14)+", "+\
-                    "rsi14="+str(rsi14)+", "+\
-                    "rsi_overbought="+str(rsi_overbought)+", "+\
-                    "rsi_oversold="+str(rsi_oversold)+", "+\
-                    "ma200="+str(ma200)+ ", "+\
-                    "ma10="+str(ma10)+ ", "+\
-                    "ma20="+str(ma20)+ ", "+\
-                    "ma30="+str(ma30)+ ", "+\
-                    "ma40="+str(ma40)+ ", "+\
-                    "ma50="+str(ma50)+ ", "+\
-                    "sentiment_1d="+str(sentiment)+", "+\
-                    "is_ta_calc="+str(is_ta_calc)+" "+\
-                    "WHERE id="+str(id)
-                    cr_upd.execute(sql_upd)
-                    connection.commit()
-                    gc.collect()
-                    cr_upd.close()
-                    print(sql_upd)
+                    case_block = case_block +\
+                    "change_1d= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(change_1d)+ " END, "+\
+                    "gain_1d= CASE"+\
+                    "   WHEN id="+str(id)+" THEN "+str(gain_1d)+" END, "+\
+                    "loss_1d= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(loss_1d)+" END, "+\
+                    "avg_gain= CASE"+\
+                    "   WHEN id="+str(id)+" THEN "+str(avg_gain)+" END, "+\
+                    "avg_loss= CASE"+\
+                    "   WHEN id="+str(id)+" THEN "+str(avg_loss)+" END, "+\
+                    "rs14= CASE"+\
+                    "   WHEN id="+str(id)+" THEN "+str(rs14)+" END, "+\
+                    "rsi14= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(rsi14)+" END, "+\
+                    "rsi_overbought= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(rsi_overbought)+" END, "+\
+                    "rsi_oversold= CASE"+\
+                    "   WHEN id="+str(id)+" THEN "+str(rsi_oversold)+" END, "+\
+                    "ma200= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(ma200)+ " END, "+\
+                    "ma10= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(ma10)+ " END, "+\
+                    "ma20= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(ma20)+ " END, "+\
+                    "ma30= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(ma30)+ " END, "+\
+                    "ma40= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(ma40)+ " END, "+\
+                    "ma50= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(ma50)+ " END, "+\
+                    "sentiment_1d= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(sentiment)+" END, "+\
+                    "is_ta_calc= CASE "+\
+                    "   WHEN id="+str(id)+" THEN "+str(is_ta_calc)+"END, "
                 except:
-                    sql_upd = "UPDATE price_instruments_data SET "+\
-                    "is_ta_calc=1 "+\
-                    "WHERE id="+str(id)
-                    cr_upd.execute(sql_upd)
-                    connection.commit()
-                    gc.collect()
-                    cr_upd.close()
+                    case_block = case_block +\
+                    'is_ta_calc = CASE '+\
+                    '   WHEN id='+ str(id)+' THEN 1'+\
+                    'END, '
+            try:
+                cr_upd = connection.cursor(pymysql.cursors.SSCursor)
+                sql_upd = 'UPDATE price_instruments_data SET ' + case_block
+                print(sql_upd)
+                cr.upd_execute(sql_upd)
+                connection.commit()
+            except:
+                sql_upd = 'UPDATE price_instruments_data SET ' + case_block
+                print(sql_upd)
+                cr.upd_execute(sql_upd)
+                connection.commit()
+
 
             cr_d_id.close()
             gc.collect()
