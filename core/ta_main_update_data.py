@@ -163,12 +163,13 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
 
             cr_upd = connection.cursor(pymysql.cursors.SSCursor)
             try:
-                sql_upd = 'UPDATE price_instruments_data SET ' + case_block
-                print(sql_upd)
-                cr_upd.execute(sql_upd)
-                connection.commit()
+                if case_block != '':
+                    sql_upd = 'UPDATE price_instruments_data SET ' + case_block
+                    print(sql_upd)
+                    cr_upd.execute(sql_upd)
+                    connection.commit()
             except:
-                print('id='+ str(id) + ' ::: is_ta_calc=1' )
+                pass
             cr_upd.close()
 
             cr_d_id.close()
