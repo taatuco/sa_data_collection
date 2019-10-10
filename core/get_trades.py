@@ -7,6 +7,7 @@ import sys
 import os
 import datetime; import time; from datetime import timedelta
 from sa_numeric import *
+import gc
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
@@ -105,7 +106,13 @@ def get_trades(s,uid,dc,full_update):
             target_price_1 = round( row[3], trade_decimal_places)
 
             dto = date_1 + timedelta(days=8) ; dto_str = dto.strftime('%Y%m%d')
-            cr_2 = connection.cursor(pymysql.cursors.SSCursor)
+            connection2 = pymysql.connect(host=db_srv,
+                                         user=db_usr,
+                                         password=db_pwd,
+                                         db=db_name,
+                                         charset='utf8mb4',
+                                         cursorclass=pymysql.cursors.DictCursor)
+            cr_2 = connection2.cursor(pymysql.cursors.SSCursor)
             sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dto_str + " ORDER BY date LIMIT 1"
             print(sql_2)
             cr_2.execute(sql_2)
@@ -113,6 +120,7 @@ def get_trades(s,uid,dc,full_update):
             date_2 = None; price_close_2 = -1
             for row in rs_2: date_2 = row[0]; price_close_2 = round( row[1], trade_decimal_places)
             cr_2.close()
+            connection2.close()
 
             if price_close_1 <= target_price_1: trade_order_type = 'buy'
             else: trade_order_type = 'sell'
@@ -143,7 +151,7 @@ def get_trades(s,uid,dc,full_update):
 
             inserted_value = inserted_value + sep + "("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
             str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
-
+            gc.collect()
             i += 1
 
         cr_1.close()
