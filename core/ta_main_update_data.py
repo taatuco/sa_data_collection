@@ -164,12 +164,12 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 cr_upd = connection.cursor(pymysql.cursors.SSCursor)
                 sql_upd = 'UPDATE price_instruments_data SET ' + case_block
                 print(sql_upd)
-                cr.upd_execute(sql_upd)
+                cr_upd.execute(sql_upd)
                 connection.commit()
             except:
                 sql_upd = 'UPDATE price_instruments_data SET ' + case_block
                 print(sql_upd)
-                cr.upd_execute(sql_upd)
+                cr_upd.execute(sql_upd)
                 connection.commit()
 
 
