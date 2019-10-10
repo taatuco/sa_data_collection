@@ -63,6 +63,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
         sql = sql_parse_list
         cr.execute(sql)
         rs = cr.fetchall()
+        case_block = ''
         for row in rs:
             s = row[0]
             uid = row[1]
@@ -96,7 +97,6 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             sql_d_id = sql_select_instr
             cr_d_id.execute(sql_d_id)
             rs_d = cr_d_id.fetchall()
-            case_block = ''
             for row in rs_d:
                 d = str(row[1]).replace("-","")
                 id = row[0]
