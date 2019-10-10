@@ -168,10 +168,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 cr_upd.execute(sql_upd)
                 connection.commit()
             except:
-                sql_upd = 'UPDATE price_instruments_data SET ' + case_block
-                print(sql_upd)
-                cr_upd.execute(sql_upd)
-                connection.commit()
+                print('id='+ str(id) + ' ::: is_ta_calc=1' )
             cr_upd.close()
 
             cr_d_id.close()
