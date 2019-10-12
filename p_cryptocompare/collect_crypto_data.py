@@ -37,7 +37,7 @@ for row in rs:
     fsym = row[2]
     tsym = row[3]
 
-    print(s+": "+ os.path.basename(__file__) )
+    debug(s+": "+ os.path.basename(__file__) )
 
     ### Cryptocompare API ######################################################
     url = "https://min-api.cryptocompare.com/data/histoday?fsym="+fsym+"&tsym="+tsym+"&limit=30&aggregate=1&e=CCCAGG"
@@ -62,7 +62,7 @@ for row in rs:
         else:
             sep = ','
         inserted_values = inserted_values + sep + "('"+s+"','"+dt.strftime('%Y%m%d')+"','"+str(pc)+"')"
-        print(inserted_values)
+        debug(inserted_values)
         i += 1
     sql_i = "INSERT IGNORE INTO price_instruments_data(symbol, date, price_close) VALUES " + inserted_values
     try:

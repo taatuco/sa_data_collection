@@ -53,7 +53,7 @@ def get_forecast_pnl(s,uid,nd, full_update):
         pnl_long = 999
         pnl_short = 999
 
-        print(s +": "+ sd_str +": "+ os.path.basename(__file__) )
+        debug(s +": "+ sd_str +": "+ os.path.basename(__file__) )
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close, target_price FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ pd_str
@@ -78,7 +78,7 @@ def get_forecast_pnl(s,uid,nd, full_update):
             s_price_close = 0
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT id, price_close, pnl, pnl_long, pnl_short FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ sd_str
-            print(sql)
+            debug(sql)
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs:
@@ -99,11 +99,11 @@ def get_forecast_pnl(s,uid,nd, full_update):
 
                 cr = connection.cursor(pymysql.cursors.SSCursor)
                 sql = "UPDATE price_instruments_data SET pnl = " + str(pnl) + ", pnl_long = " + str(pnl_long) + ", pnl_short = " + str(pnl_short) + " WHERE id = " + str(id)
-                print(sql)
+                debug(sql)
                 try:
                     cr.execute(sql)
                     connection.commit()
-                except Exception as e: print(e)
+                except Exception as e: debug(e)
                 cr.close()
         i += 1
     connection.close()

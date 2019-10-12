@@ -36,10 +36,10 @@ sql = "INSERT IGNORE INTO markets(market_id, market_label, currency_code) VALUES
 "('GO>','Global','pts'), "+\
 "('US>','U.S.','USD')"
 
-print(sql +": "+ os.path.basename(__file__) )
+debug(sql +": "+ os.path.basename(__file__) )
 
 try:
     cr.execute(sql)
     connection.commit()
     cr.close()
-except Exception as e: print(e)
+except Exception as e: debug(e)

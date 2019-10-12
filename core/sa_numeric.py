@@ -52,9 +52,9 @@ def get_stdev(sql):
         cr.execute(sql)
         a = list( cr.fetchall() )
         r = np.std(a)
-        print('stdev='+str(r) )
+        debug('stdev='+str(r) )
         cr.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
     return r
 
@@ -81,7 +81,7 @@ def get_volatility_risk(sql,is_portf,s):
         stdev = get_stdev(sql)
         rp = lp - stdev
         r = abs( get_pct_change(lp,rp)  )
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
     return r
 
@@ -119,8 +119,8 @@ def get_mdd(sql):
         cr.close()
 
         r = pct_dd
-        print('mdd='+ str(r) )
-    except Exception as e: print(e)
+        debug('mdd='+ str(r) )
+    except Exception as e: debug(e)
 
     return r
 
@@ -143,13 +143,13 @@ def get_romad(sql):
             i += 1
         cr.close()
 
-        print('f='+str(first) + ' l='+str(last) )
+        debug('f='+str(first) + ' l='+str(last) )
 
         rt = get_pct_change(first,last)
         dd = get_mdd(sql)
 
         r = rt / dd
-        print('romad='+ str(r) )
-    except Exception as e: print(e)
+        debug('romad='+ str(r) )
+    except Exception as e: debug(e)
 
     return r

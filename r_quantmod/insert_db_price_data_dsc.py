@@ -50,7 +50,7 @@ try:
             uid = row[1]
             s = row[0]
             file_str = csvdir+str(uid)+'.csv'
-            print(str(uid) + ' - ' + str(s) + '------------------------------')
+            debug(str(uid) + ' - ' + str(s) + '------------------------------')
             filepath = Path(file_str)
             if filepath.exists():
                 with open(file_str) as csvfile:
@@ -71,7 +71,7 @@ try:
                             else:
                                 sep = ','
                             inserted_values = inserted_values + sep + "('"+s+"',"+price_date+","+price_close+")"
-                            print(s +": ("+str(i)+"/"+str(j)+"): "+price_date+": "+ os.path.basename(__file__) +" - " + inserted_values)
+                            debug(s +": ("+str(i)+"/"+str(j)+"): "+price_date+": "+ os.path.basename(__file__) +" - " + inserted_values)
                         i += 1
                     cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                     sql_q_ins = "INSERT IGNORE INTO price_instruments_data (symbol, date, price_close) VALUES " + inserted_values

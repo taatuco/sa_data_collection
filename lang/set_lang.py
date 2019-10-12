@@ -36,10 +36,10 @@ sql = "INSERT IGNORE INTO languages(id, language) VALUES "+\
 "('en','English'), "+\
 "('fr','Français'), "+\
 "('th','ไทย')"
-print(sql +": "+ os.path.basename(__file__) )
+debug(sql +": "+ os.path.basename(__file__) )
 
 try:
     cr.execute(sql)
     connection.commit()
     cr.close()
-except Exception as e: print(e)
+except Exception as e: debug(e)

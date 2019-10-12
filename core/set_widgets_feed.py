@@ -46,7 +46,7 @@ def set_widgets_feed(s):
         set_widgets_from_url(feed_id,'Economic Calendar','{burl}w/?funcname=get_tradingview_ecocal(0,0)&refreshw=1800','ECOCAL:GO> Economic Calendar')
         set_widgets_from_url(feed_id,'World News and Top Stories','{burl}w/?funcname=get_newsfeed(0,0,500,1)&refreshw=900&noflexheight=1','TOP:GO> World News and Top Stories')
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def set_widgets_from_url(feed_id,short_title,url,search):
     try:
@@ -87,7 +87,7 @@ def set_widgets_from_url(feed_id,short_title,url,search):
             pass
         cr_i.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def set_widgets_tradingview_chart(s,feed_id):
 
@@ -128,7 +128,7 @@ def set_widgets_tradingview_chart(s,feed_id):
         type = str(feed_id)
         search = "CHART:" + symbol + " " + fullname
 
-        print(search +": "+ os.path.basename(__file__) )
+        debug(search +": "+ os.path.basename(__file__) )
 
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+"' AND type="+ type +")"

@@ -42,7 +42,7 @@ def get_trade_pnl(uid,d):
         for row in rs: r = row[0]
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def clear_chart_table(s):
@@ -61,13 +61,13 @@ def clear_chart_table(s):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr_t = connection.cursor(pymysql.cursors.SSCursor)
         sql_t = sql
-        print(sql_t)
+        debug(sql_t)
         cr_t.execute(sql_t)
         connection.commit()
         cr_t.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def gen_chart(s,uid):
 
@@ -81,7 +81,7 @@ def gen_chart(s,uid):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"'"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -126,8 +126,8 @@ def gen_chart(s,uid):
                             st_upper_range = row[11]
                             lt_lower_range = row[12]
                             lt_upper_range = row[13]
-                        except Exception as e: print(e)
-                    print( str(row[0])+':::'+str(row[2])+':::'+str(row[3])+':::'+str(row[4])+':::'+str(row[5]) )
+                        except Exception as e: debug(e)
+                    debug( str(row[0])+':::'+str(row[2])+':::'+str(row[3])+':::'+str(row[4])+':::'+str(row[5]) )
                     i +=1
 
             connection = pymysql.connect(host=db_srv,
@@ -139,7 +139,7 @@ def gen_chart(s,uid):
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT date, price_close, ma200, rsi14, rsi_overbought, rsi_oversold, target_price "+\
             "FROM price_instruments_data WHERE symbol='"+s+"' AND date>=" + d + " ORDER BY date"
-            print(sql)
+            debug(sql)
             cr.execute(sql)
             rs = cr.fetchall()
 
@@ -215,7 +215,7 @@ def gen_chart(s,uid):
                 str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+","+\
                 str(pct_change)+","+ str(signal_price) +","+ str(pct_signal) +")"
 
-                print(inserted_values)
+                debug(inserted_values)
                 i += 1
 
             connection = pymysql.connect(host=db_srv,
@@ -229,7 +229,7 @@ def gen_chart(s,uid):
             "lt_upper_trend_line, lt_lower_trend_line, "+\
             "st_upper_trend_line, st_lower_trend_line, "+\
             "rsi, rsi_oversold, rsi_overbought, ma200, target_price, percent_perf, signal_price, percent_signal) VALUES "+ inserted_values
-            print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
+            debug(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
             cr_t.execute(sql_t)
             connection.commit()
             cr_t.close()
@@ -277,7 +277,7 @@ def gen_chart(s,uid):
                                                          cursorclass=pymysql.cursors.DictCursor)
                             cr_fp = connection.cursor(pymysql.cursors.SSCursor)
                             sql_fp = "SELECT target_price FROM price_instruments_data WHERE symbol = '"+ str(s) +"' ORDER BY date DESC LIMIT 1"
-                            print(sql_fp)
+                            debug(sql_fp)
                             cr_fp.execute(sql_fp)
                             rs_fp = cr_fp.fetchall()
                             for row in rs_fp: forecast = str(row[0])
@@ -302,10 +302,10 @@ def gen_chart(s,uid):
                     "lt_upper_trend_line, lt_lower_trend_line, "+\
                     "st_upper_trend_line, st_lower_trend_line, "+\
                     "rsi, rsi_oversold, rsi_overbought, ma200, target_price) VALUES "+ inserted_values
-                    print(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
+                    debug(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__) )
                     cr_t.execute(sql_t)
                     connection.commit()
                     cr_t.close()
                     connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)

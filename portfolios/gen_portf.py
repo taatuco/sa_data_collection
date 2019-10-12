@@ -37,7 +37,7 @@ def set_portf_symbol():
         r = get_portf_suffix() + symbol.upper()
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def set_portf_fullname(s,ac,m,st):
@@ -46,7 +46,7 @@ def set_portf_fullname(s,ac,m,st):
     try:
         fullname = s.replace(get_portf_suffix(),'')
         r = fullname + ' ' + m + ' ' + ac + ' ' + st
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_nickname(id):
@@ -58,7 +58,7 @@ def get_nickname(id):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_portf_description(ac,m,st,id):
@@ -77,7 +77,7 @@ def get_portf_description(ac,m,st,id):
         r = portf_description
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_strategy():
@@ -89,7 +89,7 @@ def get_strategy():
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_asset_class_name(ac):
@@ -101,7 +101,7 @@ def get_asset_class_name(ac):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_market_name(m):
@@ -113,7 +113,7 @@ def get_market_name(m):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_decimal_places(ac):
@@ -125,7 +125,7 @@ def get_decimal_places(ac):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_unit(m):
@@ -137,7 +137,7 @@ def get_unit(m):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def set_portf_owner():
@@ -149,7 +149,7 @@ def set_portf_owner():
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def select_allocation(ac,m):
@@ -161,7 +161,7 @@ def select_allocation(ac,m):
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def gen_portf_allocation(s,ac,m,sy):
@@ -180,12 +180,12 @@ def gen_portf_allocation(s,ac,m,sy):
         "('"+ str(s) +"','"+ select_allocation(ac,m) +"',1,'"+ strategy_order_type +"','"+ strategy_conviction +"'),"+\
         "('"+ str(s) +"','"+ select_allocation(ac,m) +"',1,'"+ strategy_order_type +"','"+ strategy_conviction +"'),"+\
         "('"+ str(s) +"','"+ select_allocation(ac,m) +"',1,'"+ strategy_order_type +"','"+ strategy_conviction +"')"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def create_portf(ac,m,sy):
     try:
@@ -209,12 +209,12 @@ def create_portf(ac,m,sy):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "INSERT IGNORE INTO symbol_list(symbol) VALUES "+\
         "('"+ portf_symbol +"')"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
         sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
         "('"+ str(portf_symbol) +"','"+ str(fullname) +"','"+ str(asset_class_id) +"','"+ str(market_id) +"',"+ str(decimal_places) +","+ str(pip) +","+ str(sector) +",'"+ str(unit) +"','"+ str(portf_description) +"',"+ str(account_reference) +","+ str(portf_owner) +")"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
 
@@ -223,7 +223,7 @@ def create_portf(ac,m,sy):
         cr.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def gen_portf():
     try:
@@ -255,6 +255,6 @@ def gen_portf():
         cr_m.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 gen_portf()

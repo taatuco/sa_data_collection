@@ -33,6 +33,13 @@ class sa_path:
     def get_path_r_oanda_src(self):
         return self.rdir + "\\r_oanda\\src\\"
 
+def debug(txt):
+    enable_debug = False
+    try:
+        if enable_debug: print(txt)
+    except:
+        pass
+
 def get_portf_suffix():
     return "PRF:"
 

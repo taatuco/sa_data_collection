@@ -24,8 +24,8 @@ def analyze_sentiment_of_this(text):
         analyser = SentimentIntensityAnalyzer()
         score = analyser.polarity_scores(text)
         r = (score.get('compound'))
-        print(str(r))
-    except Exception as e: print(e)
+        debug(str(r))
+    except Exception as e: debug(e)
     return r
 
 def get_sentiment_score_avg(s,dh):
@@ -46,5 +46,5 @@ def get_sentiment_score_avg(s,dh):
         cr.close()
         connection.close()
         r = avg_sentiment
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r

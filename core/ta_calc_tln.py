@@ -246,7 +246,7 @@ def get_trend_line_data(s,uid):
                 "FROM price_instruments_data "+\
                 "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
                 " ORDER BY date"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         ttr = cr.rowcount
@@ -290,7 +290,7 @@ def get_trend_line_data(s,uid):
             st_bias = get_bias(ma_50_sd, ma_50_ed)
             lt_bias = get_bias(ma_200_sd, ma_200_ed)
 
-            print(s +": "+ os.path.basename(__file__) )
+            debug(s +": "+ os.path.basename(__file__) )
             writer.writerow({"180_sd": str(t180_sd), "180_slope_low": str(t180_slp_l), "180_slope_high": str(t180_slp_h),
             "360_sd": str(t360_sd), "360_slope_low": str(t360_slp_l),"360_slope_high": str(t360_slp_h),
             "180_sdv_low": str(t180_sdv_l), "180_sdv_high": str(t180_sdv_h), "360_sdv_low": str(t360_sdv_l), "360_sdv_high": str(t360_sdv_h),

@@ -65,7 +65,7 @@ def gen_recomm(s,uid):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol='"+s+"'"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -76,7 +76,7 @@ def gen_recomm(s,uid):
         sql = "SELECT trade_1_entry, trade_1_tp, trade_1_sl, trade_1_type, "+\
         "trade_3_entry, trade_3_tp, trade_3_sl, trade_3_type, wf "+\
         "FROM instruments WHERE symbol ='" + s + "'"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -126,7 +126,7 @@ def gen_recomm(s,uid):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+s+"' ORDER BY date DESC LIMIT 1"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -142,7 +142,7 @@ def gen_recomm(s,uid):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT * FROM recommendations"
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -206,13 +206,13 @@ def gen_recomm(s,uid):
 
             cr_u = connection.cursor(pymysql.cursors.SSCursor)
             sql_u = "UPDATE instruments SET recommendation='"+ str(r) +"' WHERE symbol='" + str(s) + "'"
-            print(sql)
+            debug(sql)
             cr_u.execute(sql_u)
             connection.commit()
             cr_u.close()
         cr.close()
         connection.close()
 
-        print(str(uid) +": "+ os.path.basename(__file__) )
+        debug(str(uid) +": "+ os.path.basename(__file__) )
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)

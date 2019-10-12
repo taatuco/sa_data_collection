@@ -42,12 +42,12 @@ portf_description_en ="This {market_asset_class} portfolio is designed by {nickn
 
 sql = "INSERT IGNORE INTO labels(lang, portf_description) VALUES "+\
 "('"+lang_en+"', '"+  portf_description_en +"') "
-print(sql)
+debug(sql)
 
 try:
     cr.execute(sql)
     connection.commit()
-except Exception as e: print(e)
+except Exception as e: debug(e)
 
 cr.close()
 connection.close()

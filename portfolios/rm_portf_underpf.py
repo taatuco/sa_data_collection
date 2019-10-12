@@ -60,7 +60,7 @@ def rm_portf_underpf(limit_max):
             cr.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def rm_portf_from(table,column,s):
     try:
@@ -72,10 +72,10 @@ def rm_portf_from(table,column,s):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'DELETE FROM '+ str(table) +' WHERE '+ column +' = "'+ str(s) +'"'
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
         cr.close()
         connection.close()
         gc.collect()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)

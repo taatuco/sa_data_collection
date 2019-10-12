@@ -67,10 +67,10 @@ sql = "INSERT IGNORE INTO newsdata(name, url, format, type, asset_class, market,
 "('WalletInvestor','https://walletinvestor.com/blog/feed/','rss','global','CR:','','en',0), "+\
 "('Finance Magnates','https://www.financemagnates.com/cryptocurrency/feed/','rss','global','CR:','','en',0), "+\
 "('Bitcoin Magazine','https://bitcoinmagazine.com/feed','rss','global','CR:','','en',0)"
-print(sql +": "+ os.path.basename(__file__) )
+debug(sql +": "+ os.path.basename(__file__) )
 
 try:
     cr.execute(sql)
     connection.commit()
     cr.close()
-except Exception as e: print(e)
+except Exception as e: debug(e)

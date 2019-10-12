@@ -53,12 +53,12 @@ def get_portf_perf_summ(s,uid):
         sql = "UPDATE instruments SET y1="+ str(y1) +", m6="+ str(m6) +", m3="+ str(m3) +", m1="+ str(m1) +", w1="+ str(w1) +", "+\
         " stdev_st="+ str(stdev_st) + ", maximum_dd_st="+ str(maximum_dd_st) + ", romad_st="+ str(romad_st) + ", volatility_risk_st="+ str(volatility_risk_st) +\
         " WHERE symbol='"+ str(s)  +"' "
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def get_portf_perf():
     try:
@@ -92,7 +92,7 @@ def get_portf_perf():
 
             cr_i = connection.cursor(pymysql.cursors.SSCursor)
             sql_i = "DELETE FROM chart_data WHERE uid = "+ str(portf_uid)
-            print(sql_i)
+            debug(sql_i)
             cr_i.execute(sql_i)
             connection.commit()
             cr_i.close()
@@ -112,7 +112,7 @@ def get_portf_perf():
                     "FROM portfolios JOIN price_instruments_data ON portfolios.symbol = price_instruments_data.symbol "+\
                     "JOIN instruments ON portfolios.symbol = instruments.symbol "+\
                     "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
-                    print(sql_c)
+                    debug(sql_c)
 
                     cr_c.execute(sql_c)
                     rs_c = cr_c.fetchall()
@@ -144,12 +144,12 @@ def get_portf_perf():
                 cr_i = connection.cursor(pymysql.cursors.SSCursor)
                 sql_i = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close) VALUES "+\
                 inserted_value
-                print(sql_i)
+                debug(sql_i)
                 cr_i.execute(sql_i)
                 connection.commit()
                 cr_i.close()
-            except Exception as e: print(e)
+            except Exception as e: debug(e)
             get_portf_perf_summ(portf_symbol, portf_uid)
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)

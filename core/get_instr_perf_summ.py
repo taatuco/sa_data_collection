@@ -34,17 +34,17 @@ def get_pct_from_date(d, sql_select, lp):
                                  cursorclass=pymysql.cursors.DictCursor)
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = sql_select + "AND date <= '"+ str(d) +"' ORDER BY date DESC LIMIT 1"
-    print(sql)
+    debug(sql)
     cr.execute(sql)
     rs = cr.fetchall()
     for row in rs:
         pp = row[0]
     cr.close()
     connection.close()
-    print('pp: ' + str(pp) + ' date='+ str(d) )
+    debug('pp: ' + str(pp) + ' date='+ str(d) )
     if pp != 0:
         pct = ( (lp - pp) / pp)
-    print(str(pct) + ' = '+ '('+ str(lp) +' - '+ str(pp) +') / '+ str(pp))
+    debug(str(pct) + ' = '+ '('+ str(lp) +' - '+ str(pp) +') / '+ str(pp))
     return pct
 
 def get_prev_session_date(symbol):
@@ -67,7 +67,7 @@ def get_prev_session_date(symbol):
         cr.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 
@@ -107,7 +107,7 @@ class instr_sum_data:
             self.sql_select = "SELECT price_close, date FROM price_instruments_data WHERE symbol='"+ self.s + "' "
             self.sql_select_signal = "SELECT signal_price, date from chart_data WHERE symbol='"+ self.s +"' AND forecast = 0 "
             sql = self.sql_select_signal+" ORDER BY Date DESC LIMIT 1"
-            print(sql)
+            debug(sql)
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs: self.lp_signal = row[0];

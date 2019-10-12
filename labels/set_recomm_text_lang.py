@@ -66,12 +66,12 @@ sql = "INSERT IGNORE INTO recommendations(lang, price_under_200ma, price_above_2
 "'"+lower_range_above_price_uptrend_en+"', '"+rsi_oversold_en+"', '"+rsi_overbought_en+"', '"+rsi_weak_en+"', "+\
 "'"+rsi_strong_en+"', '"+uptrend_recomm_en+"', '"+downtrend_recomm_en+"', '"+portf_descr_en+"', '"+portf_recomm_buy_en+ "', '"+portf_recomm_sell_en+"', "+\
 "'"+portf_risk_consider_en+"'"  +")"
-print(sql)
+debug(sql)
 
 try:
     cr.execute(sql)
     connection.commit()
-except Exception as e: print(e)
+except Exception as e: debug(e)
 
 cr.close()
 connection.close()

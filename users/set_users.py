@@ -55,7 +55,7 @@ def set_nickname():
         cr.close()
         num = str( random.randint(1,99) )
         r = p1 + p2 + num
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def set_default_profile():
@@ -68,7 +68,7 @@ def set_default_profile():
         for row in rs: r = row[0]
         cr.close()
         r = r.replace('PF:',''); r = r.replace('BD:','')
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def gen_users(n):
@@ -102,13 +102,13 @@ def gen_users(n):
             try:
                 sql = "INSERT IGNORE INTO users(uid, name, nickname, username, password, avatar_id, created_on, default_profile, lang, is_bot) VALUES "+\
                 "('"+ str(uid) +"','"+ str(name) +"','"+ str(nickname) +"','"+ str(username) +"','"+ str(password) +"',"+ str(avatar_id) +",'"+ str(created_on) +"','"+ str(default_profile) +"','"+ str(lang) +"',"+str(is_bot)+")"
-                print(sql)
+                debug(sql)
                 cr.execute(sql)
                 connection.commit()
             except:
                 pass
         cr.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 gen_users(2000)

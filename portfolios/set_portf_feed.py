@@ -46,7 +46,7 @@ def get_portf_content(user_id):
         r = '<img src="{burl}static/avatar/'+ str(avatar_id) +'.png" style="vertical-align: middle;border-style: none;width: 30px;">&nbsp;<strong>'+nickname+'</strong>'
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
@@ -122,7 +122,7 @@ def get_portf_ranking(s,rank,stdev_st,y1,m6,m3,m1):
 
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def set_portf_feed():
@@ -177,7 +177,7 @@ def set_portf_feed():
 
         badge = w_forecast_display_info
         search = asset_class + market + symbol + " " + fullname
-        print(search +": "+ os.path.basename(__file__) )
+        debug(search +": "+ os.path.basename(__file__) )
 
         if i == 0:
             sep = ''
@@ -199,12 +199,12 @@ def set_portf_feed():
     "(date, short_title, short_description, content, url,"+\
         " ranking, symbol, type, badge, "+\
     "search, asset_class, market) VALUES " + inserted_value
-    print(sql_i)
+    debug(sql_i)
     try:
         cr_i.execute(sql_i)
         connection.commit()
     except Exception as e:
-        print(e + ' ' + os.path.basename(__file__) )
+        debug(e + ' ' + os.path.basename(__file__) )
         pass
     cr_i.close()
 
@@ -220,7 +220,7 @@ def set_portf_feed():
         portf_symbol = row[0]
         cr_u = connection.cursor(pymysql.cursors.SSCursor)
         sql_u = "UPDATE feed SET globalRank = "+ str(i) + " WHERE symbol = '"+ str(portf_symbol) +"'"
-        print(sql_u)
+        debug(sql_u)
         cr_u.execute(sql_u)
         i += 1
         connection.commit()

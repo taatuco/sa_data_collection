@@ -63,7 +63,7 @@ def get_day_up_dwn_stat(s,uid):
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        print(s +": "+ os.path.basename(__file__) )
+        debug(s +": "+ os.path.basename(__file__) )
         writer.writerow({"symbol": str(s),
         "7_up_days": str(w1_up),"7_down_days": str(w1_dn),
         "30_up_days": str(m1_up),"30_down_days": str(m1_dn) })

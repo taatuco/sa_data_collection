@@ -84,7 +84,7 @@ class forecast_data:
                         self.tp_2_s = row[4] #lower 95 last row row[4]
                         self.frc_pt = target_price
                     i +=1
-        print(str(uid) +": "+ os.path.basename(__file__) )
+        debug(str(uid) +": "+ os.path.basename(__file__) )
 
 
     def get_frc_pt(self):
@@ -187,12 +187,12 @@ def update_forecast_table(s,wf,frc,d,pip):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (date>="+ d +" AND symbol='"+s+"' AND target_price =0) "
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def update_instruments_table(s,y1_pct,m6_pct,m3_pct,m1_pct,w1_pct,d1_pct,wf_pct,
 trade_entry_buy_1,trade_tp_buy_1,trade_sl_buy_1,
@@ -308,13 +308,13 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal,sentiment)
         "y1_signal="+str(y1_pct_signal)+",m6_signal="+str(m6_pct_signal)+",m3_signal="+str(m3_pct_signal)+",m1_signal="+str(m1_pct_signal)+",w1_signal="+str(w1_pct_signal) +", "+\
         "sentiment="+str(sentiment)+" "+\
         "WHERE symbol='"+s+"' "
-        print(sql_i)
+        debug(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
         cr_i.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 
 def get_instr_sum(s,uid,asset_class,dn,pip,sentiment):
@@ -369,4 +369,4 @@ def get_instr_sum(s,uid,asset_class,dn,pip,sentiment):
         trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2,
         y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal,sentiment)
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)

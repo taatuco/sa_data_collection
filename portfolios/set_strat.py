@@ -38,11 +38,11 @@ def gen_strategies():
         "('ls','long/short'), "+\
         "('l','long-only'), "+\
         "('s','short-only') "
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 gen_strategies()

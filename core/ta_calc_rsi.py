@@ -91,7 +91,7 @@ class rsi_data:
                 cr_get_curr_d.close()
             cr_get_pr_d.close()
             connection.close()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 
 
     def get_gain(self):
@@ -130,7 +130,7 @@ class rsi_data:
                 #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(period-1)+ (GAIN) ) / period
                 rsi_data.c_curr_avg_gain = ( ( rsi_data.c_prev_avg_gain * (self.p-1) )+ rsi_data.c_curr_gain )/self.p
             connection.close()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
         return rsi_data.c_curr_avg_gain
 
     def get_avg_loss(self):
@@ -161,7 +161,7 @@ class rsi_data:
                 #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
                 rsi_data.c_curr_avg_loss = ( ( rsi_data.c_prev_avg_loss * (self.p-1) )+ rsi_data.c_curr_loss )/self.p
             connection.close()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
         return rsi_data.c_curr_avg_loss
 
 

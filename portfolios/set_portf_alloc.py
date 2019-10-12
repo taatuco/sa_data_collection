@@ -48,7 +48,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -60,7 +60,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -72,7 +72,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -84,7 +84,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -96,7 +96,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -108,7 +108,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -120,7 +120,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -132,7 +132,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -144,7 +144,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -156,7 +156,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -167,7 +167,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -179,7 +179,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -191,7 +191,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -203,7 +203,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -213,7 +213,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -224,7 +224,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -236,7 +236,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -248,7 +248,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -260,7 +260,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -272,7 +272,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
 ################################################################################
@@ -283,7 +283,7 @@ def set_alloc(sfx,s):
         try:
             cr.execute(sql)
             connection.commit()
-        except Exception as e: print(e)
+        except Exception as e: debug(e)
 ################################################################################
 
     cr.close()

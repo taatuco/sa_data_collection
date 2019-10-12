@@ -107,7 +107,7 @@ def get_trades(s,uid,dc,full_update):
             dto = date_1 + timedelta(days=8) ; dto_str = dto.strftime('%Y%m%d')
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
             sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dto_str + " ORDER BY date LIMIT 1"
-            print(sql_2)
+            debug(sql_2)
             cr_2.execute(sql_2)
             rs_2 = cr_2.fetchall()
             date_2 = None; price_close_2 = -1
@@ -117,7 +117,7 @@ def get_trades(s,uid,dc,full_update):
             if price_close_1 <= target_price_1: trade_order_type = 'buy'
             else: trade_order_type = 'sell'
 
-            print(str(date_1) + " ::: " + str(price_close_1) + " ::: " + str(target_price_1) + " ::: " + str(trade_order_type) )
+            debug(str(date_1) + " ::: " + str(price_close_1) + " ::: " + str(target_price_1) + " ::: " + str(trade_order_type) )
 
             trade_entry_price = price_close_1; trade_entry_date = date_1 + timedelta(days=1)
             if date_2 is not None: trade_expiration_date = date_2
@@ -138,7 +138,7 @@ def get_trades(s,uid,dc,full_update):
             else:
                 sep = ','
 
-            print("("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
+            debug("("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
             str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")")
 
             inserted_value = inserted_value + sep + "("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
@@ -158,7 +158,7 @@ def get_trades(s,uid,dc,full_update):
         cr_i = connection.cursor(pymysql.cursors.SSCursor)
         sql_i = "INSERT IGNORE INTO trades(uid, symbol, fullname, order_type, entry_price, entry_date, expiration_date, close_price, pnl_pct, status, url) VALUES "+ inserted_value
         try:
-            print(sql_i)
+            debug(sql_i)
             cr_i.execute(sql_i)
             connection.commit()
             r = True
@@ -167,6 +167,6 @@ def get_trades(s,uid,dc,full_update):
         cr_i.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
     return r

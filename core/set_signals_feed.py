@@ -53,7 +53,7 @@ def get_signal_ranking(s,rank):
         cr.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def set_signals_feed(s):
@@ -109,7 +109,7 @@ def set_signals_feed(s):
 
         search = asset_class + market + symbol + " " + fullname
 
-        print(search +": "+ os.path.basename(__file__) )
+        debug(search +": "+ os.path.basename(__file__) )
 
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_d = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+d+"' AND type="+ type +")"

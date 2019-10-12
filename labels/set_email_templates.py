@@ -44,12 +44,12 @@ new_user_welcome_content_en = "{fullname},\n Thank you for joining SmartAlpha.\n
 
 sql = "INSERT IGNORE INTO email_templates(lang, new_user_welcome_subject, new_user_welcome_content) VALUES "+\
 "('"+lang_en+"', '"+  new_user_welcome_subject_en +"', '"+ new_user_welcome_content_en +"' " + ")"
-print(sql)
+debug(sql)
 
 try:
     cr.execute(sql)
     connection.commit()
-except Exception as e: print(e)
+except Exception as e: debug(e)
 
 cr.close()
 connection.close()

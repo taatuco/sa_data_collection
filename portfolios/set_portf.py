@@ -43,7 +43,7 @@ def get_user_smartalpha_id():
         rs = cr.fetchall()
         for row in rs: r = row[0]
         cr.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 owner_sa_bot_id = get_user_smartalpha_id()
 
@@ -92,14 +92,14 @@ def set_portf_fx():
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "FXONE','No-Fly Global Forex long/short','FX:','GO>',5,1,1,'USD','With an exposure in the foreign exchange market, the defined porfolio projects an absolute positive return in the next couple days.',1000,"+ str(owner_sa_bot_id) +")"
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
-    print( set_alloc(portf_symbol_suffix, "FXONE") )
+    except Exception as e: debug(e)
+    debug( set_alloc(portf_symbol_suffix, "FXONE") )
     cr.close()
     return ac
 
@@ -114,14 +114,14 @@ def set_portf_crypto():
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "CRYPTONE','The Hot Potato Global Crypto long/short','CR:','GO>',5,1,2,'USD','This is a quantamental portfolio trading on some of the most lucrative financial assets, the portfolio consists of a long/short strategy on most popular cryptocurrencies.',1000,"+ str(owner_sa_bot_id) +")"
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
-    print( set_alloc(portf_symbol_suffix, "CRYPTONE") )
+    except Exception as e: debug(e)
+    debug( set_alloc(portf_symbol_suffix, "CRYPTONE") )
     cr.close()
     return ac
 
@@ -136,14 +136,14 @@ def set_portf_commo():
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "COMMONE','Gold Digger Global Commodities long/short','CO:','GO>',2,1,18,'USD','This portfolio includes two of the most traded commodities products.',1000,"+ str(owner_sa_bot_id) +")"
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
-    print( set_alloc(portf_symbol_suffix, "COMMONE") )
+    except Exception as e: debug(e)
+    debug( set_alloc(portf_symbol_suffix, "COMMONE") )
     cr.close()
     return ac
 
@@ -159,16 +159,16 @@ def set_portf_multi():
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "MULTIONE','Milkshake Global Multi-asset long/short','MA:','GO>',5,1,19,'USD','This is a quantamental portfolio trading on some of the most lucrative financial assets, a combination of relevant stocks and cryptocurrencies.',1000,"+ str(owner_sa_bot_id) +"), "+\
     "('" + portf_symbol_suffix + "GOJONE','Safe Haven Global Multi-asset long/short','MA:','GO>',5,1,19,'USD','This is a playsafe portfolio, involving only Gold ETF and Japanese Yen.',1000,"+ str(owner_sa_bot_id) +")"
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
-    print( set_alloc(portf_symbol_suffix, "MULTIONE") )
-    print( set_alloc(portf_symbol_suffix, "GOJONE") )
+    except Exception as e: debug(e)
+    debug( set_alloc(portf_symbol_suffix, "MULTIONE") )
+    debug( set_alloc(portf_symbol_suffix, "GOJONE") )
     cr.close()
     return ac
 
@@ -198,7 +198,7 @@ def set_portf_us():
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     sql = "INSERT IGNORE INTO instruments(symbol, fullname, asset_class, market, decimal_places, pip, sector, unit, description, account_reference, owner) VALUES "+\
     "('" + portf_symbol_suffix + "INDXONE','The Escalator Global Equity long/short','EQ:','GO>',2,1,17,'USD','This portfolio includes carefully selected world major indices traded with a long/short strategy.',1000,"+ str(owner_sa_bot_id) +"), "+\
     "('" + portf_symbol_suffix + "INDUONEUS','Smoke Up U.S. Equity long/short','EQ:','US>',2,1,4,'USD','This portfolio is a combination of assets from different industries statistically selected to provide positive gains over the next week.',1000,"+ str(owner_sa_bot_id) +"), "+\
@@ -219,30 +219,30 @@ def set_portf_us():
     try:
         cr.execute(sql)
         connection.commit()
-    except Exception as e: print(e)
-    print( set_alloc(portf_symbol_suffix, "INDXONE") )
-    print( set_alloc(portf_symbol_suffix, "INDUONEUS") )
-    print( set_alloc(portf_symbol_suffix, "TECHONEUS") )
-    print( set_alloc(portf_symbol_suffix, "HCONEUS") )
-    print( set_alloc(portf_symbol_suffix, "CDONEUS") )
-    print( set_alloc(portf_symbol_suffix, "UTILONEUS") )
-    print( set_alloc(portf_symbol_suffix, "FINONEUS") )
-    print( set_alloc(portf_symbol_suffix, "MATONEUS") )
-    print( set_alloc(portf_symbol_suffix, "TONEUS") )
-    print( set_alloc(portf_symbol_suffix, "CSONEUS") )
-    print( set_alloc(portf_symbol_suffix, "NRGONEUS") )
-    print( set_alloc(portf_symbol_suffix, "TELCONEUS") )
-    print( set_alloc(portf_symbol_suffix, "REITONEUS") )
-    print( set_alloc(portf_symbol_suffix, "FOODONEUS") )
-    print( set_alloc(portf_symbol_suffix, "DEFONEUS") )
-    print( set_alloc(portf_symbol_suffix, "TOBACONEUS") )
+    except Exception as e: debug(e)
+    debug( set_alloc(portf_symbol_suffix, "INDXONE") )
+    debug( set_alloc(portf_symbol_suffix, "INDUONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "TECHONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "HCONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "CDONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "UTILONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "FINONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "MATONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "TONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "CSONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "NRGONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "TELCONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "REITONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "FOODONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "DEFONEUS") )
+    debug( set_alloc(portf_symbol_suffix, "TOBACONEUS") )
     cr.close()
     return ac
 
 
 ################################################################################
-print(set_portf_fx() +": "+ os.path.basename(__file__) )
-print(set_portf_crypto() +": "+ os.path.basename(__file__) )
-print(set_portf_commo() +": "+ os.path.basename(__file__) )
-print(set_portf_multi() +": "+ os.path.basename(__file__) )
-print(set_portf_us() +": "+ os.path.basename(__file__) )
+debug(set_portf_fx() +": "+ os.path.basename(__file__) )
+debug(set_portf_crypto() +": "+ os.path.basename(__file__) )
+debug(set_portf_commo() +": "+ os.path.basename(__file__) )
+debug(set_portf_multi() +": "+ os.path.basename(__file__) )
+debug(set_portf_us() +": "+ os.path.basename(__file__) )

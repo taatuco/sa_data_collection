@@ -73,12 +73,12 @@ _5_vix_day_up_week_down_en+'","'+_5_vix_day_down_week_down_en+'","'+_6_vix_day_u
 _7_worldstocks_down_JPY_down_en+'","'+_8_workdstocks_up_JPY_up_en+'","'+_8_worldstocks_down_JPY_up_en+'","'+_9_gold_up_en+'","'+_9_gold_down_en+'","'+_10_BTC_day_up_week_up_en+'","'+\
 _10_BTC_day_down_week_up_en+'","'+_11_BTC_day_up_week_down_en+'","'+_11_BTC_day_down_week_down_en+'")'
 
-print(sql)
+debug(sql)
 
 try:
     cr.execute(sql)
     connection.commit()
-except Exception as e: print(e)
+except Exception as e: debug(e)
 
 cr.close()
 connection.close()

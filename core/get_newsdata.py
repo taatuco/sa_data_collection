@@ -61,7 +61,7 @@ def get_newsdata(limit,clear_history,what,cat):
         get_newsdata_rss(d,feed_id,limit,what,cat)
         if clear_history: clear_old_newsdata(dh,feed_id)
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def get_newsdata_rss(d,feed_id,limit,what,cat):
     try:
@@ -86,9 +86,9 @@ def get_newsdata_rss(d,feed_id,limit,what,cat):
                 get_rss_global(feed_id,d,feed_url,asset_class,market,lang,limit)
             if type == str('specific') and (what == 'all' or what == 'specific'):
                 get_rss_specific(feed_id,d,feed_url,lang,limit)
-                
+
         cr.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
     try:
@@ -125,7 +125,7 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
         'url, type, search, asset_class, market, lang, ranking) VALUES '+ insert_line
-        print(sql +": "+ os.path.basename(__file__) )
+        debug(sql +": "+ os.path.basename(__file__) )
         try:
             cr.execute(sql)
             connection.commit()
@@ -133,7 +133,7 @@ def get_rss_global(feed_id,date_d,feed_url,asset_class,market,lang,limit):
         except: pass
         cr.close()
 
-    except Exception as e: print(s)
+    except Exception as e: debug(s)
 
 def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
     try:
@@ -162,7 +162,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             if instrument_description != '' or instrument_description is not None:
                 feed = feedparser.parse(feed_url_selection)
 
-            print(feed_url_selection)
+            debug(feed_url_selection)
 
             insert_line = ''
             short_title = ''
@@ -196,7 +196,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
             'url, type, search, asset_class, market, lang, symbol, ranking) VALUES '+ insert_line
-            print(sql +": "+ os.path.basename(__file__) )
+            debug(sql +": "+ os.path.basename(__file__) )
             try:
                 cr.execute(sql)
                 connection.commit()
@@ -204,15 +204,15 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
             except: pass
             cr.close()
         cr_s.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 def clear_old_newsdata(dh,feed_id):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'DELETE FROM feed WHERE type='+ str(feed_id) + ' AND date < '+ str(dh)
-        print(sql)
+        debug(sql)
         cr.execute(sql)
         connection.commit()
         gc.collect()
         cr.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)

@@ -73,7 +73,7 @@ def get_condition(s,sj,w):
             if d1 < 0: r = 'd1_down'
 
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_perf(s,p,reverse):
@@ -112,7 +112,7 @@ def get_perf(s,p,reverse):
         if p == 'd1': r = d1 + sep + unit
         if p == 'w1': r = w1 + sep + unit
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def compile_market_snapshot():
@@ -226,7 +226,7 @@ def compile_market_snapshot():
 
         r = report
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def send_intel_report():
@@ -245,7 +245,7 @@ def send_intel_report():
 
         bundle_email(num_of_email_limit_per_message, num_of_second_interval, send_to_email, send_to_displayname, subject, l_msgtext)
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
 
 
 def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_displayName, subject, textmsg):
@@ -276,7 +276,7 @@ def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_dis
                 i += 1
             else:
                 send_mail(to_email,to_displayName,bcc,subject,textmsg)
-                print('waiting for '+ str(num_of_second_interval) + ' seconds before the next batch...' )
+                debug('waiting for '+ str(num_of_second_interval) + ' seconds before the next batch...' )
                 time.sleep(num_of_second_interval)
                 bcc.clear()
                 bcc.append(email)
@@ -287,4 +287,4 @@ def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_dis
         cr.close()
         connection.close()
 
-    except Exception as e: print(e)
+    except Exception as e: debug(e)

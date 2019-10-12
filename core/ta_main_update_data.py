@@ -75,8 +75,8 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 pip = row[0]
             cr_pip.close()
 
-            print(str(uid) + ' - ' + str(s) + '------------------------------' )
-            print(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
+            debug(str(uid) + ' - ' + str(s) + '------------------------------' )
+            debug(s +": "+ str(pip) +": "+ os.path.basename(__file__) )
             dn = datetime.datetime.now() - timedelta(days=10)
             dn = dn.strftime("%Y%m%d")
             dh = datetime.datetime.now() - timedelta(days=7)
@@ -143,7 +143,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                     connection.commit()
                     gc.collect()
                     cr_upd.close()
-                    print(sql_upd)
+                    debug(sql_upd)
                 except:
                     sql_upd = "UPDATE price_instruments_data SET "+\
                     "is_ta_calc=1 "+\

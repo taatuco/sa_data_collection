@@ -37,21 +37,21 @@ dy = dy.strftime('%Y%m%d')
 
 cr = connection.cursor(pymysql.cursors.SSCursor)
 sql = 'DELETE FROM price_instruments_data WHERE date >='+ str(dy)
-print(sql)
+debug(sql)
 cr.execute(sql)
 connection.commit()
 
 sql = 'DELETE FROM chart_data'
-print(sql)
+debug(sql)
 cr.execute(sql)
 connection.commit()
 
 sql = 'DELETE FROM feed WHERE type=1'
-print(sql)
+debug(sql)
 cr.execute(sql)
 connection.commit()
 
 sql = 'DELETE FROM trades'
-print(sql)
+debug(sql)
 cr.execute(sql)
 connection.commit()

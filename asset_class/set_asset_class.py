@@ -40,10 +40,10 @@ sql = "INSERT IGNORE INTO asset_class(asset_class_id, asset_class_name) VALUES "
 "('CO:','Commodities'), "+\
 "('BD:','Bonds'), "+\
 "('MA:','Multi-asset')"
-print(sql +": "+ os.path.basename(__file__) )
+debug(sql +": "+ os.path.basename(__file__) )
 
 try:
     cr.execute(sql)
     connection.commit()
     cr.close()
-except Exception as e: print(e)
+except Exception as e: debug(e)

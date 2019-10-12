@@ -130,7 +130,7 @@ def get_conviction_coef(c):
         if c == 'neutral': r = random.randint(8,20)
         if c == 'strong': r = random.randint(21,80)
         r = (r * 0.01) + 1
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_market_conv_rate(m):
@@ -149,7 +149,7 @@ def get_market_conv_rate(m):
         for row in rs: r = row[0]
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_market_currency(m):
@@ -168,7 +168,7 @@ def get_market_currency(m):
         for row in rs: r = row[0]
         cr.close()
         connection.close()
-    except Exception as e: print(e)
+    except Exception as e: debug(e)
     return r
 
 def get_portf_alloc():
@@ -207,7 +207,7 @@ def get_portf_alloc():
         rs_pf = cr_pf.fetchall()
         for row in rs_pf:
 
-            print(sql_pf+": "+ os.path.basename(__file__) )
+            debug(sql_pf+": "+ os.path.basename(__file__) )
             portf_item_symbol = row[0]
             portf_initial_item_quantity = row[1]
             portf_item_conviction = row[2]
@@ -221,7 +221,7 @@ def get_portf_alloc():
             sql_p = "SELECT price_close, date FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"
             cr_p.execute(sql_p)
             rs_p = cr_p.fetchall()
-            print(sql_p+": "+ os.path.basename(__file__) )
+            debug(sql_p+": "+ os.path.basename(__file__) )
             for row in rs_p:
                 alloc_price = row[0]
                 alloc_date = row[1]
@@ -236,7 +236,7 @@ def get_portf_alloc():
 
             cr_t.execute(sql_t)
             rs_t = cr_t.fetchall()
-            print(sql_t+": "+ os.path.basename(__file__) )
+            debug(sql_t+": "+ os.path.basename(__file__) )
 
             for row in rs_t:
                 alloc_symbol = row[0]
@@ -265,13 +265,13 @@ def get_portf_alloc():
 
                 entry_level = alloc_entry_level_sign + ' ' + str( round( float(alloc_price), alloc_decimal_places) )
 
-                print(portf_symbol +": " + alloc_symbol )
+                debug(portf_symbol +": " + alloc_symbol )
 
                 cr_x = connection.cursor(pymysql.cursors.SSCursor)
                 sql_x = 'UPDATE portfolios SET quantity='+ str(portf_item_quantity) +', alloc_fullname="'+ alloc_fullname +'", order_type="' + alloc_order_type + '", '+\
                 'dollar_amount='+ str(alloc_dollar_amount) +', entry_level="'+ entry_level +'", expiration='+ alloc_expiration +' '+\
                 'WHERE symbol ="'+ alloc_symbol+'" AND portf_symbol ="' + portf_symbol + '" '
-                print(sql_x)
+                debug(sql_x)
                 cr_x.execute(sql_x)
                 connection.commit()
                 cr_x.close()

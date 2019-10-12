@@ -34,10 +34,10 @@ cr.execute(sql)
 
 sql = "INSERT IGNORE INTO brokers(broker_id, burl, affiliate_link) VALUES "+\
 "('eToro','https://www.etoro.com/markets/','http://partners.etoro.com/A52784_TClick.aspx')"
-print(sql +": "+ os.path.basename(__file__) )
+debug(sql +": "+ os.path.basename(__file__) )
 
 try:
     cr.execute(sql)
     connection.commit()
     cr.close()
-except Exception as e: print(e)
+except Exception as e: debug(e)
