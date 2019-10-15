@@ -22,6 +22,12 @@ access_obj = sa_db_access()
 import pymysql.cursors
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
+connection = pymysql.connect(host=db_srv,
+                             user=db_usr,
+                             password=db_pwd,
+                             db=db_name,
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
 
 def get_forecast_pnl(s,uid,nd, full_update):
 
@@ -48,12 +54,6 @@ def get_forecast_pnl(s,uid,nd, full_update):
 
         debug(s +": "+ sd_str +": "+ os.path.basename(__file__) )
 
-        connection = pymysql.connect(host=db_srv,
-                                     user=db_usr,
-                                     password=db_pwd,
-                                     db=db_name,
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close, target_price FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ pd_str
         cr.execute(sql)
@@ -62,7 +62,6 @@ def get_forecast_pnl(s,uid,nd, full_update):
             p_price_close = row[0]
             p_target_price = row[1]
         cr.close()
-        connection.close()
 
         if (p_price_close > 0 and p_target_price > 0 ):
 
@@ -94,7 +93,6 @@ def get_forecast_pnl(s,uid,nd, full_update):
                 s_pnl_long = row[3]
                 s_pnl_short = row[4]
             cr.close()
-            connection.close()
 
             if (s_pnl == 0 or s_pnl_long == 0 or s_pnl_short == 0) or (full_update):
                 if signal == "b":
@@ -104,12 +102,6 @@ def get_forecast_pnl(s,uid,nd, full_update):
                     pnl = p_price_close - s_price_close
                     pnl_short = pnl
 
-                connection = pymysql.connect(host=db_srv,
-                                             user=db_usr,
-                                             password=db_pwd,
-                                             db=db_name,
-                                             charset='utf8mb4',
-                                             cursorclass=pymysql.cursors.DictCursor)
                 cr = connection.cursor(pymysql.cursors.SSCursor)
                 sql = "UPDATE price_instruments_data SET pnl = " + str(pnl) + ", pnl_long = " + str(pnl_long) + ", pnl_short = " + str(pnl_short) + " WHERE id = " + str(id)
                 debug(sql)
@@ -118,5 +110,4 @@ def get_forecast_pnl(s,uid,nd, full_update):
                     connection.commit()
                 except Exception as e: debug(e)
                 cr.close()
-                connection.close()
         i += 1
