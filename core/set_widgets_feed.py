@@ -19,6 +19,13 @@ access_obj = sa_db_access()
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
+sys.path.append(os.path.abspath( sett.get_path_feed() ))
+from add_feed_type import *
+
+from pathlib import Path
+
+import pymysql.cursors
+
 connection = pymysql.connect(host=db_srv,
                              user=db_usr,
                              password=db_pwd,
@@ -26,12 +33,6 @@ connection = pymysql.connect(host=db_srv,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
-sys.path.append(os.path.abspath( sett.get_path_feed() ))
-from add_feed_type import *
-
-from pathlib import Path
-
-import pymysql.cursors
 
 def set_widgets_feed(s):
     try:
