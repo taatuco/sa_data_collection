@@ -75,12 +75,7 @@ def get_forecast_pnl(s,uid,nd, full_update):
             s_pnl_long = 0
             s_pnl_short = 0
             s_price_close = 0
-            connection = pymysql.connect(host=db_srv,
-                                         user=db_usr,
-                                         password=db_pwd,
-                                         db=db_name,
-                                         charset='utf8mb4',
-                                         cursorclass=pymysql.cursors.DictCursor)
+
             cr = connection.cursor(pymysql.cursors.SSCursor)
             sql = "SELECT id, price_close, pnl, pnl_long, pnl_short FROM price_instruments_data WHERE symbol ='"+s+"' AND date = "+ sd_str
             debug(sql)
