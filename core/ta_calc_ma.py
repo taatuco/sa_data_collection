@@ -20,15 +20,16 @@ access_obj = sa_db_access()
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
+import pymysql.cursors
+connection = pymysql.connect(host=db_srv,
+                             user=db_usr,
+                             password=db_pwd,
+                             db=db_name,
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+
 def calc_ma(symbol_id, date_id, ma_period):
     try:
-        import pymysql.cursors
-        connection = pymysql.connect(host=db_srv,
-                                     user=db_usr,
-                                     password=db_pwd,
-                                     db=db_name,
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
 
         from_date =  datetime.datetime.strptime(date_id, '%Y%m%d') - ( timedelta(days=ma_period) )
         from_date = from_date.strftime("%Y%m%d")
@@ -43,6 +44,5 @@ def calc_ma(symbol_id, date_id, ma_period):
             for row in rs:
                 ma = row[0]
         cr.close()
-        connection.close()
     except Exception as e: debug( str(symbol_id) + " ::: " + e)
     return(ma)
