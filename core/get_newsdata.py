@@ -141,7 +141,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
         sql_s = 'SELECT instruments.asset_class, instruments.market, '+\
         'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname, instruments.description '+\
         'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
-        'WHERE symbol_list.disabled=0 AND symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"" ORDER BY symbol'
+        'WHERE symbol_list.disabled=0 AND (symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"") ORDER BY symbol'
         cr_s.execute(sql_s)
         rs = cr_s.fetchall()
 
