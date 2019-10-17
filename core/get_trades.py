@@ -63,6 +63,7 @@ def get_trades(s,uid,dc,full_update):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol = '"+ s +"' "
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -79,6 +80,7 @@ def get_trades(s,uid,dc,full_update):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ s +"' ORDER BY date DESC LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: trade_last_price = row[0]
@@ -94,6 +96,7 @@ def get_trades(s,uid,dc,full_update):
         cr_1 = connection.cursor(pymysql.cursors.SSCursor)
         sql_1 = "SELECT symbol, date, price_close, target_price "+\
         "FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dfrom_str + " ORDER BY date"
+        cr_1.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr_1.execute(sql_1)
         rs_1 = cr_1.fetchall()
         i = 0
@@ -108,6 +111,7 @@ def get_trades(s,uid,dc,full_update):
             cr_2 = connection.cursor(pymysql.cursors.SSCursor)
             sql_2 = "SELECT date, price_close FROM price_instruments_data WHERE symbol = '"+ s +"' AND date >=" + dto_str + " ORDER BY date LIMIT 1"
             debug(sql_2)
+            cr_2.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr_2.execute(sql_2)
             rs_2 = cr_2.fetchall()
             date_2 = None; price_close_2 = -1

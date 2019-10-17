@@ -67,6 +67,7 @@ class rsi_data:
             sql_get_pr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
                                  "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" "+\
                                  "ORDER BY date DESC LIMIT 1"
+            cr_get_pr_d.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr_get_pr_d.execute(sql_get_pr_d)
             rs_prev = cr_get_pr_d.fetchall()
             if rs_prev:
@@ -80,6 +81,7 @@ class rsi_data:
                 sql_get_curr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
                                      "WHERE symbol='"+self.s+"' AND date="+str(self.d)+" "+\
                                      "ORDER BY date DESC LIMIT 1"
+                cr_get_curr_d.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
                 cr_get_curr_d.execute(sql_get_curr_d)
                 rs_curr = cr_get_curr_d.fetchall()
                 if rs_curr:
@@ -111,6 +113,7 @@ class rsi_data:
                 sql_get_avg_g = "SELECT gain_1d FROM price_instruments_data "+\
                               "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
                               "LIMIT "+str(self.p)
+                cr_get_avg_g.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
                 cr_get_avg_g.execute(sql_get_avg_g)
                 rs_avg_g = cr_get_avg_g.fetchall()
                 for row in rs_avg_g:
@@ -134,6 +137,7 @@ class rsi_data:
                 sql_get_avg_l = "SELECT loss_1d FROM price_instruments_data "+\
                               "WHERE symbol='"+self.s+"' AND date<"+str(self.d)+" AND is_ta_calc=1 "+\
                               "LIMIT "+str(self.p)
+                cr_get_avg_l.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
                 cr_get_avg_l.execute(sql_get_avg_l)
                 rs_avg_l = cr_get_avg_l.fetchall()
                 for row in rs_avg_l:

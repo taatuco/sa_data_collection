@@ -71,6 +71,7 @@ def get_newsdata_rss(d,feed_id,limit,what,cat):
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"' + filtercat
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
 
@@ -142,6 +143,7 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
         'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname, instruments.description '+\
         'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
         'WHERE symbol_list.disabled=0 AND (symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"") ORDER BY symbol'
+        cr_s.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr_s.execute(sql_s)
         rs = cr_s.fetchall()
 

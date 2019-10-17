@@ -33,6 +33,7 @@ connection = pymysql.connect(host=db_srv,
 try:
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol, uid FROM symbol_list WHERE oanda<>'' "
+    cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
     cr.execute(sql)
     rs = cr.fetchall()
     for row in rs:

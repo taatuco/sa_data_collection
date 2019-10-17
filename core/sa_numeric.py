@@ -68,6 +68,7 @@ def get_volatility_risk(sql,is_portf,s):
 
         if is_portf:
             sql_i = "SELECT account_reference FROM instruments WHERE symbol='"+ s +"'"
+            cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr.execute(sql_i)
             rs = cr.fetchall()
             for row in rs: lp = row[0]

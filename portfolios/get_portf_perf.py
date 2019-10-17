@@ -75,6 +75,7 @@ def get_portf_perf():
         sql = "SELECT symbol_list.symbol, symbol_list.uid, instruments.fullname, instruments.account_reference "+\
         "FROM `symbol_list` INNER JOIN instruments ON symbol_list.symbol = instruments.symbol "+\
         "WHERE symbol_list.symbol LIKE '"+portf_symbol_suffix+"%' ORDER BY symbol_list.symbol"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
 
@@ -113,7 +114,7 @@ def get_portf_perf():
                     "JOIN instruments ON portfolios.symbol = instruments.symbol "+\
                     "WHERE portfolios.portf_symbol = '"+ portf_symbol +"' AND date="+ d_str +" ORDER BY portfolios.portf_symbol"
                     debug(sql_c)
-
+                    cr_c.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
                     cr_c.execute(sql_c)
                     rs_c = cr_c.fetchall()
 

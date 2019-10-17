@@ -61,6 +61,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = sql_parse_list
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -69,6 +70,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             asset_class = row[2]
             cr_pip = connection.cursor(pymysql.cursors.SSCursor)
             sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
+            cr_pip.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr_pip.execute(sql_pip)
             rs_pip = cr_pip.fetchall()
             for row in rs_pip:
@@ -94,6 +96,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
 
             cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
             sql_d_id = sql_select_instr
+            cr_d_id.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr_d_id.execute(sql_d_id)
             rs_d = cr_d_id.fetchall()
             for row in rs_d:

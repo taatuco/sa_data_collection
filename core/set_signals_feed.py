@@ -41,6 +41,7 @@ def get_signal_ranking(s,rank):
         pip_divider = 10000
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT unit FROM instruments WHERe symbol = '"+ s +"'"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: unit = row[0]
@@ -70,7 +71,7 @@ def set_signals_feed(s):
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, sectors.sector, instruments.w_forecast_display_info, symbol_list.uid, symbol_list.disabled, instruments.m1_signal FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%' "
-
+    cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
     cr.execute(sql)
     rs = cr.fetchall()
     i = 0

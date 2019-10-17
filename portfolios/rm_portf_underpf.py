@@ -34,6 +34,7 @@ def rm_portf_underpf(limit_max):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT COUNT(*) FROM instruments JOIN users ON instruments.owner = users.id'
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: total = row[0]
@@ -48,6 +49,7 @@ def rm_portf_underpf(limit_max):
             'FROM instruments JOIN users ON instruments.owner = users.id '+\
             'WHERE users.is_bot=1 AND instruments.symbol LIKE "%'+ get_portf_suffix() +'%" ORDER BY instruments.y1 '+\
             'LIMIT '+ str(quant_to_rm)
+            cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs:

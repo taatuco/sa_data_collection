@@ -58,6 +58,7 @@ def get_prev_session_date(symbol):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT date from price_instruments_data WHERE symbol = '"+ str(symbol) +"' ORDER BY date DESC LIMIT 2"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         i = 1
@@ -98,6 +99,7 @@ class instr_sum_data:
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol from symbol_list WHERE uid=" + str(uid)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: symbol_is_portf = row[0]
@@ -108,6 +110,7 @@ class instr_sum_data:
             self.sql_select_signal = "SELECT signal_price, date from chart_data WHERE symbol='"+ self.s +"' AND forecast = 0 "
             sql = self.sql_select_signal+" ORDER BY Date DESC LIMIT 1"
             debug(sql)
+            cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr.execute(sql)
             rs = cr.fetchall()
             for row in rs: self.lp_signal = row[0];

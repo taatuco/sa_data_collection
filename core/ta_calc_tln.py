@@ -49,6 +49,7 @@ class trend_pts:
         sql = "SELECT date FROM price_instruments_data "+\
                 "WHERE symbol='"+ self.s +\
                 "' ORDER BY date DESC LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         ttr = cr.rowcount
@@ -83,6 +84,7 @@ class trend_pts:
             sl = "SELECT MAX(price_close) AS p "
 
         sql = sl + "FROM price_instruments_data WHERE symbol='"+self.s + dr
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -137,6 +139,7 @@ class tln_data:
         s = self.s
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT ma200 FROM price_instruments_data WHERE (symbol ='"+s+"' AND date='"+str(d)+"') LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -149,6 +152,7 @@ class tln_data:
         s = self.s
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT AVG(price_close) AS p FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT 50"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -161,6 +165,7 @@ class tln_data:
         s = self.s
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT AVG(rsi14) AS rsi FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT " + str(p)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -213,6 +218,7 @@ def get_trend_line_data(s,uid):
                 "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
                 " ORDER BY date"
         debug(sql)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         ttr = cr.rowcount

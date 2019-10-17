@@ -34,17 +34,20 @@ def get_condition(s,sj,w):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT w1, d1, unit FROM instruments WHERE symbol = "'+ str(s) +'" '
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: w1 = row[0]; d1 = row[1]
 
         sql = 'SELECT w1, d1 FROM instruments WHERE symbol = "'+ str(sj) +'" '
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: jpyw1 = row[0]*(-1); jpyd1 = row[1]*(-1)
 
 
         sql = 'SELECT ma10, price_close FROM price_instruments_data WHERE symbol = "'+ str(s) +'" ORDER BY date DESC LIMIT 1'
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -94,6 +97,7 @@ def get_perf(s,p,reverse):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT w1, d1, unit FROM instruments WHERE symbol = "'+ str(s) +'" '
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -150,6 +154,7 @@ def compile_market_snapshot():
         '_10_BTC_day_up_week_up, _10_BTC_day_down_week_up, '+\
         '_11_BTC_day_up_week_down, _11_BTC_day_down_week_down '+\
         'FROM briefing WHERE lang="'+ language +'"'
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
 
@@ -211,6 +216,7 @@ def compile_market_snapshot():
         if get_condition(symbol_btc,symbol_jpy,'d1_w1') == 'd1_down_w1_down': report = report +' '+ _11_BTC_day_down_week_down
 
         sql = "SELECT COUNT(*) FROM reports"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         cnt = 0
@@ -262,6 +268,7 @@ def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_dis
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT DISTINCT username FROM users JOIN instruments ON instruments.owner = users.id '+\
         'WHERE users.is_bot=0 AND users.deactivated=0 AND (email_subscription="ALL" OR email_subscription="DIR") '
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
 

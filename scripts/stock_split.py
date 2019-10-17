@@ -37,6 +37,7 @@ def correct_stock_split_price(symbol,to_this_date_included, split_factor):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'SELECT date, price_close, target_price, ma200, ma10, ma20, ma30, ma40, ma50 FROM price_instruments_data WHERE symbol = "'+ symbol +'" AND date <= '+ str(to_this_date_included) +' '
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         i = 1

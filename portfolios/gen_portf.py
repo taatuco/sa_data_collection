@@ -30,6 +30,7 @@ def set_portf_symbol():
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT part_three FROM randwords ORDER BY RAND() LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: symbol = symbol + row[0]
@@ -55,6 +56,7 @@ def get_nickname(id):
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT nickname FROM users WHERE id="+ str(id)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -67,6 +69,7 @@ def get_portf_description(ac,m,st,id):
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT portf_description FROM labels WHERE lang = '"+ "en" +"'"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: portf_description = row[0]
@@ -86,6 +89,7 @@ def get_strategy():
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT codename FROM strategies ORDER BY RAND() LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -98,6 +102,7 @@ def get_asset_class_name(ac):
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT asset_class_name FROM asset_class WHERE asset_class_id='"+ str(ac) +"' "
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -110,6 +115,7 @@ def get_market_name(m):
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT market_label FROM markets WHERE market_id='"+ str(m) +"' "
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -122,6 +128,7 @@ def get_decimal_places(ac):
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places FROM asset_class WHERE asset_class = '"+ str(ac) +"' ORDER BY decimal_places DESC LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -134,6 +141,7 @@ def get_unit(m):
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT currency_code FROM markets WHERE market_id = '"+ str(m) +"' "
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -146,6 +154,7 @@ def set_portf_owner():
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT id FROM users WHERE is_bot=1 ORDER BY RAND() LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -158,6 +167,7 @@ def select_allocation(ac,m):
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol FROM instruments WHERE symbol NOT LIKE '%"+ get_portf_suffix() +"%' AND asset_class = '"+ str(ac) +"' AND market = '"+ str(m) +"' ORDER BY RAND() LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -233,6 +243,7 @@ def gen_portf():
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT asset_class_id FROM asset_class WHERE asset_class_id <> 'PF:' AND asset_class_id <> 'MA:' AND asset_class_id <>'BD:' AND asset_class_id <>'CO:' "
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -244,6 +255,7 @@ def gen_portf():
             else:
                 cr_m = connection.cursor(pymysql.cursors.SSCursor)
                 sql_m = "SELECT market_id FROM markets WHERE market_id <> 'GO>' "
+                cr_m.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
                 cr_m.execute(sql_m)
                 rs_m = cr_m.fetchall()
                 for row in rs_m:

@@ -49,6 +49,7 @@ class portf_data:
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT account_reference FROM instruments WHERE symbol='"+ portf_s +"' "
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -57,6 +58,7 @@ class portf_data:
 
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol FROM portfolios WHERE portf_symbol = '"+ portf_s +"'"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -65,6 +67,7 @@ class portf_data:
             "FROM instruments JOIN price_instruments_data ON instruments.symbol = price_instruments_data.symbol "+\
             "WHERE price_instruments_data.symbol='"+ str(row[0]) +"' "+\
             "ORDER BY price_instruments_data.date DESC LIMIT 1"
+            cr_s.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr_s.execute(sql_s)
             rs_s = cr_s.fetchall()
             for row in rs_s:
@@ -97,6 +100,7 @@ class portf_data:
         "FROM instruments JOIN price_instruments_data ON instruments.symbol = price_instruments_data.symbol "+\
         "WHERE price_instruments_data.symbol='"+ alloc_s +"' "+\
         "ORDER BY price_instruments_data.date DESC LIMIT 1"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         q = 0
@@ -144,6 +148,7 @@ def get_market_conv_rate(m):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT conv_to_usd FROM markets WHERE market_id = '"+ str(m) +"'"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -163,6 +168,7 @@ def get_market_currency(m):
                                      cursorclass=pymysql.cursors.DictCursor)
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT currency_code FROM markets WHERE market_id = '"+ str(m) +"'"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -184,6 +190,7 @@ def get_portf_alloc():
     sql = "SELECT instruments.symbol, instruments.fullname, symbol_list.uid, instruments.unit, instruments.market FROM instruments "+\
     "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol LIKE '"+portf_symbol_suffix+"%' ORDER BY instruments.symbol"
+    cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
     cr.execute(sql)
     rs = cr.fetchall()
 
@@ -203,6 +210,7 @@ def get_portf_alloc():
 
         cr_pf = connection.cursor(pymysql.cursors.SSCursor)
         sql_pf = "SELECT symbol, quantity, strategy_conviction FROM portfolios WHERE portf_symbol ='"+ portf_symbol +"' ORDER BY portf_symbol"
+        cr_pf.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr_pf.execute(sql_pf)
         rs_pf = cr_pf.fetchall()
         for row in rs_pf:
@@ -219,6 +227,7 @@ def get_portf_alloc():
 
             cr_p = connection.cursor(pymysql.cursors.SSCursor)
             sql_p = "SELECT price_close, date FROM price_instruments_data WHERE symbol ='"+portf_item_symbol+"' ORDER BY date DESC LIMIT 1"
+            cr_p.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr_p.execute(sql_p)
             rs_p = cr_p.fetchall()
             debug(sql_p+": "+ os.path.basename(__file__) )
@@ -233,7 +242,7 @@ def get_portf_alloc():
             sql_t = "SELECT instruments.symbol, instruments.fullname, instruments.decimal_places, "+\
             "instruments.w_forecast_change, instruments.pip, symbol_list.uid, instruments.market FROM instruments "+\
             "INNER JOIN symbol_list ON instruments.symbol = symbol_list.symbol WHERE instruments.symbol ='"+portf_item_symbol+"'"
-
+            cr_t.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr_t.execute(sql_t)
             rs_t = cr_t.fetchall()
             debug(sql_t+": "+ os.path.basename(__file__) )

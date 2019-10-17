@@ -100,7 +100,7 @@ def set_widgets_tradingview_chart(s,feed_id):
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, sectors.sector, symbol_list.uid, symbol_list.disabled FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol = '"+ s +"' AND instruments.symbol NOT LIKE '"+ get_portf_suffix() +"%' "
-
+    cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
     cr.execute(sql)
     rs = cr.fetchall()
     i = 0

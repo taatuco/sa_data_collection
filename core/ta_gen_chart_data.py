@@ -38,6 +38,7 @@ def get_trade_pnl(uid,d):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT pnl_pct FROM trades WHERE uid=" + str(uid) + " AND expiration_date = "+ str(d)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
@@ -69,6 +70,7 @@ def gen_chart(s,uid):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"'"
         debug(sql)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -120,6 +122,7 @@ def gen_chart(s,uid):
             sql = "SELECT date, price_close, ma200, rsi14, rsi_overbought, rsi_oversold, target_price "+\
             "FROM price_instruments_data WHERE symbol='"+s+"' AND date>=" + d + " ORDER BY date"
             debug(sql)
+            cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
             cr.execute(sql)
             rs = cr.fetchall()
 
@@ -244,6 +247,7 @@ def gen_chart(s,uid):
                             cr_fp = connection.cursor(pymysql.cursors.SSCursor)
                             sql_fp = "SELECT target_price FROM price_instruments_data WHERE symbol = '"+ str(s) +"' ORDER BY date DESC LIMIT 1"
                             debug(sql_fp)
+                            cr_fp.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
                             cr_fp.execute(sql_fp)
                             rs_fp = cr_fp.fetchall()
                             for row in rs_fp: forecast = str(row[0])

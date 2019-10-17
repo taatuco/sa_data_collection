@@ -34,6 +34,7 @@ connection = pymysql.connect(host=db_srv,
 try:
     cr_cnt = connection.cursor(pymysql.cursors.SSCursor)
     sql_cnt = "SELECT COUNT(*) FROM symbol_list"
+    cr_cnt.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
     cr_cnt.execute(sql_cnt)
     rs_cnt = cr_cnt.fetchall()
     for row in rs_cnt:
@@ -42,6 +43,7 @@ try:
 
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol DESC"
+    cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
     cr.execute(sql)
     rs = cr.fetchall()
     ii = 1

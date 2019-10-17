@@ -65,6 +65,7 @@ def gen_recomm(s,uid):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol='"+s+"'"
         debug(sql)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -76,6 +77,7 @@ def gen_recomm(s,uid):
         "trade_3_entry, trade_3_tp, trade_3_sl, trade_3_type, wf "+\
         "FROM instruments WHERE symbol ='" + s + "'"
         debug(sql)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -119,6 +121,7 @@ def gen_recomm(s,uid):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+s+"' ORDER BY date DESC LIMIT 1"
         debug(sql)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:
@@ -128,6 +131,7 @@ def gen_recomm(s,uid):
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT * FROM recommendations"
         debug(sql)
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs:

@@ -39,6 +39,7 @@ def get_user_smartalpha_id():
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT id FROM users WHERE nickname = '"+ sa_bot_nickname +"'"
+        cr.execute('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;')
         cr.execute(sql)
         rs = cr.fetchall()
         for row in rs: r = row[0]
