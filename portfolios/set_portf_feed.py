@@ -140,6 +140,13 @@ def set_portf_feed():
                                  db=db_name,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
+
+    cr_i = connection.cursor(pymysql.cursors.SSCursor)
+    sql_i = "DELETE FROM feed WHERE type= "+ str(feed_id)
+    cr_i.execute(sql_i)
+    connection.commit()
+
+
     cr = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, instruments.market, instruments.w_forecast_change, "+\
     "instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, "+\
@@ -189,11 +196,6 @@ def set_portf_feed():
         "'"+search+"','"+asset_class+"','"+market+"')"
 
         i += 1
-
-        cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "DELETE FROM feed WHERE (symbol = '"+ symbol+"' AND date<='"+d+"')"
-        cr_i.execute(sql_i)
-        connection.commit()
 
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
