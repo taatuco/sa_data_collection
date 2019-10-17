@@ -33,25 +33,25 @@ connection = pymysql.connect(host=db_srv,
 
 def rename_symbol(current_symbol,new_symbol):
     try:
-        rename_s_table('symbol_list',current_s,new_symbol)
-        rename_s_table('instruments',current_s,new_symbol)
-        rename_s_table('feed',current_s,new_symbol)
-        rename_s_table('trades',current_s,new_symbol)
-        rename_s_table('chart_data',current_s,new_symbol)
-        rename_s_table('portfolios',current_s,new_symbol)
-        rename_s_table('price_instruments_data',current_s,new_symbol)
+        rename_s_table('symbol_list',current_symbol,new_symbol)
+        rename_s_table('instruments',current_symbol,new_symbol)
+        rename_s_table('feed',current_symbol,new_symbol)
+        rename_s_table('trades',current_symbol,new_symbol)
+        rename_s_table('chart_data',current_symbol,new_symbol)
+        rename_s_table('portfolios',current_symbol,new_symbol)
+        rename_s_table('price_instruments_data',current_symbol,new_symbol)
         connection.close()
-    except Exception as e: debug(e)
+    except Exception as e: print(e)
 
 def rename_s_table(table,current_s,new_s):
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'UPDATE '+ str(table) + ' SET symbol="'+ str(new_s) +'" WHERE symbol="'+ str(current_s) +'"'
-        debug(sql)
+        print(sql)
         cr.execute(sql)
         connection.commit()
         cr.close()
-    except Exception as e: debug(e)
+    except Exception as e: print(e)
 
 
 print("###############################################################################")
