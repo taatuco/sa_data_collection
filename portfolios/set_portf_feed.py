@@ -225,8 +225,8 @@ def set_portf_feed():
         debug(sql_u)
         cr_u.execute(sql_u)
         i += 1
-        connection.commit()
-        gc.collect()
+    connection.commit()
+    gc.collect()
     cr_r.close()
     cr.close()
     connection.close()
