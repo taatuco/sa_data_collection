@@ -17,15 +17,6 @@ access_obj = sa_db_access()
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
-import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-user=db_usr,
-password=db_pwd,
-db=db_name,
-charset='utf8mb4',
-cursorclass=pymysql.cursors.DictCursor)
-
-
 
 # Notes:
 #
@@ -62,6 +53,14 @@ class rsi_data:
             self.s = symbol
             self.d = date
             self.p = period
+
+            import pymysql.cursors
+            connection = pymysql.connect(host=db_srv,
+            user=db_usr,
+            password=db_pwd,
+            db=db_name,
+            charset='utf8mb4',
+            cursorclass=pymysql.cursors.DictCursor)
 
             cr_get_pr_d = connection.cursor(rsi_data.pymysql.cursors.SSCursor)
             sql_get_pr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc FROM price_instruments_data "+\
