@@ -47,7 +47,8 @@ class rsi_data:
     c_curr_is_ta_calc = 0
     c_rs = 0
     c_rsi = 0
-
+    import pymysql.cursors
+    
     def __init__(self, symbol, date, period):
         try:
             self.s = symbol
