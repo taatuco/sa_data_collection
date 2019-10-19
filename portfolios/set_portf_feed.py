@@ -197,36 +197,25 @@ def set_portf_feed():
 
         i += 1
 
-    sql_i = "INSERT IGNORE INTO feed"+\
+    sql_i = "INSERT IGNORE INTO temp_feed"+\
     "(date, short_title, short_description, content, url,"+\
         " ranking, symbol, type, badge, "+\
     "search, asset_class, market) VALUES " + inserted_value
     debug(sql_i)
     try:
+        cr_i.execute('''CREATE TEMPORARY TABLE temp_feed
+        SELECT * FROM feed
+        LIMIT 0;''')
         cr_i.execute(sql_i)
+        connection.commit()
+        cr_i.execute('UPDATE temp_feed SET (globalRank = globalRank +1) ORDER BY ranking DESC')
+        connection.commit()
+        cr_i.execute('INSERT INTO feed SELECT * FROM temp_feed')
         connection.commit()
     except Exception as e:
         debug(e + ' ' + os.path.basename(__file__) )
         pass
     cr_i.close()
-
-    i = 1
-    d = datetime.datetime.now() ; d = d.strftime('%Y%m')
-
-    portf_symbol = ''
-    cr_r = connection.cursor(pymysql.cursors.SSCursor)
-    sql_r = "SELECT feed.symbol, instruments.creation_date FROM feed JOIN instruments ON feed.symbol = instruments.symbol WHERE feed.type = 9 AND instruments.creation_date < "+d+"01 ORDER BY feed.ranking DESC"
-    cr_r.execute(sql_r)
-    rs_r = cr_r.fetchall()
-    for row in rs_r:
-        portf_symbol = row[0]
-        cr_u = connection.cursor(pymysql.cursors.SSCursor)
-        sql_u = "UPDATE feed SET globalRank = "+ str(i) + " WHERE symbol = '"+ str(portf_symbol) +"'"
-        debug(sql_u)
-        cr_u.execute(sql_u)
-        i += 1
-    connection.commit()
     gc.collect()
-    cr_r.close()
     cr.close()
     connection.close()
