@@ -48,7 +48,7 @@ def get_trade_pnl(uid,d):
 def clear_chart_table(s):
     try:
 
-        if s != '' or s is not None:
+        if s != '' and s is not None:
             sql = 'DELETE FROM chart_data WHERE symbol LIKE "'+ str(s) +'"'
         else:
             sql = 'TRUNCATE chart_data'
