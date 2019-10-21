@@ -114,8 +114,9 @@ def get_trades(s,uid,dc,full_update):
             for row in rs_2: date_2 = row[0]; price_close_2 = round( row[1], trade_decimal_places)
             cr_2.close()
 
-            if price_close_1 <= target_price_1: trade_order_type = 'buy'
-            else: trade_order_type = 'sell'
+            trade_order_type = '-'
+            if price_close_1 < target_price_1: trade_order_type = 'buy'
+            if price_close_1 > target_price_1: trade_order_type = 'sell'
 
             debug(str(date_1) + " ::: " + str(price_close_1) + " ::: " + str(target_price_1) + " ::: " + str(trade_order_type) )
 
@@ -138,13 +139,13 @@ def get_trades(s,uid,dc,full_update):
             else:
                 sep = ','
 
-            debug("("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
-            str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")")
+            if trade_order_type != '-':
+                debug("("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
+                str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")")
 
-            inserted_value = inserted_value + sep + "("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
-            str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
-
-            i += 1
+                inserted_value = inserted_value + sep + "("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +",'"+ str(trade_entry_date) +"','"+\
+                str(trade_expiration_date) +"',"+ str(trade_close_price) +","+ str(trade_pnl_pct) +",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
+                i += 1
 
         cr_1.close()
         connection.close()
