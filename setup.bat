@@ -93,6 +93,7 @@ SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
 SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
 SET REBUILD_DATA_SCRIPT_4="%SA_DATA_DIR%scripts\4_rebuild_data_dataset.bat"
 SET RECALC_FORCAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
+SET RECALC_INSTRUMENT="%SA_DATA_DIR%scripts\recalc_instrument.bat"
 
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
 SET GET_OA_DATA="%SA_DATA_DIR%r_oanda\get_oanda_data.bat"
@@ -219,6 +220,10 @@ DEL /F %RECALC_FORCAST_MODEL%
 @ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL%
 @ECHO PAUSE >> %RECALC_FORCAST_MODEL%
 @ECHO %_PY_EXE% "%SA_FRC_DIR%get_prediction_model_fullset.py" >> %RECALC_FORCAST_MODEL%
+
+REM ### Recalculation instrument data
+DEL /F %RECALC_INSTRUMENT%
+@ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%core\collect_instr_fulldata_full_set_spec.py" >> %RECALC_INSTRUMENT%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
