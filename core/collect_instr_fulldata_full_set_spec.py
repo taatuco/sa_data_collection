@@ -36,7 +36,7 @@ def recalc_histdata(symbol):
         connection.commit()
         cr.close()
         connection.close()
-
+        get_update_instr_data(1,True,symbol)
         print(str(symbol) + ': Done.')
 
     except Exception as e: print(e)
