@@ -59,7 +59,7 @@ collect_data <- function() {
   yx <- year(now())
   mx <- month(now())
   dx <- day(now())
-  if (dx < 28){
+  if (dx > 28){
     dx <- 28
   }
   dfrom <- get_date_prev_month(yx,mx,dx)
