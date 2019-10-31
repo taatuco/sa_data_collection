@@ -230,11 +230,12 @@ DEL /F %RECALC_INSTRUMENT%
 @ECHO @ECHO. >> %RECALC_INSTRUMENT%
 @ECHO @ECHO 1. Run the Py script: to update table price_instruments_data for specific symbol >> %RECALC_INSTRUMENT%
 @ECHO @ECHO 2. Run the Py script: to compute forecast model and score for specific symbol >> %RECALC_INSTRUMENT%
-@ECHO @ECHO 3. This process might take long hours probably a day or a month >> %RECALC_INSTRUMENT%
+@ECHO @ECHO 3. Run the Py script: to update table price_instruments_data for specific symbol >> %RECALC_INSTRUMENT%
 @ECHO @ECHO ########################################################################## >> %RECALC_INSTRUMENT%
 @ECHO PAUSE >> %RECALC_INSTRUMENT%
 @ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%core\collect_instr_fulldata_full_set_spec.py" >> %RECALC_INSTRUMENT%
 @ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_INSTRUMENT%
+@ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%core\collect_instr_fulldata_full_set_spec.py" >> %RECALC_INSTRUMENT%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
