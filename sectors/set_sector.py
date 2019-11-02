@@ -43,7 +43,7 @@ sql = "INSERT IGNORE INTO sectors(id, sector) VALUES "+\
 "('8','Utilities'), "+\
 "('9','Financials'), "+\
 "('10','Materials'), "+\
-"('11','Treasury Bond'), "+\
+"('11','Treasury Bond / Government Bond'), "+\
 "('12','Consumer Staples'), "+\
 "('13','Energy'), "+\
 "('14','Telecom and Services'), "+\
