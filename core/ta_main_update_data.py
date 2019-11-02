@@ -139,11 +139,11 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                     "sentiment_1d="+str(sentiment)+", "+\
                     "is_ta_calc="+str(is_ta_calc)+" "+\
                     "WHERE id="+str(id)
+                    debug(sql_upd)
                     cr_upd.execute(sql_upd)
                     connection.commit()
                     gc.collect()
                     cr_upd.close()
-                    debug(sql_upd)
                 except:
                     sql_upd = "UPDATE price_instruments_data SET "+\
                     "is_ta_calc=1 "+\
