@@ -45,6 +45,6 @@ def get_sentiment_score_avg(s,dh):
         for row in rs: avg_sentiment = row[0]
         cr.close()
         connection.close()
-        r = avg_sentiment
+        if avg_sentiment is not None: r = avg_sentiment
     except Exception as e: debug(e)
     return r
