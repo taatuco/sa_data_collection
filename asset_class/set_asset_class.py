@@ -7,7 +7,7 @@ import sys
 import os
 
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
+sys.path.append(os.path.abspath(pdir))
 from settings import *
 sett = sa_path()
 
