@@ -43,7 +43,6 @@ def set_widgets_feed(s):
         set_widgets_tradingview_chart(s,feed_id)
         set_widgets_from_url(feed_id,'FX Heatmap','{burl}w/?funcname=get_tradingview_fxheatmap(0,0)','FX:GO>HM: Forex Heat Map')
         set_widgets_from_url(feed_id,'Tradebook','{burl}w/?funcname=get_trades_box(0,burl,1)','TB: Tradebook')
-        set_widgets_from_url(feed_id,'My Portfolio(s)','{burl}ls/?w=portf','PORT: List of my Portfolio(s)')
         set_widgets_from_url(feed_id,'Dashboard','{burl}?dashboard=1','DASH: Dashboard - All relevant info in One place')
         set_widgets_from_url(feed_id,'Top Portfolios','{burl}ls/?w=portf&x=','TOPPORT: Traders Top Portfolios')
         set_widgets_from_url(feed_id,'All Signals','{burl}ls/?w=instr&x=','SIGNAL:GO> All Trading Signals')
@@ -52,7 +51,7 @@ def set_widgets_feed(s):
         set_widgets_from_url(feed_id,'U.S. Stocks Signals','{burl}ls/?w=instr&x=US>','SIGNAL:EQ:US> U.S. stocks Trading Signals')
         set_widgets_from_url(feed_id,'Crypto Signals','{burl}ls/?w=instr&x=CR:','SIGNAL:CR:GO> Cryptocurrency Trading Signals')
         set_widgets_from_url(feed_id,'Economic Calendar','{burl}w/?funcname=get_tradingview_ecocal(0,0)&refreshw=1800','ECOCAL:GO> Economic Calendar')
-        set_widgets_from_url(feed_id,'World News and Top Stories','{burl}w/?funcname=get_newsfeed(0,0,500,1)&refreshw=900&noflexheight=1','TOP:GO> World News and Top Stories')
+        set_widgets_from_url(feed_id,'World News and Top Stories','{burl}w/?funcname=get_newsfeed(burl,0,0,500,1)&refreshw=900&noflexheight=1','TOP:GO> World News and Top Stories')
 
     except Exception as e: debug(e)
 
