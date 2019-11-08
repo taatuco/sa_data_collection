@@ -6,20 +6,21 @@
 
 import sys
 import os
-
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir))
+import pymysql.cursors
 from settings import debug, SmartAlphaPath
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import sa_db_access
-access_obj = sa_db_access()
 
-db_usr = access_obj.username()
-db_pwd = access_obj.password()
-db_name = access_obj.db_name()
-db_srv = access_obj.db_server()
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+SETT = SmartAlphaPath()
+
+sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+ACCESS_OBJ = sa_db_access()
+
+DB_USR = ACCESS_OBJ.username()
+DB_PWD = ACCESS_OBJ.password()
+DB_NAME = ACCESS_OBJ.db_name()
+DB_SRV = ACCESS_OBJ.db_server()
 
 
 def set_asset_class():
@@ -30,18 +31,17 @@ def set_asset_class():
     Returns:
         None
     """
-    import pymysql.cursors
-    connection = pymysql.connect(host=db_srv,
-                                 user=db_usr,
-                                 password=db_pwd,
-                                 db=db_name,
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
 
-    cr = connection.cursor(pymysql.cursors.SSCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
 
     sql = "DELETE FROM asset_class"
-    cr.execute(sql)
+    cursor.execute(sql)
 
     sql = "INSERT IGNORE INTO asset_class(asset_class_id, asset_class_name) VALUES "+\
     "('CR:','Crypto'), "+\
@@ -51,11 +51,11 @@ def set_asset_class():
     "('CO:','Commodities'), "+\
     "('BD:','Bonds'), "+\
     "('MA:','Multi-asset')"
-    debug(sql +": "+ os.path.basename(__file__) )
+    debug(sql +": "+ os.path.basename(__file__))
 
-    cr.execute(sql)
+    cursor.execute(sql)
     connection.commit()
-    cr.close()
+    cursor.close()
 
 
 set_asset_class()

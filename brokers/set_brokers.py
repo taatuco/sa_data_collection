@@ -1,3 +1,4 @@
+""" Import brokers and affiliate links to the database """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -5,42 +6,50 @@
 
 import sys
 import os
-
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
-from settings import *
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-
-db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
-
-from pathlib import Path
-
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+from settings import SmartAlphaPath, debug
+from sa_access import sa_db_access
 
-cr = connection.cursor(pymysql.cursors.SSCursor)
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+SETT = SmartAlphaPath()
 
-sql = "DELETE FROM brokers"
-cr.execute(sql)
+sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+ACCESS_OBJ = sa_db_access()
+DB_USR = ACCESS_OBJ.username()
+DB_PWD = ACCESS_OBJ.password()
+DB_NAME = ACCESS_OBJ.db_name()
+DB_SRV = ACCESS_OBJ.db_server()
 
-sql = "INSERT IGNORE INTO brokers(broker_id, burl, affiliate_link) VALUES "+\
-"('eToro','https://www.etoro.com/markets/','http://partners.etoro.com/A52784_TClick.aspx'),"+\
-"('googleSiteSmartAlpha','https://sites.google.com/view/','https://sites.google.com/view/about-smartalpha')"+\
-"('Tradingview','https://tradingview.com/','20367')"
 
-debug(sql +": "+ os.path.basename(__file__) )
+def set_brokers():
+    """
+    Import brokers and affiliate link to the database.
+    Args:
+        None
+    Returns:
+        None
+    """
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
 
-try:
-    cr.execute(sql)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+
+    sql = "DELETE FROM brokers"
+    cursor.execute(sql)
+    sql = """
+    INSERT IGNORE INTO brokers(broker_id, burl, affiliate_link) VALUES
+    ('eToro','https://www.etoro.com/markets/','http://partners.etoro.com/A52784_TClick.aspx'),
+    ('googleSiteSmartAlpha','https://sites.google.com/view/','https://sites.google.com/view/about-smartalpha'),
+    ('Tradingview','https://tradingview.com/','20367')
+    """
+    debug(sql +": "+ os.path.basename(__file__))
+    cursor.execute(sql)
     connection.commit()
-    cr.close()
-except Exception as e: debug(e)
+    cursor.close()
+
+set_brokers()
