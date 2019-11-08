@@ -7,14 +7,13 @@
 import sys
 import os
 import pymysql.cursors
-from settings import SmartAlphaPath, debug
-from sa_access import sa_db_access
-
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
+from settings import debug, SmartAlphaPath
 SETT = SmartAlphaPath()
-
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+from sa_access import sa_db_access
+
 ACCESS_OBJ = sa_db_access()
 DB_USR = ACCESS_OBJ.username()
 DB_PWD = ACCESS_OBJ.password()
