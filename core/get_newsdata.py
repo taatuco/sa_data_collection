@@ -15,7 +15,7 @@ from get_sentiment_score import *
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
 from settings import *
-sett = sa_path()
+sett = SmartAlphaPath()
 
 sys.path.append(os.path.abspath( sett.get_path_feed() ))
 from add_feed_type import *
