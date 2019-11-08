@@ -1,11 +1,18 @@
+"""
+Settings and customization
+"""
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import os
-import sys
 
 class sa_path:
+    """
+    Get path to program folders.
+    Args:
+        None
+    """    
     rdir = os.path.dirname(os.path.realpath(__file__))
     pdir = os.path.abspath(os.path.join(rdir, os.pardir))
 
@@ -34,33 +41,60 @@ class sa_path:
         return self.rdir + "\\r_oanda\\src\\"
 
 def debug(txt):
+    """
+    Print text to the terminal if variable enable_debug is set to True.
+    Args:
+        txt (string): text to print
+    Returns:
+        Boolean: return True if debug is enabled.
+    """
     enable_debug = False
-    try:
-        if enable_debug: print(txt)
-    except:
-        pass
+    if enable_debug:
+        print(str(txt))
+    return enable_debug
 
 def get_portf_suffix():
+    """
+    Get the strategy portfolio suffix that differentiate portfolio from
+    other financial instruments.
+    Args:
+        None
+    Returns:
+        String: Strategy portfolio suffix.
+    """
     return "PRF:"
 
 def get_product_name():
     return "SmartAlpha"
 
 def get_reply_to_email(w):
-    r = ''
-    if w == 'email': r = 'no-reply@taatu.co'
-    if w == 'name': r = 'SmartAlpha Intelligence'
-    if w == 'tech': r = 'tech@taatu.co'
-    return r
+    """
+    Get information related to email sender such as email address,
+    display name, or an alternative address.
+    Args:
+        None
+    Returns:
+        String: email address, display name, alternative email.
+    """
+    ret = ''
+    if w == 'email': ret = 'no-reply@taatu.co'
+    if w == 'name': ret = 'SmartAlpha Intelligence'
+    if w == 'tech': ret = 'tech@taatu.co'
+    return ret
 
 def get_email_txt_signature():
-
-    r = '\n'+\
+    """
+    Get email signature.
+    Args:
+        None
+    Returns:
+        String: Email signature.
+    """
+    ret = '\n'+\
     'SmartAlpha Team'+\
     '\n'+\
     'Taatu Ltd.'+\
     '\n'+\
     '27 Old Gloucester Street, London, WC1N 3AX, UK'+\
     '\n'
-
-    return r
+    return ret
