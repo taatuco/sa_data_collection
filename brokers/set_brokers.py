@@ -34,7 +34,8 @@ cr.execute(sql)
 
 sql = "INSERT IGNORE INTO brokers(broker_id, burl, affiliate_link) VALUES "+\
 "('eToro','https://www.etoro.com/markets/','http://partners.etoro.com/A52784_TClick.aspx'),"+\
-"('googleSiteSmartAlpha','https://sites.google.com/view/','https://sites.google.com/view/about-smartalpha')"
+"('googleSiteSmartAlpha','https://sites.google.com/view/','https://sites.google.com/view/about-smartalpha')"+\
+"('Tradingview','https://tradingview.com/','20367')"
 
 debug(sql +": "+ os.path.basename(__file__) )
 
