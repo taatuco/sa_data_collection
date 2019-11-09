@@ -1,134 +1,231 @@
+""" Generate strategy portfolio """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import sys
 import os
-import datetime
-from datetime import timedelta
-import time
-import csv
 import random
-
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
-from settings import *
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-
 import pymysql.cursors
-db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+from settings import SmartAlphaPath, get_portf_suffix, debug
+SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+from sa_access import sa_db_access
+ACCESS_OBJ = sa_db_access()
+DB_USR = ACCESS_OBJ.username()
+DB_PWD = ACCESS_OBJ.password()
+DB_NAME = ACCESS_OBJ.db_name()
+DB_SRV = ACCESS_OBJ.db_server()
 
 def set_portf_symbol():
-    r = ''
-    try:
-        symbol = ''
-        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT part_three FROM randwords ORDER BY RAND() LIMIT 1"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: symbol = symbol + row[0]
-        symbol = symbol + str( random.randint(1,999) )
-        r = get_portf_suffix() + symbol.upper()
-        cr.close()
-        connection.close()
-    except Exception as e: debug(e)
-    return r
+    """
+    Set and generate a portfolio symbol from randomwords.
+    Args:
+        None
+    Returns:
+        String: A Random symbol for strategy porfolio.
+    """
+    ret = ''
+    symbol = ''
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
 
-def set_portf_fullname(s,ac,m,st):
-    #portf: symbol, asset_class_name, market_label, strategy_type
-    r = ''
-    try:
-        fullname = s.replace(get_portf_suffix(),'')
-        r = fullname + ' ' + m + ' ' + ac + ' ' + st
-    except Exception as e: debug(e)
-    return r
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT part_three FROM randwords ORDER BY RAND() LIMIT 1"
+    cursor.execute(sql)
+    rs = cursor.fetchall()
+    for row in rs: symbol = symbol + row[0]
+    symbol = symbol + str( random.randint(1,999) )
+    ret = get_portf_suffix() + symbol.upper()
+    cursor.close()
+    connection.close()
+    return ret
+
+def set_portf_fullname(symbol,asset_class,market,strategy_type):
+    """
+    Set and generate strategy portfolio fullname
+    Args:
+        String: Symbol
+        String: Asset class
+        String: Market
+        String: The type of strategy (Long, Short, Long/Short)
+    Returns:
+        String: A strategy portfolio fullname according to provided args.
+    """
+    ret = ''
+    fullname = symbol.replace(get_portf_suffix(),'')
+    ret = fullname + ' ' + market + ' ' + asset_class + ' ' + strategy_type
+    return ret
 
 def get_nickname(id):
-    r = ''
-    try:
-        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT nickname FROM users WHERE id="+ str(id)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: r = row[0]
-    except Exception as e: debug(e)
-    return r
+    """
+    Get user's nickname from id.
+    Args:
+        Int: id of the user
+    Returns:
+        String: User's nickname
+    """    
+    ret = ''
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT nickname FROM users WHERE id="+ str(id)
+    cursor.execute(sql)
+    rs = cursor.fetchall()
+    for row in rs:
+        ret = row[0]
+    cursor.close()
+    connection.close()
+    return ret
 
-def get_portf_description(ac,m,st,id):
-    r = ''
+def get_portf_description(asset_class,market,strategy_type,uid):
+    """
+    Generate and get strategy portfolio description
+    Args:
+        String: Asset class
+        String: Market
+        String: Strategy type (Long, Short...)
+    Returns:
+        String: A text that describe the strategy portfolio.
+    """    
+    ret = ''
     try:
-        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
+        connection = pymysql.connect(host=DB_SRV,
+                                     user=DB_USR,
+                                     password=DB_PWD,
+                                     db=DB_NAME,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        cursor = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT portf_description FROM labels WHERE lang = '"+ "en" +"'"
-        cr.execute(sql)
-        rs = cr.fetchall()
+        cursor.execute(sql)
+        rs = cursor.fetchall()
         for row in rs: portf_description = row[0]
-        nickname = get_nickname(id)
-        market_asset_class = ac + ' ' + m + ' '+ st
+        nickname = get_nickname(uid)
+        market_asset_class = asset_class + ' ' + market + ' '+ strategy_type
         portf_description = portf_description.replace('{market_asset_class}',market_asset_class)
         portf_description = portf_description.replace('{nickname}',nickname)
-        r = portf_description
-        cr.close()
+        ret = portf_description
+        cursor.close()
         connection.close()
     except Exception as e: debug(e)
-    return r
+    return ret
 
 def get_strategy():
-    r = ''
-    try:
-        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT codename FROM strategies ORDER BY RAND() LIMIT 1"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: r = row[0]
-    except Exception as e: debug(e)
-    return r
+    """
+    Get a strategy type for the generated strategy portfolio.
+    A strategy type randomly selected from available strategy type.
+    Args:
+        None
+    Returns:
+        String: A strategy type randomly selected.
+    """
+    ret = ''
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT codename FROM strategies ORDER BY RAND() LIMIT 1"
+    cursor.execute(sql)
+    rs = cursor.fetchall()
+    for row in rs:
+        ret = row[0]
+    return ret
 
-def get_asset_class_name(ac):
-    r = ''
-    try:
-        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT asset_class_name FROM asset_class WHERE asset_class_id='"+ str(ac) +"' "
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: r = row[0]
-    except Exception as e: debug(e)
-    return r
+def get_asset_class_name(asset_class_id):
+    """
+    Get the asset class name from the asset class id
+    Args:
+        String: Asset class id
+    Returns:
+        String: the asset class name.
+    """
+    ret = ''
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT asset_class_name FROM asset_class WHERE asset_class_id='"+ str(asset_class_id) +"' "
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        ret = row[0]
+    return ret
 
-def get_market_name(m):
-    r = ''
-    try:
-        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT market_label FROM markets WHERE market_id='"+ str(m) +"' "
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: r = row[0]
-    except Exception as e: debug(e)
-    return r
+def get_market_name(market_id):
+    """
+    Get the market name from its id
+    Args:
+        String: Market id
+    Returns:
+        String: Market name.
+    """
+    ret = ''
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT market_label FROM markets WHERE market_id='"+ str(market_id) +"' "
+    cr.execute(sql)
+    rs = cr.fetchall()
+    for row in rs:
+        ret = row[0]
+    return ret
 
-def get_decimal_places(ac):
-    r = 2
-    try:
-        connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT decimal_places FROM asset_class WHERE asset_class = '"+ str(ac) +"' ORDER BY decimal_places DESC LIMIT 1"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: r = row[0]
-    except Exception as e: debug(e)
-    return r
+def get_decimal_places(asset_class_id):
+    """
+    Get decimal places used by the selected asset_class.
+    Return the largest used decimal places of the asset class as per arg.
+    Args:
+        String: Asset Class
+    Returns:
+        Int: Decimal places
+    """
+    ret = 2
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT decimal_places FROM instruments WHERE asset_class = '"+ str(asset_class_id) +"' ORDER BY decimal_places DESC LIMIT 1"
+    cr.execute(sql)
+    rs = cr.fetchall()
+    for row in rs:
+        ret = row[0]
+    return ret
 
 def get_unit(m):
+    """
+    Set and generate strategy portfolio fullname
+    Args:
+        String: Symbol
+        String: Asset class
+        String: Market
+        String: The type of strategy (Long, Short, Long/Short)
+    Returns:
+        String: A strategy portfolio fullname according to provided args.
+    """
     r = ''
     try:
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
@@ -141,6 +238,16 @@ def get_unit(m):
     return r
 
 def set_portf_owner():
+    """
+    Set and generate strategy portfolio fullname
+    Args:
+        String: Symbol
+        String: Asset class
+        String: Market
+        String: The type of strategy (Long, Short, Long/Short)
+    Returns:
+        String: A strategy portfolio fullname according to provided args.
+    """
     r = ''
     try:
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
@@ -153,6 +260,16 @@ def set_portf_owner():
     return r
 
 def select_allocation(ac,m):
+    """
+    Set and generate strategy portfolio fullname
+    Args:
+        String: Symbol
+        String: Asset class
+        String: Market
+        String: The type of strategy (Long, Short, Long/Short)
+    Returns:
+        String: A strategy portfolio fullname according to provided args.
+    """
     r = ''
     try:
         connection = pymysql.connect(host=db_srv,user=db_usr,password=db_pwd, db=db_name,charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
@@ -165,6 +282,16 @@ def select_allocation(ac,m):
     return r
 
 def gen_portf_allocation(s,ac,m,sy):
+    """
+    Set and generate strategy portfolio fullname
+    Args:
+        String: Symbol
+        String: Asset class
+        String: Market
+        String: The type of strategy (Long, Short, Long/Short)
+    Returns:
+        String: A strategy portfolio fullname according to provided args.
+    """
     try:
         strategy_order_type = 'long/short'
         if sy == 'l': strategy_order_type = 'long'
@@ -188,6 +315,16 @@ def gen_portf_allocation(s,ac,m,sy):
     except Exception as e: debug(e)
 
 def create_portf(ac,m,sy):
+    """
+    Set and generate strategy portfolio fullname
+    Args:
+        String: Symbol
+        String: Asset class
+        String: Market
+        String: The type of strategy (Long, Short, Long/Short)
+    Returns:
+        String: A strategy portfolio fullname according to provided args.
+    """
     try:
         st = ''
         if sy =='ls': st = 'long/short'
@@ -226,6 +363,16 @@ def create_portf(ac,m,sy):
     except Exception as e: debug(e)
 
 def gen_portf():
+    """
+    Set and generate strategy portfolio fullname
+    Args:
+        String: Symbol
+        String: Asset class
+        String: Market
+        String: The type of strategy (Long, Short, Long/Short)
+    Returns:
+        String: A strategy portfolio fullname according to provided args.
+    """
     try:
 
         #Scan Asset Class and create portfolio if not reach threshold
