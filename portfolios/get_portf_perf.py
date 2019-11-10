@@ -1,3 +1,4 @@
+""" Get strategy portfolio performance """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -33,6 +34,13 @@ from pathlib import Path
 import pymysql.cursors
 
 def get_portf_perf_summ(s,uid):
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         pps = instr_sum_data(s, uid)
         y1 = pps.get_pct_1Yp(); m6 = pps.get_pct_6Mp(); m3 = pps.get_pct_3Mp(); m1 = pps.get_pct_1Mp(); w1 = pps.get_pct_1Wp()
@@ -61,6 +69,13 @@ def get_portf_perf_summ(s,uid):
     except Exception as e: debug(e)
 
 def get_portf_perf():
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         portf_symbol_suffix = get_portf_suffix()
         df = datetime.datetime.now() - timedelta(days=370)

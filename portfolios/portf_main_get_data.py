@@ -1,3 +1,4 @@
+""" Collect and compute strategy portfolio data """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the

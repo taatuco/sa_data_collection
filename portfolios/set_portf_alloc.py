@@ -1,3 +1,4 @@
+""" """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -35,6 +36,13 @@ connection.commit()
 cr.close()
 
 def set_alloc(sfx,s):
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     symbol = sfx + s
 
     cr = connection.cursor(pymysql.cursors.SSCursor)

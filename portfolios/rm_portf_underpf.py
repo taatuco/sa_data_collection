@@ -1,3 +1,4 @@
+""" Evaluate and remove underperforming strategy portfolios (auto-generated) """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -6,9 +7,6 @@
 import sys
 import os
 import gc
-import datetime
-import time
-
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
 from settings import *
@@ -23,6 +21,13 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 import pymysql.cursors
 
 def rm_portf_underpf(limit_max):
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     total = 0
     quant_to_rm = 0
     try:
@@ -63,6 +68,13 @@ def rm_portf_underpf(limit_max):
     except Exception as e: debug(e)
 
 def rm_portf_from(table,column,s):
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         connection = pymysql.connect(host=db_srv,
                                      user=db_usr,

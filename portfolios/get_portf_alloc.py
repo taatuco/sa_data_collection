@@ -1,46 +1,43 @@
+""" Get strategy portfolio allocation """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import sys
 import os
-import datetime
 from datetime import timedelta
-import time
-import csv
 import random
-
+import pymysql.cursors
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
-from settings import *
+from settings import SmartAlphaPath, debug, get_portf_suffix
 sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-
-db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
-
-sys.path.append(os.path.abspath( sett.get_path_feed() ))
-from add_feed_type import *
-
 sys.path.append(os.path.abspath( sett.get_path_core() ))
-from ta_instr_sum import *
+from ta_instr_sum import forecast_data
+sys.path.append(os.path.abspath( sett.get_path_pwd() ))
+from sa_access import sa_db_access
+access_obj = sa_db_access()
+db_usr = access_obj.username()
+db_pwd = access_obj.password()
+db_name = access_obj.db_name()
+db_srv = access_obj.db_server()
 
-from pathlib import Path
-
-import pymysql.cursors
 
 class portf_data:
-
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     portf_multip = 0
     portf_big_alloc_price = 0
     portf_total_alloc_amount = 0
     portf_account_ref = 0
 
     def __init__(self, portf_s):
-
+        """ Initialize strategy portfolio data """
         connection = pymysql.connect(host=db_srv,
                                      user=db_usr,
                                      password=db_pwd,
@@ -83,7 +80,13 @@ class portf_data:
             self.portf_multip = 1
 
     def get_quantity(self, alloc_s, alloc_coef):
-
+        """
+        Description
+        Args:
+            None
+        Returns:
+            None
+        """
         portf_reduce_risk_by = 4
 
         connection = pymysql.connect(host=db_srv,
@@ -124,6 +127,13 @@ class portf_data:
 
 
 def get_conviction_coef(c):
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 1.01
     try:
         if c == 'weak': r = random.randint(3,8)
@@ -134,6 +144,13 @@ def get_conviction_coef(c):
     return r
 
 def get_market_conv_rate(m):
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     r = ''
     try:
         connection = pymysql.connect(host=db_srv,
@@ -153,6 +170,13 @@ def get_market_conv_rate(m):
     return r
 
 def get_market_currency(m):
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     r = ''
     try:
         connection = pymysql.connect(host=db_srv,
@@ -172,7 +196,13 @@ def get_market_currency(m):
     return r
 
 def get_portf_alloc():
-
+    """
+    Description
+    Args:
+        None
+    Returns:
+        None
+    """
     portf_symbol_suffix = get_portf_suffix()
     connection = pymysql.connect(host=db_srv,
                                  user=db_usr,
@@ -189,8 +219,6 @@ def get_portf_alloc():
 
     for row in rs:
         portf_symbol = row[0]
-        portf_fullname = row[1]
-        portf_uid = row[2]
         portf_unit = row[3]
         portf_market = row[4]
         portf_currency = get_market_currency(portf_market)
