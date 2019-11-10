@@ -3,21 +3,17 @@
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import sys
 import os
-
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
-from settings import *
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_feed() ))
-from get_portf_alloc import *
-from get_portf_perf import *
-from set_portf_feed import *
-from rm_portf_underpf import *
-from pathlib import Path
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+from settings import SmartAlphaPath
+SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_feed()))
+from get_portf_alloc import get_portf_alloc
+from get_portf_perf import get_portf_perf
+from set_portf_feed import set_portf_feed
+from rm_portf_underpf import rm_portf_underpf
 
 rm_portf_underpf(250)
 get_portf_alloc()

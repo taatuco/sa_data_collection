@@ -116,7 +116,6 @@ REM %_PY_EXE% "%SA_DATA_DIR%sectors\set_sector.py"
 REM %_PY_EXE% "%SA_DATA_DIR%newsdata\set_newsdata.py"
 REM %_PY_EXE% "%SA_DATA_DIR%brokers\set_brokers.py"
 REM %_PY_EXE% "%SA_DATA_DIR%users\set_users.py"
-REM %_PY_EXE% "%SA_DATA_DIR%portfolios\set_portf.py"
 REM %_PY_EXE% "%SA_DATA_DIR%portfolios\set_strat.py"
 REM %_PY_EXE% "%SA_DATA_DIR%portfolios\gen_portf.py"
 
