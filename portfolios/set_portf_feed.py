@@ -24,13 +24,14 @@ from add_feed_type import add_feed_type
 
 def get_portf_content(user_id):
     """
-    Desc
+    Get strategy portfolio content for the feed.Return the nickname and
+    avatar of the owner of the portfolio.
     Args:
-        None
+        Int: User id
     Returns:
-        None
+        String: Nickname and avatar in html format
     """
-    r = ''
+    ret = ''
     nickname = ''
     avatar_id = ''
     connection = pymysql.connect(host=DB_SRV,
@@ -39,27 +40,35 @@ def get_portf_content(user_id):
                                  db=DB_NAME,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
-    cr = connection.cursor(pymysql.cursors.SSCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT nickname, avatar_id FROM users WHERE id="+ str(user_id)
-    cr.execute(sql)
-    rs = cr.fetchall()
-    for row in rs: nickname = row[0]; avatar_id = row[1]
-    r = '<img src="{burl}static/avatar/'+ str(avatar_id) +'.png" '+\
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        nickname = row[0]
+        avatar_id = row[1]
+    ret = '<img src="{burl}static/avatar/'+ str(avatar_id) +'.png" '+\
     'style="vertical-align: middle;border-style: none;width: 30px;">&nbsp;<strong>'+\
     nickname+'</strong>'
-    cr.close()
+    cursor.close()
     connection.close()
-    return r
+    return ret
 
-def get_portf_ranking(s, rank, y1, m6, m3, m1):
+def get_portf_ranking(symbol, rank, y1_performance, m6_performance, m3_performance, m1_performance):
     """
-    Desc
+    Rank portfolio based on various criteria such as maximum drawdown,
+    negative year, month, etc...
     Args:
-        None
+        String: Symbol of the portfolio
+        Double: Return on max drawdown (RoMAD) is used to rank
+        Double: 1-year strategy portfolio performance
+        Double: 6-month strategy portfolio performance
+        Double: 3-month strategy portfolio performance
+        Double: 1-month strategy portfolio performance
     Returns:
         None
     """
-    r = 0
+    ret = 0
     count_negative_year = 0
     count_blown_portf = 0
     max_drawdown_reached = False
@@ -69,74 +78,78 @@ def get_portf_ranking(s, rank, y1, m6, m3, m1):
                                  db=DB_NAME,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
-    cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol FROM instruments WHERE symbol ='"+ s +"' AND y1<=0 "
-    cr.execute(sql)
-    rs = cr.fetchall()
-    for row in rs: count_negative_year = 1
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT symbol FROM instruments WHERE symbol ='"+ symbol +"' AND y1<=0 "
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        count_negative_year = 1
 
-    sql = "SELECT symbol FROM chart_data WHERE symbol ='"+ s +"' AND price_close <= 0 "
-    cr.execute(sql)
-    rs = cr.fetchall()
-    for row in rs: count_blown_portf = 1
+    sql = "SELECT symbol FROM chart_data WHERE symbol ='"+ symbol +"' AND price_close <= 0 "
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        count_blown_portf = 1
 
     account_start = 1000
-    sql = "SELECT account_reference FROM instruments WHERE symbol='"+ s +"'"
-    cr.execute(sql)
-    rs = cr.fetchall()
-    for row in rs: account_start = row[0]
+    sql = "SELECT account_reference FROM instruments WHERE symbol='"+ symbol +"'"
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        account_start = row[0]
 
     drawdown_pct_threshold = 0.3
     drawdown_account_max = (float(account_start) * float(drawdown_pct_threshold))
     drawdown_account_max = float(account_start) - drawdown_account_max
-    sql = "SELECT price_close FROM chart_data WHERE symbol ='"+ s +\
+    sql = "SELECT price_close FROM chart_data WHERE symbol ='"+ symbol +\
     "' AND price_close < "+ str(drawdown_account_max) + " LIMIT 1"
-    cr.execute(sql)
-    rs = cr.fetchall()
-    for row in rs: max_drawdown_reached = True
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        max_drawdown_reached = True
 
-    r = float(rank)
-    #Negative monthly return
+    ret = float(rank)
+    #Negative return on max drawdown
     if float(rank) <= 0:
-        r = r - 9999
+        ret = ret - 9999
     #Rank down negative year
     if count_negative_year > 0:
-        r = float(rank) - 500
+        ret = float(rank) - 500
     else:
         if max_drawdown_reached:
-            r = r - 999
+            ret = ret - 999
         #Rank up yearly performance
-        if float(y1) > 0.05:
-            r = r + 500
-        if float(y1) > 0.09:
-            r = r + 900
+        if float(y1_performance) > 0.05:
+            ret = ret + 500
+        if float(y1_performance) > 0.09:
+            ret = ret + 900
         #Rank up 6-month performance
-        if float(m6) > 0.05:
-            r = r + 500
-        if float(m6) > 0.09:
-            r = r + 900
+        if float(m6_performance) > 0.05:
+            ret = ret + 500
+        if float(m6_performance) > 0.09:
+            ret = ret + 900
         #Rank up 3-month performance
-        if float(m3) > 0.05:
-            r = r + 500
-        if float(m3) > 0.09:
-            r = r + 900
+        if float(m3_performance) > 0.05:
+            ret = ret + 500
+        if float(m3_performance) > 0.09:
+            ret = ret + 900
         #Rank up 1-month performance
-        if float(m1) > 0.05:
-            r = r + 1000
-        if float(m1) > 0.09:
-            r = r + 2000
+        if float(m1_performance) > 0.05:
+            ret = ret + 1000
+        if float(m1_performance) > 0.09:
+            ret = ret + 2000
 
     #Rank down blown portfolio
     if count_blown_portf > 0:
-        r = float(rank) - 999999
+        ret = float(rank) - 999999
 
-    cr.close()
+    cursor.close()
     connection.close()
-    return r
+    return ret
 
 def set_portf_feed():
     """
-    Desc
+    Import all the portfolio to table feed.
     Args:
         None
     Returns:
@@ -147,8 +160,8 @@ def set_portf_feed():
     add_feed_type(feed_id, feed_type)
 
     #Date [Today date]
-    d = datetime.datetime.now()
-    d = d.strftime("%Y%m%d")
+    date_today = datetime.datetime.now()
+    date_today = date_today.strftime("%Y%m%d")
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
                                  password=DB_PWD,
@@ -162,7 +175,7 @@ def set_portf_feed():
     connection.commit()
 
 
-    cr = connection.cursor(pymysql.cursors.SSCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, "+\
     "instruments.market, instruments.w_forecast_change, "+\
     "instruments.w_forecast_display_info, symbol_list.uid, instruments.owner, "+\
@@ -172,11 +185,11 @@ def set_portf_feed():
     "JOIN symbol_list ON instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol LIKE '"+ get_portf_suffix() +"%'"
 
-    cr.execute(sql)
-    rs = cr.fetchall()
+    cursor.execute(sql)
+    res = cursor.fetchall()
     i = 0
     inserted_value = ''
-    for row in rs:
+    for row in res:
         symbol = row[0]
         fullname = row[1].replace("'", "")
         asset_class = row[2]
@@ -185,16 +198,17 @@ def set_portf_feed():
         uid = row[6]
         owner = row[7]
         romad_st = row[8]
-        y1 = row[10]
-        m6 = row[11]
-        m3 = row[12]
-        m1 = row[13]
+        y1_performance = row[10]
+        m6_performance = row[11]
+        m3_performance = row[12]
+        m1_performance = row[13]
 
         short_title = fullname
         short_description = symbol
         content = get_portf_content(owner)
         url = "{burl}p/?uid="+str(uid)
-        ranking = str(get_portf_ranking(symbol, romad_st, y1, m6, m3, m1))
+        ranking = str(get_portf_ranking(symbol, romad_st, y1_performance,
+                                        m6_performance, m3_performance, m1_performance))
         feed_type = str(feed_id)
 
         badge = w_forecast_display_info
@@ -206,7 +220,7 @@ def set_portf_feed():
         else:
             sep = ','
         inserted_value = inserted_value + sep +\
-        "('"+d+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
+        "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"')"
 
@@ -230,5 +244,5 @@ def set_portf_feed():
 
     cr_i.close()
     gc.collect()
-    cr.close()
+    cursor.close()
     connection.close()

@@ -1,57 +1,65 @@
+""" Update all involved records in database while symbol is renamed """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import sys
 import os
-import time
-import datetime
-from datetime import timedelta
-
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
-from settings import *
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-
-sys.path.append(os.path.abspath( sett.get_path_core() ))
-from ta_main_update_data import *
-
-db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
-
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+from settings import SmartAlphaPath
+SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+from sa_access import sa_db_access
+ACCESS_OBJ = sa_db_access()
+DB_USR = ACCESS_OBJ.username()
+DB_PWD = ACCESS_OBJ.password()
+DB_NAME = ACCESS_OBJ.db_name()
+DB_SRV = ACCESS_OBJ.db_server()
 
-def rename_symbol(current_symbol,new_symbol):
-    try:
-        rename_s_table('symbol_list',current_symbol,new_symbol)
-        rename_s_table('instruments',current_symbol,new_symbol)
-        rename_s_table('feed',current_symbol,new_symbol)
-        rename_s_table('trades',current_symbol,new_symbol)
-        rename_s_table('chart_data',current_symbol,new_symbol)
-        rename_s_table('portfolios',current_symbol,new_symbol)
-        rename_s_table('price_instruments_data',current_symbol,new_symbol)
-        connection.close()
-    except Exception as e: print(e)
 
-def rename_s_table(table,current_s,new_s):
-    try:
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'UPDATE '+ str(table) + ' SET symbol="'+ str(new_s) +'" WHERE symbol="'+ str(current_s) +'"'
-        print(sql)
-        cr.execute(sql)
-        connection.commit()
-        cr.close()
-    except Exception as e: print(e)
+def rename_symbol(current_symbol, new_symbol):
+    """
+    Rename symbol in all involved tables of the database
+    Args:
+        String: Provide the original symbol
+        String: Provide the new symbol
+    Returns:
+        None
+    """
+    rename_s_table('symbol_list', current_symbol, new_symbol)
+    rename_s_table('instruments', current_symbol, new_symbol)
+    rename_s_table('feed', current_symbol, new_symbol)
+    rename_s_table('trades', current_symbol, new_symbol)
+    rename_s_table('chart_data', current_symbol, new_symbol)
+    rename_s_table('portfolios', current_symbol, new_symbol)
+    rename_s_table('price_instruments_data', current_symbol, new_symbol)
+
+def rename_s_table(table, current_s, new_s):
+    """
+    Perform update according to args. Rename symbol accordingly.
+    Args:
+        String: Table to update
+        String: Current symbol
+        String: New symbol to update to
+    Returns:
+        None
+    """
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = 'UPDATE '+ str(table) + ' SET symbol="'+ str(new_s) +\
+    '" WHERE symbol="'+ str(current_s) +'"'
+    print(sql)
+    cursor.execute(sql)
+    connection.commit()
+    cursor.close()
+    connection.close()
 
 
 print("###############################################################################")
