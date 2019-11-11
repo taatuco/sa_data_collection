@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -40,6 +41,13 @@ connection = pymysql.connect(host=db_srv,
 #
 
 class rsi_data:
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     c_curr_gain = 0
     c_curr_loss = 0
     c_prev_price_close = 0

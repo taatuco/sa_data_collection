@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -35,6 +36,13 @@ connection = pymysql.connect(host=db_srv,
 
 
 def set_widgets_feed(s):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         feed_id = 2
         feed_type = "widgets"
@@ -56,6 +64,13 @@ def set_widgets_feed(s):
     except Exception as e: debug(e)
 
 def set_widgets_from_url(feed_id,short_title,url,search):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         d = datetime.datetime.now()
         d = d.strftime("%Y%m%d")
@@ -90,7 +105,13 @@ def set_widgets_from_url(feed_id,short_title,url,search):
     except Exception as e: debug(e)
 
 def set_widgets_tradingview_chart(s,feed_id):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     #Date [Today date]
     d = datetime.datetime.now()
     d = d.strftime("%Y%m%d")

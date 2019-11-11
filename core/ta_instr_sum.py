@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -34,6 +35,13 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 class forecast_data:
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     ent_1_b = 0
     sl_1_b = 0
     tp_1_b = 0
@@ -132,6 +140,13 @@ class forecast_data:
         return v
 
 def get_forecast_pct(lp,fp):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         lpf = float(lp)
         fpf = float(fp)
@@ -141,6 +156,13 @@ def get_forecast_pct(lp,fp):
     return p
 
 def update_forecast_table(s,wf,frc,d,pip):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
 
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
@@ -178,6 +200,13 @@ trade_entry_buy_2,trade_tp_buy_2,trade_sl_buy_2,
 trade_entry_sell_1,trade_tp_sell_1,trade_sl_sell_1,
 trade_entry_sell_2,trade_tp_sell_2,trade_sl_sell_2,
 y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal,sentiment):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_d = "SELECT decimal_places FROM instruments WHERE symbol='"+s+"' "
@@ -275,29 +304,35 @@ y1_pct_signal,m6_pct_signal,m3_pct_signal,m1_pct_signal,w1_pct_signal,sentiment)
 
 
 def get_instr_sum(s,uid,asset_class,dn,pip,sentiment):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     m = 1
     #Convert from percentage to pips for forex
     if asset_class == 'FX:':
         m = 10000
 
-    instr_data = instr_sum_data(s,uid)
+    instr_data = InstrumentSummaryData(s,uid)
     forc_data = forecast_data(uid)
     # ---
-    y1_pct_signal = float(instr_data.get_pct_1Yp_signal() )* m
-    m6_pct_signal = float(instr_data.get_pct_6Mp_signal() )* m
-    m3_pct_signal = float(instr_data.get_pct_3Mp_signal() )* m
-    m1_pct_signal = float(instr_data.get_pct_1Mp_signal() )* m
-    w1_pct_signal = float(instr_data.get_pct_1Wp_signal() )* m
+    y1_pct_signal = float(instr_data.get_pct_1_year_signal() )* m
+    m6_pct_signal = float(instr_data.get_pct_6_month_signal() )* m
+    m3_pct_signal = float(instr_data.get_pct_3_month_signal() )* m
+    m1_pct_signal = float(instr_data.get_pct_1_month_signal() )* m
+    w1_pct_signal = float(instr_data.get_pct_1_week_signal() )* m
 
-    y1_pct = float(instr_data.get_pct_1Yp() )* m
-    m6_pct = float(instr_data.get_pct_6Mp() )* m
-    m3_pct = float(instr_data.get_pct_3Mp() )* m
-    m1_pct = float(instr_data.get_pct_1Mp() )* m
-    w1_pct = float(instr_data.get_pct_1Wp() )* m
-    d1_pct = float(instr_data.get_pct_1Dp() )* m
+    y1_pct = float(instr_data.get_pct_1_year_performance() )* m
+    m6_pct = float(instr_data.get_pct_6_month_performance() )* m
+    m3_pct = float(instr_data.get_pct_3_month_performance() )* m
+    m1_pct = float(instr_data.get_pct_1_month_performance() )* m
+    w1_pct = float(instr_data.get_pct_1_week_performance() )* m
+    d1_pct = float(instr_data.get_pct_1_day_performance() )* m
     frc_pt = forc_data.get_frc_pt()
-    lp_pt = instr_data.get_lp()
+    lp_pt = instr_data.get_last_price()
     wf = get_forecast_pct(lp_pt, frc_pt )
     wf_pct =  wf * m
     # --- (1)

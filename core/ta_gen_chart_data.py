@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -34,6 +35,13 @@ connection = pymysql.connect(host=db_srv,
 
 
 def get_trade_pnl(uid,d):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
     try:
         cr = connection.cursor(pymysql.cursors.SSCursor)
@@ -46,6 +54,13 @@ def get_trade_pnl(uid,d):
     return r
 
 def clear_chart_table(s):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
 
         if s != '' and s is not None:
@@ -63,7 +78,13 @@ def clear_chart_table(s):
     except Exception as e: debug(e)
 
 def gen_chart(s,uid):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         decimal_places = 2
         cr = connection.cursor(pymysql.cursors.SSCursor)

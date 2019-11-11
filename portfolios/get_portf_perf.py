@@ -22,7 +22,7 @@ DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 sys.path.append(os.path.abspath(SETT.get_path_feed()))
 sys.path.append(os.path.abspath(SETT.get_path_core()))
-from get_instr_perf_summ import instr_sum_data
+from get_instr_perf_summ import InstrumentSummaryData
 from sa_numeric import get_stdev, get_mdd, get_romad, get_volatility_risk
 
 def get_portf_perf_summ(symbol, uid):
@@ -34,12 +34,12 @@ def get_portf_perf_summ(symbol, uid):
     Returns:
         None
     """
-    pps = instr_sum_data(symbol, uid)
-    y1_pct = pps.get_pct_1Yp()
-    m6_pct = pps.get_pct_6Mp()
-    m3_pct = pps.get_pct_3Mp()
-    m1_pct = pps.get_pct_1Mp()
-    w1_pct = pps.get_pct_1Wp()
+    pps = InstrumentSummaryData(symbol, uid)
+    y1_pct = pps.get_pct_1_year_performance()
+    m6_pct = pps.get_pct_6_month_performance()
+    m3_pct = pps.get_pct_3_month_performance()
+    m1_pct = pps.get_pct_1_month_performance()
+    w1_pct = pps.get_pct_1_week_performance()
     date_last_month = datetime.datetime.now() - timedelta(days=30)
     date_last_month = date_last_month.strftime('%Y%m%d')
     sql = "SELECT price_close FROM chart_data WHERE uid="+ str(uid) +\

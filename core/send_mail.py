@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -29,6 +30,13 @@ textmsg: use backslash n to go to next line.
 --------------------------------------------------------------------------------
 '''
 def send_mail(to_email,to_displayName,bcc,subject,textmsg):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = ''
     try:
         tolist = [to_email] + bcc
@@ -58,6 +66,13 @@ def send_mail(to_email,to_displayName,bcc,subject,textmsg):
     return r
 
 def process_mail_queue():
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         import pymysql.cursors
         connection = pymysql.connect(host=db_srv,

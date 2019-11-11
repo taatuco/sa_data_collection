@@ -1,11 +1,12 @@
+""" Collect instrument data, send intel report and collect news """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
+from ta_main_update_data import get_update_instr_data
+from send_intel_report_email import send_intel_report
+from get_newsdata import get_newsdata
 
-from ta_main_update_data import *
-from send_intel_report_email import *
-from get_newsdata import *
-get_update_instr_data(1,False,'')
+get_update_instr_data(1, False, '')
 send_intel_report()
-get_newsdata(3,True,'all',0)
+get_newsdata(3, True, 'all', 0)

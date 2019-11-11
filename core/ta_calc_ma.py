@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -29,6 +30,13 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 def calc_ma(symbol_id, date_id, ma_period):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
 
         from_date =  datetime.datetime.strptime(date_id, '%Y%m%d') - ( timedelta(days=ma_period) )

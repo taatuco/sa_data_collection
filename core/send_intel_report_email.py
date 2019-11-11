@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -17,6 +18,13 @@ sett = SmartAlphaPath()
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 def get_condition(s,sj,w):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = ''
     w1 = 0
     d1 = 0
@@ -77,6 +85,13 @@ def get_condition(s,sj,w):
     return r
 
 def get_perf(s,p,reverse):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = ''
     w1 = ''
     d1 = ''
@@ -116,6 +131,13 @@ def get_perf(s,p,reverse):
     return r
 
 def compile_market_snapshot():
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = ''
     report = ''
     try:
@@ -230,6 +252,13 @@ def compile_market_snapshot():
     return r
 
 def send_intel_report():
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         num_of_email_limit_per_message = 55
         num_of_second_interval = 60
@@ -249,6 +278,13 @@ def send_intel_report():
 
 
 def bundle_email(num_of_email_in_group, num_of_second_interval, to_email, to_displayName, subject, textmsg):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
 
         import pymysql.cursors

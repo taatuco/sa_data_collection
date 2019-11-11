@@ -1,8 +1,8 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import sys
 import os
 import datetime
@@ -34,6 +34,13 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 def get_signal_ranking(s,rank):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
     try:
         unit = ''
@@ -57,7 +64,13 @@ def get_signal_ranking(s,rank):
     return r
 
 def set_signals_feed(s):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     feed_id = 1
     feed_type = "signals"
     add_feed_type(feed_id, feed_type)

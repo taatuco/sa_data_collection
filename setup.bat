@@ -91,7 +91,6 @@ SET PROCESS_MAIL_Q="%SA_DATA_DIR%sa_7_process_mail_q.bat"
 SET REBUILD_DATA_SCRIPT_1="%SA_DATA_DIR%scripts\1_rebuild_data_collection.bat"
 SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
 SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
-SET REBUILD_DATA_SCRIPT_4="%SA_DATA_DIR%scripts\4_rebuild_data_dataset.bat"
 SET RECALC_FORCAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
 SET RECALC_INSTRUMENT="%SA_DATA_DIR%scripts\recalc_instrument.bat"
 
@@ -190,7 +189,7 @@ DEL /F %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO 3. Run 3_rebuild_data_dataset to update all the related tables accordingly >> %REBUILD_DATA_SCRIPT_1%
 @ECHO @ECHO ########################################################################## >> %REBUILD_DATA_SCRIPT_1%
 @ECHO PAUSE >> %REBUILD_DATA_SCRIPT_1%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%core\1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_1%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\_1_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %GET_QM_DATA% >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %GET_AV_DATA% >> %REBUILD_DATA_SCRIPT_1%
 @ECHO %GET_CC_DATA% >> %REBUILD_DATA_SCRIPT_1%
@@ -198,7 +197,7 @@ DEL /F %REBUILD_DATA_SCRIPT_1%
 DEL /F %REBUILD_DATA_SCRIPT_2%
 @ECHO %SA_FRC_SCRIPT% >> %REBUILD_DATA_SCRIPT_2%
 DEL /F %REBUILD_DATA_SCRIPT_3%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%core\2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_3%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\_2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_3%
 
 REM ### Forecast Model Recalculation
 DEL /F %RECALC_FORCAST_MODEL%

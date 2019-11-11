@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -30,7 +31,13 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 def get_rsi_mom(os,ob,we,sg,lt_rsi_mom):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = ''
     if (lt_rsi_mom.lower() == 'overbought'):
         r = ob
@@ -45,7 +52,13 @@ def get_rsi_mom(os,ob,we,sg,lt_rsi_mom):
 
 
 def gen_recomm(s,uid):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         wf = 0
         buy_entry = 0

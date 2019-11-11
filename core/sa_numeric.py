@@ -1,8 +1,8 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import sys
 import os
 from pathlib import Path
@@ -31,7 +31,13 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 def get_pct_change(ini_val,new_val):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     if not new_val == 0:
         if new_val < ini_val:
             r =  ( (ini_val - new_val) / ini_val ) * (-1)
@@ -44,7 +50,13 @@ def get_pct_change(ini_val,new_val):
 
 
 def get_stdev(sql):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
     try:
         #sql with just one numerical value to compute standard deviation
@@ -59,7 +71,13 @@ def get_stdev(sql):
     return r
 
 def get_volatility_risk(sql,is_portf,s):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
 
     try:
@@ -87,7 +105,13 @@ def get_volatility_risk(sql,is_portf,s):
 
 
 def get_mdd(sql):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
     try:
         #sql with just one numerical value to compute maximum drawdown
@@ -125,7 +149,13 @@ def get_mdd(sql):
     return r
 
 def get_romad(sql):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
     try:
         #sql with one column as numerical value to compute return on maximum drawdown

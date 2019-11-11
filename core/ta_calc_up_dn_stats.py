@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -26,6 +27,13 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 def get_count_d(s,t,p):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         cnt = 0
         cr = connection.cursor(pymysql.cursors.SSCursor)
@@ -51,7 +59,13 @@ def get_count_d(s,t,p):
         pass
 
 def get_day_up_dwn_stat(s,uid):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     m1_up = get_count_d(s,1,30)
     m1_dn = get_count_d(s,-1,30)
     w1_up = get_count_d(s,1,7)

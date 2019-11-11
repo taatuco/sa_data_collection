@@ -1,8 +1,8 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import sys
 import os
 import gc
@@ -35,7 +35,13 @@ from get_sentiment_score import *
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
 
 def get_update_instr_data(fm,is_update_all,specific_symbol):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     if fm == 1:
         nd_scan = 370
     else:
@@ -165,7 +171,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
                 get_trend_line_data(s,uid)
                 gen_recomm(s,uid)
                 gen_chart(s,uid)
-            get_forecast_pnl(s,uid,nd_scan,is_update_all)
+            get_forecast_pnl(s,nd_scan,is_update_all)
 
             get_instr_sum(s,uid,asset_class,dn,pip,sentiment)
             set_signals_feed(s)

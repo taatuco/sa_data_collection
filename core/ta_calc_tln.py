@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -32,7 +33,13 @@ connection = pymysql.connect(host=db_srv,
                              cursorclass=pymysql.cursors.DictCursor)
 
 class trend_pts:
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     sd = datetime.datetime(2000, 1, 1, 1, 1)
     ed = datetime.datetime(2000, 1, 1, 1, 1)
     md = datetime.datetime(2000, 1, 1, 1, 1)
@@ -91,7 +98,13 @@ class trend_pts:
         return v
 
 class tln_data:
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     sd = datetime.datetime(2000, 1, 1, 1, 1)
     ed = datetime.datetime(2000, 1, 1, 1, 1)
     md = datetime.datetime(2000, 1, 1, 1, 1)
@@ -183,6 +196,13 @@ class tln_data:
         return mm
 
 def get_bias(sdv,edv):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     try:
         v = "Neutral"
         if (sdv > edv):
@@ -194,8 +214,13 @@ def get_bias(sdv,edv):
     return v
 
 def get_trend_line_data(s,uid):
-
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     tl_180_l = tln_data(s,180,"l")
     tl_180_h = tln_data(s,180,"h")
     tl_360_l = tln_data(s,360,"l")

@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -24,7 +25,13 @@ db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access
 
 
 def get_trades(s,uid,dc,full_update):
-
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = False
     try:
         daycount = dc + 10

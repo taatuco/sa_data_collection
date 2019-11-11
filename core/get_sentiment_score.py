@@ -1,3 +1,4 @@
+""" Desc """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -5,7 +6,7 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import sys
 import os
-
+import pymysql.cursors
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
 from settings import *
@@ -14,11 +15,19 @@ sett = SmartAlphaPath()
 sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import *
 access_obj = sa_db_access()
-
-db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
-import pymysql.cursors
+db_usr = access_obj.username()
+db_pwd = access_obj.password()
+db_name = access_obj.db_name()
+db_srv = access_obj.db_server()
 
 def analyze_sentiment_of_this(text):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
     try:
         analyser = SentimentIntensityAnalyzer()
@@ -29,6 +38,13 @@ def analyze_sentiment_of_this(text):
     return r
 
 def get_sentiment_score_avg(s,dh):
+    """
+    Desc
+    Args:
+        None
+    Returns:
+        None
+    """
     r = 0
     try:
         avg_sentiment = 0
