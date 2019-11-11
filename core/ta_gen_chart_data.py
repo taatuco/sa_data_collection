@@ -7,20 +7,17 @@
 import sys
 import os
 import datetime
-import time
 from datetime import timedelta
 import csv
 from pathlib import Path
 from sa_numeric import *
-
-
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
-from settings import *
+from settings import SmartAlphaPath, debug
 sett = SmartAlphaPath()
 
 sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
+from sa_access import sa_db_access
 access_obj = sa_db_access()
 
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
@@ -269,12 +266,13 @@ def gen_chart(s,uid):
                             rs_fp = cr_fp.fetchall()
                             for row in rs_fp: forecast = str(row[0])
                             cr_fp.close()
-
-                        inserted_values = inserted_values + sep +\
-                        "("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+","+str(forecast)+","+\
-                        str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
-                        str(st_upper_trend_line)+","+st_lower_trend_line+","+\
-                        str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+")"
+                            
+                        if str(forecast) != '0':
+                            inserted_values = inserted_values + sep +\
+                            "("+str(uid)+",'"+str(s)+"',"+str(date.strftime("%Y%m%d"))+","+str(price)+","+str(forecast)+","+\
+                            str(lt_upper_trend_line)+","+str(lt_lower_trend_line)+","+\
+                            str(st_upper_trend_line)+","+st_lower_trend_line+","+\
+                            str(rsi)+","+str(rsi_oversold)+","+str(rsi_overbought)+","+str(ma200)+","+str(target_price)+")"
 
                         i +=1
 

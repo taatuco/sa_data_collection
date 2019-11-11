@@ -43,20 +43,19 @@ def get_newsdata(limit, clear_history, what, cat):
     # what = the type of feed, "global" or "specific"
     # cat = the category to scan, if 0 means all of the category will be collected
     #---------------------------------------------------------------------------
-    d = datetime.datetime.now()
-    dn = datetime.datetime.now() - timedelta(days=1)
-    dh = datetime.datetime.now() - timedelta(days=200)
-    d = d.strftime("%Y-%m-%d %H:%M:%S")
-    dn = dn.strftime("%Y%m%d")
-    dh = dh.strftime("%Y%m%d")
+    date_today = datetime.datetime.now()
+    date_from = datetime.datetime.now() - timedelta(days=200)
+    date_today = date_today.strftime("%Y-%m-%d %H:%M:%S")
+    date_from = date_from.strftime("%Y%m%d")
 
     feed_id = 3
     feed_type = "news"
     add_feed_type(feed_id, feed_type)
-    get_newsdata_rss(d, feed_id, limit, what, cat)
-    if clear_history: clear_old_newsdata(dh, feed_id)
+    get_newsdata_rss(date_today, feed_id, limit, what, cat)
+    if clear_history:
+        clear_old_newsdata(date_from, feed_id)
 
-def get_newsdata_rss(d, feed_id, limit, what, cat):
+def get_newsdata_rss(date_news, feed_id, limit, what, cat):
     """
     Collect news from rss format
     Args:
@@ -78,22 +77,23 @@ def get_newsdata_rss(d, feed_id, limit, what, cat):
                                  db=DB_NAME,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
-    cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata WHERE format="rss"' + filtercat
-    cr.execute(sql)
-    rs = cr.fetchall()
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = 'SELECT url,format,type,asset_class,market,lang FROM newsdata '+\
+    'WHERE format="rss"' + filtercat
+    cursor.execute(sql)
+    res = cursor.fetchall()
 
-    for row in rs:
+    for row in res:
         feed_url = row[0]
         feed_type = row[2]
         asset_class = row[3]
         market = row[4]
         lang = row[5]
         if feed_type == str('global') and (what == 'all' or what == 'global'):
-            get_rss_global(feed_id, d, feed_url, asset_class, market, lang, limit)
+            get_rss_global(feed_id, date_news, feed_url, asset_class, market, lang, limit)
         if feed_type == str('specific') and (what == 'all' or what == 'specific'):
-            get_rss_specific(feed_id, d, feed_url, lang, limit)
-    cr.close()
+            get_rss_specific(feed_id, date_news, feed_url, lang, limit)
+    cursor.close()
     connection.close()
 
 def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
@@ -121,22 +121,25 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
     sentiment_score = 0
     i = 1
     for post in feed.entries:
-        short_title = str(post.title).replace("'","`")
-        try:
-            short_description = str(post.description).replace("'","`") + ' '+ str(post.published)
-        except:
+        short_title = str(post.title).replace("'", "`")
+        if post.description is None:
+            short_description = str(post.description).replace("'", "`") + ' '+ str(post.published)
+        else:
             short_description = str(post.published)
 
         url = str(post.link)
         search = url
         sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
 
-        if i > 1: sep=','
+        if i > 1:
+            sep = ','
         insert_line = insert_line + sep +\
         '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
-        str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\','+ str(sentiment_score) +')'
+        str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+\
+        str(market)+'\',\''+str(lang)+'\','+ str(sentiment_score) +')'
 
-        if i >= limit: break
+        if i >= limit:
+            break
         i += 1
 
     connection = pymysql.connect(host=DB_SRV,
@@ -145,17 +148,17 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
                                  db=DB_NAME,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
-    cr = connection.cursor(pymysql.cursors.SSCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
     'url, type, search, asset_class, market, lang, ranking) VALUES '+ insert_line
-    debug(sql +": "+ os.path.basename(__file__) )
-    cr.execute(sql)
+    debug(sql +": "+ os.path.basename(__file__))
+    cursor.execute(sql)
     connection.commit()
     gc.collect()
-    cr.close()
+    cursor.close()
     connection.close()
 
-def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
+def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
     """
     Get news in rss format specific to symbol.
     Args:
@@ -174,28 +177,33 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
                                  password=DB_PWD,
                                  db=DB_NAME,
                                  charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)    
+                                 cursorclass=pymysql.cursors.DictCursor)
     cr_s = connection.cursor(pymysql.cursors.SSCursor)
     sql_s = 'SELECT instruments.asset_class, instruments.market, '+\
-    'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, instruments.fullname, instruments.description '+\
+    'symbol_list.symbol, symbol_list.yahoo_finance, symbol_list.seekingalpha, '+\
+    'instruments.fullname, instruments.description '+\
     'FROM symbol_list JOIN instruments ON symbol_list.symbol = instruments.symbol '+\
-    'WHERE symbol_list.disabled=0 AND (symbol_list.seekingalpha<>"" OR symbol_list.yahoo_finance<>"") ORDER BY symbol'
+    'WHERE symbol_list.disabled=0 AND (symbol_list.seekingalpha<>"" OR '+\
+    'symbol_list.yahoo_finance<>"") ORDER BY symbol'
     cr_s.execute(sql_s)
-    rs = cr_s.fetchall()
+    res = cr_s.fetchall()
 
-    for row in rs:
+    for row in res:
         asset_class = row[0]
         market = row[1]
         symbol = row[2]
         yahoo_finance = row[3]
         seekingalpha = row[4]
         feed = ''
-        instrument_fullname = row[5].replace(' ','+').replace('.','').replace(',','')
-        instrument_description = row[5].replace(' ','+').replace('.','').replace(',','')
+        instrument_fullname = row[5].replace(' ', '+').replace('.', '').replace(',', '')
+        instrument_description = row[5].replace(' ', '+').replace('.', '').replace(',', '')
         feed_url_selection = feed_url.replace('{seekingalpha}', seekingalpha)
-        feed_url_selection = feed_url_selection.replace('{yahoo_finance}', yahoo_finance)
-        feed_url_selection = feed_url_selection.replace('{instrument_fullname}', instrument_fullname)
-        feed_url_selection = feed_url_selection.replace('{instrument_description}', instrument_description)
+        feed_url_selection = feed_url_selection.replace('{yahoo_finance}',
+                                                        yahoo_finance)
+        feed_url_selection = feed_url_selection.replace('{instrument_fullname}',
+                                                        instrument_fullname)
+        feed_url_selection = feed_url_selection.replace('{instrument_description}',
+                                                        instrument_description)
 
         if instrument_description != '' or instrument_description is not None:
             feed = feedparser.parse(feed_url_selection)
@@ -212,37 +220,41 @@ def get_rss_specific(feed_id,date_d,feed_url,lang,limit):
         sentiment_score = 0
         i = 1
         for post in feed.entries:
-            short_title = str(post.title).replace("'","`")
-            try:
-                short_description = str(post.description).replace("'","`") + ' '+ str(post.published)
-            except:
+            short_title = str(post.title).replace("'", "`")
+            if post.description is None:
+                short_description = str(post.description).replace("'", "`") +\
+                ' '+ str(post.published)
+            else:
                 short_description = str(post.published)
 
             url = str(post.link)
             search = url
             sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
 
-            if i > 1: sep = ','
+            if i > 1:
+                sep = ','
             insert_line = insert_line + sep +\
             '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
-            str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
+            str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+\
+            str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
             str(symbol)+'\','+ str(sentiment_score) + ')'
 
-            if i >= limit: break
+            if i >= limit:
+                break
             i += 1
 
-        cr = connection.cursor(pymysql.cursors.SSCursor)
+        cursor = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
         'url, type, search, asset_class, market, lang, symbol, ranking) VALUES '+ insert_line
-        debug(sql +": "+ os.path.basename(__file__) )
-        cr.execute(sql)
+        debug(sql +": "+ os.path.basename(__file__))
+        cursor.execute(sql)
         connection.commit()
         gc.collect()
-        cr.close()
+        cursor.close()
     cr_s.close()
     connection.close()
 
-def clear_old_newsdata(dh,feed_id):
+def clear_old_newsdata(date_older_than, feed_id):
     """
     Delete news older than the threshold provided
     Args:
@@ -256,12 +268,12 @@ def clear_old_newsdata(dh,feed_id):
                                  password=DB_PWD,
                                  db=DB_NAME,
                                  charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)    
-    cr = connection.cursor(pymysql.cursors.SSCursor)
-    sql = 'DELETE FROM feed WHERE type='+ str(feed_id) + ' AND date < '+ str(dh)
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = 'DELETE FROM feed WHERE type='+ str(feed_id) + ' AND date < '+ str(date_older_than)
     debug(sql)
-    cr.execute(sql)
+    cursor.execute(sql)
     connection.commit()
     gc.collect()
-    cr.close()
+    cursor.close()
     connection.close()

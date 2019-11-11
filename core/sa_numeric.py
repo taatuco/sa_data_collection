@@ -1,185 +1,194 @@
-""" Desc """
+""" All numerical functionalities """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import sys
 import os
-from pathlib import Path
+import math
 import numpy as np
-import math as math
-from math import exp, expm1
-
-
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
-from settings import *
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-
-db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
-
 import pymysql.cursors
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+from settings import SmartAlphaPath, debug
+SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+from sa_access import sa_db_access
+ACCESS_OBJ = sa_db_access()
+DB_USR = ACCESS_OBJ.username()
+DB_PWD = ACCESS_OBJ.password()
+DB_NAME = ACCESS_OBJ.db_name()
+DB_SRV = ACCESS_OBJ.db_server()
 
-def get_pct_change(ini_val,new_val):
+
+def get_pct_change(ini_val, new_val):
     """
-    Desc
+    Get percentage change between two values
     Args:
-        None
+        Double: Initial value
+        Double: New value
     Returns:
-        None
+        Double: Percentage change between the 2 values
     """
     if not new_val == 0:
         if new_val < ini_val:
-            r =  ( (ini_val - new_val) / ini_val ) * (-1)
+            ret = ((ini_val - new_val) / ini_val) * (-1)
         else:
-            r = (new_val - ini_val) / new_val
+            ret = (new_val - ini_val) / new_val
     else:
-        r = 0
+        ret = 0
 
-    return r
+    return ret
 
 
 def get_stdev(sql):
     """
-    Desc
+    sql with just one numerical value to compute standard deviation
+    Compute standard deviation from a database table column.
     Args:
-        None
+        String: SQL query with only 1 numerical column
     Returns:
-        None
+        Double: Standard deviation
     """
-    r = 0
-    try:
-        #sql with just one numerical value to compute standard deviation
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        cr.execute(sql)
-        a = list( cr.fetchall() )
-        r = np.std(a)
-        debug('stdev='+str(r) )
-        cr.close()
-    except Exception as e: debug(e)
+    ret = 0
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    cursor.execute(sql)
+    std_is = list(cursor.fetchall())
+    ret = np.std(std_is)
+    debug('stdev='+str(ret))
+    cursor.close()
+    connection.close()
+    if ret is None:
+        ret = 0
+    return ret
 
-    return r
-
-def get_volatility_risk(sql,is_portf,s):
+def get_volatility_risk(sql, is_portf, symbol):
     """
-    Desc
+    Get the volatility risk of an instrument, or strategy portfolio.
     Args:
-        None
+        String: SQL query with one column corresponding to close_price
+        Boolean: If True, calculation of a strategy portfolio. False = instrument
+        String: Symbol of instrument or strategy portfolio
     Returns:
-        None
+        Double: volatility risk in percentage.
     """
-    r = 0
-
-    try:
-        #sql with one numerical column to compute volatility risk
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-
-        if is_portf:
-            sql_i = "SELECT account_reference FROM instruments WHERE symbol='"+ s +"'"
-            cr.execute(sql_i)
-            rs = cr.fetchall()
-            for row in rs: lp = row[0]
-            cr.close()
-        else:
-            cr.execute(sql)
-            rs = cr.fetchall()
-            for row in rs: lp = row[0]
-            cr.close()
-
-        stdev = get_stdev(sql)
-        rp = lp - stdev
-        r = abs( get_pct_change(lp,rp)  )
-    except Exception as e: debug(e)
-
-    return r
-
+    ret = 0
+    #sql with one numerical column to compute volatility risk
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    if is_portf:
+        sql_i = "SELECT account_reference FROM instruments WHERE symbol='"+ symbol +"'"
+        cursor.execute(sql_i)
+        res = cursor.fetchall()
+        for row in res:
+            last_price = row[0]
+        cursor.close()
+    else:
+        cursor.execute(sql)
+        res = cursor.fetchall()
+        for row in res:
+            last_price = row[0]
+        cursor.close()
+        connection.close()
+    stdev = get_stdev(sql)
+    price_minus_stdev = last_price - stdev
+    ret = abs(get_pct_change(last_price, price_minus_stdev))
+    return ret
 
 def get_mdd(sql):
     """
-    Desc
+    Get maximum drawdown from a list of price
     Args:
-        None
+        String: SQL query with one column containing price
     Returns:
-        None
+        Double: Return the maximum drawdown in percentage
     """
-    r = 0
-    try:
-        #sql with just one numerical value to compute maximum drawdown
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        top = 0
-        breset = math.pow(10,100)
-        bottom = breset
-        pct_dd = 0
-        cur_dd = 0
-        for row in rs:
-            val = row[0]
+    ret = 0
+    #sql with just one numerical value to compute maximum drawdown
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    top = 0
+    breset = math.pow(10, 100)
+    bottom = breset
+    pct_dd = 0
+    cur_dd = 0
+    for row in res:
+        val = row[0]
 
-            if val > top:
-                top = val
-                bottom = breset
+        if val > top:
+            top = val
+            bottom = breset
 
-            if val < bottom:
-                bottom = val
+        if val < bottom:
+            bottom = val
 
-            if bottom < top:
-                cur_dd = abs( get_pct_change(bottom,top) )
-            else:
-                cur_dd = 0
+        if bottom < top:
+            cur_dd = abs(get_pct_change(bottom, top))
+        else:
+            cur_dd = 0
 
-            if cur_dd > pct_dd:
-                pct_dd = cur_dd
-        cr.close()
-
-        r = pct_dd
-        debug('mdd='+ str(r) )
-    except Exception as e: debug(e)
-
-    return r
+        if cur_dd > pct_dd:
+            pct_dd = cur_dd
+    cursor.close()
+    connection.close()
+    ret = pct_dd
+    debug('mdd='+ str(ret))
+    return ret
 
 def get_romad(sql):
     """
-    Desc
+    Get return over max drawdown
     Args:
-        None
+        String: SQL query with one column containing price.
     Returns:
-        None
+        Double: Return RoMaD
     """
-    r = 0
-    try:
-        #sql with one column as numerical value to compute return on maximum drawdown
-        #ordered by date ASC
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        i = 0
-        first = 0
-        last = 0
-        for row in rs:
-            if i == 0:
-                first = row[0]
-            last = row[0]
-            i += 1
-        cr.close()
+    ret = 0
+    #sql with one column as numerical value to compute return on maximum drawdown
+    #ordered by date ASC
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    i = 0
+    first = 0
+    last = 0
+    for row in res:
+        if i == 0:
+            first = row[0]
+        last = row[0]
+        i += 1
+    cursor.close()
+    connection.close()
 
-        debug('f='+str(first) + ' l='+str(last) )
+    debug('f='+str(first) + ' l='+str(last))
 
-        rt = get_pct_change(first,last)
-        dd = get_mdd(sql)
+    percent_return = get_pct_change(first, last)
+    max_drawdown = get_mdd(sql)
 
-        r = rt / dd
-        debug('romad='+ str(r) )
-    except Exception as e: debug(e)
-
-    return r
+    ret = percent_return / max_drawdown
+    debug('romad='+ str(ret))
+    return ret

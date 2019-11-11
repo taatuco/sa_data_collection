@@ -1,66 +1,66 @@
-""" Desc """
+""" Text sentiment analysis """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
 import sys
 import os
 import pymysql.cursors
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
-from settings import *
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-db_usr = access_obj.username()
-db_pwd = access_obj.password()
-db_name = access_obj.db_name()
-db_srv = access_obj.db_server()
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+from settings import SmartAlphaPath, debug
+SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+from sa_access import sa_db_access
+ACCESS_OBJ = sa_db_access()
+DB_USR = ACCESS_OBJ.username()
+DB_PWD = ACCESS_OBJ.password()
+DB_NAME = ACCESS_OBJ.db_name()
+DB_SRV = ACCESS_OBJ.db_server()
 
 def analyze_sentiment_of_this(text):
     """
-    Desc
+    Provide a sentiment score from a given text.
     Args:
-        None
+        String: text to evaluate sentiment
     Returns:
-        None
+        Double: Sentiment score
     """
-    r = 0
-    try:
-        analyser = SentimentIntensityAnalyzer()
-        score = analyser.polarity_scores(text)
-        r = (score.get('compound'))
-        debug(str(r))
-    except Exception as e: debug(e)
-    return r
+    ret = 0
+    analyser = SentimentIntensityAnalyzer()
+    score = analyser.polarity_scores(text)
+    ret = (score.get('compound'))
+    debug(str(ret))
+    return ret
 
-def get_sentiment_score_avg(s,dh):
+def get_sentiment_score_avg(symbol, date_greater_than):
     """
-    Desc
+    From the feed table, get an average sentiment of the specified instrument.
     Args:
-        None
+        String: Symbol of the instrument
+        String: Date in string format
     Returns:
         None
     """
-    r = 0
-    try:
-        avg_sentiment = 0
-        connection = pymysql.connect(host=db_srv,
-                                     user=db_usr,
-                                     password=db_pwd,
-                                     db=db_name,
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'SELECT AVG(ranking) FROM feed WHERE symbol="'+ str(s) +'" AND type=3 AND date>='+ str(dh)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: avg_sentiment = row[0]
-        cr.close()
-        connection.close()
-        if avg_sentiment is not None: r = avg_sentiment
-    except Exception as e: debug(e)
-    return r
+    ret = 0
+    avg_sentiment = 0
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = 'SELECT AVG(ranking) FROM feed WHERE symbol="'+\
+    str(symbol) +'" AND type=3 AND date>='+ str(date_greater_than)
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        avg_sentiment = row[0]
+    cursor.close()
+    connection.close()
+    if avg_sentiment is not None:
+        ret = avg_sentiment
+    return ret
