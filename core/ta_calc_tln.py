@@ -1,293 +1,320 @@
-""" Desc """
+""" Functionalities related to trend lines """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
-
 import datetime
 from datetime import timedelta
 import csv
 import sys
 import os
 import os.path
-import gc
-import time
+PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.abspath(PDIR))
+from settings import SmartAlphaPath, debug
+SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_pwd()))
+from sa_access import sa_db_access
+ACCESS_OBJ = sa_db_access()
+DB_USR = ACCESS_OBJ.username()
+DB_PWD = ACCESS_OBJ.password()
+DB_NAME = ACCESS_OBJ.db_name()
+DB_SRV = ACCESS_OBJ.db_server()
 
-pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(pdir) )
-from settings import *
-sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-
-import pymysql.cursors
-db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
-
-connection = pymysql.connect(host=db_srv,
-                             user=db_usr,
-                             password=db_pwd,
-                             db=db_name,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-
-class trend_pts:
+class TrendPoints:
     """
-    Desc
+    Retrieve data points related to trend lines
     Args:
-        None
-    Returns:
-        None
+        String: Instrument symbol
+        Integer: Period
     """
-    sd = datetime.datetime(2000, 1, 1, 1, 1)
-    ed = datetime.datetime(2000, 1, 1, 1, 1)
-    md = datetime.datetime(2000, 1, 1, 1, 1)
-    s = ""
-    p = 0
-    p2 = 0
+    import pymysql.cursors
+    sday = datetime.datetime(2000, 1, 1, 1, 1)
+    eday = datetime.datetime(2000, 1, 1, 1, 1)
+    mday = datetime.datetime(2000, 1, 1, 1, 1)
+    symbol = ""
+    period = 0
+    period2 = 0
 
-    def __init__(self, s, p):
-        self.s = s;
-        self.p = p;
-        self.p2 = p/2;
-
-        cr = connection.cursor(pymysql.cursors.SSCursor)
+    def __init__(self, symbol, period):
+        """ Initialize data points related to trend lines """
+        self.symbol = symbol
+        self.period = period
+        self.period2 = period/2
+        connection = TrendPoints.pymysql.connect(host=DB_SRV,
+                                                 user=DB_USR,
+                                                 password=DB_PWD,
+                                                 db=DB_NAME,
+                                                 charset='utf8mb4',
+                                                 cursorclass=TrendPoints.pymysql.cursors.DictCursor)
+        cursor = connection.cursor(TrendPoints.pymysql.cursors.SSCursor)
         sql = "SELECT date FROM price_instruments_data "+\
-                "WHERE symbol='"+ self.s +\
+                "WHERE symbol='"+ self.symbol +\
                 "' ORDER BY date DESC LIMIT 1"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        ttr = cr.rowcount
+        cursor.execute(sql)
+        res = cursor.fetchall()
 
-        for row in rs:
-            self.ed = row[0]
-        cr.close()
-        self.sd = self.ed - timedelta(days=self.p)
-        self.md = self.ed - timedelta(days=self.p2)
+        for row in res:
+            self.eday = row[0]
+        cursor.close()
+        connection.close()
+        self.sday = self.eday - timedelta(days=self.period)
+        self.mday = self.eday - timedelta(days=self.period2)
 
     def get_sd(self):
-        return self.sd
+        """ Get start date of the trend line """
+        return self.sday
 
     def get_ed(self):
-        return self.ed
+        """ Get end date of the trend line """
+        return self.eday
 
     def get_md(self):
-        return self.md
+        """ Get the middle point of the trend line"""
+        return self.mday
 
-    def get_val_frm_d(self,d,get_what):
-        v = 0
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        dr = ""
-        sl = ""
-        if d == self.sd:
-            dr = "' AND date>'"+str(self.sd)+"' AND date<'"+str(self.md)+"'"
-        if d == self.ed:
-            dr = "' AND date>'"+str(self.md)+"' AND date<'"+str(self.ed)+"'"
+    def get_val_frm_d(self, date_this, get_what):
+        """ Get the trend line points from date """
+        value = 0
+        connection = TrendPoints.pymysql.connect(host=DB_SRV,
+                                                 user=DB_USR,
+                                                 password=DB_PWD,
+                                                 db=DB_NAME,
+                                                 charset='utf8mb4',
+                                                 cursorclass=TrendPoints.pymysql.cursors.DictCursor)
+        cursor = connection.cursor(TrendPoints.pymysql.cursors.SSCursor)
+        date_range = ""
+        selection = ""
+        if date_this == self.sday:
+            date_range = "' AND date>'"+str(self.sday)+"' AND date<'"+str(self.mday)+"'"
+        if date_this == self.eday:
+            date_range = "' AND date>'"+str(self.mday)+"' AND date<'"+str(self.eday)+"'"
         if get_what == "l":
-            sl = "SELECT MIN(price_close) AS p "
+            selection = "SELECT MIN(price_close) AS p "
         if get_what == "h":
-            sl = "SELECT MAX(price_close) AS p "
+            selection = "SELECT MAX(price_close) AS p "
 
-        sql = sl + "FROM price_instruments_data WHERE symbol='"+self.s + dr
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs:
-            v = row[0]
-        cr.close()
-        return v
+        sql = selection + "FROM price_instruments_data WHERE symbol='"+self.symbol + date_range
+        cursor.execute(sql)
+        res = cursor.fetchall()
+        for row in res:
+            value = row[0]
+        cursor.close()
+        connection.close()
+        return value
 
-class tln_data:
+class TrendData:
     """
-    Desc
+    Data related to trend lines
     Args:
-        None
-    Returns:
-        None
+        String: Instrument symbol
+        Integer: Period
+        String: lower or higher trend line.
     """
-    sd = datetime.datetime(2000, 1, 1, 1, 1)
-    ed = datetime.datetime(2000, 1, 1, 1, 1)
-    md = datetime.datetime(2000, 1, 1, 1, 1)
+    import pymysql.cursors
+    sdate = datetime.datetime(2000, 1, 1, 1, 1)
+    edate = datetime.datetime(2000, 1, 1, 1, 1)
+    mdate = datetime.datetime(2000, 1, 1, 1, 1)
     get_this = ""
     sdv = 0
     edv = 0
-    p = 0
-    s = ""
+    period = 0
+    symbol = ""
 
     def __init__(self, symbol, period, get_what):
-        pts = trend_pts(symbol, period)
-        self.s = symbol
-        self.sd = pts.get_sd()
-        self.ed = pts.get_ed()
-        self.md = pts.get_md()
-        self.p = period
+        """ Initialize trend line """
+        pts = TrendPoints(symbol, period)
+        self.symbol = symbol
+        self.sdate = pts.get_sd()
+        self.edate = pts.get_ed()
+        self.mdate = pts.get_md()
+        self.period = period
         self.get_this = get_what
-        self.sdv = pts.get_val_frm_d(self.sd, self.get_this)
-        self.edv = pts.get_val_frm_d(self.ed, self.get_this)
+        self.sdv = pts.get_val_frm_d(self.sdate, self.get_this)
+        self.edv = pts.get_val_frm_d(self.edate, self.get_this)
 
     def get_slope(self):
+        """ Get trend line slope """
         slp = 0
-        try:
-            slp =  (self.edv - self.sdv)/self.p
-        except:
-            pass
+        if self.period != 0:
+            slp = (self.edv - self.sdv)/self.period
         return slp
 
     def get_sd(self):
-        return self.sd
+        """ Get trend line start date """
+        return self.sdate
 
     def get_ed(self):
-        return self.ed
+        """ Get trend line end date """
+        return self.edate
 
     def get_sdv(self):
+        """ Get start date value """
         return self.sdv
 
     def get_edv(self):
+        """ Get end date value """
         return self.edv
 
-    def get_200ma_frm_d(self,d):
-        v = 0
-        s = self.s
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT ma200 FROM price_instruments_data WHERE (symbol ='"+s+"' AND date='"+str(d)+"') LIMIT 1"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs:
-            v = row[0]
-        cr.close()
-        return v
+    def get_200ma_frm_d(self, date_this):
+        """ Get 200 moving average from date """
+        val = 0
+        connection = TrendData.pymysql.connect(host=DB_SRV,
+                                               user=DB_USR,
+                                               password=DB_PWD,
+                                               db=DB_NAME,
+                                               charset='utf8mb4',
+                                               cursorclass=TrendData.pymysql.cursors.DictCursor)
+        cursor = connection.cursor(TrendData.pymysql.cursors.SSCursor)
+        sql = "SELECT ma200 FROM price_instruments_data WHERE (symbol ='"+self.symbol+\
+        "' AND date='"+str(date_this)+"') LIMIT 1"
+        cursor.execute(sql)
+        res = cursor.fetchall()
+        for row in res:
+            val = row[0]
+        cursor.close()
+        return val
 
-    def get_50ma_frm_d(self,d):
-        v = 0
-        s = self.s
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT AVG(price_close) AS p FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT 50"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs:
-            v = row[0]
-        cr.close()
-        return v
+    def get_50ma_frm_d(self, date_this):
+        """ Get 50 moving average from date """
+        val = 0
+        connection = TrendData.pymysql.connect(host=DB_SRV,
+                                               user=DB_USR,
+                                               password=DB_PWD,
+                                               db=DB_NAME,
+                                               charset='utf8mb4',
+                                               cursorclass=TrendData.pymysql.cursors.DictCursor)
+        cursor = connection.cursor(TrendData.pymysql.cursors.SSCursor)
+        sql = "SELECT AVG(price_close) AS p FROM price_instruments_data WHERE (symbol ='"+\
+        self.symbol+"' AND date<='"+str(date_this)+"') LIMIT 50"
+        cursor.execute(sql)
+        res = cursor.fetchall()
+        for row in res:
+            val = row[0]
+        cursor.close()
+        return val
 
-    def get_rsi_avg(self,d,p):
-        v = 0
-        s = self.s
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT AVG(rsi14) AS rsi FROM price_instruments_data WHERE (symbol ='"+s+"' AND date<='"+str(d)+"') LIMIT " + str(p)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs:
-            v = row[0]
-        cr.close()
-        return v
+    def get_rsi_avg(self, date_this, period):
+        """ Retrieve relative strength index from date, period """
+        val = 0
+        connection = TrendData.pymysql.connect(host=DB_SRV,
+                                               user=DB_USR,
+                                               password=DB_PWD,
+                                               db=DB_NAME,
+                                               charset='utf8mb4',
+                                               cursorclass=TrendData.pymysql.cursors.DictCursor)
+        cursor = connection.cursor(TrendPoints.pymysql.cursors.SSCursor)
+        sql = "SELECT AVG(rsi14) AS rsi FROM price_instruments_data WHERE (symbol ='"+\
+        self.symbol+"' AND date<='"+str(date_this)+"') LIMIT " + str(period)
+        cursor.execute(sql)
+        res = cursor.fetchall()
+        for row in res:
+            val = row[0]
+        cursor.close()
+        return val
 
-    def get_rsi_mom(self,v):
-        try:
-            if (v < 31):
-                mm = "Oversold"
-            if (v >30 and v <50):
-                mm = "Weak"
-            if (v >49 and v <70):
-                mm = "Strong"
-            if (v >69):
-                mm = "Overbought"
-        except:
-            mm = ""
-        return mm
+    def get_rsi_mom(self, val):
+        """ Retrieve relative strength index momentum value """
+        mom = ""
+        if val < 31:
+            mom = "Oversold"
+        if val > 30 and val < 50:
+            mom = "Weak"
+        if val > 49 and val < 70:
+            mom = "Strong"
+        if val > 69:
+            mom = "Overbought"
+        return mom
 
-def get_bias(sdv,edv):
+def get_bias(sdv, edv):
     """
-    Desc
+    Get trend line bias
     Args:
-        None
+        Double: Start date value
+        Double: End date value
+    Returns:
+        String: Bias
+    """
+    ret = "Neutral"
+    if sdv > edv:
+        ret = "Negative"
+    if sdv < edv:
+        ret = "Positive"
+    return ret
+
+def get_trend_line_data(symbol, uid):
+    """
+    Compute trend lines data
+    Args:
+        String: Instrument symbol
+        Integer: Instrument uid
     Returns:
         None
     """
-    try:
-        v = "Neutral"
-        if (sdv > edv):
-            v = "Negative"
-        if (sdv < edv):
-            v = "Positive"
-    except:
-        v = ""
-    return v
+    tl_180_l = TrendData(symbol, 180, "l")
+    tl_180_h = TrendData(symbol, 180, "h")
+    tl_360_l = TrendData(symbol, 360, "l")
+    tl_360_h = TrendData(symbol, 360, "h")
+    file_this = SETT.get_path_src()+"\\"+str(uid)+"t.csv"
+    with open(file_this, 'w', newline='') as csvfile:
+        fieldnames = ["180_sd", "180_slope_low", "180_slope_high",
+                      "360_sd", "360_slope_low", "360_slope_high",
+                      "180_sdv_low", "180_sdv_high", "360_sdv_low", "360_sdv_high",
+                      "st_lower_range", "st_upper_range", "lt_lower_range", "lt_upper_range",
+                      "st_rsi_avg", "lt_rsi_avg", "st_rsi_mom", "lt_rsi_mom",
+                      "ma200", "ma50", "st_bias", "lt_bias"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        t180_sd = tl_180_l.get_sd()
+        t180_ed = tl_180_l.get_ed()
+        t360_ed = tl_360_l.get_ed()
+        t180_slp_l = tl_180_l.get_slope()
+        t180_slp_h = tl_180_h.get_slope()
+        t360_sd = tl_360_l.get_sd()
+        t360_slp_l = tl_360_l.get_slope()
+        t360_slp_h = tl_360_h.get_slope()
+        t180_sdv_l = tl_180_l.get_sdv()
+        t180_sdv_h = tl_180_h.get_sdv()
+        t360_sdv_l = tl_360_l.get_sdv()
+        t360_sdv_h = tl_360_h.get_sdv()
+        st_lower_range = tl_180_l.get_edv()
+        st_upper_range = tl_180_h.get_edv()
+        lt_lower_range = tl_360_l.get_edv()
+        lt_upper_range = tl_360_h.get_edv()
 
-def get_trend_line_data(s,uid):
-    """
-    Desc
-    Args:
-        None
-    Returns:
-        None
-    """
-    tl_180_l = tln_data(s,180,"l")
-    tl_180_h = tln_data(s,180,"h")
-    tl_360_l = tln_data(s,360,"l")
-    tl_360_h = tln_data(s,360,"h")
-    t180_l_x1v = 0
-    t180_h_x1v = 0
-    t360_l_x1v = 0
-    t360_h_x1v = 0
-    sd = tl_360_l.get_sd()
-    f = sett.get_path_src()+"\\"+str(uid)+"t.csv"
-    try:
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT date, price_close "+\
-                "FROM price_instruments_data "+\
-                "WHERE symbol='"+ s +"' AND date>='"+ str(sd) +"'"+\
-                " ORDER BY date"
-        debug(sql)
-        cr.execute(sql)
-        rs = cr.fetchall()
-        ttr = cr.rowcount
+        st_rsi_avg = tl_180_l.get_rsi_avg(t180_ed, 5)
+        lt_rsi_avg = tl_360_l.get_rsi_avg(t360_ed, 50)
 
-        with open(f, 'w', newline='') as csvfile:
-            fieldnames = ["180_sd", "180_slope_low","180_slope_high",
-            "360_sd","360_slope_low","360_slope_high",
-            "180_sdv_low","180_sdv_high","360_sdv_low","360_sdv_high",
-            "st_lower_range","st_upper_range","lt_lower_range", "lt_upper_range",
-            "st_rsi_avg", "lt_rsi_avg", "st_rsi_mom", "lt_rsi_mom",
-            "ma200","ma50", "st_bias", "lt_bias"]
+        st_rsi_mom = tl_180_l.get_rsi_mom(st_rsi_avg)
+        lt_rsi_mom = tl_360_l.get_rsi_mom(lt_rsi_avg)
+        ma_200_ed = tl_360_l.get_200ma_frm_d(t180_ed)
+        ma_50_ed = tl_360_l.get_50ma_frm_d(t180_ed)
+        ma_200_sd = tl_360_l.get_200ma_frm_d(t180_sd)
+        ma_50_sd = tl_360_l.get_50ma_frm_d(t180_sd)
+        st_bias = get_bias(ma_50_sd, ma_50_ed)
+        lt_bias = get_bias(ma_200_sd, ma_200_ed)
 
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            t180_sd = tl_180_l.get_sd()
-            t180_ed = tl_180_l.get_ed()
-            t360_ed = tl_360_l.get_ed()
-            t180_slp_l = tl_180_l.get_slope()
-            t180_slp_h = tl_180_h.get_slope()
-            t360_sd = tl_360_l.get_sd()
-            t360_slp_l = tl_360_l.get_slope()
-            t360_slp_h = tl_360_h.get_slope()
-            t180_sdv_l = tl_180_l.get_sdv()
-            t180_sdv_h = tl_180_h.get_sdv()
-            t360_sdv_l = tl_360_l.get_sdv()
-            t360_sdv_h = tl_360_h.get_sdv()
-            st_lower_range = tl_180_l.get_edv()
-            st_upper_range = tl_180_h.get_edv()
-            lt_lower_range = tl_360_l.get_edv()
-            lt_upper_range = tl_360_h.get_edv()
-
-            st_rsi_avg = tl_180_l.get_rsi_avg( t180_ed, 5)
-            lt_rsi_avg = tl_360_l.get_rsi_avg( t360_ed, 50)
-
-            st_rsi_mom = tl_180_l.get_rsi_mom(st_rsi_avg)
-            lt_rsi_mom = tl_360_l.get_rsi_mom(lt_rsi_avg)
-            ma_200_ed = tl_360_l.get_200ma_frm_d( t180_ed )
-            ma_50_ed = tl_360_l.get_50ma_frm_d( t180_ed )
-            ma_200_sd = tl_360_l.get_200ma_frm_d( t180_sd )
-            ma_50_sd = tl_360_l.get_50ma_frm_d( t180_sd )
-            st_bias = get_bias(ma_50_sd, ma_50_ed)
-            lt_bias = get_bias(ma_200_sd, ma_200_ed)
-
-            debug(s +": "+ os.path.basename(__file__) )
-            writer.writerow({"180_sd": str(t180_sd), "180_slope_low": str(t180_slp_l), "180_slope_high": str(t180_slp_h),
-            "360_sd": str(t360_sd), "360_slope_low": str(t360_slp_l),"360_slope_high": str(t360_slp_h),
-            "180_sdv_low": str(t180_sdv_l), "180_sdv_high": str(t180_sdv_h), "360_sdv_low": str(t360_sdv_l), "360_sdv_high": str(t360_sdv_h),
-            "st_lower_range": str(st_lower_range), "st_upper_range": str(st_upper_range), "lt_lower_range": str(lt_lower_range), "lt_upper_range": str(lt_upper_range),
-            "st_rsi_avg":str(st_rsi_avg), "lt_rsi_avg": str(lt_rsi_avg), "st_rsi_mom": str(st_rsi_mom), "lt_rsi_mom": str(lt_rsi_mom),
-            "ma200": str(ma_200_ed), "ma50": str(ma_50_ed), "st_bias": str(st_bias), "lt_bias": str(lt_bias) })
-        cr.close()
-    finally:
-        gc.collect()
+        debug(symbol +": "+ os.path.basename(__file__))
+        writer.writerow({"180_sd": str(t180_sd),
+                         "180_slope_low": str(t180_slp_l),
+                         "180_slope_high": str(t180_slp_h),
+                         "360_sd": str(t360_sd),
+                         "360_slope_low": str(t360_slp_l),
+                         "360_slope_high": str(t360_slp_h),
+                         "180_sdv_low": str(t180_sdv_l),
+                         "180_sdv_high": str(t180_sdv_h),
+                         "360_sdv_low": str(t360_sdv_l),
+                         "360_sdv_high": str(t360_sdv_h),
+                         "st_lower_range": str(st_lower_range),
+                         "st_upper_range": str(st_upper_range),
+                         "lt_lower_range": str(lt_lower_range),
+                         "lt_upper_range": str(lt_upper_range),
+                         "st_rsi_avg":str(st_rsi_avg),
+                         "lt_rsi_avg": str(lt_rsi_avg),
+                         "st_rsi_mom": str(st_rsi_mom),
+                         "lt_rsi_mom": str(lt_rsi_mom),
+                         "ma200": str(ma_200_ed),
+                         "ma50": str(ma_50_ed),
+                         "st_bias": str(st_bias),
+                         "lt_bias": str(lt_bias)})
+    

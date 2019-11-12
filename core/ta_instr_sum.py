@@ -1,4 +1,4 @@
-""" Desc """
+""" Functionalities related to instruments data """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -6,27 +6,24 @@
 import sys
 import os
 import datetime
-import time
 from datetime import timedelta
 import csv
+import pymysql.cursors
 from get_sentiment_score import *
 from pathlib import Path
-
 pdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(pdir) )
-from settings import *
+from settings import SmartAlphaPath, debug
 sett = SmartAlphaPath()
-
-sys.path.append(os.path.abspath( sett.get_path_pwd() ))
-from sa_access import *
-access_obj = sa_db_access()
-
 sys.path.append(os.path.abspath(sett.get_path_core() ))
 from get_instr_perf_summ import *
 from sa_numeric import *
 
-import pymysql.cursors
+sys.path.append(os.path.abspath( sett.get_path_pwd() ))
+from sa_access import sa_db_access
+access_obj = sa_db_access()
 db_usr = access_obj.username(); db_pwd = access_obj.password(); db_name = access_obj.db_name(); db_srv = access_obj.db_server()
+
 connection = pymysql.connect(host=db_srv,
                              user=db_usr,
                              password=db_pwd,

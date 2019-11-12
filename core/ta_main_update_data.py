@@ -105,7 +105,7 @@ def get_update_instr_data(fm,is_update_all,specific_symbol):
             for row in rs_d:
                 d = str(row[1]).replace("-","")
                 id = row[0]
-                rsi = rsi_data(s,d,14)
+                rsi = RsiData(s,d,14)
                 change_1d = rsi.get_change()
                 gain_1d = rsi.get_gain()
                 loss_1d = rsi.get_loss()
