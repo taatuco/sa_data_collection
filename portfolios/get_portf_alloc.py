@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath(pdir) )
 from settings import SmartAlphaPath, debug, get_portf_suffix
 sett = SmartAlphaPath()
 sys.path.append(os.path.abspath( sett.get_path_core() ))
-from ta_instr_sum import forecast_data
+from ta_instr_sum import ForecastData
 sys.path.append(os.path.abspath( sett.get_path_pwd() ))
 from sa_access import sa_db_access
 access_obj = sa_db_access()
@@ -304,7 +304,7 @@ def get_portf_alloc():
                 connection.commit()
                 cr_x.close()
 
-                alloc_forc_data = forecast_data(alloc_uid)
+                alloc_forc_data = ForecastData(alloc_uid)
                 alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity * alloc_pip )
                 portf_forc_return = portf_forc_return + alloc_forc_pnl
                 portf_nav = portf_nav + alloc_dollar_amount
