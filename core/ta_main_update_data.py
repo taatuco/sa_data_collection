@@ -34,6 +34,84 @@ DB_PWD = ACCESS_OBJ.password()
 DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
+def update_instruments_data(symbol, is_update_all, date_num_day_scan, date_minus_seven):
+    """
+    Update instruments table
+    Args:
+        String: Instrument symbol
+        Boolean: if 1 then update all data regardless flag is_ta_calc
+        String: Current date in string format YYYYMMDD
+        String: CUrrent date -7 days in string format YYYYMMDD
+    Returns:
+        None
+    """
+    if is_update_all:
+        sql_select_instr = "SELECT id, date FROM price_instruments_data "+\
+        "WHERE (symbol='"+symbol+"' and date>"+date_num_day_scan+") ORDER BY date ASC"
+    else:
+        sql_select_instr = "SELECT id, date FROM price_instruments_data "+\
+        "WHERE (symbol='"+symbol+"' and date>"+date_num_day_scan+\
+        " and is_ta_calc=0) ORDER BY date ASC"
+
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
+    sql_d_id = sql_select_instr
+    cr_d_id.execute(sql_d_id)
+    rs_d = cr_d_id.fetchall()
+    for row in rs_d:
+        date_current = str(row[1]).replace("-", "")
+        record_id = row[0]
+        rsi = RsiData(symbol, date_current, 14)
+        change_1d = rsi.get_change()
+        gain_1d = rsi.get_gain()
+        loss_1d = rsi.get_loss()
+        avg_gain = rsi.get_avg_gain()
+        avg_loss = rsi.get_avg_loss()
+        rs14 = rsi.get_rs()
+        rsi14 = rsi.get_rsi()
+        rsi_overbought = rsi.get_rsi_overbought()
+        rsi_oversold = rsi.get_rsi_oversold()
+        ma200 = calc_ma(symbol, date_current, 200)
+        ma10 = calc_ma(symbol, date_current, 10)
+        ma20 = calc_ma(symbol, date_current, 20)
+        ma30 = calc_ma(symbol, date_current, 30)
+        ma40 = calc_ma(symbol, date_current, 40)
+        ma50 = calc_ma(symbol, date_current, 50)
+        sentiment = get_sentiment_score_avg(symbol, date_minus_seven)
+        is_ta_calc = "1"
+        cr_upd = connection.cursor(pymysql.cursors.SSCursor)
+        sql_upd = "UPDATE price_instruments_data SET "+\
+        "change_1d="+str(change_1d)+", "+\
+        "gain_1d="+str(gain_1d)+", "+\
+        "loss_1d="+str(loss_1d)+", "+\
+        "avg_gain="+str(avg_gain)+", "+\
+        "avg_loss="+str(avg_loss)+", "+\
+        "rs14="+str(rs14)+", "+\
+        "rsi14="+str(rsi14)+", "+\
+        "rsi_overbought="+str(rsi_overbought)+", "+\
+        "rsi_oversold="+str(rsi_oversold)+", "+\
+        "ma200="+str(ma200)+ ", "+\
+        "ma10="+str(ma10)+ ", "+\
+        "ma20="+str(ma20)+ ", "+\
+        "ma30="+str(ma30)+ ", "+\
+        "ma40="+str(ma40)+ ", "+\
+        "ma50="+str(ma50)+ ", "+\
+        "sentiment_1d="+str(sentiment)+", "+\
+        "is_ta_calc="+str(is_ta_calc)+" "+\
+        "WHERE id="+str(record_id)
+        debug(sql_upd)
+        cr_upd.execute(sql_upd)
+        connection.commit()
+        gc.collect()
+        cr_upd.close()
+    cr_d_id.close()
+    connection.close()
+
 def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
     """
     Main function to update all data
@@ -72,99 +150,33 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
     cursor.execute(sql)
     res = cursor.fetchall()
     for row in res:
-        s = row[0]
+        symbol = row[0]
         uid = row[1]
         asset_class = row[2]
-        cr_pip = connection.cursor(pymysql.cursors.SSCursor)
-        sql_pip = "SELECT pip FROM instruments WHERE symbol ='"+ s +"' "
-        cr_pip.execute(sql_pip)
-        rs_pip = cr_pip.fetchall()
-        for row in rs_pip:
-            pip = row[0]
-        cr_pip.close()
-
-        debug(str(uid) + ' - ' + str(s) + '------------------------------')
-        debug(s +": "+ str(pip) +": "+ os.path.basename(__file__))
-        dn = datetime.datetime.now() - timedelta(days=10)
-        dn = dn.strftime("%Y%m%d")
-        dh = datetime.datetime.now() - timedelta(days=7)
-        dh = dh.strftime("%Y%m%d")
-        d = datetime.datetime.now() - timedelta(days=nd_scan)
-        d = d.strftime("%Y%m%d")
+        debug(str(uid) + ' - ' + str(symbol) + '------------------------------')
+        date_minus_ten = datetime.datetime.now() - timedelta(days=10)
+        date_minus_ten = date_minus_ten.strftime("%Y%m%d")
+        date_minus_seven = datetime.datetime.now() - timedelta(days=7)
+        date_minus_seven = date_minus_seven.strftime("%Y%m%d")
+        date_num_day_scan = datetime.datetime.now() - timedelta(days=nd_scan)
+        date_num_day_scan = date_num_day_scan.strftime("%Y%m%d")
         sentiment = 0
+        update_instruments_data(symbol, is_update_all, date_num_day_scan, date_minus_seven)
 
         if is_update_all:
-            sql_select_instr = "SELECT id, date FROM price_instruments_data "+\
-            "WHERE (symbol='"+s+"' and date>"+d+") ORDER BY date ASC"
+            get_trades(symbol, uid, nd_scan, True)
         else:
-            sql_select_instr = "SELECT id, date FROM price_instruments_data "+\
-            "WHERE (symbol='"+s+"' and date>"+d+" and is_ta_calc=0) ORDER BY date ASC"
-
-        cr_d_id = connection.cursor(pymysql.cursors.SSCursor)
-        sql_d_id = sql_select_instr
-        cr_d_id.execute(sql_d_id)
-        rs_d = cr_d_id.fetchall()
-        for row in rs_d:
-            d = str(row[1]).replace("-", "")
-            record_id = row[0]
-            rsi = RsiData(s, d, 14)
-            change_1d = rsi.get_change()
-            gain_1d = rsi.get_gain()
-            loss_1d = rsi.get_loss()
-            avg_gain = rsi.get_avg_gain()
-            avg_loss = rsi.get_avg_loss()
-            rs14 = rsi.get_rs()
-            rsi14 = rsi.get_rsi()
-            rsi_overbought = rsi.get_rsi_overbought()
-            rsi_oversold = rsi.get_rsi_oversold()
-            ma200 = calc_ma(s, d, 200)
-            ma10 = calc_ma(s, d, 10)
-            ma20 = calc_ma(s, d, 20)
-            ma30 = calc_ma(s, d, 30)
-            ma40 = calc_ma(s, d, 40)
-            ma50 = calc_ma(s, d, 50)
-            sentiment = get_sentiment_score_avg(s, dh)
-            is_ta_calc = "1"
-            cr_upd = connection.cursor(pymysql.cursors.SSCursor)
-            sql_upd = "UPDATE price_instruments_data SET "+\
-            "change_1d="+str(change_1d)+", "+\
-            "gain_1d="+str(gain_1d)+", "+\
-            "loss_1d="+str(loss_1d)+", "+\
-            "avg_gain="+str(avg_gain)+", "+\
-            "avg_loss="+str(avg_loss)+", "+\
-            "rs14="+str(rs14)+", "+\
-            "rsi14="+str(rsi14)+", "+\
-            "rsi_overbought="+str(rsi_overbought)+", "+\
-            "rsi_oversold="+str(rsi_oversold)+", "+\
-            "ma200="+str(ma200)+ ", "+\
-            "ma10="+str(ma10)+ ", "+\
-            "ma20="+str(ma20)+ ", "+\
-            "ma30="+str(ma30)+ ", "+\
-            "ma40="+str(ma40)+ ", "+\
-            "ma50="+str(ma50)+ ", "+\
-            "sentiment_1d="+str(sentiment)+", "+\
-            "is_ta_calc="+str(is_ta_calc)+" "+\
-            "WHERE id="+str(record_id)
-            debug(sql_upd)
-            cr_upd.execute(sql_upd)
-            connection.commit()
-            gc.collect()
-            cr_upd.close()
-        cr_d_id.close()
-        gc.collect()
-
-        if is_update_all:
-            get_trades(s, uid, nd_scan, True)
-        else:
-            get_trades(s, uid, nd_scan, False)
+            get_trades(symbol, uid, nd_scan, False)
 
         if extended_scan == 1:
-            get_trend_line_data(s, uid)
-            gen_recomm(s, uid)
-            gen_chart(s, uid)
-        get_forecast_pnl(s, nd_scan, is_update_all)
-        get_instr_sum(s, uid, asset_class, dn, sentiment)
-        set_signals_feed(s)
-        set_widgets_feed(s)
+            get_trend_line_data(symbol, uid)
+            gen_recomm(symbol, uid)
+            gen_chart(symbol, uid)
+
+        get_forecast_pnl(symbol, nd_scan, is_update_all)
+        get_instr_sum(symbol, uid, asset_class, date_minus_ten, sentiment)
+        set_signals_feed(symbol)
+        set_widgets_feed(symbol)
+        gc.collect()
     cursor.close()
     connection.close()
