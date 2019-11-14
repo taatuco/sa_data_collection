@@ -9,7 +9,7 @@ import datetime
 import pymysql.cursors
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
-from settings import SmartAlphaPath, debug, get_portf_suffix
+from settings import SmartAlphaPath, debug, get_portf_suffix, get_hash_string
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_feed()))
 from add_feed_type import add_feed_type
@@ -34,7 +34,7 @@ def set_widgets_feed(symbol):
     feed_type = "widgets"
     add_feed_type(feed_id, feed_type)
     set_widgets_tradingview_chart(symbol, feed_id)
-    
+
     set_widgets_from_url(feed_id,
                          'FX Heatmap',
                          '{burl}w/?funcname=get_tradingview_fxheatmap(0,0)',
@@ -102,6 +102,7 @@ def set_widgets_from_url(feed_id, short_title, url, search):
     badge = ''
     asset_class = '-'
     market = '-'
+    hash_this = get_hash_string(str(url))
 
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
@@ -115,7 +116,7 @@ def set_widgets_from_url(feed_id, short_title, url, search):
     inserted_values = " " +\
     "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
     "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-    "'"+search+"','"+asset_class+"','"+market+"')"
+    "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+"')"
 
 
     sql_i = "INSERT IGNORE INTO feed"+\
@@ -136,7 +137,6 @@ def set_widgets_tradingview_chart(symbol, feed_id):
     Returns:
         None
     """
-    #Date [Today date]
     date_today = datetime.datetime.now()
     date_today = date_today.strftime("%Y%m%d")
 
@@ -176,6 +176,7 @@ def set_widgets_tradingview_chart(symbol, feed_id):
         ranking = '-1'
         feed_type = str(feed_id)
         search = "CHART:" + symbol + " " + fullname
+        hash_this = get_hash_string(str(url))
 
         debug(search +": "+ os.path.basename(__file__))
 
@@ -192,7 +193,7 @@ def set_widgets_tradingview_chart(symbol, feed_id):
         inserted_values = inserted_values + sep +\
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"')"
+        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+"')"
 
         cr_i.close()
     cursor.close()

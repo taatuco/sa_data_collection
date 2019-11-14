@@ -9,7 +9,7 @@ import datetime
 import pymysql.cursors
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
-from settings import SmartAlphaPath, debug, get_portf_suffix
+from settings import SmartAlphaPath, debug, get_portf_suffix, get_hash_string
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_feed()))
 from add_feed_type import add_feed_type
@@ -112,6 +112,7 @@ def set_signals_feed(symbol):
         url = "{burl}s/?uid="+ str(uid)
         ranking = str(get_signal_ranking(symbol, m1_signal))
         feed_type = str(feed_id)
+        hash_this = get_hash_string(str(url))
 
         if float(w_forecast_change) < 0:
             badge = '<i class="fas fa-caret-down"></i>&nbsp;' + w_forecast_display_info
@@ -137,7 +138,7 @@ def set_signals_feed(symbol):
         inserted_values = inserted_values + sep +\
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"')"
+        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+"')"
 
         cr_d.close()
     cursor.close()

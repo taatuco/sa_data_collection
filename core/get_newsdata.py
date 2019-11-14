@@ -8,12 +8,12 @@ import os
 import gc
 import datetime
 from datetime import timedelta
-import feedparser
 import pymysql.cursors
+import feedparser
 from get_sentiment_score import analyze_sentiment_of_this
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
-from settings import SmartAlphaPath, debug
+from settings import SmartAlphaPath, debug, get_hash_string
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
@@ -119,6 +119,7 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
     sep = ''
     insert_line = ''
     sentiment_score = 0
+    hash_str = ''
     i = 1
     for post in feed.entries:
         short_title = str(post.title).replace("'", "`")
@@ -130,13 +131,14 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
         url = str(post.link)
         search = url
         sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
+        hash_str = get_hash_string(str(short_title))
 
         if i > 1:
             sep = ','
         insert_line = insert_line + sep +\
         '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
         str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+\
-        str(market)+'\',\''+str(lang)+'\','+ str(sentiment_score) +')'
+        str(market)+'\',\''+str(lang)+'\','+ str(sentiment_score) +'\',\''+ str(hash_str) + '\''+')'
 
         if i >= limit:
             break
@@ -218,6 +220,8 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
         sep = ''
         insert_line = ''
         sentiment_score = 0
+        hash_str = ''
+
         i = 1
         for post in feed.entries:
             short_title = str(post.title).replace("'", "`")
@@ -230,6 +234,7 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
             url = str(post.link)
             search = url
             sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
+            hash_str = get_hash_string(str(short_title))
 
             if i > 1:
                 sep = ','
@@ -237,7 +242,7 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
             '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
             str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+\
             str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
-            str(symbol)+'\','+ str(sentiment_score) + ')'
+            str(symbol)+'\','+ str(sentiment_score) +'\',\''+ str(hash_str)+'\''+ ')'
 
             if i >= limit:
                 break

@@ -4,6 +4,7 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 import os
+import hashlib
 
 class SmartAlphaPath:
     """
@@ -113,4 +114,17 @@ def get_email_txt_signature():
     '\n'+\
     '27 Old Gloucester Street, London, WC1N 3AX, UK'+\
     '\n'
+    return ret
+
+def get_hash_string(text):
+    """
+    Get hash from string
+    Args:
+        String: text to hash
+    Returns:
+        String: Hash
+    """
+    ret = ''
+    d = hashlib.md5(text.encode() )
+    ret = d.hexdigest()
     return ret
