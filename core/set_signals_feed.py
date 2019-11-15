@@ -153,6 +153,5 @@ def set_signals_feed(symbol):
     if not disabled:
         cr_i.execute(sql_i)
         connection.commit()
-
     cr_i.close()
     connection.close()
