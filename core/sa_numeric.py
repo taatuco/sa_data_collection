@@ -188,7 +188,7 @@ def get_romad(sql):
 
     percent_return = get_pct_change(first, last)
     max_drawdown = get_mdd(sql)
-
-    ret = percent_return / max_drawdown
+    if max_drawdown != 0 and max_drawdown is not None:
+        ret = percent_return / max_drawdown
     debug('romad='+ str(ret))
     return ret
