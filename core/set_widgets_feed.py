@@ -193,7 +193,7 @@ def set_widgets_tradingview_chart(symbol, feed_id):
         inserted_values = inserted_values + sep +\
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+"')"
+        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+")"
 
         cr_i.close()
     cursor.close()

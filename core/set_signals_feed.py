@@ -138,7 +138,7 @@ def set_signals_feed(symbol):
         inserted_values = inserted_values + sep +\
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+"')"
+        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+")"
 
         cr_d.close()
     cursor.close()
