@@ -69,6 +69,7 @@ def set_signals_feed(symbol):
     feed_id = 1
     feed_type = "signals"
     add_feed_type(feed_id, feed_type)
+    disabled = True
 
     #Date [Today date]
     date_today = datetime.datetime.now()
