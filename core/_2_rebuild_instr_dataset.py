@@ -9,5 +9,7 @@ from ta_main_update_data import get_update_instr_data
 
 ################################################################################
 # Rebuild the data (need to be run twice)
+# Some custom indicators depends on other indicators.
 ################################################################################
-get_update_instr_data(1, False, '')
+for i in range(2):
+    get_update_instr_data(1, True, '')
