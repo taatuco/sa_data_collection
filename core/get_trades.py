@@ -169,5 +169,5 @@ def get_trades(symbol, uid, number_of_days, full_update):
         debug(sql_i)
         cr_i.execute(sql_i)
         connection.commit()
-    cr_i.close()
+        cr_i.close()
     connection.close()
