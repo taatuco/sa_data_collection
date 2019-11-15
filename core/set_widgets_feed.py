@@ -116,13 +116,13 @@ def set_widgets_from_url(feed_id, short_title, url, search):
     inserted_values = " " +\
     "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
     "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-    "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+"')"
+    "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+")"
 
 
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
     " ranking, symbol, type, badge, "+\
-    "search, asset_class, market) VALUES " + inserted_values
+    "search, asset_class, market, hash) VALUES " + inserted_values
     cr_i.execute(sql_i)
     connection.commit()
     cr_i.close()
