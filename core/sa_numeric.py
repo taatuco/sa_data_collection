@@ -79,6 +79,7 @@ def get_volatility_risk(sql, is_portf, symbol):
         Double: volatility risk in percentage.
     """
     ret = 0
+    last_price = 0
     #sql with one numerical column to compute volatility risk
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
@@ -91,7 +92,6 @@ def get_volatility_risk(sql, is_portf, symbol):
         sql_i = "SELECT account_reference FROM instruments WHERE symbol='"+ symbol +"'"
         cursor.execute(sql_i)
         res = cursor.fetchall()
-        last_price = 0
         for row in res:
             last_price = row[0]
         cursor.close()
