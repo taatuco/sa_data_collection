@@ -91,6 +91,7 @@ def get_volatility_risk(sql, is_portf, symbol):
         sql_i = "SELECT account_reference FROM instruments WHERE symbol='"+ symbol +"'"
         cursor.execute(sql_i)
         res = cursor.fetchall()
+        last_price = 0
         for row in res:
             last_price = row[0]
         cursor.close()
