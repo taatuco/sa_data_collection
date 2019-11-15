@@ -19,7 +19,7 @@ DB_PWD = ACCESS_OBJ.password()
 DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
-def hash_feed(what):
+def hash_feed(what, feed_type):
     """
     what = 'news'
     what = 'url'
@@ -31,7 +31,11 @@ def hash_feed(what):
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT short_title, url FROM feed WHERE hash = '' "
+    sql = "SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;"
+    cursor.execute(sql)
+    sql = "SELECT short_title, url FROM feed WHERE hash = '' AND type= "+ str(feed_type) + ";"
+    cursor.execute(sql)
+    sql = " SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;"
     cursor.execute(sql)
     res = cursor.fetchall()
     short_title = ''
@@ -52,7 +56,7 @@ def hash_feed(what):
         cr_u = connection.cursor(pymysql.cursors.SSCursor)
         sql_u = "UPDATE feed SET "+\
         "hash = '"+ get_hash_string(str(hash_this)) +"' "+\
-        "WHERE "+ column +" = '"+ str(hash_this) +"'"
+        "WHERE "+ column +" = '"+ str(hash_this) +"'" + ' AND type = ' + str(feed_type)
         cr_u.execute(sql_u)
         connection.commit()
 
