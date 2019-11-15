@@ -64,7 +64,7 @@ def get_stdev(sql):
     debug('stdev='+str(ret))
     cursor.close()
     connection.close()
-    if ret is None:
+    if math.isnan(ret):
         ret = 0
     return ret
 
@@ -105,7 +105,11 @@ def get_volatility_risk(sql, is_portf, symbol):
     stdev = get_stdev(sql)
     price_minus_stdev = last_price - stdev
     ret = abs(get_pct_change(last_price, price_minus_stdev))
+    if math.isnan(ret):
+        ret = 0
     return ret
+
+
 
 def get_mdd(sql):
     """
@@ -151,6 +155,8 @@ def get_mdd(sql):
     cursor.close()
     connection.close()
     ret = pct_dd
+    if math.isnan(ret):
+        ret = 0
     debug('mdd='+ str(ret))
     return ret
 
@@ -191,5 +197,7 @@ def get_romad(sql):
     max_drawdown = get_mdd(sql)
     if max_drawdown != 0 and max_drawdown is not None:
         ret = percent_return / max_drawdown
+    if math.isnan(ret):
+        ret = 0
     debug('romad='+ str(ret))
     return ret
