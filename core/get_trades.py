@@ -64,7 +64,6 @@ def get_trades(symbol, uid, number_of_days, full_update):
     sql = sql_delete_trades
     cursor.execute(sql)
     connection.commit()
-    cursor.close()
 
     sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol = '"+\
     symbol +"' "
@@ -73,7 +72,6 @@ def get_trades(symbol, uid, number_of_days, full_update):
     for row in res:
         trade_decimal_places = row[0]
         trade_fullname = row[1].replace("'", "`")
-    cursor.close()
 
     sql = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+ symbol +\
     "' ORDER BY date DESC LIMIT 1"
