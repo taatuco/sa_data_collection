@@ -162,12 +162,12 @@ def get_trades(symbol, uid, number_of_days, full_update):
             ",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
             i += 1
     cr_1.close()
-
-    cr_i = connection.cursor(pymysql.cursors.SSCursor)
-    sql_i = "INSERT IGNORE INTO trades(uid, symbol, fullname, order_type, entry_price, "+\
-    "entry_date, expiration_date, close_price, pnl_pct, status, url) VALUES "+ inserted_value
-    debug(sql_i)
-    cr_i.execute(sql_i)
-    connection.commit()
+    if inserted_value != '':
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "INSERT IGNORE INTO trades(uid, symbol, fullname, order_type, entry_price, "+\
+        "entry_date, expiration_date, close_price, pnl_pct, status, url) VALUES "+ inserted_value
+        debug(sql_i)
+        cr_i.execute(sql_i)
+        connection.commit()
     cr_i.close()
     connection.close()
