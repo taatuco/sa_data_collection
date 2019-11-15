@@ -148,7 +148,7 @@ def set_signals_feed(symbol):
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
     " ranking, symbol, type, badge, "+\
-    "search, asset_class, market) VALUES " + inserted_values
+    "search, asset_class, market, hash) VALUES " + inserted_values
     if not disabled:
         cr_i.execute(sql_i)
         connection.commit()

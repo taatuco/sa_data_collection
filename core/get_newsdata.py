@@ -250,7 +250,7 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
 
         cursor = connection.cursor(pymysql.cursors.SSCursor)
         sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-        'url, type, search, asset_class, market, lang, symbol, ranking) VALUES '+ insert_line
+        'url, type, search, asset_class, market, lang, symbol, ranking, hash) VALUES '+ insert_line
         debug(sql +": "+ os.path.basename(__file__))
         cursor.execute(sql)
         connection.commit()
