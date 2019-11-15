@@ -127,7 +127,7 @@ def set_signals_feed(symbol):
 
         cr_d = connection.cursor(pymysql.cursors.SSCursor)
         sql_d = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+\
-        date_today+"' AND type="+ type +")"
+        date_today+"' AND type="+ feed_type +")"
         cr_d.execute(sql_d)
         connection.commit()
 
