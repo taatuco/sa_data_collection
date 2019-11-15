@@ -31,11 +31,7 @@ def hash_feed(what, feed_type):
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;"
-    cursor.execute(sql)
-    sql = "SELECT short_title, url FROM feed WHERE hash = '' AND type= "+ str(feed_type) + ";"
-    cursor.execute(sql)
-    sql = " SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;"
+    sql = "SELECT short_title, url FROM feed WHERE hash = '' AND type= "+ str(feed_type) + " LOCK IN SHARE MODE"
     cursor.execute(sql)
     res = cursor.fetchall()
     short_title = ''
