@@ -129,6 +129,7 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
             short_description = str(post.published)
 
         url = str(post.link)
+        url = url.replace("'","&#39;")
         search = url
         sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
         hash_str = get_hash_string(str(short_title))
@@ -233,6 +234,7 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
                 short_description = str(post.published)
 
             url = str(post.link)
+            url = url.replace("'","&#39;")
             search = url
             sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
             hash_str = get_hash_string(str(short_title))
