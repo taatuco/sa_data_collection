@@ -152,7 +152,7 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
                                  cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-    'url, type, search, asset_class, market, lang, ranking) VALUES '+ insert_line
+    'url, type, search, asset_class, market, lang, ranking, hash) VALUES '+ insert_line
     debug(sql +": "+ os.path.basename(__file__))
     cursor.execute(sql)
     connection.commit()
