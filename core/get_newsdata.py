@@ -123,13 +123,14 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
     i = 1
     for post in feed.entries:
         short_title = str(post.title).replace("'", "`")
-        if post.description is not None and post.description != '':
+        try:
             short_description = str(post.description).replace("'", "`") + ' '+ str(post.published)
-        else:
+        except AttributeError as error:
+            debug(error)
             short_description = str(post.published)
 
         url = str(post.link)
-        url = url.replace("'","&#39;")
+        url = url.replace("'", "&#39;")
         search = url
         sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
         hash_str = get_hash_string(str(short_title))
@@ -227,14 +228,15 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
         i = 1
         for post in feed.entries:
             short_title = str(post.title).replace("'", "`")
-            if post.description is not None and post.description != '':
+            try:
                 short_description = str(post.description).replace("'", "`") +\
                 ' '+ str(post.published)
-            else:
+            except AttributeError as error:
+                debug(error)
                 short_description = str(post.published)
 
             url = str(post.link)
-            url = url.replace("'","&#39;")
+            url = url.replace("'", "&#39;")
             search = url
             sentiment_score = analyze_sentiment_of_this(short_title+' '+short_description)
             hash_str = get_hash_string(str(short_title))
