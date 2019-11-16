@@ -139,6 +139,7 @@ def set_widgets_tradingview_chart(symbol, feed_id):
     """
     date_today = datetime.datetime.now()
     date_today = date_today.strftime("%Y%m%d")
+    disabled = True
 
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
