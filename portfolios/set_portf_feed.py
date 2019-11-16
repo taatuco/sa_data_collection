@@ -10,7 +10,7 @@ import datetime
 import pymysql.cursors
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
-from settings import SmartAlphaPath, get_portf_suffix, debug
+from settings import SmartAlphaPath, get_portf_suffix, debug, get_hash_string
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
@@ -210,6 +210,7 @@ def set_portf_feed():
         ranking = str(get_portf_ranking(symbol, romad_st, y1_performance,
                                         m6_performance, m3_performance, m1_performance))
         feed_type = str(feed_id)
+        hash_this = get_hash_string(str(url))
 
         badge = w_forecast_display_info
         search = asset_class + market + symbol + " " + fullname
@@ -222,14 +223,14 @@ def set_portf_feed():
         inserted_value = inserted_value + sep +\
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"')"
+        "'"+search+"','"+asset_class+"','"+market +"','"+hash_this+"'" +")"
 
         i += 1
 
     sql_i = "INSERT IGNORE INTO temp_feed"+\
     "(date, short_title, short_description, content, url,"+\
         " ranking, symbol, type, badge, "+\
-    "search, asset_class, market) VALUES " + inserted_value
+    "search, asset_class, market, hash) VALUES " + inserted_value
     debug(sql_i)
     cr_i.execute('''CREATE TEMPORARY TABLE temp_feed
     SELECT * FROM feed
