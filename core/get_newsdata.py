@@ -144,21 +144,22 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
             break
         i += 1
 
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    cursor = connection.cursor(pymysql.cursors.SSCursor)
-    sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-    'url, type, search, asset_class, market, lang, ranking, hash) VALUES '+ insert_line
-    debug(sql +": "+ os.path.basename(__file__))
-    cursor.execute(sql)
-    connection.commit()
-    gc.collect()
-    cursor.close()
-    connection.close()
+    if insert_line != '':
+        connection = pymysql.connect(host=DB_SRV,
+                                     user=DB_USR,
+                                     password=DB_PWD,
+                                     db=DB_NAME,
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        cursor = connection.cursor(pymysql.cursors.SSCursor)
+        sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
+        'url, type, search, asset_class, market, lang, ranking, hash) VALUES '+ insert_line
+        debug(sql +": "+ os.path.basename(__file__))
+        cursor.execute(sql)
+        connection.commit()
+        gc.collect()
+        cursor.close()
+        connection.close()
 
 def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
     """
@@ -248,14 +249,16 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
                 break
             i += 1
 
-        cursor = connection.cursor(pymysql.cursors.SSCursor)
-        sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
-        'url, type, search, asset_class, market, lang, symbol, ranking, hash) VALUES '+ insert_line
-        debug(sql +": "+ os.path.basename(__file__))
-        cursor.execute(sql)
-        connection.commit()
-        gc.collect()
-        cursor.close()
+        if insert_line != '':
+            cursor = connection.cursor(pymysql.cursors.SSCursor)
+            sql = 'INSERT IGNORE INTO feed(date, short_title, short_description, '+\
+            'url, type, search, asset_class, market, lang, symbol, ranking, hash) '+\
+            'VALUES '+ insert_line
+            debug(sql +": "+ os.path.basename(__file__))
+            cursor.execute(sql)
+            connection.commit()
+            gc.collect()
+            cursor.close()
     cr_s.close()
     connection.close()
 
