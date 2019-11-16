@@ -60,8 +60,6 @@ def send_mail(to_email, to_display_name, bcc, subject, textmsg):
 
     smtpserver.sendmail(smtp_user, tolist, msg)
     smtpserver.quit()
-
-    ret = to_email + ' - ' + bcc + ' - Sending email...'
     return ret
 
 def process_mail_queue():
