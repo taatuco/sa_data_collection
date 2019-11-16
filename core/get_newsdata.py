@@ -123,7 +123,7 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
     i = 1
     for post in feed.entries:
         short_title = str(post.title).replace("'", "`")
-        if post.description is None:
+        if post.description is not None and post.description != '':
             short_description = str(post.description).replace("'", "`") + ' '+ str(post.published)
         else:
             short_description = str(post.published)
@@ -227,7 +227,7 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
         i = 1
         for post in feed.entries:
             short_title = str(post.title).replace("'", "`")
-            if post.description is None:
+            if post.description is not None and post.description != '':
                 short_description = str(post.description).replace("'", "`") +\
                 ' '+ str(post.published)
             else:
