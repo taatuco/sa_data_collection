@@ -138,7 +138,7 @@ def get_rss_global(feed_id, date_d, feed_url, asset_class, market, lang, limit):
         insert_line = insert_line + sep +\
         '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
         str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+str(asset_class)+'\',\''+\
-        str(market)+'\',\''+str(lang)+'\','+ str(sentiment_score) +'\',\''+ str(hash_str) + '\''+')'
+        str(market)+'\',\''+str(lang)+'\','+ str(sentiment_score) +',\''+ str(hash_str) + '\''+')'
 
         if i >= limit:
             break
@@ -242,7 +242,7 @@ def get_rss_specific(feed_id, date_d, feed_url, lang, limit):
             '(\''+ str(date_d)+'\',\''+str(short_title)+'\',\''+str(short_description)+'\',\''+\
             str(url)+'\',\''+str(feed_id)+'\',\''+str(search)+'\',\''+\
             str(asset_class)+'\',\''+str(market)+'\',\''+str(lang)+'\',\''+\
-            str(symbol)+'\','+ str(sentiment_score) +'\',\''+ str(hash_str)+'\''+ ')'
+            str(symbol)+'\','+ str(sentiment_score) +',\''+ str(hash_str)+'\''+ ')'
 
             if i >= limit:
                 break
