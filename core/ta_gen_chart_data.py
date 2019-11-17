@@ -24,7 +24,7 @@ DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
 
-def get_trade_pnl(uid, date_this):
+def get_trade_pnl(uid, date_this, connection):
     """
     Collect trade profit and loss
     Args:
@@ -34,12 +34,6 @@ def get_trade_pnl(uid, date_this):
         Double: trade profit and loss
     """
     ret = 0
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT pnl_pct FROM trades WHERE uid=" + str(uid) +\
     " AND expiration_date = "+ str(date_this)
@@ -48,7 +42,6 @@ def get_trade_pnl(uid, date_this):
     for row in res:
         ret = row[0]
     cursor.close()
-    connection.close()
     return ret
 
 def clear_chart_table(symbol):
@@ -201,7 +194,7 @@ def gen_chart(symbol, uid):
             else:
                 pct_change = get_pct_change(ini_val, price)
                 signal_price = (signal_price +
-                                (signal_price * float(get_trade_pnl(uid, date.strftime("%Y%m%d")))))
+                                (signal_price * float(get_trade_pnl(uid, date.strftime("%Y%m%d"), connection))))
                 pct_signal = get_pct_change(ini_signal, signal_price)
                 sep = ','
 
