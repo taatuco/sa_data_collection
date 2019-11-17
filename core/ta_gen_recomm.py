@@ -200,14 +200,14 @@ def gen_recomm(symbol, uid):
 
         result = pt1 + " " + pt2 + " " + pt3 + " " + pt4 + " " + pt5
 
-
-        cr_u = connection.cursor(pymysql.cursors.SSCursor)
-        sql_u = "UPDATE instruments SET recommendation='"+\
-        str(result) +"' WHERE symbol='" + str(symbol) + "'"
-        debug(sql)
-        cr_u.execute(sql_u)
-        connection.commit()
-        cr_u.close()
+        if result != '':
+            cr_u = connection.cursor(pymysql.cursors.SSCursor)
+            sql_u = "UPDATE instruments SET recommendation='"+\
+            str(result) +"' WHERE symbol='" + str(symbol) + "'"
+            debug(sql)
+            cr_u.execute(sql_u)
+            connection.commit()
+            cr_u.close()
     cursor.close()
 
     debug(str(uid) +": "+ os.path.basename(__file__))
