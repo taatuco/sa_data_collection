@@ -293,14 +293,16 @@ def gen_chart(symbol, uid):
                         str(target_price)+")"
 
                     i += 1
-
-                cr_t = connection.cursor(pymysql.cursors.SSCursor)
-                sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, date, price_close, forecast, "+\
-                "lt_upper_trend_line, lt_lower_trend_line, "+\
-                "st_upper_trend_line, st_lower_trend_line, "+\
-                "rsi, rsi_oversold, rsi_overbought, ma200, target_price) VALUES "+ inserted_values
-                debug(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__))
-                cr_t.execute(sql_t)
-                connection.commit()
-                cr_t.close()
+                if inserted_values != '':
+                    cr_t = connection.cursor(pymysql.cursors.SSCursor)
+                    sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, "+\
+                    "date, price_close, forecast, "+\
+                    "lt_upper_trend_line, lt_lower_trend_line, "+\
+                    "st_upper_trend_line, st_lower_trend_line, "+\
+                    "rsi, rsi_oversold, rsi_overbought, ma200, target_price) VALUES "+\
+                    inserted_values
+                    debug(sql_t +": "+str(uid)+"> "+str(date)+": "+ os.path.basename(__file__))
+                    cr_t.execute(sql_t)
+                    connection.commit()
+                    cr_t.close()
     connection.close()
