@@ -291,8 +291,7 @@ def gen_chart(symbol, uid):
                         str(rsi_overbought)+","+\
                         str(ma200)+","+\
                         str(target_price)+")"
-
-                    i += 1
+                        i += 1
                 if inserted_values != '':
                     cr_t = connection.cursor(pymysql.cursors.SSCursor)
                     sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, "+\
