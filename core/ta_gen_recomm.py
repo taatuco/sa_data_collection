@@ -199,6 +199,7 @@ def gen_recomm(symbol, uid):
 
 
         result = pt1 + " " + pt2 + " " + pt3 + " " + pt4 + " " + pt5
+        result = result.replace("'", "`")
 
         if result != '':
             cr_u = connection.cursor(pymysql.cursors.SSCursor)
