@@ -238,10 +238,11 @@ def get_bias(sdv, edv):
         String: Bias
     """
     ret = "Neutral"
-    if sdv > edv:
-        ret = "Negative"
-    if sdv < edv:
-        ret = "Positive"
+    if sdv is not None and edv is not None:
+        if sdv > edv:
+            ret = "Negative"
+        if sdv < edv:
+            ret = "Positive"
     return ret
 
 def get_trend_line_data(symbol, uid):
@@ -319,4 +320,3 @@ def get_trend_line_data(symbol, uid):
                          "ma50": str(ma_50_ed),
                          "st_bias": str(st_bias),
                          "lt_bias": str(lt_bias)})
-    
