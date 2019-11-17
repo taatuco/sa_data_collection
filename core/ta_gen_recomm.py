@@ -204,7 +204,7 @@ def gen_recomm(symbol, uid):
             cr_u = connection.cursor(pymysql.cursors.SSCursor)
             sql_u = "UPDATE instruments SET recommendation='"+\
             str(result) +"' WHERE symbol='" + str(symbol) + "'"
-            debug(sql)
+            debug(sql_u)
             cr_u.execute(sql_u)
             connection.commit()
             cr_u.close()
