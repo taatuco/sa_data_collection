@@ -101,6 +101,8 @@ class TrendPoints:
             value = row[0]
         cursor.close()
         connection.close()
+        if value is None:
+            value = 0
         return value
 
 class TrendData:
@@ -132,14 +134,6 @@ class TrendData:
         self.get_this = get_what
         self.sdv = pts.get_val_frm_d(self.sdate, self.get_this)
         self.edv = pts.get_val_frm_d(self.edate, self.get_this)
-        try:
-            self.sdv = float(self.sdv)
-        except ValueError:
-            self.sdv = 0
-        try:
-            self.edv = float(self.edv)
-        except ValueError:
-            self.edv = 0
 
     def get_slope(self):
         """ Get trend line slope """
