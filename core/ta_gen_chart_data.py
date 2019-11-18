@@ -253,10 +253,9 @@ def gen_chart(symbol, uid):
                                                         float(st_slope_low), decimal_places))
                         st_upper_trend_line = str(round(float(st_upper_trend_line) +
                                                         float(st_slope_high), decimal_places))
-
-                    if i == 1:
-                        sep = ''
-                    else:
+                        
+                    sep = ''
+                    if i > 2:
                         sep = ','
 
                     if i == 8:
@@ -286,7 +285,7 @@ def gen_chart(symbol, uid):
                         str(rsi_overbought)+","+\
                         str(ma200)+","+\
                         str(target_price)+")"
-                        i += 1
+                    i += 1
                 if inserted_values != '':
                     cr_t = connection.cursor(pymysql.cursors.SSCursor)
                     sql_t = "INSERT IGNORE INTO chart_data(uid, symbol, "+\
