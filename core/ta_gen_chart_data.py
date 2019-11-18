@@ -52,7 +52,7 @@ def clear_chart_table(symbol):
     Returns:
         None
     """
-    if symbol is not None:
+    if symbol != '':
         sql = 'DELETE FROM chart_data WHERE symbol LIKE "'+ str(symbol) +'"'
     else:
         sql = 'TRUNCATE chart_data'
