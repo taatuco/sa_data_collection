@@ -194,7 +194,9 @@ def gen_chart(symbol, uid):
             else:
                 pct_change = get_pct_change(ini_val, price)
                 signal_price = (signal_price +
-                                (signal_price * float(get_trade_pnl(uid, date.strftime("%Y%m%d"), connection))))
+                                (signal_price * float(get_trade_pnl(uid,
+                                                                    date.strftime("%Y%m%d"),
+                                                                    connection))))
                 pct_signal = get_pct_change(ini_signal, signal_price)
                 sep = ','
 
@@ -238,8 +240,8 @@ def gen_chart(symbol, uid):
                 csv_file = csv.reader(csvfile, delimiter=',')
                 i = 1
                 inserted_values = ''
-                forecast = '0'
                 for row in csv_file:
+                    forecast = '0'
                     if i >= 2:
                         date = date + (timedelta(days=1))
                         forecast = row[1]
