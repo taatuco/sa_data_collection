@@ -13,6 +13,7 @@ PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
 from settings import SmartAlphaPath, debug, get_portf_suffix
 SETT = SmartAlphaPath()
+from logging import log_this
 sys.path.append(os.path.abspath(SETT.get_path_core()))
 from ta_calc_ma import calc_ma
 from ta_calc_rsi import RsiData
@@ -123,6 +124,7 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
     Returns:
         None
     """
+    log_this('3. get_update_instr_data', 0)
     if extended_scan == 1:
         nd_scan = 370
     else:
@@ -180,3 +182,4 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
         gc.collect()
     cursor.close()
     connection.close()
+    log_this('3. get_update_instr_data', 1)

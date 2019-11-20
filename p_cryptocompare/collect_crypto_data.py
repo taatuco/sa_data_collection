@@ -13,6 +13,8 @@ PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
 from settings import SmartAlphaPath, debug, get_portf_suffix
 SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_core()))
+from logging import log_this
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
 ACCESS_OBJ = sa_db_access()
@@ -32,6 +34,7 @@ def collect_crypto_data():
     Returns:
         None
     """
+    log_this('1. collect_crypto_data', 0)
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
                                  password=DB_PWD,
@@ -86,5 +89,6 @@ def collect_crypto_data():
         connection.commit()
         cr_i.close()
     cursor.close()
+    log_this('1. collect_crypto_data', 1)
 
 collect_crypto_data()

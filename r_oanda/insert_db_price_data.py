@@ -13,6 +13,8 @@ PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
 from settings import SmartAlphaPath, debug
 SETT = SmartAlphaPath()
+sys.path.append(os.path.abspath(SETT.get_path_core()))
+from logging import log_this
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
 ACCESS_OBJ = sa_db_access()
@@ -31,6 +33,7 @@ def insert_db_price_data():
     Returns:
         None
     """
+    log_this('1. oanda_insert_db_price_data', 0)
     csvdir = SETT.get_path_r_oanda_src()
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
@@ -77,5 +80,6 @@ def insert_db_price_data():
                 cr_q_ins.close()
     cursor.close()
     connection.close()
+    log_this('1. oanda_insert_db_price_data', 1)
 
 insert_db_price_data()
