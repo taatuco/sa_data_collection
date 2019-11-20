@@ -14,7 +14,7 @@ sys.path.append(os.path.abspath(PDIR))
 from settings import SmartAlphaPath, debug, get_portf_suffix
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_core()))
-from logging import log_this
+from sa_logging import log_this
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
 ACCESS_OBJ = sa_db_access()
