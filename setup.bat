@@ -129,9 +129,9 @@ MKDIR "%SA_DATA_DIR%src"
 @ECHO %_PIP_EXE% install feedparser >> %GET_DATA%
 @ECHO %_PIP_EXE% install vaderSentiment >> %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose >> %GET_DATA%
-@ECHO %GET_QM_DATA% >> %GET_DATA%
-@ECHO %GET_OA_DATA% >> %GET_DATA%
-@ECHO %GET_CC_DATA% >> %GET_DATA%
+@ECHO CALL %GET_QM_DATA% >> %GET_DATA%
+@ECHO CALL %GET_OA_DATA% >> %GET_DATA%
+@ECHO CALL %GET_CC_DATA% >> %GET_DATA%
 
 REM ### Quantmod
 DEL /F /Q %GET_QM_DATA%
@@ -152,7 +152,7 @@ REM ### Cryptocompare
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
-@ECHO %SA_FRC_SCRIPT% >> %GET_FRC%
+@ECHO CALL %SA_FRC_SCRIPT% >> %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_FULLDATA%
@@ -177,9 +177,9 @@ DEL /F /Q %PROCESS_MAIL_Q%
 
 REM ### SA Collect Data
 DEL /F /Q %RUN_DATA_COLLECT%
-@ECHO %GET_DATA% >> %RUN_DATA_COLLECT%
-@ECHO %GET_FRC% >> %RUN_DATA_COLLECT%
-@ECHO %SET_FULLDATA% >> %RUN_DATA_COLLECT%
+@ECHO CALL %GET_DATA% >> %RUN_DATA_COLLECT%
+@ECHO CALL %GET_FRC% >> %RUN_DATA_COLLECT%
+@ECHO CALL %SET_FULLDATA% >> %RUN_DATA_COLLECT%
 
 REM ### Data Rebuild Script
 DEL /F %REBUILD_DATA_SCRIPT_1%
