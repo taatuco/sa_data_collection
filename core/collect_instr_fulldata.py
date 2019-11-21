@@ -5,8 +5,6 @@
 # LICENSE file in the root directory of this source tree.
 from ta_main_update_data import get_update_instr_data
 from send_intel_report_email import send_intel_report
-from get_newsdata import get_newsdata
 
 get_update_instr_data(1, False, '')
 send_intel_report()
-get_newsdata(3, True, 'all', 0)
