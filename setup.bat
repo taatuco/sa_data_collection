@@ -9,8 +9,6 @@ SET SA_FRC_SCRIPT=%SYSTEMDRIVE%\smartalpha\sa_frc\get_forecast_data.bat
 SET SA_FRC_DIR=%SYSTEMDRIVE%\smartalpha\sa_frc\
 
 SET GET_DATA_TIME_ST=00:01
-SET GET_FRC_TIME_ST=02:00
-SET SET_FULLDATA_TIME_ST=04:00
 SET GET_NEWSDATA_TIME_0500_ST=05:00
 SET GET_NEWSDATA_TIME_0530_ST=05:30
 SET GET_NEWSDATA_TIME_0600_ST=06:00
@@ -81,6 +79,7 @@ SET GET_NEWSDATA_TIME_2300_ST=23:00
 REM ############################################################################
 
 SET SA_DATA_DIR=%~dp0
+SET RUN_DATA_COLLECT="%SA_DATA_DIR%_sa_collect_data.bat"
 SET GET_DATA="%SA_DATA_DIR%sa_1_get_data.bat"
 SET GET_FRC="%SA_DATA_DIR%sa_2_get_forecast.bat"
 SET SET_FULLDATA="%SA_DATA_DIR%sa_3_set_fulldata.bat"
@@ -130,17 +129,16 @@ MKDIR "%SA_DATA_DIR%src"
 @ECHO %_PIP_EXE% install feedparser >> %GET_DATA%
 @ECHO %_PIP_EXE% install vaderSentiment >> %GET_DATA%
 @ECHO %_PY_EXE% -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose >> %GET_DATA%
-@ECHO START "" %GET_QM_DATA% >> %GET_DATA%
-@ECHO START "" %GET_OA_DATA% >> %GET_DATA%
-@ECHO START "" %GET_CC_DATA% >> %GET_DATA%
+@ECHO %GET_QM_DATA% >> %GET_DATA%
+@ECHO %GET_OA_DATA% >> %GET_DATA%
+@ECHO %GET_CC_DATA% >> %GET_DATA%
 
 REM ### Quantmod
 DEL /F /Q %GET_QM_DATA%
 MKDIR "%SA_DATA_DIR%r_quantmod\src"
 @ECHO DEL /F /Q "%SA_DATA_DIR%r_quantmod\src\*" > %GET_QM_DATA%
 @ECHO %_R_SCRIPT_EXE% "%SA_DATA_DIR%r_quantmod\collect_data.R" >> %GET_QM_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%r_quantmod\insert_db_price_data_asc.py" >> %GET_QM_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%r_quantmod\insert_db_price_data_dsc.py" >> %GET_QM_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%r_quantmod\insert_db_price_data.py" >> %GET_QM_DATA%
 
 REM ### Oanda
 DEL /F /Q %GET_OA_DATA%
@@ -154,7 +152,7 @@ REM ### Cryptocompare
 
 REM ### 2 Get Forecast
 DEL /F /Q %GET_FRC%
-@ECHO START "" "%SA_FRC_SCRIPT%" >> %GET_FRC%
+@ECHO %SA_FRC_SCRIPT% >> %GET_FRC%
 
 REM ### 3 Set Data
 DEL /F /Q %SET_FULLDATA%
@@ -176,6 +174,12 @@ DEL /F /Q %GET_NEWSDATA_SPEC%
 REM ### 7 Process email queue
 DEL /F /Q %PROCESS_MAIL_Q%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\process_mail_queue.py" >> %PROCESS_MAIL_Q%
+
+REM ### SA Collect Data
+DEL /F /Q %RUN_DATA_COLLECT%
+@ECHO "%GET_DATA%" >> %RUN_DATA_COLLECT%
+@ECHO "%GET_FRC%" >> %RUN_DATA_COLLECT%
+@ECHO "%SET_FULLDATA%" >> %RUN_DATA_COLLECT%
 
 REM ### Data Rebuild Script
 DEL /F %REBUILD_DATA_SCRIPT_1%
@@ -232,9 +236,7 @@ DEL /F %RECALC_INSTRUMENT%
 @ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_INSTRUMENT%
 
 REM ### Set Schedule tasks
-SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %GET_DATA% /RI 0 /ST %GET_DATA_TIME_ST% /F
-SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_FORECAST /TR %GET_FRC% /RI 0 /ST %GET_FRC_TIME_ST% /F
-SCHTASKS /Create /SC DAILY /TN SMARTALPHA_SET_FULLDATA /TR %SET_FULLDATA% /RI 0 /ST %SET_FULLDATA_TIME_ST% /F
+SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %RUN_DATA_COLLECT% /RI 0 /ST %GET_DATA_TIME_ST% /F
 
 REM ### SET NewsData collection
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_NEWSDATA_01 /TR %GET_NEWSDATA% /RI 0 /ST %GET_NEWSDATA_TIME_0500_ST% /F

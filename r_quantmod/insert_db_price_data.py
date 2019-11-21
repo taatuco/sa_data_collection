@@ -1,4 +1,4 @@
-""" Import data collected with Quantmod csv output into database DESC """
+""" Import data collected with Quantmod csv output into database ASC """
 # Copyright (c) 2018-present, Taatu Ltd.
 #
 # This source code is licensed under the MIT license found in the
@@ -25,16 +25,16 @@ DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
 
-def insert_db_price_data_dsc():
+def insert_db_price_data_asc():
     """
     Insert collected price data from Quantmod csv into database in
-    descending order.
+    ascending order.
     Args:
         None
     Returns:
         None
     """
-    log_this('1. quantmod_insert_db_price_data_dsc', 0)
+    log_this('1. quantmod_insert_db_price_data', 0)
     csvdir = SETT.get_path_r_quantmod_src()
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
@@ -47,11 +47,11 @@ def insert_db_price_data_dsc():
     cr_cnt.execute(sql_cnt)
     rs_cnt = cr_cnt.fetchall()
     for row in rs_cnt:
-        j = (((int(row[0]))/2)+10)
+        j = int(row[0])
     cr_cnt.close()
 
     cursor = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol DESC"
+    sql = "SELECT symbol, uid FROM symbol_list ORDER BY symbol ASC"
     cursor.execute(sql)
     res = cursor.fetchall()
     k = 1
@@ -83,7 +83,7 @@ def insert_db_price_data_dsc():
                             inserted_values = inserted_values + sep +\
                             "('"+symbol+"',"+price_date+","+price_close+")"
                             debug(symbol +": ("+str(i)+"/"+str(j)+"): "+price_date+": "+\
-                                  os.path.basename(__file__) +" - " + inserted_values)
+                                  os.path.basename(__file__) + " - " + inserted_values)
                         i += 1
                     cr_q_ins = connection.cursor(pymysql.cursors.SSCursor)
                     sql_q_ins = "INSERT IGNORE INTO price_instruments_data "+\
@@ -97,6 +97,6 @@ def insert_db_price_data_dsc():
             break
     cursor.close()
     connection.close()
-    log_this('1. quantmod_insert_db_price_data_dsc', 1)
+    log_this('1. quantmod_insert_db_price_data', 1)
 
-insert_db_price_data_dsc()
+insert_db_price_data_asc()
