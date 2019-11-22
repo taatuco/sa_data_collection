@@ -22,7 +22,7 @@ DB_PWD = ACCESS_OBJ.password()
 DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
-def get_trades(symbol, uid, number_of_days, full_update):
+def get_trades(symbol, uid, number_of_days, full_update, connection):
     """
     Generate trades from price_instruments_data
     Args:
@@ -54,12 +54,6 @@ def get_trades(symbol, uid, number_of_days, full_update):
     else:
         sql_delete_trades = "DELETE FROM trades WHERE symbol ='"+ symbol +"' AND status='active' "
 
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = sql_delete_trades
     cursor.execute(sql)
@@ -170,4 +164,3 @@ def get_trades(symbol, uid, number_of_days, full_update):
         cr_i.execute(sql_i)
         connection.commit()
         cr_i.close()
-    connection.close()

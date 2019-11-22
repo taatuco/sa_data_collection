@@ -55,18 +55,12 @@ class RsiData:
     c_rs = 0
     c_rsi = 0
 
-    def __init__(self, symbol, date, period):
+    def __init__(self, symbol, date, period, connection):
         """ Initialize RSI data """
         self.symbol = symbol
         self.date = date
         self.period = period
 
-        connection = RsiData.pymysql.connect(host=DB_SRV,
-                                             user=DB_USR,
-                                             password=DB_PWD,
-                                             db=DB_NAME,
-                                             charset='utf8mb4',
-                                             cursorclass=RsiData.pymysql.cursors.DictCursor)
         cr_get_pr_d = connection.cursor(RsiData.pymysql.cursors.SSCursor)
         sql_get_pr_d = "SELECT price_close, avg_gain, avg_loss, is_ta_calc "+\
         "FROM price_instruments_data "+\
@@ -96,8 +90,6 @@ class RsiData:
                     RsiData.c_curr_is_ta_calc = row[3]
             cr_get_curr_d.close()
         cr_get_pr_d.close()
-        connection.close()
-
 
     def get_gain(self):
         """ Get 1 day gain """
@@ -107,7 +99,7 @@ class RsiData:
         RsiData.c_curr_gain = gain_1d
         return gain_1d
 
-    def get_avg_gain(self):
+    def get_avg_gain(self, connection):
         """ Get period average gain """
         #(FIRST_AVG, GAIN, LOSS) = AVERAGE( (GAIN) ), AVERAGE( (LOSS) ) (if count> period)
         # In case previous is 0 then get average of last period
@@ -115,12 +107,6 @@ class RsiData:
         if RsiData.c_prev_avg_gain == 0:
             #with RsiData.connection.cursor() as cr_get_avg_g:
 
-            connection = RsiData.pymysql.connect(host=DB_SRV,
-                                                 user=DB_USR,
-                                                 password=DB_PWD,
-                                                 db=DB_NAME,
-                                                 charset='utf8mb4',
-                                                 cursorclass=RsiData.pymysql.cursors.DictCursor)
             cr_get_avg_g = connection.cursor(RsiData.pymysql.cursors.SSCursor)
             sql_get_avg_g = "SELECT gain_1d FROM price_instruments_data "+\
                           "WHERE symbol='"+self.symbol+"' AND date<"+\
@@ -132,7 +118,6 @@ class RsiData:
                 tt_gain = tt_gain + row[0]
             RsiData.c_curr_avg_gain = tt_gain / self.period
             cr_get_avg_g.close()
-            connection.close()
         else:
             #(AVG_GAIN) = ( (PREVIOUS_AVG_GAIN)*(period-1)+ (GAIN) ) / period
             RsiData.c_curr_avg_gain = ((RsiData.c_prev_avg_gain*(self.period-1))+
@@ -140,19 +125,13 @@ class RsiData:
             RsiData.c_curr_avg_gain = RsiData.c_curr_avg_gain/self.period
         return RsiData.c_curr_avg_gain
 
-    def get_avg_loss(self):
+    def get_avg_loss(self, connection):
         """ Get period average loss """
         #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
         tt_loss = 0
         if RsiData.c_prev_avg_loss == 0:
             #with RsiData.connection.cursor() as cr_get_avg_l:
 
-            connection = RsiData.pymysql.connect(host=DB_SRV,
-                                                 user=DB_USR,
-                                                 password=DB_PWD,
-                                                 db=DB_NAME,
-                                                 charset='utf8mb4',
-                                                 cursorclass=RsiData.pymysql.cursors.DictCursor)
             cr_get_avg_l = connection.cursor(RsiData.pymysql.cursors.SSCursor)
             sql_get_avg_l = "SELECT loss_1d FROM price_instruments_data "+\
                           "WHERE symbol='"+self.symbol+"' AND date<"+str(self.date)+\
@@ -164,7 +143,6 @@ class RsiData:
                 tt_loss = tt_loss + row[0]
             RsiData.c_curr_avg_loss = tt_loss / self.period
             cr_get_avg_l.close()
-            connection.close()
         else:
             #(AVG_LOSS) = ( (PREVIOUS_AVG_LOSS)*(period-1)+ (LOSS) ) / period
             RsiData.c_curr_avg_loss = ((RsiData.c_prev_avg_loss*(self.period-1))+

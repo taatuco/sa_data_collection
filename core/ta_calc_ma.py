@@ -21,7 +21,7 @@ DB_PWD = ACCESS_OBJ.password()
 DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
-def calc_ma(symbol_id, date_id, ma_period):
+def calc_ma(symbol_id, date_id, ma_period, connection):
     """
     Compute moving average according to args
     Args:
@@ -35,12 +35,6 @@ def calc_ma(symbol_id, date_id, ma_period):
     from_date = from_date.strftime("%Y%m%d")
     ma_period = str(ma_period)
 
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT AVG(price_close) as ma FROM price_instruments_data "+\
     "WHERE symbol='"+symbol_id+"' AND date<="+date_id+" AND date>="+ from_date
@@ -50,5 +44,4 @@ def calc_ma(symbol_id, date_id, ma_period):
     for row in res:
         mav = row[0]
     cursor.close()
-    connection.close()
     return mav

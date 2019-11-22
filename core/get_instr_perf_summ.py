@@ -106,15 +106,9 @@ class InstrumentSummaryData:
     last_price = 0
     lp_signal = 0
 
-    def __init__(self, symbol, uid):
+    def __init__(self, symbol, uid, connection):
         """ Select and initialize instrument data according to args """
         self.symbol_selection = symbol
-        connection = pymysql.connect(host=DB_SRV,
-                                     user=DB_USR,
-                                     password=DB_PWD,
-                                     db=DB_NAME,
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
         cursor = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT symbol from symbol_list WHERE uid=" + str(uid)
         cursor.execute(sql)
@@ -143,7 +137,6 @@ class InstrumentSummaryData:
             self.last_price = row[0]
         self.last_date = row[1]
         cursor.close()
-        connection.close()
 
         self.uid = uid
         self.d_1_year_perf = self.last_date - (timedelta(days=365))

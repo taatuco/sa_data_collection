@@ -34,7 +34,14 @@ def get_portf_perf_summ(symbol, uid):
     Returns:
         None
     """
-    pps = InstrumentSummaryData(symbol, uid)
+    connection = pymysql.connect(host=DB_SRV,
+                                 user=DB_USR,
+                                 password=DB_PWD,
+                                 db=DB_NAME,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    
+    pps = InstrumentSummaryData(symbol, uid, connection)
     y1_pct = pps.get_pct_1_year_performance()
     m6_pct = pps.get_pct_6_month_performance()
     m3_pct = pps.get_pct_3_month_performance()
@@ -49,12 +56,6 @@ def get_portf_perf_summ(symbol, uid):
     romad_st = get_romad(sql)
     volatility_risk_st = get_volatility_risk(sql, True, symbol)
 
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "UPDATE instruments SET y1="+ str(y1_pct) +", m6="+ str(m6_pct) +", m3="+\
     str(m3_pct) +", m1="+ str(m1_pct) +", w1="+ str(w1_pct) +", "+\

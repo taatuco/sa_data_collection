@@ -44,7 +44,7 @@ def get_rsi_mom(oversold, overbought, weak, strong, lt_rsi_mom):
         ret = strong
     return ret
 
-def gen_recomm(symbol, uid):
+def gen_recomm(symbol, uid, connection):
     """
     Update recommendations, modify record in table recommendations
     Args:
@@ -68,12 +68,6 @@ def gen_recomm(symbol, uid):
     last_price = 0
     decimal_places = 0
 
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT decimal_places, fullname FROM instruments WHERE symbol='"+str(symbol)+"'"
     debug(sql)

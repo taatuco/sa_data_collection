@@ -44,7 +44,7 @@ def get_trade_pnl(uid, date_this, connection):
     cursor.close()
     return ret
 
-def clear_chart_table(symbol):
+def clear_chart_table(symbol, connection):
     """
     Remove the content of chart_data table
     Args:
@@ -57,21 +57,14 @@ def clear_chart_table(symbol):
     else:
         sql = 'TRUNCATE chart_data'
 
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cr_t = connection.cursor(pymysql.cursors.SSCursor)
     sql_t = sql
     debug(sql_t)
     cr_t.execute(sql_t)
     connection.commit()
     cr_t.close()
-    connection.close()
 
-def gen_chart(symbol, uid):
+def gen_chart(symbol, uid, connection):
     """
     Generate chart data
     Args:
@@ -81,12 +74,6 @@ def gen_chart(symbol, uid):
         None
     """
     decimal_places = 2
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT decimal_places FROM instruments WHERE symbol='"+symbol+"'"
     debug(sql)
@@ -253,7 +240,7 @@ def gen_chart(symbol, uid):
                                                         float(st_slope_low), decimal_places))
                         st_upper_trend_line = str(round(float(st_upper_trend_line) +
                                                         float(st_slope_high), decimal_places))
-                        
+
                     sep = ''
                     if i > 2:
                         sep = ','
@@ -298,4 +285,3 @@ def gen_chart(symbol, uid):
                     cr_t.execute(sql_t)
                     connection.commit()
                     cr_t.close()
-    connection.close()

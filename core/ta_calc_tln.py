@@ -36,17 +36,12 @@ class TrendPoints:
     period = 0
     period2 = 0
 
-    def __init__(self, symbol, period):
+    def __init__(self, symbol, period, connection):
         """ Initialize data points related to trend lines """
         self.symbol = symbol
         self.period = period
         self.period2 = period/2
-        connection = TrendPoints.pymysql.connect(host=DB_SRV,
-                                                 user=DB_USR,
-                                                 password=DB_PWD,
-                                                 db=DB_NAME,
-                                                 charset='utf8mb4',
-                                                 cursorclass=TrendPoints.pymysql.cursors.DictCursor)
+
         cursor = connection.cursor(TrendPoints.pymysql.cursors.SSCursor)
         sql = "SELECT date FROM price_instruments_data "+\
                 "WHERE symbol='"+ self.symbol +\
@@ -57,7 +52,7 @@ class TrendPoints:
         for row in res:
             self.eday = row[0]
         cursor.close()
-        connection.close()
+
         self.sday = self.eday - timedelta(days=self.period)
         self.mday = self.eday - timedelta(days=self.period2)
 
@@ -73,15 +68,9 @@ class TrendPoints:
         """ Get the middle point of the trend line"""
         return self.mday
 
-    def get_val_frm_d(self, date_this, get_what):
+    def get_val_frm_d(self, date_this, get_what, connection):
         """ Get the trend line points from date """
         value = 0
-        connection = TrendPoints.pymysql.connect(host=DB_SRV,
-                                                 user=DB_USR,
-                                                 password=DB_PWD,
-                                                 db=DB_NAME,
-                                                 charset='utf8mb4',
-                                                 cursorclass=TrendPoints.pymysql.cursors.DictCursor)
         cursor = connection.cursor(TrendPoints.pymysql.cursors.SSCursor)
         date_range = ""
         selection = ""
@@ -100,7 +89,7 @@ class TrendPoints:
         for row in res:
             value = row[0]
         cursor.close()
-        connection.close()
+
         if value is None:
             value = 0
         return value
@@ -123,17 +112,17 @@ class TrendData:
     period = 0
     symbol = ""
 
-    def __init__(self, symbol, period, get_what):
+    def __init__(self, symbol, period, get_what, connection):
         """ Initialize trend line """
-        pts = TrendPoints(symbol, period)
+        pts = TrendPoints(symbol, period, connection)
         self.symbol = symbol
         self.sdate = pts.get_sd()
         self.edate = pts.get_ed()
         self.mdate = pts.get_md()
         self.period = period
         self.get_this = get_what
-        self.sdv = pts.get_val_frm_d(self.sdate, self.get_this)
-        self.edv = pts.get_val_frm_d(self.edate, self.get_this)
+        self.sdv = pts.get_val_frm_d(self.sdate, self.get_this, connection)
+        self.edv = pts.get_val_frm_d(self.edate, self.get_this, connection)
 
     def get_slope(self):
         """ Get trend line slope """
@@ -158,15 +147,9 @@ class TrendData:
         """ Get end date value """
         return self.edv
 
-    def get_200ma_frm_d(self, date_this):
+    def get_200ma_frm_d(self, date_this, connection):
         """ Get 200 moving average from date """
         val = 0
-        connection = TrendData.pymysql.connect(host=DB_SRV,
-                                               user=DB_USR,
-                                               password=DB_PWD,
-                                               db=DB_NAME,
-                                               charset='utf8mb4',
-                                               cursorclass=TrendData.pymysql.cursors.DictCursor)
         cursor = connection.cursor(TrendData.pymysql.cursors.SSCursor)
         sql = "SELECT ma200 FROM price_instruments_data WHERE (symbol ='"+self.symbol+\
         "' AND date='"+str(date_this)+"') LIMIT 1"
@@ -177,15 +160,9 @@ class TrendData:
         cursor.close()
         return val
 
-    def get_50ma_frm_d(self, date_this):
+    def get_50ma_frm_d(self, date_this, connection):
         """ Get 50 moving average from date """
         val = 0
-        connection = TrendData.pymysql.connect(host=DB_SRV,
-                                               user=DB_USR,
-                                               password=DB_PWD,
-                                               db=DB_NAME,
-                                               charset='utf8mb4',
-                                               cursorclass=TrendData.pymysql.cursors.DictCursor)
         cursor = connection.cursor(TrendData.pymysql.cursors.SSCursor)
         sql = "SELECT AVG(price_close) AS p FROM price_instruments_data WHERE (symbol ='"+\
         self.symbol+"' AND date<='"+str(date_this)+"') LIMIT 50"
@@ -196,16 +173,10 @@ class TrendData:
         cursor.close()
         return val
 
-    def get_rsi_avg(self, date_this, period):
+    def get_rsi_avg(self, date_this, period, connection):
         """ Retrieve relative strength index from date, period """
         val = 0
-        connection = TrendData.pymysql.connect(host=DB_SRV,
-                                               user=DB_USR,
-                                               password=DB_PWD,
-                                               db=DB_NAME,
-                                               charset='utf8mb4',
-                                               cursorclass=TrendData.pymysql.cursors.DictCursor)
-        cursor = connection.cursor(TrendPoints.pymysql.cursors.SSCursor)
+        cursor = connection.cursor(TrendData.pymysql.cursors.SSCursor)
         sql = "SELECT AVG(rsi14) AS rsi FROM price_instruments_data WHERE (symbol ='"+\
         self.symbol+"' AND date<='"+str(date_this)+"') LIMIT " + str(period)
         cursor.execute(sql)
@@ -245,7 +216,7 @@ def get_bias(sdv, edv):
             ret = "Positive"
     return ret
 
-def get_trend_line_data(symbol, uid):
+def get_trend_line_data(symbol, uid, connection):
     """
     Compute trend lines data
     Args:
@@ -254,10 +225,10 @@ def get_trend_line_data(symbol, uid):
     Returns:
         None
     """
-    tl_180_l = TrendData(symbol, 180, "l")
-    tl_180_h = TrendData(symbol, 180, "h")
-    tl_360_l = TrendData(symbol, 360, "l")
-    tl_360_h = TrendData(symbol, 360, "h")
+    tl_180_l = TrendData(symbol, 180, "l", connection)
+    tl_180_h = TrendData(symbol, 180, "h", connection)
+    tl_360_l = TrendData(symbol, 360, "l", connection)
+    tl_360_h = TrendData(symbol, 360, "h", connection)
     file_this = SETT.get_path_src()+"\\"+str(uid)+"t.csv"
     with open(file_this, 'w', newline='') as csvfile:
         fieldnames = ["180_sd", "180_slope_low", "180_slope_high",
@@ -285,15 +256,15 @@ def get_trend_line_data(symbol, uid):
         lt_lower_range = tl_360_l.get_edv()
         lt_upper_range = tl_360_h.get_edv()
 
-        st_rsi_avg = tl_180_l.get_rsi_avg(t180_ed, 5)
-        lt_rsi_avg = tl_360_l.get_rsi_avg(t360_ed, 50)
+        st_rsi_avg = tl_180_l.get_rsi_avg(t180_ed, 5, connection)
+        lt_rsi_avg = tl_360_l.get_rsi_avg(t360_ed, 50, connection)
 
         st_rsi_mom = tl_180_l.get_rsi_mom(st_rsi_avg)
         lt_rsi_mom = tl_360_l.get_rsi_mom(lt_rsi_avg)
-        ma_200_ed = tl_360_l.get_200ma_frm_d(t180_ed)
-        ma_50_ed = tl_360_l.get_50ma_frm_d(t180_ed)
-        ma_200_sd = tl_360_l.get_200ma_frm_d(t180_sd)
-        ma_50_sd = tl_360_l.get_50ma_frm_d(t180_sd)
+        ma_200_ed = tl_360_l.get_200ma_frm_d(t180_ed, connection)
+        ma_50_ed = tl_360_l.get_50ma_frm_d(t180_ed, connection)
+        ma_200_sd = tl_360_l.get_200ma_frm_d(t180_sd, connection)
+        ma_50_sd = tl_360_l.get_50ma_frm_d(t180_sd, connection)
         st_bias = get_bias(ma_50_sd, ma_50_ed)
         lt_bias = get_bias(ma_200_sd, ma_200_ed)
 

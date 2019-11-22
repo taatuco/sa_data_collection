@@ -21,7 +21,7 @@ DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
 
-def get_forecast_pnl(symbol, number_of_day_collection, full_update):
+def get_forecast_pnl(symbol, number_of_day_collection, full_update, connection):
     """
     Get forecast profit and loss
     Args:
@@ -31,12 +31,6 @@ def get_forecast_pnl(symbol, number_of_day_collection, full_update):
     Returns:
         None
     """
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     i = 0
     wdb = 7
     while i <= number_of_day_collection:
@@ -110,4 +104,3 @@ def get_forecast_pnl(symbol, number_of_day_collection, full_update):
                 connection.commit()
                 cursor.close()
         i += 1
-    connection.close()

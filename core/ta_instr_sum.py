@@ -48,15 +48,9 @@ class ForecastData:
     tp_2_s = 0
     frc_pt = 0
 
-    def __init__(self, uid):
+    def __init__(self, uid, connection):
 
         target_price = 0
-        connection = pymysql.connect(host=DB_SRV,
-                                     user=DB_USR,
-                                     password=DB_PWD,
-                                     db=DB_NAME,
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
         cursor = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_instruments_data.target_price FROM price_instruments_data "+\
         "JOIN symbol_list ON symbol_list.symbol = price_instruments_data.symbol WHERE "+\
@@ -92,8 +86,6 @@ class ForecastData:
                         self.frc_pt = target_price
                     i += 1
         debug(str(uid) +": "+ os.path.basename(__file__))
-        connection.close()
-
 
     def get_frc_pt(self):
         """ Get forecast point """
@@ -164,7 +156,7 @@ def get_forecast_pct(lprice, fprice):
         result = 0
     return result
 
-def update_forecast_table(symbol, weekf, frc, date_this):
+def update_forecast_table(symbol, weekf, frc, date_this, connection):
     """
     Update forecast data table instruments and price_instruments_data
     Args:
@@ -175,12 +167,7 @@ def update_forecast_table(symbol, weekf, frc, date_this):
     Returns:
         None
     """
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
+
     cr_d = connection.cursor(pymysql.cursors.SSCursor)
     sql_d = "SELECT unit FROM instruments WHERE symbol = '"+symbol+"'"
     cr_d.execute(sql_d)
@@ -210,7 +197,6 @@ def update_forecast_table(symbol, weekf, frc, date_this):
     cursor.execute(sql)
     connection.commit()
     cursor.close()
-    connection.close()
 
 def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_pct, wf_pct,
                              trade_entry_buy_1, trade_tp_buy_1, trade_sl_buy_1,
@@ -218,7 +204,7 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
                              trade_entry_sell_1, trade_tp_sell_1, trade_sl_sell_1,
                              trade_entry_sell_2, trade_tp_sell_2, trade_sl_sell_2,
                              y1_pct_signal, m6_pct_signal, m3_pct_signal,
-                             m1_pct_signal, w1_pct_signal, sentiment):
+                             m1_pct_signal, w1_pct_signal, sentiment, connection):
     """
     Update instrument table with summary data information
     Args:
@@ -227,12 +213,6 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     Returns:
         None
     """
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cr_d = connection.cursor(pymysql.cursors.SSCursor)
     sql_d = "SELECT decimal_places FROM instruments WHERE symbol='"+symbol+"' "
     cr_d.execute(sql_d)
@@ -347,10 +327,8 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     cr_i.execute(sql_i)
     connection.commit()
     cr_i.close()
-    connection.close()
 
-
-def get_instr_sum(symbol, uid, asset_class, date_this, sentiment):
+def get_instr_sum(symbol, uid, asset_class, date_this, sentiment, connection):
     """
     Retrieve instrument data summary
     Args:
@@ -367,8 +345,8 @@ def get_instr_sum(symbol, uid, asset_class, date_this, sentiment):
     if asset_class == 'FX:':
         mul = 10000
 
-    instr_data = InstrumentSummaryData(symbol, uid)
-    forc_data = ForecastData(uid)
+    instr_data = InstrumentSummaryData(symbol, uid, connection)
+    forc_data = ForecastData(uid, connection)
     # ---
     y1_pct_signal = float(instr_data.get_pct_1_year_signal())* mul
     m6_pct_signal = float(instr_data.get_pct_6_month_signal())* mul
@@ -403,11 +381,11 @@ def get_instr_sum(symbol, uid, asset_class, date_this, sentiment):
     trade_tp_sell_2 = forc_data.get_tp_sell(2)
     trade_sl_sell_2 = forc_data.get_sl_sell(2)
     # ---
-    update_forecast_table(symbol, weekf, frc_pt, date_this)
+    update_forecast_table(symbol, weekf, frc_pt, date_this, connection)
     update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_pct, wf_pct,
                              trade_entry_buy_1, trade_tp_buy_1, trade_sl_buy_1,
                              trade_entry_buy_2, trade_tp_buy_2, trade_sl_buy_2,
                              trade_entry_sell_1, trade_tp_sell_1, trade_sl_sell_1,
                              trade_entry_sell_2, trade_tp_sell_2, trade_sl_sell_2,
                              y1_pct_signal, m6_pct_signal, m3_pct_signal,
-                             m1_pct_signal, w1_pct_signal, sentiment)
+                             m1_pct_signal, w1_pct_signal, sentiment, connection)
