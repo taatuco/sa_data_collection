@@ -25,7 +25,7 @@ sys.path.append(os.path.abspath(SETT.get_path_core()))
 from get_instr_perf_summ import InstrumentSummaryData
 from sa_numeric import get_stdev, get_mdd, get_romad, get_volatility_risk
 
-def get_portf_perf_summ(symbol, uid):
+def get_portf_perf_summ(symbol, uid, connection):
     """
     Get and calculate strategy portfolio performance summary
     Args:
@@ -33,14 +33,7 @@ def get_portf_perf_summ(symbol, uid):
         Int: uid of the strategy portfolio
     Returns:
         None
-    """
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    
+    """    
     pps = InstrumentSummaryData(symbol, uid, connection)
     y1_pct = pps.get_pct_1_year_performance()
     m6_pct = pps.get_pct_6_month_performance()
@@ -66,9 +59,8 @@ def get_portf_perf_summ(symbol, uid):
     cursor.execute(sql)
     connection.commit()
     cursor.close()
-    connection.close()
 
-def get_portf_pnl(portf_symbol, date_last_year_str):
+def get_portf_pnl(portf_symbol, date_last_year_str, connection):
     """
     Get strategy portfolio profit and loss according to args.
     Args:
@@ -79,12 +71,6 @@ def get_portf_pnl(portf_symbol, date_last_year_str):
     """
     ret = 0
     portf_pnl = 0
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT price_instruments_data.pnl, portfolios.quantity, "+\
     "instruments.pip, "+\
@@ -113,7 +99,6 @@ def get_portf_pnl(portf_symbol, date_last_year_str):
             portf_pnl = portf_pnl + (pnl_short_c * quantity_c * pip_c)
     ret = portf_pnl
     cursor.close()
-    connection.close()
     return ret
 
 def get_portf_perf():
@@ -168,7 +153,7 @@ def get_portf_perf():
             #get portfolio allocations
             #for each item get the pnl
             if date_last_year < datetime.datetime.now():
-                portf_pnl = get_portf_pnl(portf_symbol, date_last_year_str)
+                portf_pnl = get_portf_pnl(portf_symbol, date_last_year_str, connection)
                 portf_nav = round(portf_nav + portf_pnl, 2)
 
                 if i > 0:
@@ -187,6 +172,6 @@ def get_portf_perf():
         cr_i.execute(sql_i)
         connection.commit()
         cr_i.close()
-        get_portf_perf_summ(portf_symbol, portf_uid)
+        get_portf_perf_summ(portf_symbol, portf_uid, connection)
     cursor.close()
     connection.close()
