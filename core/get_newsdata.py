@@ -11,6 +11,7 @@ from datetime import timedelta
 import pymysql.cursors
 import feedparser
 from get_sentiment_score import analyze_sentiment_of_this
+from sa_logging import update_data_is_terminated
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
 from settings import SmartAlphaPath, debug, get_hash_string
@@ -29,6 +30,7 @@ from add_feed_type import add_feed_type
 def get_newsdata(limit, clear_history, what, cat):
     """
     Collect news data from provided source.
+    If update data is not terminated, news wont be collected.
     Args:
         Integer: the maximum number of news to collect.
         Boolean: if it's True, older records will be removed.
@@ -43,17 +45,18 @@ def get_newsdata(limit, clear_history, what, cat):
     # what = the type of feed, "global" or "specific"
     # cat = the category to scan, if 0 means all of the category will be collected
     #---------------------------------------------------------------------------
-    date_today = datetime.datetime.now()
-    date_from = datetime.datetime.now() - timedelta(days=200)
-    date_today = date_today.strftime("%Y-%m-%d %H:%M:%S")
-    date_from = date_from.strftime("%Y%m%d")
+    if update_data_is_terminated():
+        date_today = datetime.datetime.now()
+        date_from = datetime.datetime.now() - timedelta(days=200)
+        date_today = date_today.strftime("%Y-%m-%d %H:%M:%S")
+        date_from = date_from.strftime("%Y%m%d")
 
-    feed_id = 3
-    feed_type = "news"
-    add_feed_type(feed_id, feed_type)
-    get_newsdata_rss(date_today, feed_id, limit, what, cat)
-    if clear_history:
-        clear_old_newsdata(date_from, feed_id)
+        feed_id = 3
+        feed_type = "news"
+        add_feed_type(feed_id, feed_type)
+        get_newsdata_rss(date_today, feed_id, limit, what, cat)
+        if clear_history:
+            clear_old_newsdata(date_from, feed_id)
 
 def get_newsdata_rss(date_news, feed_id, limit, what, cat):
     """
