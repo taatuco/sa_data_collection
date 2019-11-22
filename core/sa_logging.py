@@ -86,26 +86,26 @@ def update_data_is_terminated():
     date_today = datetime.datetime.now()
     date_today = date_today.strftime("%Y%m%d")
     ret = False
-    
+
     connection = pymysql.connect(host=DB_SRV,
                                  user=DB_USR,
                                  password=DB_PWD,
                                  db=DB_NAME,
                                  charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor) 
+                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT COUNT(*) FROM log "+\
     "WHERE date_time >= "+ str(date_today) +\
-    " AND module='"+ str(log_caption) +"'" 
+    " AND module='"+ str(log_caption) +"'"
     cursor.execute(sql)
     res = cursor.fetchall()
     count_log = 0
     for row in res:
         count_log = row[0]
-    
+
     if count_log != 0:
         ret = True
-        
+
     return ret
 
 def log_update_data_terminated():
@@ -118,5 +118,3 @@ def log_update_data_terminated():
     """
     log_caption = 'Data update terminated'
     log_this(log_caption, 1)
-
-log_update_data_terminated()
