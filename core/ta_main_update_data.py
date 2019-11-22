@@ -170,10 +170,9 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
         else:
             get_trades(symbol, uid, nd_scan, False)
 
-        if extended_scan == 1:
-            get_trend_line_data(symbol, uid)
-            gen_recomm(symbol, uid)
-            gen_chart(symbol, uid)
+        get_trend_line_data(symbol, uid)
+        gen_recomm(symbol, uid)
+        gen_chart(symbol, uid)
 
         get_forecast_pnl(symbol, nd_scan, is_update_all)
         get_instr_sum(symbol, uid, asset_class, date_minus_ten, sentiment)
