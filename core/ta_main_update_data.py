@@ -177,8 +177,8 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
 
         get_forecast_pnl(symbol, nd_scan, is_update_all)
         get_instr_sum(symbol, uid, asset_class, date_minus_ten, sentiment)
-        set_signals_feed(symbol)
-        set_widgets_feed(symbol)
+        set_signals_feed(symbol, connection)
+        set_widgets_feed(symbol, connection)
         gc.collect()
     cursor.close()
     connection.close()

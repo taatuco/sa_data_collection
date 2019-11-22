@@ -58,7 +58,7 @@ def get_signal_ranking(symbol, rank):
     connection.close()
     return ret
 
-def set_signals_feed(symbol):
+def set_signals_feed(symbol, connection):
     """
     Import instrument signals in table feed
     Args:
@@ -75,12 +75,6 @@ def set_signals_feed(symbol):
     date_today = datetime.datetime.now()
     date_today = date_today.strftime("%Y%m%d")
 
-    connection = pymysql.connect(host=DB_SRV,
-                                 user=DB_USR,
-                                 password=DB_PWD,
-                                 db=DB_NAME,
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, "+\
     "instruments.market, instruments.w_forecast_change, sectors.sector, "+\
@@ -154,4 +148,3 @@ def set_signals_feed(symbol):
         cr_i.execute(sql_i)
         connection.commit()
     cr_i.close()
-    connection.close()
