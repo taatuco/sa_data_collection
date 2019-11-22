@@ -6,5 +6,5 @@
 from ta_main_update_data import get_update_instr_data
 from send_intel_report_email import send_intel_report
 
-get_update_instr_data(1, False, '')
+get_update_instr_data(0, False, '')
 send_intel_report()
