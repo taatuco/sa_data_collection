@@ -31,20 +31,10 @@ rd <- getwd()
 ### Install necessary packages
 source(paste(rd, "/sa_data_collection/r_packages/r_packages.R", sep = "") )
 
-get_date_prev_month <- function(yyyy,mm,dd) {
+get_date_format <- function(yyyy,mm,dd) {
   yx <- yyyy
   mx <- mm
   dx <- dd
-
-  if (mx == 1) {
-    mx <- 12
-    yx <- yx -1
-  } else {
-    mx <- mx -1
-    if (mx < 10) {
-      mx <- paste("0",mx, sep = "")
-    }
-  }
 
   date_yyyymmdd <- paste(yx,mx,dx, sep = "-")
   return(date_yyyymmdd)
@@ -56,13 +46,7 @@ collect_data <- function() {
   source(paste(rd, "/sa_pwd/sa_access.R", sep = "")  )
   xf <- paste(rd, "/sa_data_collection/r_quantmod/src/", sep = "")
   qm_src <- "yahoo"
-  yx <- year(now())
-  mx <- month(now())
-  dx <- day(now())
-  if (dx > 28) {
-    dx <- 28
-  }
-  dfrom <- get_date_prev_month(yx,mx,dx)
+  dfrom <- Sys.Date() - 3
 
   ### Connect to MySQL database to retrieve list of symbols
   db_usr <- get_sa_usr()
