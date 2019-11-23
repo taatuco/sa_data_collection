@@ -31,22 +31,12 @@ rd <- getwd()
 ### Install necessary packages
 source(paste(rd, "/sa_data_collection/r_packages/r_packages.R", sep = "") )
 
-get_date_format <- function(yyyy,mm,dd) {
-  yx <- yyyy
-  mx <- mm
-  dx <- dd
-
-  date_yyyymmdd <- paste(yx,mx,dx, sep = "-")
-  return(date_yyyymmdd)
-
-}
-
 collect_data <- function() {
   ### Define path and other variables
   source(paste(rd, "/sa_pwd/sa_access.R", sep = "")  )
   xf <- paste(rd, "/sa_data_collection/r_quantmod/src/", sep = "")
   qm_src <- "yahoo"
-  dfrom <- Sys.Date() - 3
+  dfrom <- Sys.Date() - 5
 
   ### Connect to MySQL database to retrieve list of symbols
   db_usr <- get_sa_usr()
