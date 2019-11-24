@@ -71,7 +71,6 @@ collect_data <- function() {
         ### Export content to CSV ###
         fn <- paste(uid,".csv", sep = "")
         f <- paste(xf,fn, sep = "")
-        print(f)
         write.csv(dataframe, file = f)
       }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
       i = i+1
