@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(PDIR))
 from settings import SmartAlphaPath, debug, get_portf_suffix, get_hash_string
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_feed()))
-from add_feed_type import add_feed_type
+from add_feed_type import add_feed_type, set_feed_function
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
 ACCESS_OBJ = sa_db_access()
@@ -116,7 +116,7 @@ def set_signals_feed(symbol, connection):
         else:
             badge = w_forecast_display_info
 
-        search = asset_class + market + symbol + " " + fullname
+        search = set_feed_function('DES', symbol) + ' '+ asset_class + market + " " + fullname
 
         debug(search +": "+ os.path.basename(__file__))
 

@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(PDIR))
 from settings import SmartAlphaPath, debug, get_portf_suffix, get_hash_string
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_feed()))
-from add_feed_type import add_feed_type
+from add_feed_type import add_feed_type, set_feed_function
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
 ACCESS_OBJ = sa_db_access()
@@ -38,47 +38,58 @@ def set_widgets_feed(symbol, connection):
     set_widgets_from_url(feed_id, connection,
                          'FX Heatmap',
                          '{burl}w/?funcname=get_tradingview_fxheatmap(0,0)',
-                         'FX:GO>HM: Forex Heat Map')
+                         set_feed_function('FXC', '') +\
+                         ' Forex Heat Map')
     set_widgets_from_url(feed_id, connection,
                          'Tradebook',
                          '{burl}w/?funcname=get_trades_box(0,burl,1)',
-                         'TB: Tradebook')
+                         set_feed_function('TBX', '') +\
+                         ' Tradebook')
     set_widgets_from_url(feed_id, connection,
                          'Dashboard',
                          '{burl}?dashboard=1',
-                         'DASH: Dashboard - All relevant info in One place')
+                         set_feed_function('PORT', 'DASH') +\
+                         ' Dashboard - All relevant info in One place')
     set_widgets_from_url(feed_id, connection,
                          'Top Portfolios',
                          '{burl}ls/?w=portf&x=',
-                         'TOPPORT: Traders Top Portfolios')
+                         set_feed_function('PORT', 'TOP') +\
+                         ' Traders Top Strategy Portfolios')
     set_widgets_from_url(feed_id, connection,
                          'All Signals',
                          '{burl}ls/?w=instr&x=',
-                         'SIGNAL:GO> All Trading Signals')
+                         set_feed_function('SIGNAL', 'ALL') +\
+                         ' All Trading Signals')
     set_widgets_from_url(feed_id, connection,
                          'FX Signals',
                          '{burl}ls/?w=instr&x=FX:',
+                         set_feed_function('SIGNAL', 'FX') +\
                          'SIGNAL:FX:GO> Forex Trading Signals')
     set_widgets_from_url(feed_id, connection,
                          'All Stocks Signals',
                          '{burl}ls/?w=instr&x=EQ:',
-                         'SIGNAL:EQ: All stocks Trading Signals')
+                         set_feed_function('SIGNAL', 'EQ') +\
+                         ' All stocks Trading Signals')
     set_widgets_from_url(feed_id, connection,
                          'U.S. Stocks Signals',
                          '{burl}ls/?w=instr&x=US>',
-                         'SIGNAL:EQ:US> U.S. stocks Trading Signals')
+                         set_feed_function('SIGNAL', 'EQ:US') +\
+                         ' U.S. stocks Trading Signals')
     set_widgets_from_url(feed_id, connection,
                          'Crypto Signals',
                          '{burl}ls/?w=instr&x=CR:',
-                         'SIGNAL:CR:GO> Cryptocurrency Trading Signals')
+                         set_feed_function('SIGNAL', 'CR') +\
+                         ' Cryptocurrency Trading Signals')
     set_widgets_from_url(feed_id, connection,
                          'Economic Calendar',
                          '{burl}w/?funcname=get_tradingview_ecocal(0,0)&refreshw=1800',
-                         'ECOCAL:GO> Economic Calendar')
+                         set_feed_function('ECO', '') +\
+                         ' Economic Calendar')
     set_widgets_from_url(feed_id, connection,
                          'World News and Top Stories',
                          '{burl}w/?funcname=get_newsfeed(burl,0,0,500,1)&refreshw=900&noflexheight=1',
-                         'TOP:GO> World News and Top Stories')
+                         set_feed_function('TOP', '') +\
+                         ' World News and Top Stories')
 
 
 def set_widgets_from_url(feed_id, connection, short_title, url, search):
@@ -163,7 +174,7 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         badge = ''
         ranking = '-1'
         feed_type = str(feed_id)
-        search = "CHART:" + symbol + " " + fullname
+        search = set_feed_function('GP', symbol) + " " + fullname
         hash_this = get_hash_string(str(url))
 
         debug(search +": "+ os.path.basename(__file__))

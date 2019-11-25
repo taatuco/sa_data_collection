@@ -41,3 +41,21 @@ def add_feed_type(feed_id, feed_type):
     debug(sql +": "+ os.path.basename(__file__))
     cursor.close()
     connection.close()
+
+def set_feed_function(func_name, sub_func):
+    """
+    Return the function html formatting as per func_name
+    Args:
+        String: Label, name of function
+        String: Instrument symbol or sub function
+    Returns:
+        String: html for function label
+    """
+    ret = ''
+    function_label = '<span class="btn btn-outline-info">'+ str(func_name) +' </span>'
+    if sub_func != '':
+        sub_func_label = '<span class="btn btn-outline-info">'+ str(sub_func) +' </span>'
+    else:
+        sub_func_label = ''
+    ret = sub_func_label + function_label
+    return ret
