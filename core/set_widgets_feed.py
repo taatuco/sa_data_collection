@@ -90,6 +90,11 @@ def set_widgets_feed(symbol, connection):
                          '{burl}w/?funcname=get_newsfeed(burl,0,0,500,1)&refreshw=900&noflexheight=1',
                          set_feed_function('TOP', '') +\
                          ' World News and Top Stories')
+    set_widgets_from_url(feed_id, connection,
+                         'Economic Calendar',
+                         '{burl}w/?funcname=get_tradingview_screener(0,0)',
+                         set_feed_function('EQS', '') +\
+                         ' Screener')
 
 
 def set_widgets_from_url(feed_id, connection, short_title, url, search):
