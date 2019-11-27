@@ -191,7 +191,7 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         badge = ''
         ranking = '-1'
         feed_type = str(feed_id)
-        search = set_feed_function('GP', symbol, 'label') + fullname
+        search = set_feed_function('GP', symbol, 'label') + fullname + ' - Interactive Chart / Historical Graphs'
         sa_function = set_feed_function('GP', symbol, 'value')
         hash_this = get_hash_string(str(url))
 
