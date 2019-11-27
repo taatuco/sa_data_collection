@@ -63,13 +63,13 @@ def set_widgets_feed(symbol, connection):
                          'All Signals',
                          '{burl}ls/?w=instr&x=',
                          set_feed_function('ALL', 'SIGNAL', 'label') +\
-                         ' All Trading Signals',
+                         'All Trading Signals',
                          set_feed_function('ALL', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'FX Signals',
                          '{burl}ls/?w=instr&x=FX:',
                          set_feed_function('FX', 'SIGNAL', 'label') +\
-                         'SIGNAL:FX:GO> Forex Trading Signals',
+                         'Forex Trading Signals',
                          set_feed_function('FX', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'All Stocks Signals',
@@ -103,10 +103,22 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('GO', 'TOP', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Screener',
-                         '{burl}w/?funcname=get_tradingview_screener(0,0)',
-                         set_feed_function('GO', 'EQS', 'label') +\
+                         '{burl}w/?funcname=get_tradingview_screener(0,0,1)',
+                         set_feed_function('FX', 'EQS', 'label') +\
                          ' Screener',
-                         set_feed_function('GO', 'EQS', 'value'))
+                         set_feed_function('FX', 'EQS', 'value'))
+    set_widgets_from_url(feed_id, connection,
+                         'Screener',
+                         '{burl}w/?funcname=get_tradingview_screener(0,0,2)',
+                         set_feed_function('EQ:US', 'EQS', 'label') +\
+                         ' Screener',
+                         set_feed_function('EQ:US', 'EQS', 'value'))
+    set_widgets_from_url(feed_id, connection,
+                         'Screener',
+                         '{burl}w/?funcname=get_tradingview_screener(0,0,5)',
+                         set_feed_function('CR', 'EQS', 'label') +\
+                         ' Screener',
+                         set_feed_function('CR', 'EQS', 'value'))    
     set_widgets_from_url(feed_id, connection,
                          'Trading Instruments Watchlist',
                          '{burl}w/?funcname=get_tradingview_watchlist(0,0)',
