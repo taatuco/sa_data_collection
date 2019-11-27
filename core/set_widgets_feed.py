@@ -43,7 +43,7 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('GO', 'FXC', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Tradebook',
-                         '{burl}w/?funcname=get_trades_box(0,burl,1)',
+                         '{burl}w/?funcname=get_trades_box(0,burl,1)&noflexheight=1',
                          set_feed_function('GO', 'TBX', 'label') +\
                          'Tradebook',
                          set_feed_function('GO', 'TBX', 'value'))
