@@ -108,10 +108,10 @@ def set_widgets_feed(symbol, connection):
                          ' Screener',
                          set_feed_function('GO', 'EQS', 'value'))
     set_widgets_from_url(feed_id, connection,
-                         'Screener',
+                         'Trading Instruments Watchlist',
                          '{burl}w/?funcname=get_tradingview_watchlist(0,0)',
                          set_feed_function('GO', 'WATCHLIST', 'label') +\
-                         ' Screener',
+                         'Watchlist',
                          set_feed_function('GO', 'WATCHLIST', 'value'))
 
 
