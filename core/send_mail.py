@@ -114,11 +114,11 @@ def process_mail_queue():
             condition = ' OR '
         where = where + condition + ' id='+ str(email_id)
         i += 1
-
-    rm_query = 'DELETE FROM email_queue WHERE ' + where
-    debug(rm_query)
-    cursor.execute(rm_query)
-    connection.commit()
+    if where != '':
+        rm_query = 'DELETE FROM email_queue WHERE ' + where
+        debug(rm_query)
+        cursor.execute(rm_query)
+        connection.commit()
 
     cursor.close()
     connection.close()
