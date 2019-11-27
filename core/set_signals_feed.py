@@ -116,7 +116,9 @@ def set_signals_feed(symbol, connection):
         else:
             badge = w_forecast_display_info
 
-        search = set_feed_function('DES', symbol, 'label') + asset_class + market + " " + fullname
+        search = set_feed_function('DES', symbol, 'label') +\
+        asset_class + market + " " + fullname + ' - ' + 'Security Tearsheet'
+        
         sa_function = set_feed_function('DES', symbol, 'value')
 
         debug(search +": "+ os.path.basename(__file__))
