@@ -102,22 +102,22 @@ def set_widgets_feed(symbol, connection):
                          'World News and Top Stories',
                          set_feed_function('GO', 'TOP', 'value'))
     set_widgets_from_url(feed_id, connection,
-                         'Screener',
+                         'Forex Screener',
                          '{burl}w/?funcname=get_tradingview_screener(0,0,1)',
                          set_feed_function('FX', 'EQS', 'label') +\
-                         ' Screener',
+                         'FX',
                          set_feed_function('FX', 'EQS', 'value'))
     set_widgets_from_url(feed_id, connection,
-                         'Screener',
+                         'U.S. Stocks Screener',
                          '{burl}w/?funcname=get_tradingview_screener(0,0,2)',
                          set_feed_function('EQ:US', 'EQS', 'label') +\
-                         ' Screener',
+                         'EQ:US',
                          set_feed_function('EQ:US', 'EQS', 'value'))
     set_widgets_from_url(feed_id, connection,
-                         'Screener',
+                         'Cryptocurrencies Screener',
                          '{burl}w/?funcname=get_tradingview_screener(0,0,5)',
                          set_feed_function('CR', 'EQS', 'label') +\
-                         ' Screener',
+                         'CR',
                          set_feed_function('CR', 'EQS', 'value'))    
     set_widgets_from_url(feed_id, connection,
                          'Trading Instruments Watchlist',
