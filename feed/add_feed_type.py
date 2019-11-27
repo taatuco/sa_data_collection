@@ -42,20 +42,25 @@ def add_feed_type(feed_id, feed_type):
     cursor.close()
     connection.close()
 
-def set_feed_function(func_name, sub_func):
+def set_feed_function(func_name, sub_func, what):
     """
     Return the function html formatting as per func_name
     Args:
         String: Label, name of function
         String: Instrument symbol or sub function
+        String: label = display label. value = for use in the column.
     Returns:
         String: html for function label
     """
     ret = ''
-    function_label = '<span class="btn btn-outline-info">'+ str(func_name) +' </span>'
-    if sub_func != '':
-        sub_func_label = '<span class="btn btn-outline-info">'+ str(sub_func) +' </span>'
+    if what == 'label':
+        function_label = '<span class="btn btn-outline-info">'+ str(func_name) +' </span>'
+        if sub_func != '':
+            sub_func_label = '<span class="btn btn-outline-info">'+ str(sub_func) +' </span>'
+        else:
+            sub_func_label = ''
+        ret = sub_func_label + '&nbsp;' + function_label + '&nbsp;&nbsp;'
     else:
-        sub_func_label = ''
-    ret = sub_func_label + function_label
+        ret = sub_func + ' ' + func_name
+        
     return ret
