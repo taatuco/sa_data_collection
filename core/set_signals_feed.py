@@ -117,6 +117,7 @@ def set_signals_feed(symbol, connection):
             badge = w_forecast_display_info
 
         search = set_feed_function('DES', symbol, 'label') + asset_class + market + " " + fullname
+        sa_function = set_feed_function('DES', symbol, 'value')
 
         debug(search +": "+ os.path.basename(__file__))
 
@@ -133,7 +134,7 @@ def set_signals_feed(symbol, connection):
         inserted_values = inserted_values + sep +\
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+")"
+        "'"+search+"','"+asset_class+"','"+market+"','"+sa_function+"','"+hash_this+"'"+")"
 
         cr_d.close()
     cursor.close()
@@ -143,7 +144,7 @@ def set_signals_feed(symbol, connection):
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
     " ranking, symbol, type, badge, "+\
-    "search, asset_class, market, hash) VALUES " + inserted_values
+    "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
     if not disabled:
         cr_i.execute(sql_i)
         connection.commit()

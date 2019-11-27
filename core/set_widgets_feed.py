@@ -38,66 +38,78 @@ def set_widgets_feed(symbol, connection):
     set_widgets_from_url(feed_id, connection,
                          'FX Heatmap',
                          '{burl}w/?funcname=get_tradingview_fxheatmap(0,0)',
-                         set_feed_function('FXC', 'GO', 'label') +\
-                         'Forex Heat Map')
+                         set_feed_function('GO', 'FXC', 'label') +\
+                         'Forex Heat Map',
+                         set_feed_function('GO', 'FXC', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Tradebook',
                          '{burl}w/?funcname=get_trades_box(0,burl,1)',
-                         set_feed_function('TBX', 'GO', 'label') +\
-                         'Tradebook')
+                         set_feed_function('GO', 'TBX', 'label') +\
+                         'Tradebook',
+                         set_feed_function('GO', 'TBX', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Dashboard',
                          '{burl}?dashboard=1',
-                         set_feed_function('PORT', 'DASH', 'label') +\
-                         'Dashboard - All relevant info in One place')
+                         set_feed_function('DASH', 'PORT', 'label') +\
+                         'Dashboard - All relevant info in One place',
+                         set_feed_function('DASH', 'PORT', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Top Portfolios',
                          '{burl}ls/?w=portf&x=',
-                         set_feed_function('PORT', 'TOP', 'label') +\
-                         'Traders Top Strategy Portfolios')
+                         set_feed_function('TOP', 'PORT', 'label') +\
+                         'Traders Top Strategy Portfolios',
+                         set_feed_function('TOP', 'PORT', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'All Signals',
                          '{burl}ls/?w=instr&x=',
-                         set_feed_function('SIGNAL', 'ALL', 'label') +\
-                         ' All Trading Signals')
+                         set_feed_function('ALL', 'SIGNAL', 'label') +\
+                         ' All Trading Signals',
+                         set_feed_function('ALL', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'FX Signals',
                          '{burl}ls/?w=instr&x=FX:',
-                         set_feed_function('SIGNAL', 'FX', 'label') +\
-                         'SIGNAL:FX:GO> Forex Trading Signals')
+                         set_feed_function('FX', 'SIGNAL', 'label') +\
+                         'SIGNAL:FX:GO> Forex Trading Signals',
+                         set_feed_function('FX', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'All Stocks Signals',
                          '{burl}ls/?w=instr&x=EQ:',
-                         set_feed_function('SIGNAL', 'EQ', 'label') +\
-                         'All stocks Trading Signals')
+                         set_feed_function('EQ', 'SIGNAL', 'label') +\
+                         'All stocks Trading Signals',
+                         set_feed_function('EQ', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'U.S. Stocks Signals',
                          '{burl}ls/?w=instr&x=US>',
-                         set_feed_function('SIGNAL', 'EQ:US', 'label') +\
-                         'U.S. stocks Trading Signals')
+                         set_feed_function('EQ:US', 'SIGNAL', 'label') +\
+                         'U.S. stocks Trading Signals',
+                         set_feed_function('EQ:US', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Crypto Signals',
                          '{burl}ls/?w=instr&x=CR:',
-                         set_feed_function('SIGNAL', 'CR', 'label') +\
-                         'Cryptocurrency Trading Signals')
+                         set_feed_function('CR', 'SIGNAL', 'label') +\
+                         'Cryptocurrency Trading Signals',
+                         set_feed_function('CR', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Economic Calendar',
                          '{burl}w/?funcname=get_tradingview_ecocal(0,0)&refreshw=1800',
-                         set_feed_function('ECO', 'GO', 'label') +\
-                         'Economic Calendar')
+                         set_feed_function('GO', 'ECO', 'label') +\
+                         'Economic Calendar',
+                         set_feed_function('GO', 'ECO', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'World News and Top Stories',
                          '{burl}w/?funcname=get_newsfeed(burl,0,0,500,1)&refreshw=900&noflexheight=1',
-                         set_feed_function('TOP', 'GO', 'label') +\
-                         'World News and Top Stories')
+                         set_feed_function('GO', 'TOP', 'label') +\
+                         'World News and Top Stories',
+                         set_feed_function('GO', 'TOP', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Screener',
                          '{burl}w/?funcname=get_tradingview_screener(0,0)',
-                         set_feed_function('EQS', 'GO', 'label') +\
-                         ' Screener')
+                         set_feed_function('GO', 'EQS', 'label') +\
+                         ' Screener',
+                         set_feed_function('GO', 'EQS', 'value'))
 
 
-def set_widgets_from_url(feed_id, connection, short_title, url, search):
+def set_widgets_from_url(feed_id, connection, short_title, url, search, sa_function):
     """
     Insert into table feed widget from an url
     Args:
@@ -126,13 +138,13 @@ def set_widgets_from_url(feed_id, connection, short_title, url, search):
     inserted_values = " " +\
     "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
     "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-    "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+")"
+    "'"+search+"','"+asset_class+"','"+market+"','"+sa_function+"','"+hash_this+"'"+")"
 
 
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
     " ranking, symbol, type, badge, "+\
-    "search, asset_class, market, hash) VALUES " + inserted_values
+    "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
     cr_i.execute(sql_i)
     connection.commit()
     cr_i.close()
@@ -180,6 +192,7 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         ranking = '-1'
         feed_type = str(feed_id)
         search = set_feed_function('GP', symbol, 'label') + fullname
+        sa_function = set_feed_function('GP', symbol, 'value')
         hash_this = get_hash_string(str(url))
 
         debug(search +": "+ os.path.basename(__file__))
@@ -197,7 +210,7 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         inserted_values = inserted_values + sep +\
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
-        "'"+search+"','"+asset_class+"','"+market+"','"+hash_this+"'"+")"
+        "'"+search+"','"+asset_class+"','"+market+"','"+sa_function+"','"+hash_this+"'"+")"
 
         cr_i.close()
     cursor.close()
@@ -206,7 +219,7 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
     sql_i = "INSERT IGNORE INTO feed"+\
     "(date, short_title, short_description, content, url,"+\
     " ranking, symbol, type, badge, "+\
-    "search, asset_class, market, hash) VALUES " + inserted_values
+    "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
     if not disabled:
         cr_i.execute(sql_i)
         connection.commit()

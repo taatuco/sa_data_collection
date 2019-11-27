@@ -59,7 +59,7 @@ def set_feed_function(func_name, sub_func, what):
             sub_func_label = '<span class="btn btn-outline-info">'+ str(sub_func) +' </span>'
         else:
             sub_func_label = ''
-        ret = sub_func_label + '&nbsp;' + function_label + '&nbsp;&nbsp;'
+        ret = sub_func_label + function_label + '&nbsp;&nbsp;'
     else:
         ret = sub_func + ' ' + func_name
         

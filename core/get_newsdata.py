@@ -47,7 +47,7 @@ def get_newsdata(limit, clear_history, what, cat):
     #---------------------------------------------------------------------------
     if update_data_is_terminated():
         date_today = datetime.datetime.now()
-        date_from = datetime.datetime.now() - timedelta(days=200)
+        date_from = datetime.datetime.now() - timedelta(days=40)
         date_today = date_today.strftime("%Y-%m-%d %H:%M:%S")
         date_from = date_from.strftime("%Y%m%d")
 
