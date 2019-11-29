@@ -79,7 +79,6 @@ SET RUN_DATA_COLLECT="%SA_DATA_DIR%_sa_collect_data.bat"
 SET GET_DATA="%SA_DATA_DIR%sa_1_get_data.bat"
 SET GET_FRC="%SA_DATA_DIR%sa_2_get_forecast.bat"
 SET SET_FULLDATA="%SA_DATA_DIR%sa_3_set_fulldata.bat"
-SET SET_DATA="%SA_DATA_DIR%sa_4_set_data.bat"
 SET GET_NEWSDATA="%SA_DATA_DIR%sa_5_get_newsdata.bat"
 SET GET_NEWSDATA_SPEC="%SA_DATA_DIR%sa_6_get_newsdata.bat"
 SET PROCESS_MAIL_Q="%SA_DATA_DIR%sa_7_process_mail_q.bat"
@@ -154,10 +153,7 @@ REM ### 3 Set Data
 DEL /F /Q %SET_FULLDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_instr_fulldata.py" >> %SET_FULLDATA%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%portfolios\portf_main_get_data.py" >> %SET_FULLDATA%
-
-REM ### 4 Set Data
-DEL /F /Q %SET_DATA%
-@ECHO %_PY_EXE% "%SA_DATA_DIR%core\collect_instr_data.py" >> %SET_DATA%
+@ECHO %_PY_EXE% "%SA_DATA_DIR%core\send_email_report.py" >> %SET_FULLDATA%
 
 REM ### 5 Get NewsData Global
 DEL /F /Q %GET_NEWSDATA%
@@ -223,12 +219,8 @@ DEL /F %RECALC_INSTRUMENT%
 @ECHO @ECHO. >> %RECALC_INSTRUMENT%
 @ECHO @ECHO 1. Run the Py script: to update table price_instruments_data for specific symbol >> %RECALC_INSTRUMENT%
 @ECHO @ECHO 2. Run the Py script: to compute forecast model and score for specific symbol >> %RECALC_INSTRUMENT%
-@ECHO @ECHO 3. Run the Py script: to update price patterns for specific symbol >> %RECALC_INSTRUMENT%
-@ECHO @ECHO 4. Run the Py script: to collect target_price for specific symbol >> %RECALC_INSTRUMENT%
 @ECHO @ECHO ########################################################################## >> %RECALC_INSTRUMENT%
 @ECHO PAUSE >> %RECALC_INSTRUMENT%
-@ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%core\collect_instr_fulldata_full_set_spec.py" >> %RECALC_INSTRUMENT%
-@ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_INSTRUMENT%
 @ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%core\collect_instr_fulldata_full_set_spec.py" >> %RECALC_INSTRUMENT%
 @ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_INSTRUMENT%
 
