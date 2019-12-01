@@ -44,8 +44,9 @@ def update_instruments_data(symbol, is_update_all, date_num_day_scan, date_minus
         String: Current date in string format YYYYMMDD
         String: CUrrent date -7 days in string format YYYYMMDD
     Returns:
-        None
+        Double: Sentiment score
     """
+    ret = 0
     if is_update_all:
         sql_select_instr = "SELECT id, date FROM price_instruments_data "+\
         "WHERE (symbol='"+symbol+"' and date>"+date_num_day_scan+") ORDER BY date ASC"
@@ -105,6 +106,8 @@ def update_instruments_data(symbol, is_update_all, date_num_day_scan, date_minus
         gc.collect()
         cr_upd.close()
     cr_d_id.close()
+    ret = sentiment
+    return ret
 
 def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
     """
@@ -155,12 +158,11 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
         date_minus_seven = date_minus_seven.strftime("%Y%m%d")
         date_num_day_scan = datetime.datetime.now() - timedelta(days=nd_scan)
         date_num_day_scan = date_num_day_scan.strftime("%Y%m%d")
-        sentiment = 0
-        update_instruments_data(symbol,
-                                is_update_all,
-                                date_num_day_scan,
-                                date_minus_seven,
-                                connection)
+        sentiment = update_instruments_data(symbol,
+                                            is_update_all,
+                                            date_num_day_scan,
+                                            date_minus_seven,
+                                            connection)
 
         if is_update_all:
             get_trades(symbol, uid, nd_scan, True, connection)
