@@ -64,6 +64,8 @@ def get_forecast_pnl(symbol, number_of_day_collection, full_update, connection):
 
             if p_price_close < p_target_price:
                 signal = "b"
+            elif p_target_price == -9:
+                signal = "w"
             else:
                 signal = "s"
 
@@ -91,9 +93,12 @@ def get_forecast_pnl(symbol, number_of_day_collection, full_update, connection):
                 if signal == "b":
                     pnl = s_price_close - p_price_close
                     pnl_long = pnl
-                if signal == "s":
+                elif signal == "s":
                     pnl = p_price_close - s_price_close
                     pnl_short = pnl
+                else:
+                    pnl_long = 0
+                    pnl_short = 0
 
                 cursor = connection.cursor(pymysql.cursors.SSCursor)
                 sql = "UPDATE price_instruments_data SET pnl = " + str(pnl) +\

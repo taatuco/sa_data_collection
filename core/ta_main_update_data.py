@@ -47,6 +47,7 @@ def update_instruments_data(symbol, is_update_all, date_num_day_scan, date_minus
         Double: Sentiment score
     """
     ret = 0
+    sentiment = 0
     if is_update_all:
         sql_select_instr = "SELECT id, date FROM price_instruments_data "+\
         "WHERE (symbol='"+symbol+"' and date>"+date_num_day_scan+") ORDER BY date ASC"
