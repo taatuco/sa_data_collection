@@ -38,6 +38,7 @@ def get_trades(symbol, uid, number_of_days, full_update, connection):
     dfrom_str = dfrom.strftime('%Y%m%d')
 
     trade_symbol = symbol
+    trade_fullname = ''
     trade_order_type = ''
     trade_entry_price = ''
     trade_entry_date = dfrom
@@ -139,7 +140,7 @@ def get_trades(symbol, uid, number_of_days, full_update, connection):
             sep = ','
 
         if target_price_1 != -9:
-            debug("("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname  +\
+            debug("("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname +\
                     "', '" +\
                     trade_order_type +"',"+ str(trade_entry_price) +",'"+\
                     str(trade_entry_date) +"','"+\
