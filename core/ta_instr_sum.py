@@ -218,6 +218,7 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     sql_d = "SELECT decimal_places FROM instruments WHERE symbol='"+symbol+"' "
     cr_d.execute(sql_d)
     rs_d = cr_d.fetchall()
+    decimal_places =  2
     for row in rs_d:
         decimal_places = row[0]
     cr_d.close()
