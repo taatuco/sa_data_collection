@@ -172,6 +172,7 @@ def update_forecast_table(symbol, weekf, frc, date_this, connection):
     sql_d = "SELECT unit FROM instruments WHERE symbol = '"+symbol+"'"
     cr_d.execute(sql_d)
     rs_d = cr_d.fetchall()
+    unit = ''
     for row in rs_d:
         unit = row[0]
     cr_d.close()
