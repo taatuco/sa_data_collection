@@ -253,7 +253,8 @@ def gen_chart(symbol, uid, connection):
                         cr_fp.execute(sql_fp)
                         rs_fp = cr_fp.fetchall()
                         for row in rs_fp:
-                            forecast = str(row[0])
+                            if str(row[0]) != '-9':
+                                forecast = str(row[0])
                         cr_fp.close()
 
                     if str(forecast) != '0':
