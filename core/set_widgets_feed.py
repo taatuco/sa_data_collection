@@ -239,15 +239,15 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         "('"+date_today+"','"+short_title+"','"+short_description+"','"+content+"','"+url+"',"+\
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"','"+sa_function+"','"+hash_this+"'"+")"
-
     cursor.close()
 
-    cr_i = connection.cursor(pymysql.cursors.SSCursor)
-    sql_i = "INSERT IGNORE INTO feed"+\
-    "(date, short_title, short_description, content, url,"+\
-    " ranking, symbol, type, badge, "+\
-    "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
-    cr_i.execute(sql_i)
-    connection.commit()
+    if inserted_values != '':
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "INSERT IGNORE INTO feed"+\
+        "(date, short_title, short_description, content, url,"+\
+        " ranking, symbol, type, badge, "+\
+        "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
+        cr_i.execute(sql_i)
+        connection.commit()
 
     cr_i.close()
