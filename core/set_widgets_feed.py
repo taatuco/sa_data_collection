@@ -21,6 +21,24 @@ DB_PWD = ACCESS_OBJ.password()
 DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
+def clear_widget_feed(symbol, connection):
+    """
+    Remove from feed, if symbol not specified, remove all
+    widget feed.
+    Args:
+        String: Instrument symbol
+    Returns:
+        None
+    """
+    feed_type = 2
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    if symbol == '':
+        sql = "DELETE FROM feed WHERE type=" + str(feed_type)
+    else:
+        sql = "DELETE FROM feed WHERE (symbol ='"+symbol+\
+        "' AND type="+ str(feed_type) +")"
+    cursor.execute(sql)
+    connection.commit()
 
 def set_widgets_feed(symbol, connection):
     """
@@ -118,7 +136,7 @@ def set_widgets_feed(symbol, connection):
                          '{burl}w/?funcname=get_tradingview_screener(0,0,5)',
                          set_feed_function('CR', 'EQS', 'label') +\
                          'Cryptocurrencies Screener',
-                         set_feed_function('CR', 'EQS', 'value'))    
+                         set_feed_function('CR', 'EQS', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Trading Instruments Watchlist',
                          '{burl}w/?funcname=get_tradingview_watchlist(0,0)',
@@ -178,7 +196,6 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
     """
     date_today = datetime.datetime.now()
     date_today = date_today.strftime("%Y%m%d")
-    disabled = True
 
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, "+\
@@ -200,7 +217,6 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         market = row[3]
         sector = row[4]
         uid = row[5]
-        disabled = row[6]
 
         short_title = fullname
         short_description = symbol
@@ -214,12 +230,6 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         hash_this = get_hash_string(str(url))
 
         debug(search +": "+ os.path.basename(__file__))
-
-        cr_i = connection.cursor(pymysql.cursors.SSCursor)
-        sql_i = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+\
-        date_today+"' AND type="+ feed_type +")"
-        cr_i.execute(sql_i)
-        connection.commit()
 
         if i == 0:
             sep = ''
@@ -238,8 +248,7 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
     "(date, short_title, short_description, content, url,"+\
     " ranking, symbol, type, badge, "+\
     "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
-    if not disabled:
-        cr_i.execute(sql_i)
-        connection.commit()
+    cr_i.execute(sql_i)
+    connection.commit()
 
     cr_i.close()

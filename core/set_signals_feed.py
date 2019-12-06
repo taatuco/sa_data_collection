@@ -68,9 +68,7 @@ def clear_signals_feed(symbol, connection):
         None
     """
     feed_id = 1
-    
     cursor = connection.cursor(pymysql.cursors.SSCursor)
-
     if symbol == '':
         sql = "DELETE FROM feed WHERE type="+ str(feed_id)
     else:
