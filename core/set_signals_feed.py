@@ -73,12 +73,11 @@ def set_signals_feed(symbol, connection):
     #Date [Today date]
     date_today = datetime.datetime.now()
     date_today = date_today.strftime("%Y%m%d")
-    
+
     cr_d = connection.cursor(pymysql.cursors.SSCursor)
-    sql_d = "DELETE FROM feed WHERE (symbol ='"+symbol+"' AND date<='"+\
-    date_today+"' AND type="+ str(feed_id) +")"
+    sql_d = "DELETE FROM feed WHERE symbol ='"+symbol+"' AND type="+ str(feed_id)
     cr_d.execute(sql_d)
-    connection.commit()    
+    connection.commit()
 
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, "+\
