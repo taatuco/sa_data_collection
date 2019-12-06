@@ -69,7 +69,6 @@ def set_signals_feed(symbol, connection):
     feed_id = 1
     feed_type = "signals"
     add_feed_type(feed_id, feed_type)
-    disabled = True
 
     #Date [Today date]
     date_today = datetime.datetime.now()
@@ -78,12 +77,12 @@ def set_signals_feed(symbol, connection):
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, "+\
     "instruments.market, instruments.w_forecast_change, sectors.sector, "+\
-    "instruments.w_forecast_display_info, symbol_list.uid, symbol_list.disabled, "+\
+    "instruments.w_forecast_display_info, symbol_list.uid, "+\
     "instruments.m1_signal FROM instruments "+\
     "JOIN sectors ON instruments.sector = sectors.id JOIN symbol_list ON "+\
     "instruments.symbol = symbol_list.symbol "+\
     "WHERE instruments.symbol = '"+ symbol +"' AND instruments.symbol NOT LIKE '"+\
-    get_portf_suffix() +"%' "
+    get_portf_suffix() +"%' AND symbol_list.disabled=0"
 
     cursor.execute(sql)
     res = cursor.fetchall()
@@ -98,8 +97,7 @@ def set_signals_feed(symbol, connection):
         sector = row[5]
         w_forecast_display_info = row[6]
         uid = row[7]
-        disabled = row[8]
-        m1_signal = row[9]
+        m1_signal = row[8]
 
         short_title = fullname
         short_description = symbol
@@ -118,7 +116,7 @@ def set_signals_feed(symbol, connection):
 
         search = set_feed_function('DES', symbol, 'label') +\
         asset_class + market + " " + fullname + ' - ' + 'Security Tearsheet'
-        
+
         sa_function = set_feed_function('DES', symbol, 'value')
 
         debug(search +": "+ os.path.basename(__file__))
@@ -140,14 +138,12 @@ def set_signals_feed(symbol, connection):
 
         cr_d.close()
     cursor.close()
-
-    cr_i = connection.cursor(pymysql.cursors.SSCursor)
-
-    sql_i = "INSERT IGNORE INTO feed"+\
-    "(date, short_title, short_description, content, url,"+\
-    " ranking, symbol, type, badge, "+\
-    "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
-    if not disabled:
+    if inserted_values != '':
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "INSERT IGNORE INTO feed"+\
+        "(date, short_title, short_description, content, url,"+\
+        " ranking, symbol, type, badge, "+\
+        "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
         cr_i.execute(sql_i)
         connection.commit()
-    cr_i.close()
+        cr_i.close()
