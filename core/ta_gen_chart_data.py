@@ -256,7 +256,7 @@ def gen_chart(symbol, uid, connection):
                             forecast = str(row[0])
                         cr_fp.close()
 
-                    if str(forecast) != '0':
+                    if str(forecast) != '0' and str(forecast) != '-9':
                         inserted_values = inserted_values + sep +\
                         "("+str(uid)+",'"+\
                         str(symbol)+"',"+\
