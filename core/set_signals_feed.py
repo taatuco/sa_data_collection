@@ -138,13 +138,12 @@ def set_signals_feed(symbol, connection):
 
         cr_d.close()
     cursor.close()
-
-    cr_i = connection.cursor(pymysql.cursors.SSCursor)
-
-    sql_i = "INSERT IGNORE INTO feed"+\
-    "(date, short_title, short_description, content, url,"+\
-    " ranking, symbol, type, badge, "+\
-    "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
-    cr_i.execute(sql_i)
-    connection.commit()
-    cr_i.close()
+    if inserted_values != '':
+        cr_i = connection.cursor(pymysql.cursors.SSCursor)
+        sql_i = "INSERT IGNORE INTO feed"+\
+        "(date, short_title, short_description, content, url,"+\
+        " ranking, symbol, type, badge, "+\
+        "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
+        cr_i.execute(sql_i)
+        connection.commit()
+        cr_i.close()
