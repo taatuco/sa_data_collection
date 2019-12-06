@@ -240,7 +240,6 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"','"+sa_function+"','"+hash_this+"'"+")"
 
-        cr_i.close()
     cursor.close()
 
     cr_i = connection.cursor(pymysql.cursors.SSCursor)
