@@ -107,12 +107,15 @@ def set_signals_feed(symbol, connection):
         feed_type = str(feed_id)
         hash_this = get_hash_string(str(url))
 
-        if float(w_forecast_change) < 0:
-            badge = '<i class="fas fa-caret-down"></i>&nbsp;' + w_forecast_display_info
-        elif float(w_forecast_change) > 0:
-            badge = '<i class="fas fa-caret-up"></i>&nbsp;' + w_forecast_display_info
+        if float(w_forecast_change) != -999:
+            if float(w_forecast_change) < 0:
+                badge = '<i class="fas fa-caret-down"></i>&nbsp;' + w_forecast_display_info
+            elif float(w_forecast_change) > 0:
+                badge = '<i class="fas fa-caret-up"></i>&nbsp;' + w_forecast_display_info
+            else:
+                badge = w_forecast_display_info
         else:
-            badge = w_forecast_display_info
+            badge = '-999'
 
         search = set_feed_function('DES', symbol, 'label') +\
         asset_class + market + " " + fullname + ' - ' + 'Security Tearsheet'

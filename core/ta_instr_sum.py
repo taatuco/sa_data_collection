@@ -161,7 +161,7 @@ def update_forecast_table(symbol, weekf, frc, date_this, connection):
     Update forecast data table instruments and price_instruments_data
     Args:
         String: Instrument symbol
-        Double: Week forecast change
+        Double: Week forecast change (if -999 it means the signal is cancelled)
         Double: Forecast weekly target price
         String: Date in string format YYYYMMDD
     Returns:
@@ -176,12 +176,13 @@ def update_forecast_table(symbol, weekf, frc, date_this, connection):
     for row in rs_d:
         unit = row[0]
     cr_d.close()
-
-    w_forecast_display_info = str(round(float(weekf*100), 2)) + " " + unit
-    if unit == 'pips':
-        w_forecast_display_info = str(round(float(weekf*10000), 0)) +" "+ unit
-    if unit == '%':
-        w_forecast_display_info = str(round(float(weekf*100), 2)) + unit
+    w_forecast_display_info = ''
+    if weekf != -999:
+        w_forecast_display_info = str(round(float(weekf*100), 2)) + " " + unit
+        if unit == 'pips':
+            w_forecast_display_info = str(round(float(weekf*10000), 0)) +" "+ unit
+        if unit == '%':
+            w_forecast_display_info = str(round(float(weekf*100), 2)) + unit
 
 
     cursor = connection.cursor(pymysql.cursors.SSCursor)
@@ -191,13 +192,13 @@ def update_forecast_table(symbol, weekf, frc, date_this, connection):
     connection.commit()
     cursor.close()
 
-    cursor = connection.cursor(pymysql.cursors.SSCursor)
-    sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (date>="+\
-    date_this +" AND symbol='"+symbol+"' AND target_price =0) "
-    debug(sql)
-    cursor.execute(sql)
-    connection.commit()
-    cursor.close()
+    #cursor = connection.cursor(pymysql.cursors.SSCursor)
+    #sql = "UPDATE price_instruments_data SET target_price = "+str(frc)+" WHERE (date>="+\
+    #date_this +" AND symbol='"+symbol+"' AND target_price =0) "
+    #debug(sql)
+    #cursor.execute(sql)
+    #connection.commit()
+    #cursor.close()
 
 def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_pct, wf_pct,
                              trade_entry_buy_1, trade_tp_buy_1, trade_sl_buy_1,
@@ -364,8 +365,12 @@ def get_instr_sum(symbol, uid, asset_class, date_this, sentiment, connection):
     d1_pct = float(instr_data.get_pct_1_day_performance())* mul
     frc_pt = forc_data.get_frc_pt()
     lp_pt = instr_data.get_last_price()
-    weekf = get_forecast_pct(lp_pt, frc_pt)
-    wf_pct = weekf * mul
+    wf_pct = 0
+    if frc_pt != -9:
+        weekf = get_forecast_pct(lp_pt, frc_pt)
+        wf_pct = weekf * mul
+    else:
+        weekf = -999
     # --- (1)
     trade_entry_buy_1 = forc_data.get_entry_buy(1)
     trade_tp_buy_1 = forc_data.get_tp_buy(1)
