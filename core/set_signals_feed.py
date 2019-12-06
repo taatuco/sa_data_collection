@@ -58,6 +58,29 @@ def get_signal_ranking(symbol, rank):
     connection.close()
     return ret
 
+def clear_signals_feed(symbol, connection):
+    """
+    Remove from feed, if symbol not specified, remove all
+    signal feed.
+    Args:
+        String: Instrument symbol
+    Returns:
+        None
+    """
+    feed_id = 1
+    
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+
+    if symbol == '':
+        sql = "DELETE FROM feed WHERE type="+ str(feed_id)
+    else:
+        sql = "DELETE FROM feed WHERE symbol = '"+ str(symbol) +\
+        "' type="+ str(feed_id)
+
+    cursor.execute(sql)
+    connection.commit()
+    cursor.close()
+
 def set_signals_feed(symbol, connection):
     """
     Import instrument signals in table feed
@@ -74,10 +97,6 @@ def set_signals_feed(symbol, connection):
     date_today = datetime.datetime.now()
     date_today = date_today.strftime("%Y%m%d")
 
-    cr_d = connection.cursor(pymysql.cursors.SSCursor)
-    sql_d = "DELETE FROM feed WHERE symbol ='"+symbol+"' AND type="+ str(feed_id)
-    cr_d.execute(sql_d)
-    connection.commit()
 
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = "SELECT instruments.symbol, instruments.fullname, instruments.asset_class, "+\
@@ -138,7 +157,6 @@ def set_signals_feed(symbol, connection):
         "'"+ranking+"','"+symbol+"','"+feed_type+"','"+badge+"',"+\
         "'"+search+"','"+asset_class+"','"+market+"','"+sa_function+"','"+hash_this+"'"+")"
 
-        cr_d.close()
     cursor.close()
     if inserted_values != '':
         cr_i = connection.cursor(pymysql.cursors.SSCursor)

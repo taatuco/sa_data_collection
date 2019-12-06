@@ -19,7 +19,7 @@ from ta_calc_ma import calc_ma
 from ta_calc_rsi import RsiData
 from ta_calc_tln import get_trend_line_data
 from ta_instr_sum import get_instr_sum
-from set_signals_feed import set_signals_feed
+from set_signals_feed import set_signals_feed, clear_signals_feed
 from set_widgets_feed import set_widgets_feed
 from ta_gen_recomm import gen_recomm
 from ta_gen_chart_data import clear_chart_table, gen_chart
@@ -144,6 +144,7 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
     clear_chart_table(specific_symbol, connection)
+    clear_signals_feed(specific_symbol, connection)
     cursor = connection.cursor(pymysql.cursors.SSCursor)
     sql = sql_parse_list
     cursor.execute(sql)
