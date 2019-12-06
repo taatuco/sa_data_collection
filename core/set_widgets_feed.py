@@ -249,5 +249,4 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         "search, asset_class, market, sa_function, hash) VALUES " + inserted_values
         cr_i.execute(sql_i)
         connection.commit()
-
-    cr_i.close()
+        cr_i.close()
