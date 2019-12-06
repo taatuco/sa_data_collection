@@ -253,26 +253,26 @@ def gen_chart(symbol, uid, connection):
                         cr_fp.execute(sql_fp)
                         rs_fp = cr_fp.fetchall()
                         for row in rs_fp:
-                            if str(row[0]) != '-9':
-                                forecast = str(row[0])
+                            forecast = row[0]
                         cr_fp.close()
 
-                    if str(forecast) != '0' and str(forecast) != '-9':
-                        inserted_values = inserted_values + sep +\
-                        "("+str(uid)+",'"+\
-                        str(symbol)+"',"+\
-                        str(date.strftime("%Y%m%d"))+","+\
-                        str(price)+","+\
-                        str(forecast)+","+\
-                        str(lt_upper_trend_line)+","+\
-                        str(lt_lower_trend_line)+","+\
-                        str(st_upper_trend_line)+","+\
-                        str(st_lower_trend_line)+","+\
-                        str(rsi)+","+\
-                        str(rsi_oversold)+","+\
-                        str(rsi_overbought)+","+\
-                        str(ma200)+","+\
-                        str(target_price)+")"
+                    if forecast != '':
+                        if float(forecast) > 0:
+                            inserted_values = inserted_values + sep +\
+                            "("+str(uid)+",'"+\
+                            str(symbol)+"',"+\
+                            str(date.strftime("%Y%m%d"))+","+\
+                            str(price)+","+\
+                            str(forecast)+","+\
+                            str(lt_upper_trend_line)+","+\
+                            str(lt_lower_trend_line)+","+\
+                            str(st_upper_trend_line)+","+\
+                            str(st_lower_trend_line)+","+\
+                            str(rsi)+","+\
+                            str(rsi_oversold)+","+\
+                            str(rsi_overbought)+","+\
+                            str(ma200)+","+\
+                            str(target_price)+")"
                     i += 1
                 if inserted_values != '':
                     cr_t = connection.cursor(pymysql.cursors.SSCursor)
