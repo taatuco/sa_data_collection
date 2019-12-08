@@ -66,10 +66,22 @@ def set_widgets_feed(symbol, connection):
                          'Tradebook',
                          set_feed_function('GO', 'TBX', 'value'))
     set_widgets_from_url(feed_id, connection,
+                         'Help',
+                         '{burl}h',
+                         set_feed_function('GO', 'HELP', 'label') +\
+                         'Help - Get help, support and learn',
+                         set_feed_function('GO', 'HELP', 'value'))
+    set_widgets_from_url(feed_id, connection,
+                         'Settings',
+                         '{burl}settings',
+                         set_feed_function('GO', 'SET', 'label') +\
+                         'Settings - Customize and configure Smartalpha',
+                         set_feed_function('GO', 'SET', 'value'))
+    set_widgets_from_url(feed_id, connection,
                          'Dashboard',
                          '{burl}?dashboard=1',
                          set_feed_function('DASH', 'PORT', 'label') +\
-                         'Dashboard - All relevant info in One place',
+                         'Dashboard - Strategies portfolio control center',
                          set_feed_function('DASH', 'PORT', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Top Portfolios',
