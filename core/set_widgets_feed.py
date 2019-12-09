@@ -155,6 +155,12 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('GO', 'WATCHLIST', 'label') +\
                          'Watchlist',
                          set_feed_function('GO', 'WATCHLIST', 'value'))
+    set_widgets_from_url(feed_id, connection,
+                         'Bloomberg TV',
+                         'https://www.bloomberg.com/live/us',
+                         set_feed_function('GO', 'BBTV', 'label') +\
+                         'Live TV - Bloomberg',
+                         set_feed_function('GO', 'BBTV', 'value'))
 
 
 def set_widgets_from_url(feed_id, connection, short_title, url, search, sa_function):
