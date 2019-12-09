@@ -67,13 +67,13 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('GO', 'TBX', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Help',
-                         '{burl}h',
+                         '{burl}h/?',
                          set_feed_function('GO', 'HELP', 'label') +\
                          'Help - Get help, support and learn',
                          set_feed_function('GO', 'HELP', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Settings',
-                         '{burl}settings',
+                         '{burl}settings/?',
                          set_feed_function('GO', 'SET', 'label') +\
                          'Settings - Customize and configure Smartalpha',
                          set_feed_function('GO', 'SET', 'value'))
