@@ -97,7 +97,7 @@ SET PROCESS_MAIL_Q="%SA_DATA_DIR%sa_7_process_mail_q.bat"
 SET REBUILD_DATA_SCRIPT_1="%SA_DATA_DIR%scripts\1_rebuild_data_collection.bat"
 SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
 SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
-SET RECALC_FORCAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
+SET RECALC_FORECAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
 SET RECALC_FORECAST_MODEL_SPEC="%SA_DATA_DIR%scripts\forecast_model_recalc_spec.bat"
 SET RECALC_INSTRUMENT="%SA_DATA_DIR%scripts\recalc_instrument.bat"
 
@@ -210,32 +210,32 @@ DEL /F %REBUILD_DATA_SCRIPT_3%
 @ECHO %_PY_EXE% "%SA_DATA_DIR%core\_2_rebuild_instr_dataset.py" >> %REBUILD_DATA_SCRIPT_3%
 
 REM ### Forecast Model Recalculation
-DEL /F %RECALC_FORCAST_MODEL%
-@ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO Recalculate Forecast Model and Score ALL INSTRUMENTS >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO -------------------------------------------------------- >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO. >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO 3. This process might take long hours probably a day or a month >> %RECALC_FORCAST_MODEL%
-@ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL%
-@ECHO PAUSE >> %RECALC_FORCAST_MODEL%
-@ECHO %_PY_EXE% "%SA_FRC_DIR%get_prediction_model_fullset.py" >> %RECALC_FORCAST_MODEL%
+DEL /F %RECALC_FORECAST_MODEL%
+@ECHO @ECHO ########################################################################## >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO Recalculate Forecast Model and Score ALL INSTRUMENTS >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO -------------------------------------------------------- >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO. >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO 3. This process might take long hours probably a day or a month >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO ########################################################################## >> %RECALC_FORECAST_MODEL%
+@ECHO PAUSE >> %RECALC_FORECAST_MODEL%
+@ECHO %_PY_EXE% "%SA_FRC_DIR%get_prediction_model_fullset.py" >> %RECALC_FORECAST_MODEL%
 
 REM ### Forecast Model Recalculation for a specific instrument
-DEL /F %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO Recalculate Forecast Model and Score SPECIFIC INSTRUMENT >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO -------------------------------------------------------- >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO. >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO 3. This process might take long hours probably a day or a month >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO @ECHO ########################################################################## >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO PAUSE >> %RECALC_FORCAST_MODEL_SPEC%
-@ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_FORCAST_MODEL_SPEC%
+DEL /F %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO ########################################################################## >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO Recalculate Forecast Model and Score SPECIFIC INSTRUMENT >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO -------------------------------------------------------- >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO. >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO 3. This process might take long hours probably a day or a month >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO @ECHO ########################################################################## >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO PAUSE >> %RECALC_FORECAST_MODEL_SPEC%
+@ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_FORECAST_MODEL_SPEC%
 
 REM ### Recalculation instrument data
 DEL /F %RECALC_INSTRUMENT%
