@@ -258,6 +258,8 @@ def gen_chart(symbol, uid, connection):
 
                     if forecast != '':
                         if float(forecast) > 0:
+                            if inserted_values == '':
+                                sep = ''
                             inserted_values = inserted_values + sep +\
                             "("+str(uid)+",'"+\
                             str(symbol)+"',"+\
