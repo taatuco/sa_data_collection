@@ -73,7 +73,7 @@ def check_price_inconsist_price_move(symbol, connection):
     for row in res_c:
         average_price = row[0]
     sql_c = "SELECT price_close FROM price_instruments_data WHERE symbol = '"+\
-    symbol +" ORDER BY date DESC LIMIT 1"
+    symbol +"' ORDER BY date DESC LIMIT 1"
     cr_c.execute(sql_c)
     res_c = cr_c.fetchall()
     last_price = 0
