@@ -12,7 +12,7 @@ from sa_numeric import get_pct_change
 from sa_logging import log_this
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.abspath(PDIR))
-from settings import SmartAlphaPath
+from settings import SmartAlphaPath, debug
 SETT = SmartAlphaPath()
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
@@ -80,7 +80,7 @@ def check_price_inconsist_price_move(symbol, connection):
     for row in res_c:
         last_price = row[0]
     cr_c.close()
-    print(str(average_price)+ " ::: "+str(last_price))
+    debug(str(average_price)+ " ::: "+str(last_price))
     if average_price is not None:
         if abs(get_pct_change(average_price, last_price)) >= 0.4:
             log_this(module.replace('{symbol}', str(symbol)), status)
