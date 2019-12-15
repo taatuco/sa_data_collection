@@ -80,6 +80,6 @@ def check_price_inconsist_price_move(symbol, connection):
     for row in res_c:
         last_price = row[0]
     cr_c.close()
-
+    print(str(average_price)+ " ::: "+str(last_price))
     if abs(get_pct_change(average_price, last_price)) >= 0.4:
         log_this(module.replace('{symbol}', str(symbol)), status)
