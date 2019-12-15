@@ -66,7 +66,7 @@ def check_price_inconsist_price_move(symbol, connection):
 
     cr_c = connection.cursor(pymysql.cursors.SSCursor)
     sql_c = "SELECT AVG(price_close) FROM price_instruments_data WHERE symbol = '"+\
-    symbol + "'date >=" + date_range
+    symbol + "' date >=" + date_range
     cr_c.execute(sql_c)
     res_c = cr_c.fetchall()
     average_price = 0
