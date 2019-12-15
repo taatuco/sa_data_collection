@@ -99,6 +99,7 @@ SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
 SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
 SET RECALC_FORECAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
 SET RECALC_FORECAST_MODEL_SPEC="%SA_DATA_DIR%scripts\forecast_model_recalc_spec.bat"
+SET STOCK_SPLIT_SPEC="%SA_DATA_DIR%scripts\stock_split_spec.bat"
 SET RECALC_INSTRUMENT="%SA_DATA_DIR%scripts\recalc_instrument.bat"
 
 SET GET_QM_DATA="%SA_DATA_DIR%r_quantmod\get_quantmod_data.bat"
@@ -218,7 +219,7 @@ DEL /F %RECALC_FORECAST_MODEL%
 @ECHO @ECHO. >> %RECALC_FORECAST_MODEL%
 @ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORECAST_MODEL%
 @ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORECAST_MODEL%
-@ECHO @ECHO 3. This process might take long hours probably a day or a month >> %RECALC_FORECAST_MODEL%
+@ECHO @ECHO 3. This process might take long hours probably a couple of days >> %RECALC_FORECAST_MODEL%
 @ECHO @ECHO ########################################################################## >> %RECALC_FORECAST_MODEL%
 @ECHO PAUSE >> %RECALC_FORECAST_MODEL%
 @ECHO %_PY_EXE% "%SA_FRC_DIR%get_prediction_model_fullset.py" >> %RECALC_FORECAST_MODEL%
@@ -232,10 +233,24 @@ DEL /F %RECALC_FORECAST_MODEL_SPEC%
 @ECHO @ECHO. >> %RECALC_FORECAST_MODEL_SPEC%
 @ECHO @ECHO 1. This script will include newly added model and recalculate score >> %RECALC_FORECAST_MODEL_SPEC%
 @ECHO @ECHO 2. Run this during the Weekend to not affect the published signals >> %RECALC_FORECAST_MODEL_SPEC%
-@ECHO @ECHO 3. This process might take long hours probably a day or a month >> %RECALC_FORECAST_MODEL_SPEC%
 @ECHO @ECHO ########################################################################## >> %RECALC_FORECAST_MODEL_SPEC%
 @ECHO PAUSE >> %RECALC_FORECAST_MODEL_SPEC%
 @ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_FORECAST_MODEL_SPEC%
+
+REM ### Stock split price correction for a specific instrument
+DEL /F %STOCK_SPLIT_SPEC%
+@ECHO @ECHO ########################################################################## >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO Recalculate stock split price for SPECIFIC INSTRUMENT >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO -------------------------------------------------------- >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO. >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO 1. This script will include recalculation of all related tables >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO 2. Affected tables: price_instruments_data, chart_data, trades >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO 3. This process will also offer recalculation of the forecast model >> %STOCK_SPLIT_SPEC%
+@ECHO @ECHO ########################################################################## >> %STOCK_SPLIT_SPEC%
+@ECHO PAUSE >> %STOCK_SPLIT_SPEC%
+@ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %STOCK_SPLIT_SPEC%
+@ECHO CALL %RECALC_FORECAST_MODEL_SPEC% >> %STOCK_SPLIT_SPEC%
 
 REM ### Recalculation instrument data
 DEL /F %RECALC_INSTRUMENT%

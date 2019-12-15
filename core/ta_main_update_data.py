@@ -26,6 +26,7 @@ from ta_gen_chart_data import clear_chart_table, gen_chart
 from get_frc_pnl import get_forecast_pnl
 from get_trades import get_trades
 from get_sentiment_score import get_sentiment_score_avg
+from check_inst_price_inconsistency import check_instr_is_obsolete, check_price_inconsist_price_move
 
 sys.path.append(os.path.abspath(SETT.get_path_pwd()))
 from sa_access import sa_db_access
@@ -178,6 +179,8 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
         get_instr_sum(symbol, uid, asset_class, date_minus_ten, sentiment, connection)
         set_signals_feed(symbol, connection)
         set_widgets_feed(symbol, connection)
+        check_instr_is_obsolete(symbol, connection)
+        check_price_inconsist_price_move(symbol, connection)
         gc.collect()
     cursor.close()
     connection.close()
