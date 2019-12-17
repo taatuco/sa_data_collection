@@ -51,10 +51,12 @@ class ForecastData:
     def __init__(self, uid, connection):
 
         target_price = 0
+        date_today = datetime.datetime.now()
+        date_today = date_today.strftime('%Y%m%d')
         cursor = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_instruments_data.target_price FROM price_instruments_data "+\
         "JOIN symbol_list ON symbol_list.symbol = price_instruments_data.symbol WHERE "+\
-        "symbol_list.uid = " + str(uid) + " ORDER BY date DESC LIMIT 1"
+        "symbol_list.uid = " + str(uid) + " AND date < "+ str(date_today) +" ORDER BY date DESC LIMIT 1"
         cursor.execute(sql)
         res = cursor.fetchall()
         for row in res:
