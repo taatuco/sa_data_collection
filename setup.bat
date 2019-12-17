@@ -99,6 +99,7 @@ SET REBUILD_DATA_SCRIPT_2="%SA_DATA_DIR%scripts\2_rebuild_data_forecast.bat"
 SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
 SET RECALC_FORECAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
 SET RECALC_FORECAST_MODEL_SPEC="%SA_DATA_DIR%scripts\forecast_model_recalc_spec.bat"
+SET RENAME_SYMBOL_SPEC="%SA_DATA_DIR%scripts\rename_symbol_spec.bat"
 SET STOCK_SPLIT_SPEC="%SA_DATA_DIR%scripts\stock_split_spec.bat"
 SET RECALC_INSTRUMENT="%SA_DATA_DIR%scripts\recalc_instrument.bat"
 
@@ -111,7 +112,7 @@ SET _PIP_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\Scripts\pip.exe"
 SET _PY_EXE="%LOCALAPPDATA%\Programs\Python\%PY_VER%\python.exe"
 
 REM ### Setup default data
-REM ### NOTE: REMOVE THIS BLOCK TO NOT OVERWRITE EXISTING DATA ###
+REM ### NOTE: UNCOMMENT THIS SECTION TO UPDATE DATABASE WITH DEFAULT DATA ###
 REM %_PY_EXE% "%SA_DATA_DIR%lang\set_lang.py"
 REM %_PY_EXE% "%SA_DATA_DIR%labels\set_labels.py"
 REM %_PY_EXE% "%SA_DATA_DIR%labels\set_recomm_text_lang.py"
@@ -265,6 +266,25 @@ DEL /F %RECALC_INSTRUMENT%
 @ECHO PAUSE >> %RECALC_INSTRUMENT%
 @ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%core\collect_instr_fulldata_full_set_spec.py" >> %RECALC_INSTRUMENT%
 @ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %RECALC_INSTRUMENT%
+
+REM ### Rename symbol
+DEL /F %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO ########################################################################## >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO Rename symbol >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO ------------------------------------------------------------ >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO. >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO 1. Run the Py script: replace symbol name with new one >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO 2. Affected tables: >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO a. symbol_list >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO b. instruments >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO c. price_data_instruments >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO d. feed >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO e. trades >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO f. portfolios >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO ########################################################################## >> %RENAME_SYMBOL_SPEC%
+@ECHO PAUSE >> %RENAME_SYMBOL_SPEC%
+@ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%scripts\rename_symbol.py" >> %RENAME_SYMBOL_SPEC%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %RUN_DATA_COLLECT% /RI 0 /ST %GET_DATA_TIME_ST% /F
