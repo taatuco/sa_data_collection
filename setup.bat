@@ -282,6 +282,7 @@ DEL /F %RENAME_SYMBOL_SPEC%
 @ECHO @ECHO d. feed >> %RENAME_SYMBOL_SPEC%
 @ECHO @ECHO e. trades >> %RENAME_SYMBOL_SPEC%
 @ECHO @ECHO f. portfolios >> %RENAME_SYMBOL_SPEC%
+@ECHO @ECHO g. chart_data >> %RENAME_SYMBOL_SPEC%
 @ECHO @ECHO ########################################################################## >> %RENAME_SYMBOL_SPEC%
 @ECHO PAUSE >> %RENAME_SYMBOL_SPEC%
 @ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%scripts\rename_symbol.py" >> %RENAME_SYMBOL_SPEC%
