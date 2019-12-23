@@ -305,7 +305,7 @@ def get_portf_alloc():
                 cr_x.close()
 
                 alloc_forc_data = ForecastData(alloc_uid, connection)
-                alloc_forc_pnl =  alloc_forc_pnl + abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity * alloc_pip )
+                alloc_forc_pnl = abs( (alloc_price - float(alloc_forc_data.get_frc_pt() )) * portf_item_quantity * alloc_pip )
                 portf_forc_return = portf_forc_return + alloc_forc_pnl
                 portf_nav = portf_nav + alloc_dollar_amount
             cr_t.close()
@@ -316,7 +316,7 @@ def get_portf_alloc():
         except:
             portf_perc_return = 0
 
-        w_forecast_display_info = "+" + portf_unit + " " + str( round(portf_forc_return,2) )
+        w_forecast_display_info = str(round(portf_perc_return,2))+ "%"
         cr_f = connection.cursor(pymysql.cursors.SSCursor)
         sql_f = "UPDATE instruments SET w_forecast_change=" + str(portf_perc_return) + ", w_forecast_display_info='" + w_forecast_display_info + "' " +\
         "WHERE symbol='"+portf_symbol+"' "
