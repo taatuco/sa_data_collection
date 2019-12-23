@@ -250,7 +250,7 @@ DEL /F %STOCK_SPLIT_SPEC%
 @ECHO @ECHO 3. This process will also offer recalculation of the forecast model >> %STOCK_SPLIT_SPEC%
 @ECHO @ECHO ########################################################################## >> %STOCK_SPLIT_SPEC%
 @ECHO PAUSE >> %STOCK_SPLIT_SPEC%
-@ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%get_prediction_model_fullset_spec.py" >> %STOCK_SPLIT_SPEC%
+@ECHO %_PY_EXE% -m idlelib "%SA_FRC_DIR%scripts\stock_split.py" >> %STOCK_SPLIT_SPEC%
 @ECHO CALL %RECALC_FORECAST_MODEL_SPEC% >> %STOCK_SPLIT_SPEC%
 
 REM ### Recalculation instrument data
