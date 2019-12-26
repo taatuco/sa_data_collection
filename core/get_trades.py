@@ -36,6 +36,7 @@ def get_trades(symbol, uid, number_of_days, full_update, connection):
     daycount = number_of_days + 10
     dfrom = datetime.datetime.now() - timedelta(days=daycount)
     dfrom_str = dfrom.strftime('%Y%m%d')
+    date_today = datetime.datetime.now()
 
     trade_symbol = symbol
     trade_fullname = ''
@@ -140,22 +141,15 @@ def get_trades(symbol, uid, number_of_days, full_update, connection):
             sep = ','
 
         if target_price_1 != -9:
-            debug("("+  str(uid)  +", '"+ trade_symbol +"', '"+ trade_fullname +\
-                    "', '" +\
-                    trade_order_type +"',"+ str(trade_entry_price) +",'"+\
-                    str(trade_entry_date) +"','"+\
-            str(trade_expiration_date) +"',"+ str(trade_close_price) +","+\
-            str(trade_pnl_pct) +\
-            ",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")")
-
-            inserted_value = inserted_value + sep + "("+  str(uid)  +", '"+\
-            trade_symbol +"', '"+\
-            trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +\
-            ",'"+ str(trade_entry_date) +"','"+\
-            str(trade_expiration_date) +"',"+ str(trade_close_price) +","+\
-            str(trade_pnl_pct) +\
-            ",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
-            i += 1
+            if trade_entry_date <= date_today:
+                inserted_value = inserted_value + sep + "("+  str(uid)  +", '"+\
+                trade_symbol +"', '"+\
+                trade_fullname  +"', '" + trade_order_type +"',"+ str(trade_entry_price) +\
+                ",'"+ str(trade_entry_date) +"','"+\
+                str(trade_expiration_date) +"',"+ str(trade_close_price) +","+\
+                str(trade_pnl_pct) +\
+                ",'"+ str(trade_status) +"', '"+ str(trade_url) + "' " +")"
+                i += 1
     cr_1.close()
     if inserted_value != '':
         cr_i = connection.cursor(pymysql.cursors.SSCursor)

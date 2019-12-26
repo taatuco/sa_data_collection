@@ -53,12 +53,13 @@ class ForecastData:
         target_price = -9
         date_today = datetime.datetime.now()
         date_today = date_today.strftime('%Y%m%d')
+        date_yesterday = datetime.datetime.now() - timedelta(days=1)
         cursor = connection.cursor(pymysql.cursors.SSCursor)
         sql = "SELECT price_instruments_data.target_price FROM trades "+\
         "JOIN symbol_list ON trades.symbol = symbol_list.symbol "+\
         "JOIN price_instruments_data ON "+\
         "(trades.symbol = price_instruments_data.symbol AND "+\
-        "price_instruments_data.date = "+ str(date_today) +") "+\
+        "price_instruments_data.date = "+ str(date_yesterday) +") "+\
         "WHERE symbol_list.uid = "+ str(uid) +" AND trades.entry_date = " + str(date_today)
         cursor.execute(sql)
         res = cursor.fetchall()
