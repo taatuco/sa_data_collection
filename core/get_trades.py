@@ -7,7 +7,7 @@
 import sys
 import os
 import datetime
-from datetime import timedelta
+from datetime import timedelta, date
 import pymysql.cursors
 from sa_numeric import get_pct_change
 PDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +36,7 @@ def get_trades(symbol, uid, number_of_days, full_update, connection):
     daycount = number_of_days + 10
     dfrom = datetime.datetime.now() - timedelta(days=daycount)
     dfrom_str = dfrom.strftime('%Y%m%d')
-    date_today = datetime.datetime.now()
+    date_today = date.today()
 
     trade_symbol = symbol
     trade_fullname = ''
