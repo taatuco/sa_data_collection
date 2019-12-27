@@ -62,7 +62,6 @@ class ForecastData:
         "(trades.symbol = price_instruments_data.symbol AND "+\
         "price_instruments_data.date = "+ str(date_yesterday) +") "+\
         "WHERE symbol_list.uid = "+ str(uid) +" AND trades.entry_date = " + str(date_today)
-        print(sql)
         cursor.execute(sql)
         res = cursor.fetchall()
         for row in res:
