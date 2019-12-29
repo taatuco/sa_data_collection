@@ -97,7 +97,7 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('GO', 'ECO', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'World News and Top Stories',
-                         '{burl}w/?funcname=get_newsfeed(burl,0,0,500,1)&refreshw=900&noflexheight=1',
+                         '{burl}w/?funcname=get_newsfeed(burl,0,0,500,1,0)&refreshw=900&noflexheight=1',
                          set_feed_function('GO', 'TOP', 'label') +\
                          'World News and Top Stories',
                          set_feed_function('GO', 'TOP', 'value'))
