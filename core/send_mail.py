@@ -101,6 +101,8 @@ def process_mail_queue():
         send_to_email_bcc.append(row[3])
         email_subject = row[4]
         email_content = row[5]
+        
+        print(row[3])
 
         if from_email == '' or from_email is None:
             from_email = get_reply_to_email('email')
