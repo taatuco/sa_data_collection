@@ -37,7 +37,7 @@ def set_widgets_feed(symbol, connection):
 
     set_widgets_from_url(feed_id, connection,
                          'FX Heatmap',
-                         '{burl}w/?funcname=get_tradingview_fxheatmap(0,0)',
+                         '{burl}w/?funcname=get_tradingview_fxheatmap(0,0,1)',
                          set_feed_function('GO', 'FXC', 'label') +\
                          'Forex Heat Map',
                          set_feed_function('GO', 'FXC', 'value'))
@@ -91,7 +91,7 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('CR', 'SIGNAL', 'value'))
     set_widgets_from_url(feed_id, connection,
                          'Economic Calendar',
-                         '{burl}w/?funcname=get_tradingview_ecocal(0,0)&refreshw=1800',
+                         '{burl}w/?funcname=get_tradingview_ecocal(0,0,1)&refreshw=1800',
                          set_feed_function('GO', 'ECO', 'label') +\
                          'Economic Calendar',
                          set_feed_function('GO', 'ECO', 'value'))
@@ -121,7 +121,7 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('CR', 'EQS', 'value'))    
     set_widgets_from_url(feed_id, connection,
                          'Trading Instruments Watchlist',
-                         '{burl}w/?funcname=get_tradingview_watchlist(0,0)',
+                         '{burl}w/?funcname=get_tradingview_watchlist(0,0,1)',
                          set_feed_function('GO', 'WATCHLIST', 'label') +\
                          'Watchlist',
                          set_feed_function('GO', 'WATCHLIST', 'value'))
