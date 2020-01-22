@@ -205,7 +205,7 @@ def set_widgets_tradingview_chart(symbol, feed_id, connection):
         short_title = fullname
         short_description = symbol
         content = sector
-        url = "{burl}w/?funcname=get_tradingview_chart("+ str(uid) +",0,0)"
+        url = "{burl}w/?funcname=get_tradingview_chart("+ str(uid) +",0,0,1)"
         badge = ''
         ranking = '-1'
         feed_type = str(feed_id)
