@@ -286,6 +286,8 @@ def get_portf_alloc():
                 else:
                     alloc_conv_rate = get_market_conv_rate(alloc_market)
 
+                print('alloc_symbol:'+ str(alloc_symbol))
+                print('alloc_market' + str(alloc_market))
                 print('portf_item_quantity:' + str(portf_item_quantity))
                 print('alloc_price:' + str(alloc_price))
                 print('alloc_conv_rate:' + str(alloc_conv_rate))
