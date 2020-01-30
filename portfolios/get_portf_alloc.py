@@ -151,23 +151,22 @@ def get_market_conv_rate(m):
     Returns:
         None
     """
-    r = ''
-    try:
-        connection = pymysql.connect(host=db_srv,
-                                     user=db_usr,
-                                     password=db_pwd,
-                                     db=db_name,
-                                     charset='utf8mb4',
-                                     cursorclass=pymysql.cursors.DictCursor)
-        cr = connection.cursor(pymysql.cursors.SSCursor)
-        sql = "SELECT conv_to_usd FROM markets WHERE market_id = '"+ str(m) +"'"
-        cr.execute(sql)
-        rs = cr.fetchall()
-        for row in rs: r = row[0]
-        cr.close()
-        connection.close()
-    except Exception as e: debug(e)
-    return r
+    ret = 1
+    connection = pymysql.connect(host=db_srv,
+                                 user=db_usr,
+                                 password=db_pwd,
+                                 db=db_name,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+    cr = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT conv_to_usd FROM markets WHERE market_id = '"+ str(m) +"'"
+    cr.execute(sql)
+    rs = cr.fetchall()
+    for row in rs:
+        ret = row[0]
+    cr.close()
+    connection.close()
+    return ret
 
 def get_market_currency(m):
     """
@@ -219,7 +218,6 @@ def get_portf_alloc():
 
     for row in rs:
         portf_symbol = row[0]
-        portf_unit = row[3]
         portf_market = row[4]
         portf_currency = get_market_currency(portf_market)
         portf_forc_return = 0
@@ -285,14 +283,6 @@ def get_portf_alloc():
                     alloc_conv_rate = 1
                 else:
                     alloc_conv_rate = get_market_conv_rate(alloc_market)
-
-                print('alloc_symbol:'+ str(alloc_symbol))
-                print('alloc_market' + str(alloc_market))
-                print('portf_item_quantity:' + str(portf_item_quantity))
-                print('alloc_price:' + str(alloc_price))
-                print('alloc_conv_rate:' + str(alloc_conv_rate))
-                print('alloc_decimal_places:' + str(alloc_decimal_places))
-                print('alloc_pip:' + str(alloc_pip))
 
                 alloc_dollar_amount = round( portf_item_quantity * alloc_price * alloc_conv_rate, int(alloc_decimal_places) ) * alloc_pip
                 portf_item_quantity = round(portf_item_quantity / alloc_conv_rate,2)
