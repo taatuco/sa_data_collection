@@ -286,6 +286,12 @@ def get_portf_alloc():
                 else:
                     alloc_conv_rate = get_market_conv_rate(alloc_market)
 
+                print('portf_item_quantity:' + str(portf_item_quantity))
+                print('alloc_price:' + str(alloc_price))
+                print('alloc_conv_rate:' + str(alloc_conv_rate))
+                print('alloc_decimal_places:' + str(alloc_decimal_places))
+                print('alloc_pip:' + str(alloc_pip))
+
                 alloc_dollar_amount = round( portf_item_quantity * alloc_price * alloc_conv_rate, int(alloc_decimal_places) ) * alloc_pip
                 portf_item_quantity = round(portf_item_quantity / alloc_conv_rate,2)
                 if portf_item_quantity < 0.01: portf_item_quantity = 0.01
