@@ -125,7 +125,18 @@ def set_widgets_feed(symbol, connection):
                          set_feed_function('GO', 'WATCHLIST', 'label') +\
                          'Watchlist',
                          set_feed_function('GO', 'WATCHLIST', 'value'))
-
+    set_widgets_from_url(feed_id, connection,
+                         'Bloomberg TV',
+                         'https://www.bloomberg.com/live/us',
+                         set_feed_function('GO', 'BBTV', 'label') +\
+                         'Bloomberg TV',
+                         set_feed_function('GO', 'BBTV', 'value'))
+    set_widgets_from_url(feed_id, connection,
+                         'Tradingview Chart',
+                         'https://www.tradingview.com/chart',
+                         set_feed_function('GO', 'TVC', 'label') +\
+                         'Tradingview',
+                         set_feed_function('GO', 'TVC', 'value'))
 
 def set_widgets_from_url(feed_id, connection, short_title, url, search, sa_function):
     """
