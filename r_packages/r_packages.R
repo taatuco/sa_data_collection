@@ -7,6 +7,7 @@
 inst_ini_package <- function(){
   tryCatch(
     {
+      install.packages("forecast", dependencies = TRUE)
       list.of.packages <- c("lubridate","quantmod", "tidyquant", "DBI", "RMySQL","binhf","tseries","forecast")
       new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
       repository <- "http://cran.us.r-project.org"
