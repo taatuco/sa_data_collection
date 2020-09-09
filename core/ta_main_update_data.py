@@ -19,6 +19,7 @@ from ta_calc_ma import calc_ma
 from ta_calc_rsi import RsiData
 from ta_calc_tln import get_trend_line_data
 from ta_instr_sum import get_instr_sum
+from ta_calc_m1trend import calc_m1trend
 from set_signals_feed import set_signals_feed
 from set_widgets_feed import set_widgets_feed
 from ta_gen_recomm import gen_recomm
@@ -80,6 +81,7 @@ def update_instruments_data(symbol, is_update_all, date_num_day_scan, date_minus
         ma30 = calc_ma(symbol, date_current, 30, connection)
         ma40 = calc_ma(symbol, date_current, 40, connection)
         ma50 = calc_ma(symbol, date_current, 50, connection)
+        m1trend = calc_m1trend(symbol, date_current, connection)
         sentiment = get_sentiment_score_avg(symbol, date_minus_seven)
         is_ta_calc = "1"
         cr_upd = connection.cursor(pymysql.cursors.SSCursor)
@@ -99,6 +101,7 @@ def update_instruments_data(symbol, is_update_all, date_num_day_scan, date_minus
         "ma30="+str(ma30)+ ", "+\
         "ma40="+str(ma40)+ ", "+\
         "ma50="+str(ma50)+ ", "+\
+        "m1trend="+str(m1trend)+", "+\
         "sentiment_1d="+str(sentiment)+", "+\
         "is_ta_calc="+str(is_ta_calc)+" "+\
         "WHERE id="+str(record_id)
