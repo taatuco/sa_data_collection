@@ -92,11 +92,11 @@ def get_reply_to_email(what):
     """
     ret = ''
     if what == 'email':
-        ret = 'no-reply@taatu.co'
+        ret = 'vh@taatu.co'
     if what == 'name':
         ret = 'SmartAlpha Intelligence'
     if what == 'tech':
-        ret = 'tech@taatu.co'
+        ret = 'vh@taatu.co'
     return ret
 
 def get_email_txt_signature():
