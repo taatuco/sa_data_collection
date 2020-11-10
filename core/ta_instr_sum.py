@@ -255,6 +255,15 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     d1_pct = round(float(d1_pct), 3)
     wf_pct = round(float(wf_pct), 3)
 
+    date_last_month = datetime.datetime.now() - timedelta(days=30)
+    date_last_month = date_last_month.strftime('%Y%m%d')
+    sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+\
+    str(symbol) +"' AND date >="+ str(date_last_month) +" ORDER BY date"
+    stdev_st = get_stdev(sql)
+    maximum_dd_st = get_mdd(sql)
+    romad_st = get_romad(sql)
+    volatility_risk_st = get_volatility_risk(sql, False, '')
+
     if wf_pct >= 0:
         signal_type = "buy"
         signal_dir = '<'
@@ -304,14 +313,6 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     if trade_sl_sell_2 < 0:
         trade_sl_sell_2 = 0
 
-    date_last_month = datetime.datetime.now() - timedelta(days=30)
-    date_last_month = date_last_month.strftime('%Y%m%d')
-    sql = "SELECT price_close FROM price_instruments_data WHERE symbol='"+\
-    str(symbol) +"' AND date >="+ str(date_last_month) +" ORDER BY date"
-    stdev_st = get_stdev(sql)
-    maximum_dd_st = get_mdd(sql)
-    romad_st = get_romad(sql)
-    volatility_risk_st = get_volatility_risk(sql, False, '')
 
     cr_i = connection.cursor(pymysql.cursors.SSCursor)
     sql_i = "UPDATE instruments SET y1="+str(y1_pct)+",m6="+str(m6_pct)+\
