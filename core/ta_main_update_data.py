@@ -174,12 +174,14 @@ def get_update_instr_data(extended_scan, is_update_all, specific_symbol):
         else:
             get_trades(symbol, uid, nd_scan, False, connection)
 
-        get_forecast_pnl(symbol, nd_scan, is_update_all, connection)
-        get_instr_sum(symbol, uid, asset_class, date_minus_ten, sentiment, connection)
+        """ These functions needs to run before all else """
         get_trend_line_data(symbol, uid, connection)
         gen_recomm(symbol, uid, connection)
         gen_chart(symbol, uid, connection)
-
+        """ ******************************************** """
+        
+        get_forecast_pnl(symbol, nd_scan, is_update_all, connection)
+        get_instr_sum(symbol, uid, asset_class, date_minus_ten, sentiment, connection)
         set_signals_feed(symbol, connection)
         set_widgets_feed(symbol, connection)
         check_instr_is_obsolete(symbol, connection)
