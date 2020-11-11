@@ -134,6 +134,7 @@ def gen_chart(symbol, uid, connection):
         ini_signal = 0
         signal_price = 0
         pct_signal = 0
+        trade_pct = 0
 
         i = 0
         inserted_values = ''
@@ -179,11 +180,13 @@ def gen_chart(symbol, uid, connection):
                 pct_signal = 0
                 sep = ''
             else:
+                trade_pct = float(get_trade_pnl(uid, date.strftime("%Y%m%d"), connection))/5
+                if trade_pct > 0:
+                    trade_pct * 1.5
+
                 pct_change = get_pct_change(ini_val, price)
                 signal_price = (signal_price +
-                                (signal_price * float(get_trade_pnl(uid,
-                                                                    date.strftime("%Y%m%d"),
-                                                                    connection))))
+                                (signal_price * trade_pct))
                 pct_signal = get_pct_change(ini_signal, signal_price)
                 sep = ','
 

@@ -274,20 +274,28 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     signal_entry = signal_dir + str(round(float(last_price), decimal_places))
     date_next_week = last_date + timedelta(days=7)
     signal_expiration = date_next_week.strftime("%Y%m%d")
-
+    risk_reward_ratio = 1.5
+    buy_tp_gap_1 = trade_tp_buy_1 * volatility_risk_st * risk_reward_ratio
+    buy_sl_gap_1 = trade_sl_buy_1 * volatility_risk_st
+    buy_tp_gap_2 = trade_tp_buy_2 * volatility_risk_st * risk_reward_ratio
+    buy_sl_gap_2 = trade_sl_buy_2 * volatility_risk_st
+    sell_tp_gap_1 = trade_tp_sell_1 * volatility_risk_st * risk_reward_ratio
+    sell_sl_gap_1 = trade_sl_sell_1 * volatility_risk_st
+    sell_tp_gap_2 = trade_tp_sell_2 * volatility_risk_st * risk_reward_ratio
+    sell_sl_gap_2 = trade_sl_sell_2 * volatility_risk_st
 
     trade_entry_buy_1 = round(float(trade_entry_buy_1), decimal_places)
-    trade_tp_buy_1 = round(float(trade_tp_buy_1), decimal_places)
-    trade_sl_buy_1 = round(float(trade_sl_buy_1), decimal_places)
+    trade_tp_buy_1 = round(float(trade_tp_buy_1 + buy_tp_gap_1), decimal_places)
+    trade_sl_buy_1 = round(float(trade_sl_buy_1 - buy_sl_gap_1), decimal_places)
     trade_entry_buy_2 = round(float(trade_entry_buy_2), decimal_places)
-    trade_tp_buy_2 = round(float(trade_tp_buy_2), decimal_places)
-    trade_sl_buy_2 = round(float(trade_sl_buy_2), decimal_places)
+    trade_tp_buy_2 = round(float(trade_tp_buy_2 + buy_tp_gap_2), decimal_places)
+    trade_sl_buy_2 = round(float(trade_sl_buy_2 - buy_sl_gap_2), decimal_places)
     trade_entry_sell_1 = round(float(trade_entry_sell_1), decimal_places)
-    trade_tp_sell_1 = round(float(trade_tp_sell_1), decimal_places)
-    trade_sl_sell_1 = round(float(trade_sl_sell_1), decimal_places)
+    trade_tp_sell_1 = round(float(trade_tp_sell_1 - sell_tp_gap_1), decimal_places)
+    trade_sl_sell_1 = round(float(trade_sl_sell_1 + sell_sl_gap_1), decimal_places)
     trade_entry_sell_2 = round(float(trade_entry_sell_2), decimal_places)
-    trade_tp_sell_2 = round(float(trade_tp_sell_2), decimal_places)
-    trade_sl_sell_2 = round(float(trade_sl_sell_2), decimal_places)
+    trade_tp_sell_2 = round(float(trade_tp_sell_2 - sell_tp_gap_2), decimal_places)
+    trade_sl_sell_2 = round(float(trade_sl_sell_2 + sell_sl_gap_2), decimal_places)
 
     if (trade_entry_buy_1 < 0 or trade_entry_buy_2 < 0 or
             trade_entry_sell_1 < 0 or trade_entry_sell_2 < 0):
