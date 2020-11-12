@@ -23,12 +23,31 @@ DB_PWD = ACCESS_OBJ.password()
 DB_NAME = ACCESS_OBJ.db_name()
 DB_SRV = ACCESS_OBJ.db_server()
 
+def get_trade_type(uid, date_this, connection):
+    """
+    Return trade order type: sell or buy position
+    Args:
+        Integer: Trade symbol unique id
+        String: Date in string format YYYYMMDD, expiration date.
+    Returns:
+        Strong: trade order type: sell / buy (lowercase)
+    """
+    ret = ''
+    cursor = connection.cursor(pymysql.cursors.SSCursor)
+    sql = "SELECT order_type FROM trades WHERE uid=" + str(uid) +\
+    " AND expiration_date = "+ str(date_this)
+    cursor.execute(sql)
+    res = cursor.fetchall()
+    for row in res:
+        ret = row[0]
+    cursor.close()
+    return ret
 
 def get_trade_pnl(uid, date_this, connection):
     """
     Collect trade profit and loss
     Args:
-        Integer: Trade unique ID
+        Integer: Trade symbol unique ID
         String: Date in string format YYYYMMDD, expiration date.
     Returns:
         Double: trade profit and loss
@@ -180,9 +199,12 @@ def gen_chart(symbol, uid, connection):
                 pct_signal = 0
                 sep = ''
             else:
+                """ multiply trade_pct by r/r ratio and 2 times weighting for long positions """
                 trade_pct = float(get_trade_pnl(uid, date.strftime("%Y%m%d"), connection))/5
                 if trade_pct > 0:
                     trade_pct * 1.5
+                if get_trade_type(uid, date.strftime("%Y%m%d"), connection) == 'buy':
+                    trade_pct * 2
 
                 pct_change = get_pct_change(ini_val, price)
                 signal_price = (signal_price +
