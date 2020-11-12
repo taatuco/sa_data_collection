@@ -280,7 +280,7 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     print("volatility_risk_st=" + str(volatility_risk_st) )
     print("risk_reward_ratio=" + str(risk_reward_ratio) )
     
-    buy_tp_gap_1 = trade_tp_buy_1 * volatility_risk_st * risk_reward_ratio
+    buy_tp_gap_1 = float(trade_tp_buy_1) * float(volatility_risk_st) * float(risk_reward_ratio)
     buy_sl_gap_1 = trade_sl_buy_1 * volatility_risk_st
     buy_tp_gap_2 = trade_tp_buy_2 * volatility_risk_st * risk_reward_ratio
     buy_sl_gap_2 = trade_sl_buy_2 * volatility_risk_st
