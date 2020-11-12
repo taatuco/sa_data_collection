@@ -286,17 +286,17 @@ def update_instruments_table(symbol, y1_pct, m6_pct, m3_pct, m1_pct, w1_pct, d1_
     sell_sl_gap_2 = float(trade_sl_sell_2) * float(volatility_risk_st)
 
     trade_entry_buy_1 = round(float(trade_entry_buy_1), decimal_places)
-    trade_tp_buy_1 = round(float(trade_tp_buy_1 + buy_tp_gap_1), decimal_places)
-    trade_sl_buy_1 = round(float(trade_sl_buy_1 - buy_sl_gap_1), decimal_places)
+    trade_tp_buy_1 = round(float(trade_tp_buy_1) + float(buy_tp_gap_1), decimal_places)
+    trade_sl_buy_1 = round(float(trade_sl_buy_1) - float(buy_sl_gap_1), decimal_places)
     trade_entry_buy_2 = round(float(trade_entry_buy_2), decimal_places)
-    trade_tp_buy_2 = round(float(trade_tp_buy_2 + buy_tp_gap_2), decimal_places)
-    trade_sl_buy_2 = round(float(trade_sl_buy_2 - buy_sl_gap_2), decimal_places)
+    trade_tp_buy_2 = round(float(trade_tp_buy_2) + float(buy_tp_gap_2), decimal_places)
+    trade_sl_buy_2 = round(float(trade_sl_buy_2) - float(buy_sl_gap_2), decimal_places)
     trade_entry_sell_1 = round(float(trade_entry_sell_1), decimal_places)
-    trade_tp_sell_1 = round(float(trade_tp_sell_1 - sell_tp_gap_1), decimal_places)
-    trade_sl_sell_1 = round(float(trade_sl_sell_1 + sell_sl_gap_1), decimal_places)
+    trade_tp_sell_1 = round(float(trade_tp_sell_1) - float(sell_tp_gap_1), decimal_places)
+    trade_sl_sell_1 = round(float(trade_sl_sell_1) + float(sell_sl_gap_1), decimal_places)
     trade_entry_sell_2 = round(float(trade_entry_sell_2), decimal_places)
-    trade_tp_sell_2 = round(float(trade_tp_sell_2 - sell_tp_gap_2), decimal_places)
-    trade_sl_sell_2 = round(float(trade_sl_sell_2 + sell_sl_gap_2), decimal_places)
+    trade_tp_sell_2 = round(float(trade_tp_sell_2) - float(sell_tp_gap_2), decimal_places)
+    trade_sl_sell_2 = round(float(trade_sl_sell_2) + float(sell_sl_gap_2), decimal_places)
 
     if (trade_entry_buy_1 < 0 or trade_entry_buy_2 < 0 or
             trade_entry_sell_1 < 0 or trade_entry_sell_2 < 0):
