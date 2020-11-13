@@ -202,9 +202,9 @@ def gen_chart(symbol, uid, connection):
                 """ multiply trade_pct by r/r ratio and 2 times weighting for long positions """
                 trade_pct = float(get_trade_pnl(uid, date.strftime("%Y%m%d"), connection))/5
                 if trade_pct > 0:
-                    trade_pct * 1.5
+                    trade_pct = trade_pct * 1.5
                 if get_trade_type(uid, date.strftime("%Y%m%d"), connection) == 'buy':
-                    trade_pct * 2
+                    trade_pct = trade_pct * 2
 
                 pct_change = get_pct_change(ini_val, price)
                 signal_price = (signal_price +
