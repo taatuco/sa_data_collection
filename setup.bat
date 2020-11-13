@@ -100,6 +100,7 @@ SET REBUILD_DATA_SCRIPT_3="%SA_DATA_DIR%scripts\3_rebuild_data_dataset.bat"
 SET RECALC_FORECAST_MODEL="%SA_DATA_DIR%scripts\forecast_model_recalc.bat"
 SET RECALC_FORECAST_MODEL_SPEC="%SA_DATA_DIR%scripts\forecast_model_recalc_spec.bat"
 SET RENAME_SYMBOL_SPEC="%SA_DATA_DIR%scripts\rename_symbol_spec.bat"
+SET DISABLE_REMOVE_SYMBOL_SPEC="%SA_DATA_DIR%scripts\disable_remove_symbol_spec.bat"
 SET STOCK_SPLIT_SPEC="%SA_DATA_DIR%scripts\stock_split_spec.bat"
 SET RECALC_INSTRUMENT="%SA_DATA_DIR%scripts\recalc_instrument.bat"
 
@@ -286,6 +287,20 @@ DEL /F %RENAME_SYMBOL_SPEC%
 @ECHO @ECHO ########################################################################## >> %RENAME_SYMBOL_SPEC%
 @ECHO PAUSE >> %RENAME_SYMBOL_SPEC%
 @ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%scripts\rename_symbol.py" >> %RENAME_SYMBOL_SPEC%
+
+REM ### Disable/Remove symbol
+DEL /F %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO ########################################################################## >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO Disable or remove a symbol >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO ------------------------------------------------------------ >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO IMPORTANT: BACKUP THE DATABASE PRIOR TO RUN THIS SCRIPT >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO. >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO 1. Run the Py script: disable or remove an delisted symbol/ticker >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO 2. Affected tables: >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO a. symbol_list >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO @ECHO ########################################################################## >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO PAUSE >> %DISABLE_REMOVE_SYMBOL_SPEC%
+@ECHO %_PY_EXE% -m idlelib "%SA_DATA_DIR%scripts\disable_remove_symbol.py" >> %DISABLE_REMOVE_SYMBOL_SPEC%
 
 REM ### Set Schedule tasks
 SCHTASKS /Create /SC DAILY /TN SMARTALPHA_GET_DATA /TR %RUN_DATA_COLLECT% /RI 0 /ST %GET_DATA_TIME_ST% /F
